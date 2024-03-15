@@ -3,7 +3,6 @@
 
 
 int getNumber(int max) {
-	fflush(stdin);
 	printf(">>> ");//Ã· æ ‰»Î
 
 	char line[1024];
@@ -184,4 +183,3 @@ void getText(char* str) {
 	return true;
 
 }
-

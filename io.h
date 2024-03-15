@@ -13,7 +13,6 @@ int getNumber(int max); //输入数字
 
 double getDouble(double max); //输入小数
 
-
 void getText(char* str); //输入文字
 
 
