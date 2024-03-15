@@ -66,7 +66,8 @@ int getNumber(int max) {
 
 
 
-char* getText(char* str) {
+void getText(char* str) {
+	fflush(stdin);
 	printf(">>> ");//Ã· æ ‰»Î
 
 	char line[10240];
