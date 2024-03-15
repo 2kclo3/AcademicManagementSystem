@@ -12,7 +12,7 @@ int getNumber(int max); //输入数字
 
 
 
-char* getText(char* str); //输入文字
+void getText(char* str); //输入文字
 
 
 
