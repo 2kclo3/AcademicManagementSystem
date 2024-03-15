@@ -16,7 +16,7 @@ void InitializeList(List* plist) {
 }
 
 // 显示所有学生信息（不包含课程）返回一个链表
-void showAllStu() ；
+void showAllStu();
 	
 
 
