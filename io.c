@@ -2,6 +2,7 @@
 
 
 int getNumber(int max) {
+	fflush(stdin);
 	printf(">>> ");//提示输入
 
 	char line[1024];
@@ -67,6 +68,7 @@ int getNumber(int max) {
 
 
 char* getText(char* str) {
+	fflush(stdin);
 	printf(">>> ");//提示输入
 
 	char line[10240];
@@ -96,3 +98,4 @@ char* getText(char* str) {
 	return true;
 
 }
+
