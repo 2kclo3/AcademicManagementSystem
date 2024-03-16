@@ -28,13 +28,38 @@ void showStu(); // 显示单个学生信息（包含其课程成绩）
 
 void showCrsInStu();// 具体显示单个学生的某课程
 
+
+
+
+
 // 添加学生（不包含课程）
-bool addStu(Node* node, List* plist){
+bool addStu(List* plist){
 	Node* ptmp = *plist;
-	node->next = NULL;
+	Node* pnew;
 	while (ptmp->next != NULL)
 		ptmp = ptmp->next;
-	ptmp->next = node;
+	ptmp->next = pnew;
+	int choice;
+	for (int i = 0; i < 7; i++) {
+		printf("选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
+		scanf("%d", &choice);
+		if (choice > 7 || choice < 1)
+			printf(" 您的选择无效");
+		if (choice == 1)
+			getText(ptmp->item.data.name);
+		if (choice == 2)
+			getNumber(ptmp->item.data.ID);
+		if (choice == 3)
+			getNumber(ptmp->item.data.gender);
+		if (choice == 4)
+			getNumber(ptmp->item.data.grade);
+		if (choice == 5)
+			getText(ptmp->item.data.college);
+		if (choice == 6)
+			getText(ptmp->item.data.major);
+		if (choice == 7)
+			break;
+	}
 	return true;
 }
 	
