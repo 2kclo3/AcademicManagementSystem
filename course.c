@@ -7,9 +7,40 @@
 //之后GPA还得改改，他不是百分比换算
 //改成按学号查
 
-void showAllCrs(); // 显示所有课程（不包含学生成绩）
-void showCrs(); // 显示单个课程信息（包含该课程所有学生的成绩）
-void showStuInCrs(); // 具体显示单个课程的某学生
+//传课程链表头节点
+Cpnode showAllCrs(Cpnode phead)// 显示所有课程（不包含学生成绩）
+{
+	return phead;
+}
+//传某课程下学生链表头节点
+Cpnode showCrs(Cpnode phead) // 显示单个课程信息（包含该课程所有学生的成绩）
+{
+	Cpnode p = searchCrs(phead);
+	if (!p)
+	{
+		system("pause");
+		return NULL;
+	}
+	return p;
+}
+//传指定的学生节点
+Spnode showStuInCrs(Cpnode phead) // 具体显示单个课程的某学生
+{
+	Cpnode p = searchCrs(phead);
+	if (!p)
+	{
+		system("pause");
+		return NULL;
+	}
+	Spnode pnode = searchStuInCrs(p->sphead);
+	if (!pnode)
+	{
+		system("pause");
+		return NULL;
+	}
+	return pnode;
+
+}
 
 
 
