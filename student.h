@@ -63,14 +63,6 @@ typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了
 
 	Score* score;
 
-	//Research* research;
-
-	//Competition* competition;
-
-
-	//int score_count;// 数量
-	//Score score[200];
-
 	int research_count;// 数量
 	Research research[20];
 
