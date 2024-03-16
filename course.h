@@ -27,7 +27,7 @@ typedef struct _Cnode//课程节点
 	double averscore;//平均成绩
 	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
 	double averGPA;//平均GPA
-	struct _Course* next;//下一个课程节点
+	struct _Course * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }Cnode,*Cpnode;
 
