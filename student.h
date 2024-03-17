@@ -30,7 +30,6 @@ struct score_info {
 	double grid;//绩点
 	//int score_type;//成绩类型
 	//char remark[1024];//备注
-
 	struct score_info* sco_next;
 };
 
@@ -61,7 +60,7 @@ typedef struct quality_projects_competition Competition;
 typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了两小块）
 	Data data;
 
-	Score* score;
+	Course course;//课程链表
 
 	int research_count;// 数量
 	Research research[20];
@@ -69,6 +68,13 @@ typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了
 	int competition_count;// 数量
 	Competition competition[20];
 }Item;
+
+
+//学生课程链表节点
+typedef struct course {
+	Score score;
+	struct course* next;
+}Course;
 
 
 typedef struct node {  //节点
