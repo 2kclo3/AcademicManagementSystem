@@ -8,7 +8,6 @@
 #include "io.h"
 
 
-
 struct student_data
 {
 	char name[30];//姓名
@@ -36,45 +35,51 @@ struct score_info {
 struct quality_projects_research {//科研成果
 	char name[200];//论文名称，所发表的期刊或会议名称
 	char author[300];// 作者情况（是否为通讯作者及作者排序）
-	int date[3];// 发表年月
-	int page;// 页码范围
-	int volume_num;// 卷数
-	int issue_num;// 刊号
-
-	//struct quality_projects_research* rsch_next;
+	char date[11];// 发表年月
+	char page;// 页码范围
+	char volume_num;// 卷数
+	char issue_num;// 刊号
 };
+
 struct quality_projects_competition {//竞赛获奖
 	char name[200];//竞赛名称
 	char category[100];//获奖类别
-	int date[3];//获奖时间 ////////////////////////////////修改
+	char date[11];//获奖时间 年月
 	char organizer[100];//举办单位
-
-	//struct quality_projects_competition* cpt_next;
 };
+
 
 typedef struct student_data Data;
 typedef struct score_info Score;
 typedef struct quality_projects_research Research;
 typedef struct quality_projects_competition Competition;
 
+
+typedef struct course {//学生课程链表节点
+	Score score;
+	struct course* next;
+}Course;
+
+typedef struct research_list {//科研成果链表节点
+	int research_count;// 数量
+	Research research;
+	struct research_list* r_next;
+}Rnode;
+
+typedef struct competition_list {//竞赛获奖链表节点
+	int competition_count;// 数量
+	Competition competition;
+	struct competition_list* c_next;
+}Cnode;
+
 typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了两小块）
 	Data data;
 
 	Course course;//课程链表
 
-	int research_count;// 数量
-	Research research[20];
-
-	int competition_count;// 数量
-	Competition competition[20];
+	Rnode* rlist;//科研成果链表
+	Cnode* clist;//竞赛获奖链表
 }Item;
-
-
-//学生课程链表节点
-typedef struct course {
-	Score score;
-	struct course* next;
-}Course;
 
 
 typedef struct node {  //节点
@@ -82,6 +87,8 @@ typedef struct node {  //节点
 	struct node* next;
 }Node;
 typedef Node* List; //链表
+
+
 
 void showAllStu(); // 显示所有学生信息（不包含课程）
 
