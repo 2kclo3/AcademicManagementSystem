@@ -33,19 +33,20 @@ struct score_info {
 };
 
 struct quality_projects_research {//科研成果
-	char name[200];//论文名称，所发表的期刊或会议名称
+	char paper_name[200];//论文名称
+	char journal_or_conference_name[200];//所发表的期刊或会议名称
 	char author[300];// 作者情况（是否为通讯作者及作者排序）
 	char date[11];// 发表年月
-	char page;// 页码范围
-	char volume_num;// 卷数
-	char issue_num;// 刊号
+	char volume_num[10];// 卷数
+	char issue_num[10];// 刊号
+	char page[15];// 页码范围
 };
 
 struct quality_projects_competition {//竞赛获奖
-	char name[200];//竞赛名称
+	char competition_name[200];//竞赛名称
+	char organizer[100];//举办单位
 	char category[100];//获奖类别
 	char date[11];//获奖时间 年月
-	char organizer[100];//举办单位
 };
 
 
@@ -61,15 +62,13 @@ typedef struct course {//学生课程链表节点
 }Course;
 
 typedef struct research_list {//科研成果链表节点
-	int research_count;// 数量
 	Research research;
-	struct research_list* r_next;
+	struct research_list* rnext;
 }Rnode;
 
 typedef struct competition_list {//竞赛获奖链表节点
-	int competition_count;// 数量
 	Competition competition;
-	struct competition_list* c_next;
+	struct competition_list* cnext;
 }Cnode;
 
 typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了两小块）
@@ -77,7 +76,7 @@ typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了
 
 	Course course;//课程链表
 
-	Rnode* rlist;//科研成果链表
+	Rnode* rlist; 
 	Cnode* clist;//竞赛获奖链表
 }Item;
 
