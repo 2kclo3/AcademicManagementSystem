@@ -1,7 +1,10 @@
 #include"quality.h"
 #include"student.h"
 #include"io.h"
+#include"ui.h"
 #include<stdbool.h>
+//遗留问题：1.为每个学生的r/clist链表加入哨兵节点
+//			2.searchR/Cnode()函数的实现
 
 Node* searchStuInQuality(List phead) { // 在素质类项目中搜索学生
 	printf("请输入学生姓名\n");
@@ -20,7 +23,8 @@ Node* searchStuInQuality(List phead) { // 在素质类项目中搜索学生
 	}
 	return ptmp;
 }
-//遗留问题：为每个学生的r/clist链表加入哨兵节点
+
+
 
 bool addQuality_rlist(List* plist){
 	Node* ptmp = searchStu(plist);
@@ -60,6 +64,7 @@ bool addQuality_rlist(List* plist){
 }
 
 
+
 bool addQuality_clist(List* plist) {
 	Node* ptmp = searchStu(plist);
 	Cnode* chead = ptmp->item.rlist;
@@ -89,7 +94,86 @@ bool addQuality_clist(List* plist) {
 }
 
 
-bool modifyQuality(); // 修改素质类项目
+
+void modifyQuality_rlist(List* plist) { // 修改素质类项目之科研成果
+	Node* ptmp = searchStu(plist);//找到待修改学生
+	Rnode* rhead = ptmp->item.rlist;
+	Rnode rmod = searchRnode(rhead);
+	while (1) {
+		showMenu("请选择要修改的科研成果的相关信息：", 8, "1.论文名称", "2.期刊/会议名称", "3.作者情况", "4.发表时间", "5.卷数", "6.刊号", "7.页码范围", "8.退出");
+		int option = getNumber(8);
+		switch (option) {
+		case 1:
+			getText(rmod.research.paper_name);
+			break;
+
+		case 2:
+			getText(rmod.research.journal_or_conference_name);
+			break;
+
+		case 3:
+			getText(rmod.research.author);
+			break;
+
+		case 4:
+			getText(rmod.research.date);
+			break;
+
+		case 5:
+			getText(rmod.research.volume_num);
+			break;
+
+		case 6:
+			getText(rmod.research.issue_num);
+			break;
+
+		case 7:
+			getText(rmod.research.page);
+			break;
+
+		case 8:
+			return 0;
+
+		}
+	
+	}
+
+}
+
+
+
+void modifyQuality_clist(List* plist) { // 修改素质类项目之竞赛获奖
+	Node* ptmp = searchStu(plist);//找到待修改学生
+	Cnode* chead = ptmp->item.clist;
+	Cnode cmod = searchCnode(chead);
+	while (1) {
+		showMenu("请选择要修改的竞赛获奖的相关信息：", 5, "1.竞赛名称", "2.举办单位", "3.获奖类别", "4.获奖时间", "5.退出");
+		int option = getNumber(5);
+		switch (option) {
+		case 1:
+			getText(cmod.competition.competition_name);
+			break;
+
+		case 2:
+			getText(cmod.competition.organizer);
+			break;
+
+		case 3:
+			getText(cmod.competition.category);
+			break;
+
+		case 4:
+			getText(cmod.competition.date);
+			break;
+
+		case 5:
+			return 0;
+
+		}
+
+	}
+
+}
 
 
 bool deleteQuality(); // 删除素质类项目
