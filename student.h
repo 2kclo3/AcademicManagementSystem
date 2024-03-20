@@ -40,6 +40,7 @@ struct quality_projects_research {//科研成果
 	char volume_num[10];// 卷数
 	char issue_num[10];// 刊号
 	char page[15];// 页码范围
+	double GPA_bonus;
 };
 
 struct quality_projects_competition {//竞赛获奖
@@ -47,6 +48,7 @@ struct quality_projects_competition {//竞赛获奖
 	char organizer[100];//举办单位
 	char category[100];//获奖类别
 	char date[11];//获奖时间 年月
+	double GPA_bonus;
 };
 
 
