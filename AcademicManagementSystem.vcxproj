@@ -34,6 +34,10 @@
     <ClCompile Include="file.c" />
     <ClCompile Include="io.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="main1.c" />
+    <ClCompile Include="main2.c" />
+    <ClCompile Include="main3.c" />
+    <ClCompile Include="main4.c" />
     <ClCompile Include="quality.c" />
     <ClCompile Include="student.c" />
     <ClCompile Include="ui.c" />
