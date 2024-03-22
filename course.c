@@ -1,10 +1,9 @@
 #include"course.h"
 ///要判断内存是否分配正确
 //注意内存泄露问题
-//最后要在添加学生成绩时维护一门成绩的平均值
 //初步先不对getNumber的参数做过多要求
 //之后GPA还得改改，他不是百分比换算
-//改成按学号查
+//添加名次，实现对名次的维护
 
 //传课程链表头节点
 Cpnode showAllCrs(Cpnode phead)// 显示所有课程（不包含学生成绩）
@@ -339,8 +338,8 @@ int deleteCrs(Cpnode phead) // 删除课程
 	Cpnode p = phead;
 	while (p->next)
 	{
-		Cpnode pp = p->next;////犯啥大病，这非得让我这样写。哎，能跑就行
-		if (strcmp(str,pp->cname) == 0)
+		Cpnode pp = p->next;//犯啥大病，这非得让我这样写
+		if (strcmp(str, pp->cname) == 0)
 			break;
 		p = p->next;
 	}
@@ -351,7 +350,7 @@ int deleteCrs(Cpnode phead) // 删除课程
 		return 0;
 	}
 	Cpnode pp = p;
-	p = pp->next;////犯啥大病，这非得让我这样写
+	p = p->next;
 
 	Spnode tmp;
 	while (p->sphead->next)
