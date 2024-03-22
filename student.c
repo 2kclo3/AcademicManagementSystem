@@ -1,5 +1,6 @@
 #include "student.h"
 
+#pragma warning(disable:4996)
 
 
 
@@ -61,7 +62,7 @@ bool addStu(List* plist){
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL)
 		ptmp = ptmp->next;
-	Node* pnew;//创建新节点
+	Node* pnew = (Node*)malloc(sizeof(Node));//创建新节点
 	int choice;
 	for (int i = 0; i < 7; i++) {//录入新节点信息
 		printf("选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
@@ -91,10 +92,14 @@ bool addStu(List* plist){
 // 为某个学生添加某课程及成绩
 bool addCrsToStu(List* plist) {
 	Node* ptmp= searchStu(plist);//通过搜索函数找到待修改学生
-	Course* pcou = &(ptmp->item.course);
-	if (pcou->next != NULL)
-		pcou = pcou->next;
-	Course* pnew;//创建新节点
+	Crsnode* crs_head = ptmp->item.crslist;
+	Crsnode* crs_tmp = crs_head->crs_next;//课程链表需要有哨兵节点
+	while (crs_tmp->crs_next != NULL)
+		crs_tmp = crs_tmp->crs_next;
+	Crsnode* crs_new = (Crsnode*)malloc(sizeof(Crsnode));//创建新节点
+	if (crs_new == NULL)
+		return false;
+	crs_new->crs_next = NULL;
 	int choice;
 	for (int i = 0; i < 9; i++) {//录入新节点信息
 		printf("选择你要录入的成绩信息(输入1-5）：\n 1.course_id 2.course_name 3.score 4.semester 5.course_nature 6.credit 7.credit 8.结束录入");
@@ -102,23 +107,23 @@ bool addCrsToStu(List* plist) {
 		if (choice > 8 || choice < 1)
 			printf(" 您的选择无效");
 		if (choice == 1)
-			getText(pnew->score.course_id);
+			getText(crs_new->score.course_id);
 		if (choice == 2)
-			getText(pnew->score.course_name);
+			getText(crs_new->score.course_name);
 		if (choice == 3)
-			getNumber(pnew->score.score);
+			getNumber(crs_new->score.score);
 		if (choice == 4)
-			getNumber(pnew->score.semester);
+			getNumber(crs_new->score.semester);
 		if (choice == 5)
-			getNumber(pnew->score.course_nature);
+			getNumber(crs_new->score.course_nature);
 		if (choice == 6)
-			getNumber(pnew->score.credit);
+			getNumber(crs_new->score.credit);
 		if (choice == 7)
-			getNumber(pnew->score.grid);
+			getNumber(crs_new->score.grid);
 		if (choice == 8)
 			break;
 	}
-	pcou->next = pnew;//添加新节点
+	crs_tmp->crs_next = crs_new;//添加新节点
 	return true;
 }
 
@@ -152,8 +157,10 @@ bool modifyStu(List* plist){
 // 修改某个学生的某课程及成绩
 bool modifyCrsInStu(List* plist) {
 	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Score* pcou = searchCrsInStu(ptmp);
-	getNumber(pcou->score.score);//问题！！！！！！！！！！！！！！！！！！！！！！！！！！！
+	Crsnode* crs_head = ptmp->item.crslist;
+	Crsnode* crs_mod = searchCrsInStu(crs_head); //找到待修改的课程
+	//......
+
 }
 
 // 删除学生
@@ -170,18 +177,22 @@ bool deleteStu(List* plist) {
 // 删除某个学生的某课程及成绩
 bool deleteCrsInStu(List* plist) {
 	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Course* pcou = searchCrsInStu(ptmp);//通过搜索函数找到待修改课程；
-	Course* ppcou = &(ptmp->item.course);//小疑问
-	while (ppcou->next != pcou)
-		ppcou = ppcou->next;
-	ppcou->next = pcou->next;
-	return true;
+	Crsnode* crs_head = ptmp->item.crslist;
+	Crsnode* crs_del = searchCrsInStu(crs_head);
+	Crsnode* crs_tmp = crs_head;//下面是寻找被删除课程节点的前继节点
+	while (crs_tmp!=NULL && crs_tmp->crs_next != crs_del) {
+		crs_tmp = crs_tmp->crs_next;
+	}
+	crs_tmp->crs_next = crs_del->crs_next;
+	free(crs_del);
+	printf("\n删除成功！");
 }
+
 // 在总学生链表中通过学号和名字搜索学生
 Node* searchStu(List* plist) {
 	Node* ptmp = *plist;
 	int pid;
-	getNumber(pid); //输入学号
+	pid=getNumber(99999999); //输入学号
 	char pname[16];
 	getText(pname);
 	while (ptmp->item.data.ID != pid && strcmp(ptmp->item.data.name,pname) != 0 )//通过姓名或学号来检索
@@ -189,14 +200,14 @@ Node* searchStu(List* plist) {
 	return (ptmp);//返回这个学生信息的节点地址
 }
 	
-// 在单个学生中搜索其课程
-Course* searchCrsInStu(Node* pstu) {
+// 在单个学生中搜索待删除/修改的课程
+Crsnode* searchCrsInStu(Crsnode* crs_head) {
 	char pcourse_id[10];
 	char pcourse_name[100];
 	getText(pcourse_id);
 	getText(pcourse_name);//输入待查找课程的编号和名称；
-	Course* pcou = &(pstu->item.course);//小疑问
-	while (strcmp(pcou->score.course_id, pcourse_id) != 0 && strcmp(pcou->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
-		pcou = pcou->next;
-	return (pcou);
+	Crsnode* crs_aim = crs_head->crs_next;
+	while (strcmp(crs_aim->score.course_id, pcourse_id) != 0 && strcmp(crs_aim->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
+		crs_aim = crs_aim->crs_next;
+	return crs_aim;
 }

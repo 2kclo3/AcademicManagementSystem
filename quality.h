@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable:4996)
 
 #ifndef _QUALITY_H_
 #define _QUALITY_H_
@@ -22,18 +23,17 @@ void show_Research_menu(char* title, Rnode* rhead);//·½±ãĞŞ¸ÄÊ±È·ÈÏËùĞè´¦ÀíµÄËØÖ
 void show_Competition_menu(char* title, Cnode* chead);
 
 
-Rnode searchRnode(Rnode*);// ÕÒ³ö´ËÑ§Éú´ıĞŞ¸ÄµÄËØÖÊÀàÏîÄ¿½Úµã£¨´îÅäshow_quality_menuÊ¹ÓÃ£©
-Cnode searchCnode(Cnode*);
+Rnode* searchRnode(Rnode*);// ÕÒ³ö´ËÑ§Éú´ıĞŞ¸ÄµÄËØÖÊÀàÏîÄ¿½Úµã£¨´îÅäshow_quality_menuÊ¹ÓÃ£©
+Cnode* searchCnode(Cnode*);
 
 
 void modifyQuality_rlist(List* plist);// ĞŞ¸ÄËØÖÊÀàÏîÄ¿
 void modifyQuality_clist(List* plist);
 
 
+void deleteQuality_rlist(List*);	// É¾³ıËØÖÊÀàÏîÄ¿
+void deleteQuality_clist(List*);
 
-
-
-bool deleteQuality(); // É¾³ıËØÖÊÀàÏîÄ¿
 
 
 
