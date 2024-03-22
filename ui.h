@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 
 /*
@@ -26,6 +27,23 @@ void showChart();//显示图表
 
 
 void welcome(); // 欢迎
+
+/*
+显示页面
+作用：显示页面
+参数：页面名称
+返回：页面名
+*/
+char* show_page(char* page_name);
+
+
+/*
+显示表格信息
+作用：显示表格信息
+参数：链表头节点,表格类型
+返回：空
+*/
+//void show_sheet(List* plist, int sheet_type);
 
 
 

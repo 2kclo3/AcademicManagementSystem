@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-int getNumber(int max) {
+int getNumber(int max) { //0开头处理 TODO
 	printf(">>> ");//提示输入
 
 	char line[1024];
@@ -67,7 +67,6 @@ int getNumber(int max) {
 }
 
 
-/*
 double getDouble(double max) //这函数有点bug，我之后改改
 {
 	fflush(stdin);
@@ -152,7 +151,7 @@ double getDouble(double max) //这函数有点bug，我之后改改
 		return getDouble(max);
 	}
 
-}*/
+}
 
 void getText(char* str) 
 {
