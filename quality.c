@@ -282,24 +282,26 @@ void deleteQuality_rlist(List* plist) {	// 删除素质类项目之科研成果
 	Rnode* rhead = ptmp->item.rlist;
 	Rnode* r_del = searchRnode(rhead);//找到待删除的科研成果节点
 	Rnode* rtmp = rhead;
-	while (rtmp != NULL && rtmp->rnext != r_del) {
+	while (rtmp->rnext != r_del) {
 		rtmp = rtmp->rnext;
 	}
 	rtmp->rnext = r_del->rnext;
 	free(r_del);
 	printf("\n删除成功！");
+	Research_num--;
 }
 void deleteQuality_clist(List* plist) {	// 删除素质类项目之竞赛获奖
 	Node* ptmp = searchStu(plist);//找到待修改学生
 	Cnode* chead = ptmp->item.clist;
 	Cnode* c_del = searchCnode(chead);//找到待删除的科研成果节点
 	Cnode* ctmp = chead;
-	while (ctmp != NULL && ctmp->cnext != c_del) {
+	while (ctmp->cnext != c_del) {
 		ctmp = ctmp->cnext;
 	}
 	ctmp->cnext = c_del->cnext;
 	free(c_del);
 	printf("\n删除成功！");
+	Competition_num--;
 }
 
 
