@@ -1,10 +1,12 @@
 #pragma once
+#pragma warning(disable:4996)
 #ifndef _COURSE_H_
 #define _COURSE_H_
 #include <stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include"io.h"
+#include"ui.h"
 
 
 //等到以后再加个名次项目
@@ -17,7 +19,7 @@ typedef struct _Snode//课程节点下属的各个学生成绩节点
 	struct _Snode* next;//下个学生节点的地址
 }Snode,*Spnode;
 
-typedef struct _Cnode//课程节点
+typedef struct Cnode_//课程节点
 {
 	char cname[30];//课程名
 	int cnum;//课程号
@@ -29,14 +31,14 @@ typedef struct _Cnode//课程节点
 	double averGPA;//平均GPA
 	struct _Course * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
-}Cnode,*Cpnode;
+}_Cnode,*Cpnode;
 
 
 
 void menu();//调试时用，最后删除
-void showAllCrs(); // 显示所有课程（不包含学生成绩）
-void showCrs(); // 显示单个课程信息（包含该课程所有学生的成绩）
-void showStuInCrs(); // 具体显示单个课程的某学生
+Cpnode showAllCrs(); // 显示所有课程（不包含学生成绩）
+Cpnode showCrs(); // 显示单个课程信息（包含该课程所有学生的成绩）
+Spnode showStuInCrs(); // 具体显示单个课程的某学生
 
 
 //所有函数的传入值只有一个：课程链表的头节点
