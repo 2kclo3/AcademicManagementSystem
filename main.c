@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-int main0(void) 
+int main(void) 
 {
 
 	menu();
