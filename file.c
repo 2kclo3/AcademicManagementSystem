@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "file.h"
 #include "course.h"
 
@@ -20,18 +21,20 @@ Cpnode readCrs(char* file_name) {
 	CrsList->next = NULL;
 	CrsList->sphead = (Spnode)malloc(sizeof(Snode));
 	CrsList->sphead->next = NULL;
-	
+
 	fp = fopen(file_name, "r");//读取文件
 	if (fp == NULL) {
 		printf("Read \"%s\" error, please check and reboot the system!", file_name);
 		exit(EXIT_FAILURE);
 	}//读取失败退出
 
-	Item* item = (Item*)malloc(sizeof(Item)); //为item申请内存
-	item->score = (Score*)malloc(sizeof(Score));
-	item->score->sco_next = NULL;
-	Score* score = (Score*)malloc(sizeof(Score)); //为score申请内存
-	if (item == NULL || score == NULL) {
+	Cpnode tcnode = (Cpnode)malloc(sizeof(Cnode)); //为cnode申请内存
+	tcnode->next = NULL;
+	tcnode->sphead = (Spnode)malloc(sizeof(Snode));
+	tcnode->sphead->next = NULL;
+	Spnode tsnode = (Spnode)malloc(sizeof(Snode)); //为tsnode申请内存
+	tsnode->next = NULL;
+	if (tcnode == NULL || tsnode == NULL) {
 		printf("error!");
 		exit(EXIT_FAILURE);
 	}// 分配失败
@@ -42,35 +45,62 @@ Cpnode readCrs(char* file_name) {
 			continue;
 		}
 
-		if (sscanf(line, "%d %s %d %d %s %s",
-			&item->data.ID,
-			&item->data.name,
-			&item->data.gender,
-			&item->data.grade,
-			&item->data.college,
-			&item->data.major) == 6) { // 读取学生信息
+		if (sscanf(line, "%d %s %d %d %lf %lf %lf %lf",
+			&tcnode->cnum,
+			&tcnode->cname,
+			&tcnode->character,
+			&tcnode->headcount,
+			&tcnode->totscore,
+			&tcnode->averscore,
+			&tcnode->totGPA,
+			&tcnode->averGPA
+		) == 8) { // 读取学生信息
 			while (fgets(line, sizeof(line), fp) != NULL) {
 				if (line[0] == '\n') { // 跳过空行
 					break;
 				}
 				if (sscanf(line, "%s %s %lf %d %d %lf %lf",
-					&score->course_id,
-					&score->course_name,
-					&score->score,
-					&score->semester,
-					&score->course_nature,
-					&score->credit,
-					&score->grid) == 7) {
-					score->sco_next = NULL;
-					AddScore(score, item); // 添加到链表
+					&tsnode->snum,
+					&tsnode->sname,
+					&tsnode->score,
+					&tsnode->GPA
+				) == 4) {
+					tsnode->next = NULL;
+
+					// 添加到链表
+					Spnode snode = (Spnode)malloc(sizeof(Snode)); //为snode申请内存
+					if (snode == NULL) {
+						printf("error!");
+						exit(EXIT_FAILURE);
+					}// 分配失败
+					memcpy(snode, tsnode, sizeof(Snode));
+					Spnode ptmp = tcnode->sphead;
+					while (ptmp->next != NULL) {
+						ptmp = ptmp->next;
+					}
+					ptmp->next = snode;
+
+
 				}
 			}
-			AddItem(item, &list); // 添加到链表
-			item->score->sco_next = NULL;
+
+			// 添加到链表
+			Cpnode cnode = (Cpnode)malloc(sizeof(Cnode)); //为cnode申请内存
+			if (cnode == NULL) {
+				printf("error!");
+				exit(EXIT_FAILURE);
+			}// 分配失败
+			memcpy(cnode, tcnode, sizeof(Cnode));
+			Cpnode ptmp = CrsList;
+			while (ptmp->next != NULL) {
+				ptmp = ptmp->next;
+			}
+			ptmp->next = cnode;
+
 		}
 	}
 	fclose(fp);
-	return &list;
+	return &CrsList;
 
 
 
@@ -83,19 +113,19 @@ Cpnode readCrs(char* file_name) {
 参数：链表首地址,文件路径
 返回：是否成功
 */
-bool save(List* plist, char* file_name) {
-	FILE* fp;
-	Node* ptmp = (*plist)->next;
-	fp = fopen(file_name, "wb");//打开文件
-	if (fp == NULL) {
-		printf("Write \"%s\" error, please check and reboot the system!", file_name);
-		exit(EXIT_FAILURE);
-	}//打开失败
-
-	while (ptmp != NULL && fwrite(&(ptmp->item), sizeof(Item), 1, fp) == 1) {
-		ptmp = ptmp->next;
-	}// 写入文件
-	fclose(fp);
-	return true;
-}
-
+//bool save(List* plist, char* file_name) {
+//	FILE* fp;
+//	Node* ptmp = (*plist)->next;
+//	fp = fopen(file_name, "wb");//打开文件
+//	if (fp == NULL) {
+//		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+//		exit(EXIT_FAILURE);
+//	}//打开失败
+//
+//	while (ptmp != NULL && fwrite(&(ptmp->item), sizeof(Item), 1, fp) == 1) {
+//		ptmp = ptmp->next;
+//	}// 写入文件
+//	fclose(fp);
+//	return true;
+//}
+//
