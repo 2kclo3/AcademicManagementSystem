@@ -3,7 +3,7 @@
 #include "main.h"
 
 
-int main()
+int main2222()
 {
 	menu();
 	return 0;

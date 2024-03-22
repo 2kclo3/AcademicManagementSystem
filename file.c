@@ -17,7 +17,7 @@
 */
 Cpnode readCrs(char* file_name) {
 	FILE* fp;
-	Cpnode CrsList = (Cpnode)malloc(sizeof(Cnode));
+	Cpnode CrsList = (Cpnode)malloc(sizeof(_Cnode));
 	CrsList->next = NULL;
 	CrsList->sphead = (Spnode)malloc(sizeof(Snode));
 	CrsList->sphead->next = NULL;
@@ -28,7 +28,7 @@ Cpnode readCrs(char* file_name) {
 		exit(EXIT_FAILURE);
 	}//读取失败退出
 
-	Cpnode tcnode = (Cpnode)malloc(sizeof(Cnode)); //为cnode申请内存
+	Cpnode tcnode = (Cpnode)malloc(sizeof(_Cnode)); //为cnode申请内存
 	tcnode->next = NULL;
 	tcnode->sphead = (Spnode)malloc(sizeof(Snode));
 	tcnode->sphead->next = NULL;
@@ -85,12 +85,12 @@ Cpnode readCrs(char* file_name) {
 			}
 
 			// 添加到链表
-			Cpnode cnode = (Cpnode)malloc(sizeof(Cnode)); //为cnode申请内存
+			Cpnode cnode = (Cpnode)malloc(sizeof(_Cnode)); //为cnode申请内存
 			if (cnode == NULL) {
 				printf("error!");
 				exit(EXIT_FAILURE);
 			}// 分配失败
-			memcpy(cnode, tcnode, sizeof(Cnode));
+			memcpy(cnode, tcnode, sizeof(_Cnode));
 			Cpnode ptmp = CrsList;
 			while (ptmp->next != NULL) {
 				ptmp = ptmp->next;

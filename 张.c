@@ -4,7 +4,7 @@
 
 
 
-int main()
+int main1111()
 {
 	menu();
 

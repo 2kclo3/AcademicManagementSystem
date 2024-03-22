@@ -4,7 +4,7 @@
 #define FILE_NAME ".\\data\\test.dat"
 
 
-int main(void){ 
+int main0111(void){ 
 	
 	//页面显示
 	char* current_page = show_page("hello"); //当前页：hello
@@ -82,7 +82,8 @@ int main(void){
 			//int cnum = getNumber(99999);
 			//showMenu("请输入学年", 0);
 			//int cgrade = getNumber(3000);
-			searchCrs();
+
+			//searchCrs();
 
 
 
