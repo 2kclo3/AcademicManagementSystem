@@ -1,3 +1,4 @@
+#pragma warning(disable:4996)
 #include"quality.h"
 #include"student.h"
 #include"io.h"
@@ -140,8 +141,8 @@ void show_Competition_menu(char* title, Cnode* chead) {//·½±ãÐÞ¸Äº¯ÊýÈ·ÈÏËùÐè´¦À
 }
 
 
-Rnode searchRnode(Rnode* rhead) {//ÕÒ³ö´ýÐÞ¸ÄµÄËØÖÊÀàÏîÄ¿½Úµã
-	show_Research_menu("È·ÈÏËùÐèÐÞ¸ÄµÄ¿ÆÑÐ³É¹û", rhead);
+Rnode* searchRnode(Rnode* rhead) {//ÕÒ³ö´ýÐÞ¸ÄµÄËØÖÊÀàÏîÄ¿½Úµã
+	show_Research_menu("È·ÈÏËùÐèÐÞ¸Ä/É¾³ýµÄ¿ÆÑÐ³É¹û", rhead);
 	int option = getNumber(Research_num);
 	int count = 1;
 	Rnode* rtmp = rhead->rnext;
@@ -149,10 +150,10 @@ Rnode searchRnode(Rnode* rhead) {//ÕÒ³ö´ýÐÞ¸ÄµÄËØÖÊÀàÏîÄ¿½Úµã
 		rtmp = rtmp->rnext;	
 		count++;
 	}
-	return *rtmp;
+	return rtmp;
 }
-Cnode searchCnode(Cnode* chead) {
-	show_Competition_menu("È·ÈÏËùÐèÐÞ¸ÄµÄ¾ºÈü»ñ½±", chead);
+Cnode* searchCnode(Cnode* chead) {
+	show_Competition_menu("È·ÈÏËùÐèÐÞ¸Ä/É¾³ýµÄ¾ºÈü»ñ½±", chead);
 	int option = getNumber(Competition_num);
 	int count = 1;
 	Cnode* ctmp = chead->cnext;
@@ -160,64 +161,64 @@ Cnode searchCnode(Cnode* chead) {
 		ctmp = ctmp->cnext;
 		count++;
 	}
-	return *ctmp;
+	return ctmp;
 }
 
 
 void modifyQuality_rlist(List* plist) { // ÐÞ¸ÄËØÖÊÀàÏîÄ¿Ö®¿ÆÑÐ³É¹û
 	Node* ptmp = searchStu(plist);//ÕÒµ½´ýÐÞ¸ÄÑ§Éú
 	Rnode* rhead = ptmp->item.rlist;
-	Rnode rmod = searchRnode(rhead);//ÕÒµ½´ýÐÞ¸ÄµÄ¿ÆÑÐ³É¹û½Úµã
+	Rnode* rmod = searchRnode(rhead);//ÕÒµ½´ýÐÞ¸ÄµÄ¿ÆÑÐ³É¹û½Úµã
 	while (1) {
 		showMenu("ÇëÑ¡ÔñÒªÐÞ¸ÄµÄ¿ÆÑÐ³É¹ûµÄÏà¹ØÐÅÏ¢£º", 9, "1.ÂÛÎÄÃû³Æ", "2.ÆÚ¿¯/»áÒéÃû³Æ", "3.×÷ÕßÇé¿ö", "4.·¢±íÊ±¼ä", "5.¾íÊý", "6.¿¯ºÅ", "7.Ò³Âë·¶Î§", "8.Ó¦µÃ¼¨µã¼Ó·Ö","9.ÍË³ö");
 		int option = getNumber(9);
 		switch (option) {
 		case 1:
-			printf("Ô­À´µÄµÄÂÛÎÄÃû³Æ:%s", rmod.research.paper_name);
+			printf("Ô­À´µÄµÄÂÛÎÄÃû³Æ:%s", rmod->research.paper_name);
 			printf("\nÇëÊäÈëÐÂµÄÂÛÎÄÃû³Æ:");
-			getText(rmod.research.paper_name);
+			getText(rmod->research.paper_name);
 			break;
 
 		case 2:
-			printf("Ô­À´µÄÆÚ¿¯/»áÒéÃû³Æ:%s", rmod.research.journal_or_conference_name);
+			printf("Ô­À´µÄÆÚ¿¯/»áÒéÃû³Æ:%s", rmod->research.journal_or_conference_name);
 			printf("\nÇëÊäÈëÐÂµÄÆÚ¿¯/»áÒéÃû³Æ:");
-			getText(rmod.research.journal_or_conference_name);
+			getText(rmod->research.journal_or_conference_name);
 			break;
 
 		case 3:
-			printf("Ô­À´µÄ×÷ÕßÇé¿ö:%s", rmod.research.author);
+			printf("Ô­À´µÄ×÷ÕßÇé¿ö:%s", rmod->research.author);
 			printf("\nÇëÊäÈëÐÂµÄ×÷ÕßÇé¿ö:");
-			getText(rmod.research.author);
+			getText(rmod->research.author);
 			break;
 
 		case 4:
-			printf("Ô­À´µÄ·¢±íÊ±¼ä:%s", rmod.research.date);
+			printf("Ô­À´µÄ·¢±íÊ±¼ä:%s", rmod->research.date);
 			printf("\nÇëÊäÈëÐÂµÄ·¢±íÊ±¼ä:");
-			getText(rmod.research.date);
+			getText(rmod->research.date);
 			break;
 
 		case 5:
-			printf("Ô­À´µÄ¾íÊý:%s", rmod.research.volume_num);
+			printf("Ô­À´µÄ¾íÊý:%s", rmod->research.volume_num);
 			printf("\nÇëÊäÈëÐÂµÄ¾íÊý:");
-			getText(rmod.research.volume_num);
+			getText(rmod->research.volume_num);
 			break;
 
 		case 6:
-			printf("Ô­À´µÄ¿¯ºÅ:%s", rmod.research.issue_num);
+			printf("Ô­À´µÄ¿¯ºÅ:%s", rmod->research.issue_num);
 			printf("\nÇëÊäÈëÐÂµÄ¿¯ºÅ:");
-			getText(rmod.research.issue_num);
+			getText(rmod->research.issue_num);
 			break;
 
 		case 7:
-			printf("Ô­À´µÄÒ³Âë·¶Î§:%s", rmod.research.page);
+			printf("Ô­À´µÄÒ³Âë·¶Î§:%s", rmod->research.page);
 			printf("\nÇëÊäÈëÐÂµÄÒ³Âë·¶Î§:");
-			getText(rmod.research.page);
+			getText(rmod->research.page);
 			break;
 
 		case 8:
-			printf("Ô­À´µÄÓ¦µÃ¼¨µã¼Ó·Ö:%lf", rmod.research.GPA_bonus);
+			printf("Ô­À´µÄÓ¦µÃ¼¨µã¼Ó·Ö:%lf", rmod->research.GPA_bonus);
 			printf("\nÇëÊäÈëÐÂµÄÓ¦µÃ¼¨µã¼Ó·Ö:");
-			scanf("%lf", &rmod.research.GPA_bonus);
+			scanf("%lf", &rmod->research.GPA_bonus);
 			break;
 
 		case 9:
@@ -231,39 +232,39 @@ void modifyQuality_rlist(List* plist) { // ÐÞ¸ÄËØÖÊÀàÏîÄ¿Ö®¿ÆÑÐ³É¹û
 void modifyQuality_clist(List* plist) { // ÐÞ¸ÄËØÖÊÀàÏîÄ¿Ö®¾ºÈü»ñ½±
 	Node* ptmp = searchStu(plist);//ÕÒµ½´ýÐÞ¸ÄÑ§Éú
 	Cnode* chead = ptmp->item.clist;
-	Cnode cmod = searchCnode(chead);
+	Cnode* cmod = searchCnode(chead);
 	while (1) {
 		showMenu("ÇëÑ¡ÔñÒªÐÞ¸ÄµÄ¾ºÈü»ñ½±µÄÏà¹ØÐÅÏ¢£º", 6, "1.¾ºÈüÃû³Æ", "2.¾Ù°ìµ¥Î»", "3.»ñ½±Àà±ð", "4.»ñ½±Ê±¼ä", "5.Ó¦µÃ¼¨µã¼Ó·Ö","6.ÍË³ö");
 		int option = getNumber(6);
 		switch (option) {
 		case 1:
-			printf("Ô­À´µÄ¾ºÈüÃû³Æ:%s", cmod.competition.competition_name);
+			printf("Ô­À´µÄ¾ºÈüÃû³Æ:%s", cmod->competition.competition_name);
 			printf("\nÇëÊäÈëÐÂµÄ¾ºÈüÃû³Æ:");
-			getText(cmod.competition.competition_name);
+			getText(cmod->competition.competition_name);
 			break;
 
 		case 2:
-			printf("Ô­À´µÄ¾Ù°ìµ¥Î»:%s", cmod.competition.organizer);
+			printf("Ô­À´µÄ¾Ù°ìµ¥Î»:%s", cmod->competition.organizer);
 			printf("\nÇëÊäÈëÐÂµÄ¾Ù°ìµ¥Î»:");
-			getText(cmod.competition.organizer);
+			getText(cmod->competition.organizer);
 			break;
 
 		case 3:
-			printf("Ô­À´µÄ»ñ½±Àà±ð:%s", cmod.competition.category);
+			printf("Ô­À´µÄ»ñ½±Àà±ð:%s", cmod->competition.category);
 			printf("\nÇëÊäÈëÐÂµÄ»ñ½±Àà±ð:");
-			getText(cmod.competition.category);
+			getText(cmod->competition.category);
 			break;
 
 		case 4:
-			printf("Ô­À´µÄ»ñ½±Ê±¼ä:%s", cmod.competition.date);
+			printf("Ô­À´µÄ»ñ½±Ê±¼ä:%s", cmod->competition.date);
 			printf("\nÇëÊäÈëÐÂµÄ»ñ½±Ê±¼ä:");
-			getText(cmod.competition.date);
+			getText(cmod->competition.date);
 			break;
 
 		case 5:
-			printf("Ô­À´µÄÓ¦µÃ¼¨µã¼Ó·Ö:%lf", cmod.competition.GPA_bonus);
+			printf("Ô­À´µÄÓ¦µÃ¼¨µã¼Ó·Ö:%lf", cmod->competition.GPA_bonus);
 			printf("\nÇëÊäÈëÐÂµÄÓ¦µÃ¼¨µã¼Ó·Ö:");
-			scanf("%lf", &cmod.competition.GPA_bonus);
+			scanf("%lf", &cmod->competition.GPA_bonus);
 			break;
 		
 		case 6:
@@ -276,6 +277,33 @@ void modifyQuality_clist(List* plist) { // ÐÞ¸ÄËØÖÊÀàÏîÄ¿Ö®¾ºÈü»ñ½±
 }
 
 
-bool deleteQuality(); // É¾³ýËØÖÊÀàÏîÄ¿
+void deleteQuality_rlist(List* plist) {	// É¾³ýËØÖÊÀàÏîÄ¿Ö®¿ÆÑÐ³É¹û
+	Node* ptmp = searchStu(plist);//ÕÒµ½´ýÐÞ¸ÄÑ§Éú
+	Rnode* rhead = ptmp->item.rlist;
+	Rnode* r_del = searchRnode(rhead);//ÕÒµ½´ýÉ¾³ýµÄ¿ÆÑÐ³É¹û½Úµã
+	Rnode* rtmp = rhead;
+	while (rtmp->rnext != r_del) {
+		rtmp = rtmp->rnext;
+	}
+	rtmp->rnext = r_del->rnext;
+	free(r_del);
+	printf("\nÉ¾³ý³É¹¦£¡");
+	Research_num--;
+}
+void deleteQuality_clist(List* plist) {	// É¾³ýËØÖÊÀàÏîÄ¿Ö®¾ºÈü»ñ½±
+	Node* ptmp = searchStu(plist);//ÕÒµ½´ýÐÞ¸ÄÑ§Éú
+	Cnode* chead = ptmp->item.clist;
+	Cnode* c_del = searchCnode(chead);//ÕÒµ½´ýÉ¾³ýµÄ¿ÆÑÐ³É¹û½Úµã
+	Cnode* ctmp = chead;
+	while (ctmp->cnext != c_del) {
+		ctmp = ctmp->cnext;
+	}
+	ctmp->cnext = c_del->cnext;
+	free(c_del);
+	printf("\nÉ¾³ý³É¹¦£¡");
+	Competition_num--;
+}
+
+
 
 
