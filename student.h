@@ -58,10 +58,10 @@ typedef struct quality_projects_research Research;
 typedef struct quality_projects_competition Competition;
 
 
-typedef struct course {//学生课程链表节点
+typedef struct course_list{//学生课程链表节点
 	Score score;
-	struct course* next;
-}Course;
+	struct course_list* crs_next;
+}Crsnode;
 
 typedef struct research_list {//科研成果链表节点
 	Research research;
@@ -76,7 +76,7 @@ typedef struct competition_list {//竞赛获奖链表节点
 typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了两小块）
 	Data data;
 
-	Course course;//课程链表
+	Crsnode* crslist;//课程链表
 
 	Rnode* rlist; 
 	Cnode* clist;//竞赛获奖链表
@@ -124,7 +124,7 @@ bool deleteCrsInStu(); // 删除某个学生的某课程及成绩
 Node* searchStu(); // 在总学生链表中搜索学生
 
 
-Node* searchCrsInStu(); // 在单个学生中搜索其课程
+Crsnode* searchCrsInStu(); // 在单个学生中搜索其课程
 
 
 
