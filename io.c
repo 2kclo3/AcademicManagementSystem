@@ -67,7 +67,7 @@ int getNumber(int max) {
 }
 
 
-/*
+
 double getDouble(double max) //这函数有点bug，我之后改改
 {
 	fflush(stdin);
@@ -152,7 +152,8 @@ double getDouble(double max) //这函数有点bug，我之后改改
 		return getDouble(max);
 	}
 
-}*/
+}
+
 
 void getText(char* str) 
 {
