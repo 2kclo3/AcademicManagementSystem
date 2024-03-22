@@ -39,7 +39,6 @@
     <ClCompile Include="quality.c" />
     <ClCompile Include="student.c" />
     <ClCompile Include="ui.c" />
-    <ClCompile Include="张.c" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Page.txt" />

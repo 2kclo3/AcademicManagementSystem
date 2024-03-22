@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "io.h"
+
 
 
 struct student_data
@@ -96,6 +96,7 @@ void showAllStu(); // 显示所有学生信息（不包含课程）
 
 void showStu(); // 显示单个学生信息（包含其课程成绩）
 
+bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 
 void showCrsInStu(); // 具体显示单个学生的某课程
 
