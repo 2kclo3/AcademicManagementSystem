@@ -457,7 +457,7 @@ Spnode searchStuInCrs(Spnode phead) // 在单个课程中搜索其下的学生
 	Spnode pnode = phead->next;
 	while (pnode)
 	{
-		if (sum==pnode->snum)
+		if (snum==pnode->snum)
 			break;
 		pnode = pnode->next;
 	}
