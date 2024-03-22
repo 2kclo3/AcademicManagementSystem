@@ -1,6 +1,5 @@
 #pragma warning(disable:4996)
 #include"quality.h"
-#include"student.h"
 #include"io.h"
 #include"ui.h"
 #include<stdbool.h>
@@ -29,24 +28,25 @@ Node* searchStuInQuality(List phead) { // 在素质类项目中搜索学生
 }
 
 
-void Initialize_Quality_List(List phead){// 初始化素质类项目的链表（为每个学生的r/clist链表加入哨兵节点）
+bool Initialize_Quality_List(List phead){// 初始化素质类项目的链表（为每个学生的r/clist链表加入哨兵节点）
 	List Ltmp = phead->next;
 	while (Ltmp != NULL) {
 		
 		Rnode* rhead = (Rnode*)malloc(sizeof(Rnode));
 		if (rhead == NULL)
-			return NULL;
+			return false;
 		rhead->rnext = NULL;
 		Ltmp->item.rlist = rhead;
 
 		Cnode* chead = (Cnode*)malloc(sizeof(Cnode));
 		if (chead == NULL)
-			return NULL;
+			return false;
 		chead->cnext = NULL;
 		Ltmp->item.clist = chead;
 
 		Ltmp = Ltmp->next;
 	}
+	return true;
 }
 
 
@@ -91,7 +91,7 @@ bool addQuality_rlist(List* plist){
 }
 bool addQuality_clist(List* plist) {
 	Node* ptmp = searchStu(plist);
-	Cnode* chead = ptmp->item.rlist;
+	Cnode* chead = ptmp->item.clist;
 	Cnode* ctmp = chead->cnext;//素质类clist链表亦有哨兵节点
 	while (ctmp->cnext != NULL)
 		ctmp = ctmp->cnext;//尾插法
@@ -222,7 +222,7 @@ void modifyQuality_rlist(List* plist) { // 修改素质类项目之科研成果
 			break;
 
 		case 9:
-			return 0;
+			return ;
 
 		}
 	
@@ -268,7 +268,7 @@ void modifyQuality_clist(List* plist) { // 修改素质类项目之竞赛获奖
 			break;
 		
 		case 6:
-			return 0;
+			return ;
 
 		}
 

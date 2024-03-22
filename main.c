@@ -2,11 +2,11 @@
 
 #include "main.h"
 
-//int main(void) 
-//{
-//
-//	menu();
-//
-//
-//	return 0;
-//}
+int mainmain(void) 
+{
+
+	menu();
+
+
+	return 0;
+}

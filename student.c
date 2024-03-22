@@ -1,4 +1,6 @@
 #include "student.h"
+#include "io.h"
+
 
 #pragma warning(disable:4996)
 
@@ -56,6 +58,19 @@ void sortStu(List* plist) {
 	}
 }
 
+//初始化每个学生的课程链表并添加哨兵节点
+bool Initialize_Stu_Crslist(List phead) {
+		List Ltmp = phead->next;
+		while (Ltmp != NULL) {
+			Crsnode* crs_head = (Crsnode*)malloc(sizeof(Crsnode));
+			if (crs_head == NULL)
+				return false;
+			crs_head->crs_next = NULL;
+			Ltmp->item.crslist = crs_head;
+			Ltmp = Ltmp->next;
+		}
+		return true;
+}
 
 // 添加学生（不包含课程）
 bool addStu(List* plist){

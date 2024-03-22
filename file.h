@@ -4,12 +4,13 @@
 #define _FILE_H_
 
 #include <stdio.h>
+#include "course.h"
 
 
 bool readStu(); //读取学生文件
 
 
-bool readCrs(); //读取课程文件
+Cpnode readCrs(); //读取课程文件
 
 
 bool readQuality(); //读取素质类项目文件

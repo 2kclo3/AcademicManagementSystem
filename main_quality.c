@@ -3,9 +3,9 @@
 #include "main.h"
 
 
-//int main()
-//{
-//	menu();
-//	return 0;
-//
-//}
+int main0()
+{
+	menu();
+	return 0;
+
+}

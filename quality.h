@@ -6,14 +6,13 @@
 
 #include <stdio.h>
 #include<stdbool.h>
-
 #include"student.h"
 
 
 Node* searchStuInQuality(List); // 在素质类项目中搜索学生
 
 
-void Initialize_Quality_List(List);// 初始化素质类项目的链表（为每个学生的r/clist链表加入哨兵节点）
+bool Initialize_Quality_List(List);// 初始化素质类项目的链表（为每个学生的r/clist链表加入哨兵节点）
 
 
 bool addQuality_rlist(List*);// 添加素质类项目
