@@ -33,6 +33,7 @@
     <ClCompile Include="course.c" />
     <ClCompile Include="file.c" />
     <ClCompile Include="io.c" />
+    <ClCompile Include="Liuty.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="main_quality.c" />
     <ClCompile Include="quality.c" />
@@ -40,7 +41,7 @@
     <ClCompile Include="ui.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
+    <Text Include="Page.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
