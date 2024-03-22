@@ -1,8 +1,7 @@
 #include"course.h"
 ///要判断内存是否分配正确
-//注意以后要考虑内存泄露问题
+//注意内存泄露问题
 //最后要在添加学生成绩时维护一门成绩的平均值
-//对于课程性质，如果只有两个不如让他选择而非输入
 //初步先不对getNumber的参数做过多要求
 //之后GPA还得改改，他不是百分比换算
 //改成按学号查
@@ -46,7 +45,7 @@ Spnode showStuInCrs(Cpnode phead) // 具体显示单个课程的某学生
 
 void menu()
 {
-	Cpnode phead = (Cpnode)malloc(sizeof(Cnode));
+	Cpnode phead = (Cpnode)malloc(sizeof(_Cnode));
 	phead->next = NULL;
 	while(1)
 	{
@@ -106,30 +105,57 @@ int look(Cpnode phead)
 
 int addCrs(Cpnode phead) // 添加课程（不包含成绩）
 {
-	Cpnode pnode = (Cpnode)malloc(sizeof(Cnode));
-	pnode->sphead = (Spnode)malloc(sizeof(Snode));
-	pnode->sphead->next = NULL;
-	pnode->headcount = 0;
-	pnode->totGPA = 0;
-	pnode->totscore = 0;
-	pnode->averGPA = 0;
-	pnode->averscore = 0;
+	Cpnode p = (Cpnode)malloc(sizeof(_Cnode));
+	p->sphead = (Spnode)malloc(sizeof(Snode));
+	p->sphead->next = NULL;
+	p->headcount = 0;
+	p->totGPA = 0;
+	p->totscore = 0;
+	p->averGPA = 0;
+	p->averscore = 0;
 	//初始化
 
-	pnode->next = phead->next;
-	phead->next = pnode;//头插
+	p->next = phead->next;
+	phead->next = p;//头插
 
 	system("cls");
 	printf("请输入课程名:");
-	getText(pnode->cname);
+	getText(p->cname);
 	printf("\n");
-	printf("请输入课程号:");/////////这玩意是啥来着
-	pnode->cnum = getNumber(10);
+	printf("请输入课程号:");//五位数字，不以0开头
+	while(1)
+	{
+		p->cnum = getNumber(1e5 - 1);
+		if (p->cnum < 1e4)
+		{
+			printf("输入数据不合法，请重新输入！\n");
+			continue;
+		}
+		break;
+	}
 	printf("\n");
-	printf("请输入课程性质:");
-	getText(pnode->character);
+	showMenu("请选择课程性质", 2, "必修", "选修");
+	int op = 0;
+	while (1)
+	{
+		op = getNumber(2);
+		if (op == 0)
+		{
+			printf("输入数据不合法，请重新输入！\n");
+			continue;
+		}
+		break;
+	}
+	switch (op)
+	{
+	case 1:
+		strcpy(p->character, "必修");
+		break;
+	case 2:
+		strcpy(p->character, "选修");
+		break;
+	}
 	printf("\n");
-
 	printf("添加成功\n");
 	system("pause");
 	return 1;
@@ -149,14 +175,23 @@ int addStuToCrs(Cpnode phead) // 为某课程添加某学生成绩
 	pnode->next = p->sphead->next;
 	p->sphead->next = pnode;
 
-	printf("请输入学生姓名:");
+	printf("请输入学生姓名:");///////////////////////////////////////////以后要改
 	getText(pnode->sname);
 	printf("\n");
-	printf("请输入学生学号\n");
-	pnode->snum = getNumber(10);
+	printf("请输入学生学号\n");//八位，不以0开头
+	while (1)
+	{
+		pnode->snum  = getNumber(1e8 - 1);
+		if (pnode->snum < 1e7)
+		{
+			printf("输入数据不合法，请重新输入！\n");
+			continue;
+		}
+		break;
+	}
 	printf("\n");
 	printf("请输入学生成绩\n");
-	pnode->score = (double)getNumber(10);///那个double函数有问题
+	pnode->score = getDouble(100);////////////其实，这个也要改，01还是对的
 	printf("\n");
 	pnode->GPA = pnode->score / 100 * 4;
 
@@ -184,7 +219,17 @@ int modifyCrs(Cpnode phead) // 修改课程信息（不修改成绩）
 	{
 		system("cls");
 		showMenu("请选择功能", 4, "返回", "修改课程名称", "修改课程号", "修改课程性质");
-		int op = getNumber(10);
+		int op = 0;
+		while(1)
+		{
+			int op = getNumber(4);
+			if (op == 0)
+			{
+				printf("输入数据不合法，请重新输入！\n");
+				continue;
+			}
+			break;
+		}
 		switch (op)
 		{
 		case 1:
@@ -204,7 +249,16 @@ int modifyCrs(Cpnode phead) // 修改课程信息（不修改成绩）
 			system("cls");
 			printf("旧的课程号:%d", p->cnum);
 			printf("\n请输入新的课程号:");
-			p->cnum = getNumber(10);
+			while (1)
+			{
+				p->cnum = getNumber(1e5 - 1);
+				if (p->cnum < 1e4)
+				{
+					printf("输入数据不合法，请重新输入！\n");
+					continue;
+				}
+				break;
+			}
 			printf("\n修改成功\n");
 			system("pause");
 			break;
@@ -213,8 +267,27 @@ int modifyCrs(Cpnode phead) // 修改课程信息（不修改成绩）
 		{
 			system("cls");
 			printf("旧的课程性质:%s", p->character);
-			printf("\n请输入新的课程性质:");
-			getText(p->character);
+			showMenu("请选择新的课程性质", 2, "必修", "选修");
+			int op = 0;
+			while (1)
+			{
+				op = getNumber(2);
+				if (op == 0)
+				{
+					printf("输入数据不合法，请重新输入！\n");
+					continue;
+				}
+				break;
+			}
+			switch (op)
+			{
+			case 1:
+				strcpy(p->character, "必修");
+				break;
+			case 2:
+				strcpy(p->character, "选修");
+				break;
+			}
 			printf("\n修改成功\n");
 			system("pause");
 			break;
@@ -244,7 +317,7 @@ int modifyStuInCrs(Cpnode phead) // 修改某个课程的某学生成绩
 
 	printf("旧的学生成绩:%f", pnode->score);
 	printf("\n请输入新的学生成绩:");
-	pnode->score = getNumber(10);
+	pnode->score = getDouble(100);
 	printf("\n修改成功\n");
 	pnode->GPA = pnode->score / 100 * 4;
 	p->totscore += pnode->score;
@@ -266,7 +339,7 @@ int deleteCrs(Cpnode phead) // 删除课程
 	Cpnode p = phead;
 	while (p->next)
 	{
-		Cpnode pp = p->next;////犯啥大病，这非得让我这样写
+		Cpnode pp = p->next;////犯啥大病，这非得让我这样写。哎，能跑就行
 		if (strcmp(str,pp->cname) == 0)
 			break;
 		p = p->next;
@@ -291,10 +364,11 @@ int deleteCrs(Cpnode phead) // 删除课程
 	pp->next = p->next;
 	free(p);
 
+	printf("删除成功\n");
+	system("pause");
 	return 1;
 }
 
-//等以后加入双向链表后改改
 int deleteStuInCrs(Cpnode phead) // 删除某个课程的某学生成绩
 {
 	system("cls");
@@ -315,6 +389,8 @@ int deleteStuInCrs(Cpnode phead) // 删除某个课程的某学生成绩
 			break;
 		pnode = pnode->next;
 	}
+
+
 	if (!pnode->next)
 	{
 		printf("查无此人\n");
@@ -339,6 +415,8 @@ int deleteStuInCrs(Cpnode phead) // 删除某个课程的某学生成绩
 
 	pnode->next = tmp->next;
 	free(tmp);
+	printf("删除成功\n");
+	system("pause");
 	return 1;
 }
 
@@ -364,13 +442,22 @@ Cpnode searchCrs(Cpnode phead)// 在总课程链表中搜索课程
 }
 Spnode searchStuInCrs(Spnode phead) // 在单个课程中搜索其下的学生
 {
-	printf("请输入学生姓名\n");
-	char str[30];
-	getText(str);
+	printf("请输入学生学号\n");
+	int snum = 0;
+	while (1)
+	{
+		snum = getNumber(1e8 - 1);
+		if (snum < 1e7)
+		{
+			printf("输入数据不合法，请重新输入！\n");
+			continue;
+		}
+		break;
+	}
 	Spnode pnode = phead->next;
 	while (pnode)
 	{
-		if (strcmp(str, pnode->sname) == 0)
+		if (snum==pnode->snum)
 			break;
 		pnode = pnode->next;
 	}
