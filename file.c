@@ -115,7 +115,7 @@ Cpnode readCrs(char* file_name) {
 
 	fp = fopen(file_name, "r");//读取文件
 	if (fp == NULL) {
-		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		printf("Write to \"%s\" error, please check and reboot the system!", file_name);
 		exit(EXIT_FAILURE);
 	}//读取失败退出
 
@@ -206,13 +206,45 @@ Cpnode readCrs(char* file_name) {
 
 }
 
-bool saveStu(List StuList, char* file_name)
-{
-	return false;
+bool saveStu(List StuList, char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+	List pStu = StuList->next; // 从头结点的下一个节点开始
+	while (pStu != NULL) {
+		fprintf(fp, "%d %s %d %d %s %s\n",
+			pStu->item.data.ID,
+			pStu->item.data.name,
+			pStu->item.data.gender,
+			pStu->item.data.grade,
+			pStu->item.data.college,
+			pStu->item.data.major); // 写入
+
+		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
+		while (pcrs != NULL) {
+			fprintf(fp, "%s %s %lf %d %d %lf %lf\n",
+				pcrs->score.course_id,
+				pcrs->score.course_name,
+				pcrs->score.score,
+				pcrs->score.semester,
+				pcrs->score.course_nature,
+				pcrs->score.credit,
+				pcrs->score.grid); // 写入
+
+			pcrs = pcrs->crs_next; // 移动到下一个节点
+		}
+		fprintf(fp, "\n");
+		pStu = pStu->next; // 移动到下一个节点
+	}
+	fclose(fp);
+	return true;
 }
 
-bool saveCrs(Cpnode CrsList, char* file_name)
-{
+bool saveCrs(Cpnode CrsList, char* file_name) {
 	return false;
 }
 
