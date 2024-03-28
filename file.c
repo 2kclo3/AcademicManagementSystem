@@ -156,7 +156,7 @@ Cpnode readCrs(char* file_name) {
 				if (line[0] == '\n') { // 跳过空行
 					break;
 				}
-				if (sscanf(line, "%s %s %lf %d %d %lf %lf",
+				if (sscanf(line, "%d %s %lf %lf",
 					&tsnode->snum,
 					&tsnode->sname,
 					&tsnode->score,
@@ -226,7 +226,7 @@ bool saveStu(List StuList, char* file_name) {
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
 		while (pcrs != NULL) {
-			fprintf(fp, "%s %s %lf %d %d %lf %lf\n",
+			fprintf(fp, "%s %s %.1lf %d %d %.1lf %.1lf\n",
 				pcrs->score.course_id,
 				pcrs->score.course_name,
 				pcrs->score.score,
@@ -245,29 +245,40 @@ bool saveStu(List StuList, char* file_name) {
 }
 
 bool saveCrs(Cpnode CrsList, char* file_name) {
-	return false;
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
+	while (pCrs != NULL) {
+		fprintf(fp, "%d %s %d %d %.1lf %.2lf %.1lf %.2lf\n",
+			pCrs->cnum,
+			pCrs->cname,
+			pCrs->character,
+			pCrs->headcount,
+			pCrs->totscore,
+			pCrs->averscore,
+			pCrs->totGPA,
+			pCrs->averGPA); // 写入
+
+		Spnode pstu = pCrs->sphead->next; // 从下一个学生节点开始
+		while (pstu != NULL) {
+			fprintf(fp, "%d %s %.1lf %.1lf\n",
+				pstu->snum,
+				pstu->sname,
+				pstu->score,
+				pstu->GPA); // 写入
+
+			pstu = pstu->next; // 移动到下一个节点
+		}
+		fprintf(fp, "\n");
+		pCrs = pCrs->next; // 移动到下一个节点
+	}
+	fclose(fp);
+	return true;
 }
 
 
-/*
-保存文件
-作用：将链表保存到文件中
-参数：链表首地址,文件路径
-返回：是否成功
-*/
-//bool save(List* plist, char* file_name) {
-//	FILE* fp;
-//	Node* ptmp = (*plist)->next;
-//	fp = fopen(file_name, "wb");//打开文件
-//	if (fp == NULL) {
-//		printf("Write \"%s\" error, please check and reboot the system!", file_name);
-//		exit(EXIT_FAILURE);
-//	}//打开失败
-//
-//	while (ptmp != NULL && fwrite(&(ptmp->item), sizeof(Item), 1, fp) == 1) {
-//		ptmp = ptmp->next;
-//	}// 写入文件
-//	fclose(fp);
-//	return true;
-//}
-//

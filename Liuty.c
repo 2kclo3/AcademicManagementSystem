@@ -5,7 +5,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int main999999(void){ 
+int main888999(void){ 
 
 	
 
@@ -39,14 +39,23 @@ int main999999(void){
 		printf("\n");
 
 	}
-	char name[30];
-	scanf("%s", &name);
-	strcpy(stu->next->item.data.name, name);
+
+
+	char testName[30];
+	scanf("%s", &testName);
+	strcpy(stu->next->item.data.name, testName);
 	char crs1[30];
 	scanf("%s", &crs1);
 	strcpy(stu->next->next->item.crslist->crs_next->score.course_name, crs1);
 
+	int testID;
+	scanf("%d", &testID);
+	crs->next->next->cnum = testID;
+	strcpy(crs->next->sphead->next->next->sname, testName);
+
+
 	saveStu(stu, STU_FILE);
+	saveCrs(crs, CRS_FILE);
 
 
 

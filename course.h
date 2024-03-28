@@ -23,7 +23,7 @@ typedef struct Cnode_//课程节点
 {
 	char cname[30];//课程名
 	int cnum;//课程号
-	char character[30];//课程性质，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
+	int character;//课程性质(必修/选修)，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
 	int headcount;//总人数
 	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
 	double averscore;//平均成绩
