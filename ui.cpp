@@ -1,24 +1,7 @@
 #pragma warning(disable:4996)
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include "ui.h"
-#include "file.h"
 #define PAGE_FILE "Page.txt"
 
-
-int showMenu(const wchar_t* title, int optNum, ...){
-	wprintf(L"%s\n\n", title);
-
-	va_list args;
-	va_start(args, optNum);
-
-	for (int i = 1; i <= optNum; i++) {
-		wprintf(L"%2d:%s\n", i, va_arg(args, const wchar_t*));
-	}
-	va_end(args);
-	return 1;
-}
 
 
 
@@ -223,6 +206,7 @@ void testUI() {
 			//box2.onMessage(msg);
 		}
 
+		showxy(msg);
 
 
 		FlushBatchDraw(); //ÅúÁ¿»æÍ¼

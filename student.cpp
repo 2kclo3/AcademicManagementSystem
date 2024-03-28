@@ -1,5 +1,4 @@
 #include "student.h"
-#include "io.h"
 
 
 #pragma warning(disable:4996)
@@ -118,7 +117,7 @@ bool addCrsToStu(List* plist) {
 	int choice;
 	for (int i = 0; i < 9; i++) {//录入新节点信息
 		wprintf(L"选择你要录入的成绩信息(输入1-5）：\n 1.course_id 2.course_name 3.score 4.semester 5.course_nature 6.credit 7.credit 8.结束录入");
-		wscanf(L"&d", &choice);
+		wscanf(L"%d", &choice);
 		if (choice > 8 || choice < 1)
 			wprintf(L" 您的选择无效");
 		if (choice == 1)

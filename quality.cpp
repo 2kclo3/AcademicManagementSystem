@@ -1,8 +1,5 @@
 #pragma warning(disable:4996)
 #include"quality.h"
-#include"io.h"
-#include"ui.h"
-#include<stdbool.h>
 //遗留问题：1.为每个学生的r/clist链表加入哨兵节点 (OK
 //			2.searchR/Cnode()函数的实现  (OK
 

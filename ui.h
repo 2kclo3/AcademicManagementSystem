@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <stdbool.h>
 #include <graphics.h>
 #include <string>
@@ -15,6 +14,7 @@
 #include <sysinfoapi.h>
 #include "student.h"
 #include "course.h"
+#include "file.h"
 
 
 
@@ -262,6 +262,10 @@ class Table {};
 
 
 
+
+
+
+
 void showxy(ExMessage& msg);
 void testUI();
 void loginUI();
@@ -271,7 +275,7 @@ void StuUI();
 void allCrsUI();
 void CrsUI();
 void allQualityUI();
-void qualityUI();
+void allQualityUI();
 void changeMajorUI();
 void settingsUI();
 
@@ -279,19 +283,12 @@ void settingsUI();
 
 
 
-/*
-显示菜单并提供选择
-参数：(wchar_t*)标题，(int)选项数量，(wchar_t*)选项一，(wchar_t*)选项二...
-返回：选项对应的数字
-*/
-int showMenu(const wchar_t* title, int optNum, ...);
 
 
 void printStu(const List StuList);
 
 
-//void printCrs(const Cpnode CrsList); //这句加上就不对,奇了怪了
-
+void printCrs(const Cpnode CrsList);
 
 
 

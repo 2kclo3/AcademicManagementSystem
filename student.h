@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <tchar.h>
+#include "io.h"
 
 
 

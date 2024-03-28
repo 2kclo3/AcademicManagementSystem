@@ -6,7 +6,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include"io.h"
-#include"ui.h"
 
 
 //等到以后再加个名次项目
@@ -36,9 +35,9 @@ typedef struct Cnode_//课程节点
 
 
 void menu();//调试时用，最后删除
-Cpnode showAllCrs(); // 显示所有课程（不包含学生成绩）
-Cpnode showCrs(); // 显示单个课程信息（包含该课程所有学生的成绩）
-Spnode showStuInCrs(); // 具体显示单个课程的某学生
+Cpnode showAllCrs(Cpnode phead); // 显示所有课程（不包含学生成绩）
+Cpnode showCrs(Cpnode phead); // 显示单个课程信息（包含该课程所有学生的成绩）
+Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 
 
 //所有函数的传入值只有一个：课程链表的头节点

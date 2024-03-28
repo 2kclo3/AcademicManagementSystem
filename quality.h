@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include<stdbool.h>
 #include"student.h"
+#include"io.h"
+#include"ui.h"
 
 
 Node* searchStuInQuality(List); // 在素质类项目中搜索学生

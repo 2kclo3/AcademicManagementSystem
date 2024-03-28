@@ -1,19 +1,18 @@
 #include "io.h"
-#include <math.h>
 
 
 int getNumber(int max) { //0开头处理 TODO
 	wprintf(L">>> ");//提示输入
 
 	wchar_t line[1024];
-	fgetws(line, sizeof(line), stdin);
+	fgetws(line, sizeof(line) / sizeof(line[0]), stdin);
 	line[_tcslen(line) - 1] = '\0';
 
 	if (!_tcscmp(line, L"\0")) {
 		return getNumber(max);
 	}//没输入就按了回车
 
-	wchar_t ch;
+	//wchar_t ch;
 	int command = 0;
 	int err = 1;
 	int is_num = 0;
@@ -73,14 +72,14 @@ double getDouble(double max) //这函数有点bug，我之后改改
 	wprintf(L">>> ");//提示输入
 
 	wchar_t line[1024];
-	fgetws(line, sizeof(line), stdin);
+	fgetws(line, sizeof(line) / sizeof(line[0]), stdin);
 	line[_tcslen(line) - 1] = '\0';
 
 	if (!_tcscmp(line, L"\0")) {
 		return getDouble(max);
 	}//没输入就按了回车
 
-	wchar_t ch;
+	//wchar_t ch;
 	int command = 0;
 	int err = 1;
 	int is_num = 0;
@@ -158,8 +157,8 @@ void getText(wchar_t* str)
 	fflush(stdin);
 	wprintf(L">>> ");//提示输入
 
-	wchar_t line[10240];
-	fgetws(line, sizeof(line), stdin);
+	wchar_t line[1024];
+	fgetws(line, sizeof(line) / sizeof(line[0]), stdin);
 	line[_tcslen(line) - 1] = '\0';// 获取一整行
 
 	if (!_tcscmp(line, L"\0")) {
@@ -184,3 +183,22 @@ void getText(wchar_t* str)
 	}// 如果全是空格
 
 }
+
+
+
+int showMenu(const wchar_t* title, int optNum, ...){
+	wprintf(L"%s\n\n", title);
+
+	va_list args;
+	va_start(args, optNum);
+
+	for (int i = 1; i <= optNum; i++) {
+		wprintf(L"%2d:%s\n", i, va_arg(args, const wchar_t*));
+	}
+	va_end(args);
+	return 1;
+}
+
+
+
+
