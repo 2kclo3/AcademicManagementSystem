@@ -5,74 +5,41 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int main888999(void){ 
+int main00000000000(void){ 
 
 	
 
 	Cpnode  crs = readCrs(CRS_FILE);
-
-	Cpnode Crscrt = crs->next;
-	while (Crscrt != NULL) {
-		printf("%d\n", Crscrt->cnum);
-		Spnode stu = Crscrt->sphead->next;
-		while (stu != NULL) {
-			printf("%s\n", stu->sname);
-			stu = stu->next;
-		}
-		Crscrt = Crscrt->next;
-		printf("\n");
-
-	}
-
-
 	List stu = readStu(STU_FILE);
 
-	List Stucrt = stu->next;
-	while (Stucrt != NULL) {
-		printf("%s\n", Stucrt->item.data.name);
-		Crsnode* stu = Stucrt->item.crslist->crs_next;
-		while (stu != NULL) {
-			printf("%s\n", stu->score.course_name);
-			stu = stu->crs_next;
-		}
-		Stucrt = Stucrt->next;
-		printf("\n");
+	printStu(stu);
+	printf("\n\n\n\n\n");
+	printCrs(crs);
 
-	}
+	getchar();
 
-
-	char testName[30];
-	scanf("%s", &testName);
-	strcpy(stu->next->item.data.name, testName);
-	char crs1[30];
-	scanf("%s", &crs1);
-	strcpy(stu->next->next->item.crslist->crs_next->score.course_name, crs1);
-
-	int testID;
-	scanf("%d", &testID);
-	crs->next->next->cnum = testID;
-	strcpy(crs->next->sphead->next->next->sname, testName);
 
 
 	saveStu(stu, STU_FILE);
 	saveCrs(crs, CRS_FILE);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 	////页面显示
 	//char* current_page = show_page("hello"); //当前页：hello
 	//int command; // 指令
@@ -201,5 +168,3 @@ int main888999(void){
 	//	}
 	//}
 
-	return 0;
-}

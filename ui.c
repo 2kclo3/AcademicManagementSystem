@@ -20,12 +20,6 @@ int showMenu(char* title, int optNum, ...){
 
 
 
-/*
-显示页面
-作用：显示页面
-参数：页面名称
-返回：页面名
-*/
 char* show_page(char* page_name)
 {
 	system("cls");//清空控制台内容
@@ -60,6 +54,103 @@ char* show_page(char* page_name)
 	return page_name;
 
 }
+
+
+void printStu(const List StuList){
+
+	List pStu = StuList->next; // 从头结点的下一个节点开始
+	while (pStu != NULL) {
+		printf("学生信息:%d\t%s\t%d\t%d\t%s\t%s\n\n课程：\n",
+			pStu->item.data.ID,
+			pStu->item.data.name,
+			pStu->item.data.gender,
+			pStu->item.data.grade,
+			pStu->item.data.college,
+			pStu->item.data.major); 
+
+		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
+		while (pcrs != NULL) {
+			printf("%s\t%s\t%.1lf\t%d\t%d\t%.1lf\t%.1lf\n",
+				pcrs->score.course_id,
+				pcrs->score.course_name,
+				pcrs->score.score,
+				pcrs->score.semester,
+				pcrs->score.course_nature,
+				pcrs->score.credit,
+				pcrs->score.grid);
+
+			pcrs = pcrs->crs_next; // 移动到下一个节点
+		}
+
+		printf("\n科研成果：\n");
+		Rnode* pres = pStu->item.rlist->rnext; // 从下一个科研成果节点开始
+		while (pres != NULL) {
+			printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%.2lf\n",
+				pres->research.paper_name,
+				pres->research.journal_or_conference_name,
+				pres->research.author,
+				pres->research.date,
+				pres->research.volume_num,
+				pres->research.issue_num,
+				pres->research.page,
+				pres->research.GPA_bonus);
+
+			pres = pres->rnext; // 移动到下一个节点
+		}
+
+
+		printf("\n竞赛获奖：\n");
+		Cnode* pcpt = pStu->item.clist->cnext; // 从下一个竞赛获奖节点开始
+		while (pcpt != NULL) {
+			printf("%s\t%s\t%s\t%s\t%.2lf\n",
+				pcpt->competition.competition_name,
+				pcpt->competition.organizer,
+				pcpt->competition.category,
+				pcpt->competition.date,
+				pcpt->competition.GPA_bonus);
+
+			pcpt = pcpt->cnext; // 移动到下一个节点
+		}
+
+
+		printf("\n\n");
+		pStu = pStu->next; // 移动到下一个节点
+	}
+
+
+}
+
+
+
+
+void printCrs(const Cpnode CrsList){
+	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
+	while (pCrs != NULL) {
+		printf("课程信息:%d\t%s\t%d\t%d\t%.1lf\t%.2lf\t%.1lf\t%.2lf\n\n学生：\n",
+			pCrs->cnum,
+			pCrs->cname,
+			pCrs->character,
+			pCrs->headcount,
+			pCrs->totscore,
+			pCrs->averscore,
+			pCrs->totGPA,
+			pCrs->averGPA); // 写入
+
+		Spnode pstu = pCrs->sphead->next; // 从下一个学生节点开始
+		while (pstu != NULL) {
+			printf("%d\t%s\t%.1lf\t%.1lf\n",
+				pstu->snum,
+				pstu->sname,
+				pstu->score,
+				pstu->GPA); // 写入
+
+			pstu = pstu->next; // 移动到下一个节点
+		}
+		printf("\n\n");
+		pCrs = pCrs->next; // 移动到下一个节点
+	}
+}
+
 
 
 

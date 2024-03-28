@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include "student.h"
+#include "course.h"
+
 
 
 /*
@@ -17,16 +20,13 @@
 int showMenu(char* title, int optNum, ...);
 
 
-void showPage(); //显示页面
+void printStu(const List StuList);
 
 
-void showSheet(); //显示表格
+//void printCrs(const Cpnode CrsList); //这句加上就不对,奇了怪了
 
 
-void showChart();//显示图表
 
-
-void welcome(); // 欢迎
 
 /*
 显示页面
