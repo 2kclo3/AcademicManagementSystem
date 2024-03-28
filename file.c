@@ -189,6 +189,8 @@ List readStu(char* file_name) {
 	}
 	free(tnode);
 	free(tcrs);
+	free(trnode);
+	free(tcnode);
 	fclose(fp);
 	return StuList;
 
