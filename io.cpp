@@ -3,24 +3,24 @@
 
 
 int getNumber(int max) { //0开头处理 TODO
-	printf(">>> ");//提示输入
+	wprintf(L">>> ");//提示输入
 
-	char line[1024];
-	fgets(line, sizeof(line), stdin);
-	line[strlen(line) - 1] = '\0';
+	wchar_t line[1024];
+	fgetws(line, sizeof(line), stdin);
+	line[_tcslen(line) - 1] = '\0';
 
-	if (!strcmp(line, "\0")) {
+	if (!_tcscmp(line, L"\0")) {
 		return getNumber(max);
 	}//没输入就按了回车
 
-	char ch;
+	wchar_t ch;
 	int command = 0;
 	int err = 1;
 	int is_num = 0;
 	int is_continue = 1;
 	int is_all_space = 1;
 
-	for (int i = 0; i < strlen(line); i++) {
+	for (int i = 0; i < _tcslen(line); i++) {
 		//for (int i = 0; line[i] == ' ' || (line[i] >= '0' && line[i] <= '9'); i++) {
 		err = 0;
 		if (!(line[i] == ' ' || (line[i] >= '0' && line[i] <= '9'))) {
@@ -59,8 +59,8 @@ int getNumber(int max) { //0开头处理 TODO
 		return command;
 	}
 	else {
-		//printf("输入数据不合法，请重新输入！\n");
-		printf("\"%s\" 输入数据不合法，请重新输入！\n", line);
+		//printf(L"输入数据不合法，请重新输入！\n");
+		wprintf(L"\"%s\" 输入数据不合法，请重新输入！\n", line);
 		return getNumber(max);
 	}
 
@@ -70,17 +70,17 @@ int getNumber(int max) { //0开头处理 TODO
 double getDouble(double max) //这函数有点bug，我之后改改
 {
 	fflush(stdin);
-	printf(">>> ");//提示输入
+	wprintf(L">>> ");//提示输入
 
-	char line[1024];
-	fgets(line, sizeof(line), stdin);
-	line[strlen(line) - 1] = '\0';
+	wchar_t line[1024];
+	fgetws(line, sizeof(line), stdin);
+	line[_tcslen(line) - 1] = '\0';
 
-	if (!strcmp(line, "\0")) {
+	if (!_tcscmp(line, L"\0")) {
 		return getDouble(max);
 	}//没输入就按了回车
 
-	char ch;
+	wchar_t ch;
 	int command = 0;
 	int err = 1;
 	int is_num = 0;
@@ -89,7 +89,7 @@ double getDouble(double max) //这函数有点bug，我之后改改
 	int is_dot = 0;
 	int dot = 0;
 
-	for (int i = 0; i < strlen(line); i++) {
+	for (int i = 0; i < _tcslen(line); i++) {
 		//for (int i = 0; line[i] == ' ' || (line[i] >= '0' && line[i] <= '9'); i++) {
 		err = 0;
 		if (!(line[i] == ' ' || (line[i] >= '0' && line[i] <= '9') || line[i] == '.')) {
@@ -146,24 +146,24 @@ double getDouble(double max) //这函数有点bug，我之后改改
 		return command / pow(10, dot);
 	}
 	else {
-		//printf("输入数据不合法，请重新输入！\n");
-		printf("\"%s\" 输入数据不合法，请重新输入！\n", line);
+		//wprintf(L"输入数据不合法，请重新输入！\n");
+		wprintf(L"\"%s\" 输入数据不合法，请重新输入！\n", line);
 		return getDouble(max);
 	}
 
 }
 
-void getText(char* str) 
+void getText(wchar_t* str) 
 {
 	fflush(stdin);
-	printf(">>> ");//提示输入
+	wprintf(L">>> ");//提示输入
 
-	char line[10240];
-	fgets(line, sizeof(line), stdin);
-	line[strlen(line) - 1] = '\0';// 获取一整行
+	wchar_t line[10240];
+	fgetws(line, sizeof(line), stdin);
+	line[_tcslen(line) - 1] = '\0';// 获取一整行
 
-	if (!strcmp(line, "\0")) {
-		return getText(str);
+	if (!_tcscmp(line, L"\0")) {
+		getText(str);
 	}//没输入就按了回车
 
 	//int start_space = 1;
@@ -182,6 +182,5 @@ void getText(char* str)
 	if (is_all_space == 1) {
 		getText(str);
 	}// 如果全是空格
-	return true;
 
 }

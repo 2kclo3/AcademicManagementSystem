@@ -11,16 +11,16 @@
 #include "course.h"
 
 
-List readStu(char* file_name); //读取学生文件
+List readStu(const char* file_name); //读取学生文件
 
 
-Cpnode readCrs(char* file_name); //读取课程文件
+Cpnode readCrs(const char* file_name); //读取课程文件
 
 
-bool saveStu(List StuList, char* file_name); //保存学生文件
+bool saveStu(List StuList, const char* file_name); //保存学生文件
 
 
-bool saveCrs(Cpnode CrsList, char* file_name); //保存课程文件
+bool saveCrs(Cpnode CrsList, const char* file_name); //保存课程文件
 
 
 bool readQuality(); //读取素质类项目文件

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <tchar.h>
 
 
 
@@ -14,7 +15,7 @@ int getNumber(int max); //输入数字
 
 double getDouble(double max);
 
-void getText(char* str); //输入文字
+void getText(wchar_t* str); //输入文字
 
 
 

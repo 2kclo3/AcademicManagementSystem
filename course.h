@@ -12,7 +12,7 @@
 //等到以后再加个名次项目
 typedef struct _Snode//课程节点下属的各个学生成绩节点
 {
-	char sname[30];//姓名
+	wchar_t sname[30];//姓名
 	int snum;//学号
 	double score;
 	double GPA;//先手动输入，以后改成自动通过成绩转换
@@ -21,7 +21,7 @@ typedef struct _Snode//课程节点下属的各个学生成绩节点
 
 typedef struct Cnode_//课程节点
 {
-	char cname[30];//课程名
+	wchar_t cname[30];//课程名
 	int cnum;//课程号
 	int character;//课程性质(必修/选修)，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
 	int headcount;//总人数
