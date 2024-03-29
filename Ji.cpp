@@ -5,7 +5,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int main(void) {
+int 叫main(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
