@@ -18,7 +18,7 @@ Node* searchStuInQuality(List phead,wchar_t* str) { // 在素质类项目中搜索学生
 	return ptmp;
 }
 
-
+ 
 bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	wchar_t * journal_or_conference_name,
 	wchar_t* author, 

@@ -11,7 +11,7 @@ int main00() {
 	Cpnode  crs = readCrs(CRS_FILE);
 	List stu = readStu(STU_FILE);
 	
-	
+	 
 	printStu(stu);
 	return 0;
 }
