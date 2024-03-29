@@ -4,13 +4,24 @@
 #define _FILE_H_
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <tchar.h>
+#include "student.h"
 #include "course.h"
 
 
-bool readStu(); //读取学生文件
+List readStu(const char* file_name); //读取学生文件
 
 
-Cpnode readCrs(); //读取课程文件
+Cpnode readCrs(const char* file_name); //读取课程文件
+
+
+bool saveStu(List StuList, const char* file_name); //保存学生文件
+
+
+bool saveCrs(Cpnode CrsList, const char* file_name); //保存课程文件
 
 
 bool readQuality(); //读取素质类项目文件

@@ -1,5 +1,4 @@
 #include "student.h"
-#include "io.h"
 
 
 #pragma warning(disable:4996)
@@ -12,7 +11,7 @@ void InitializeList(List* plist) {
 	//plist = (List**)malloc(sizeof(Node*));
 	//*plist = (List*)malloc(sizeof(Node));
 	//if (*plist == NULL) {
-	//	printf("内存分配失败！");
+	//	wprintf(L"内存分配失败！");
 	//	exit(EXIT_FAILURE);
 	//}
 	(*plist)->next = NULL;
@@ -80,10 +79,10 @@ bool addStu(List* plist){
 	Node* pnew = (Node*)malloc(sizeof(Node));//创建新节点
 	int choice;
 	for (int i = 0; i < 7; i++) {//录入新节点信息
-		printf("选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
-		scanf("%d", &choice);
+		wprintf(L"选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
+		wscanf(L"%d", &choice);
 		if (choice > 7 || choice < 1)
-			printf(" 您的选择无效");
+			wprintf(L" 您的选择无效");
 		if (choice == 1)
 			getText(pnew->item.data.name);
 		if (choice == 2)
@@ -117,10 +116,10 @@ bool addCrsToStu(List* plist) {
 	crs_new->crs_next = NULL;
 	int choice;
 	for (int i = 0; i < 9; i++) {//录入新节点信息
-		printf("选择你要录入的成绩信息(输入1-5）：\n 1.course_id 2.course_name 3.score 4.semester 5.course_nature 6.credit 7.credit 8.结束录入");
-		scanf("&d", &choice);
+		wprintf(L"选择你要录入的成绩信息(输入1-5）：\n 1.course_id 2.course_name 3.score 4.semester 5.course_nature 6.credit 7.credit 8.结束录入");
+		wscanf(L"%d", &choice);
 		if (choice > 8 || choice < 1)
-			printf(" 您的选择无效");
+			wprintf(L" 您的选择无效");
 		if (choice == 1)
 			getText(crs_new->score.course_id);
 		if (choice == 2)
@@ -147,10 +146,10 @@ bool modifyStu(List* plist){
 	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
 	int choice;
 	for (int i = 0; i < 7; i++) {
-		printf("选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
-		scanf("%d", &choice);
+		wprintf(L"选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
+		wscanf(L"%d", &choice);
 		if (choice > 7 || choice < 1)
-			printf(" 您的选择无效");
+			wprintf(L" 您的选择无效");
 		if (choice == 1)
 			getText(ptmp->item.data.name);
 		if (choice == 2)
@@ -166,6 +165,7 @@ bool modifyStu(List* plist){
 		if (choice == 7)
 			break;
 	}
+	return true;
 }
 
 
@@ -176,6 +176,8 @@ bool modifyCrsInStu(List* plist) {
 	Crsnode* crs_mod = searchCrsInStu(crs_head); //找到待修改的课程
 	//......
 
+
+	return true; //不加这行会报错没有返回值
 }
 
 // 删除学生
@@ -200,7 +202,8 @@ bool deleteCrsInStu(List* plist) {
 	}
 	crs_tmp->crs_next = crs_del->crs_next;
 	free(crs_del);
-	printf("\n删除成功！");
+	wprintf(L"\n删除成功！");
+	return true;
 }
 
 // 在总学生链表中通过学号和名字搜索学生
@@ -208,21 +211,21 @@ Node* searchStu(List* plist) {
 	Node* ptmp = *plist;
 	int pid;
 	pid=getNumber(99999999); //输入学号
-	char pname[16];
+	wchar_t pname[16];
 	getText(pname);
-	while (ptmp->item.data.ID != pid && strcmp(ptmp->item.data.name,pname) != 0 )//通过姓名或学号来检索
+	while (ptmp->item.data.ID != pid && _tcscmp(ptmp->item.data.name,pname) != 0 )//通过姓名或学号来检索
 		ptmp = ptmp->next;
 	return (ptmp);//返回这个学生信息的节点地址
 }
 	
 // 在单个学生中搜索待删除/修改的课程
 Crsnode* searchCrsInStu(Crsnode* crs_head) {
-	char pcourse_id[10];
-	char pcourse_name[100];
+	wchar_t pcourse_id[10];
+	wchar_t pcourse_name[100];
 	getText(pcourse_id);
 	getText(pcourse_name);//输入待查找课程的编号和名称；
 	Crsnode* crs_aim = crs_head->crs_next;
-	while (strcmp(crs_aim->score.course_id, pcourse_id) != 0 && strcmp(crs_aim->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
+	while (_tcscmp(crs_aim->score.course_id, pcourse_id) != 0 && _tcscmp(crs_aim->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
 		crs_aim = crs_aim->crs_next;
 	return crs_aim;
 }

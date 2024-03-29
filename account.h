@@ -4,6 +4,7 @@
 #define _ACCOUNT_H_
 
 #include <stdio.h>
+#include <tchar.h>
 
 void changePwd();// ĞŞ¸ÄÃÜÂë
 

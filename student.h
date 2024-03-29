@@ -5,49 +5,52 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <tchar.h>
+#include "io.h"
 
 
 
 struct student_data
 {
-	char name[30];//姓名
+	wchar_t name[30];//姓名
 	int ID;//学号
 	int gender;//性别
 	int grade;//年级
-	char college[50];//学院
-	char major[50];//专业
+	wchar_t college[50];//学院
+	wchar_t major[50];//专业
 };
 
 struct score_info {
-	char course_id[10];//课程号
-	char course_name[100];//课程名
+	wchar_t course_id[10];//课程号
+	wchar_t course_name[100];//课程名
 	double score;//课程成绩
 	int semester;//学年学期
-	//char course_category[50]; //课程类别
+	//wchar_t course_category[50]; //课程类别
 	int course_nature;//课程性质
 	double credit;//学分
 	double grid;//绩点
 	//int score_type;//成绩类型
-	//char remark[1024];//备注
+	//wchar_t remark[1024];//备注
 	struct score_info* sco_next;
 };
 
 struct quality_projects_research {//科研成果
-	char paper_name[200];//论文名称
-	char journal_or_conference_name[200];//所发表的期刊或会议名称
-	char author[300];// 作者情况（是否为通讯作者及作者排序）
-	char date[11];// 发表年月
-	char volume_num[10];// 卷数
-	char issue_num[10];// 刊号
-	char page[15];// 页码范围
+	wchar_t paper_name[200];//论文名称
+	wchar_t journal_or_conference_name[200];//所发表的期刊或会议名称
+	wchar_t author[300];// 作者情况（是否为通讯作者及作者排序）
+	wchar_t date[11];// 发表年月
+	wchar_t volume_num[10];// 卷数
+	wchar_t issue_num[10];// 刊号
+	wchar_t page[15];// 页码范围
 	double GPA_bonus;
 };
 
 struct quality_projects_competition {//竞赛获奖
-	char competition_name[200];//竞赛名称
-	char organizer[100];//举办单位
-	char category[100];//获奖类别
-	char date[11];//获奖时间 年月
+	wchar_t competition_name[200];//竞赛名称
+	wchar_t organizer[100];//举办单位
+	wchar_t category[100];//获奖类别
+	wchar_t date[11];//获奖时间 年月
 	double GPA_bonus;
 };
 
@@ -122,10 +125,10 @@ bool deleteStu(); // 删除学生
 bool deleteCrsInStu(); // 删除某个学生的某课程及成绩
 
 
-Node* searchStu(); // 在总学生链表中搜索学生
+Node* searchStu(List* plist); // 在总学生链表中搜索学生
 
 
-Crsnode* searchCrsInStu(); // 在单个学生中搜索其课程
+Crsnode* searchCrsInStu(Crsnode* crs_head); // 在单个学生中搜索其课程
 
 
 

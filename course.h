@@ -5,14 +5,14 @@
 #include <stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <tchar.h>
 #include"io.h"
-#include"ui.h"
 
 
 //等到以后再加个名次项目
 typedef struct _Snode//课程节点下属的各个学生成绩节点
 {
-	char sname[30];//姓名
+	wchar_t sname[30];//姓名
 	int snum;//学号
 	double score;
 	double GPA;//先手动输入，以后改成自动通过成绩转换
@@ -21,24 +21,24 @@ typedef struct _Snode//课程节点下属的各个学生成绩节点
 
 typedef struct Cnode_//课程节点
 {
-	char cname[30];//课程名
+	wchar_t cname[30];//课程名
 	int cnum;//课程号
-	char character[30];//课程性质，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
+	int character;//课程性质(必修/选修)，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
 	int headcount;//总人数
 	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
 	double averscore;//平均成绩
 	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
 	double averGPA;//平均GPA
-	struct _Course * next;//下一个课程节点
+	struct Cnode_ * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }_Cnode,*Cpnode;
 
 
 
 void menu();//调试时用，最后删除
-Cpnode showAllCrs(); // 显示所有课程（不包含学生成绩）
-Cpnode showCrs(); // 显示单个课程信息（包含该课程所有学生的成绩）
-Spnode showStuInCrs(); // 具体显示单个课程的某学生
+Cpnode showAllCrs(Cpnode phead); // 显示所有课程（不包含学生成绩）
+Cpnode showCrs(Cpnode phead); // 显示单个课程信息（包含该课程所有学生的成绩）
+Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 
 
 //所有函数的传入值只有一个：课程链表的头节点

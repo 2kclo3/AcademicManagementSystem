@@ -29,17 +29,17 @@
     <ClInclude Include="ui.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="account.c" />
-    <ClCompile Include="course.c" />
-    <ClCompile Include="file.c" />
-    <ClCompile Include="io.c" />
-    <ClCompile Include="Liuty.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="main_quality.c" />
-    <ClCompile Include="quality.c" />
-    <ClCompile Include="student.c" />
-    <ClCompile Include="ui.c" />
-    <ClCompile Include="张.c" />
+    <ClCompile Include="account.cpp" />
+    <ClCompile Include="course.cpp" />
+    <ClCompile Include="file.cpp" />
+    <ClCompile Include="io.cpp" />
+    <ClCompile Include="Liuty.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main_quality.cpp" />
+    <ClCompile Include="quality.cpp" />
+    <ClCompile Include="student.cpp" />
+    <ClCompile Include="ui.cpp" />
+    <ClCompile Include="张.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Page.txt" />
