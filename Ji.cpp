@@ -25,11 +25,11 @@ int main(void) {
 
 	wchar_t pname[30];
 	int pid;
-	Node* test;
-	wscanf(L"%s %d", &pname, &pid);
+	//Node* test;
+	//wscanf(L"%s %d", &pname, &pid);
 	wscanf(L"%s %d %d %d %s %s", &name, &id,&gender,&grade,&college,&major);
-	test = searchStu(&stu, pname, pid);
-	modifyStu(&stu, test, name, id, gender, grade, college, major);
+	//test = searchStu(&stu, pname, pid);
+	addStu(&stu,name, id, gender, grade, college, major);
 
 	printStu(stu);
 

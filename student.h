@@ -32,7 +32,7 @@ struct score_info {
 	double grid;//绩点
 	//int score_type;//成绩类型
 	//wchar_t remark[1024];//备注
-	struct score_info* sco_next;
+	//struct score_info* sco_next;
 };
 
 struct quality_projects_research {//科研成果
@@ -81,7 +81,7 @@ typedef struct item {//一个学生所需具备的全部信息（共三大块 素质类项目成果拆成了
 
 	Crsnode* crslist;//课程链表
 
-	Rnode* rlist; 
+	Rnode* rlist; //科研成果链表
 	Cnode* clist;//竞赛获奖链表
 }Item;
 
@@ -104,10 +104,10 @@ bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 void showCrsInStu(); // 具体显示单个学生的某课程
 
 
-bool addStu(); // 添加学生（不包含课程）
+bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor); // 添加学生（不包含课程）
 
 
-bool addCrsToStu();// 为某个学生添加某课程及成绩
+bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid);// 为某个学生添加某课程及成绩
 
 
 void sortStu();// 排序总学生链表
@@ -116,19 +116,19 @@ void sortStu();// 排序总学生链表
 bool modifyStu(List* plist, Node* chastu, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor);// 修改学生信息（不修改课程）
 
 
-bool modifyCrsInStu(); // 修改某个学生的某课程及成绩
+bool modifyCrsInStu(Crsnode* chacrs, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid); // 修改某个学生的某课程及成绩
 
 
 bool deleteStu(List* plist,Node* delstu); // 删除学生
 
 
-bool deleteCrsInStu(); // 删除某个学生的某课程及成绩
+bool deleteCrsInStu(Node* delstu, Crsnode* delcrs); // 删除某个学生的某课程及成绩
 
 
 Node* searchStu(List* plist, wchar_t* pname, int pID); // 在总学生链表中搜索学生
 
 
-Crsnode* searchCrsInStu(Crsnode* crs_head); // 在单个学生中搜索其课程
+Crsnode* searchCrsInStu(Crsnode* crs_head, wchar_t* pcourse_id, wchar_t* pcourse_name); // 在单个学生中搜索其课程
 
 
 
