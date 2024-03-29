@@ -119,13 +119,13 @@ bool modifyStu();// 修改学生信息（不修改课程）
 bool modifyCrsInStu(); // 修改某个学生的某课程及成绩
 
 
-bool deleteStu(); // 删除学生
+bool deleteStu(List* plist,Node* delstu); // 删除学生
 
 
 bool deleteCrsInStu(); // 删除某个学生的某课程及成绩
 
 
-Node* searchStu(List* plist); // 在总学生链表中搜索学生
+Node* searchStu(List* plist, wchar_t* pname, int pID); // 在总学生链表中搜索学生
 
 
 Crsnode* searchCrsInStu(Crsnode* crs_head); // 在单个学生中搜索其课程

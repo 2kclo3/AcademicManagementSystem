@@ -4,19 +4,6 @@
 #pragma warning(disable:4996)
 
 
-
-
-//初始化链表
-void InitializeList(List* plist) {
-	//plist = (List**)malloc(sizeof(Node*));
-	//*plist = (List*)malloc(sizeof(Node));
-	//if (*plist == NULL) {
-	//	wprintf(L"内存分配失败！");
-	//	exit(EXIT_FAILURE);
-	//}
-	(*plist)->next = NULL;
-}
-
 // 显示所有学生信息（不包含课程）返回一个链表
 void showAllStu();
 	
@@ -30,7 +17,7 @@ void showCrsInStu();// 具体显示单个学生的某课程
 
 
 // 排序总学生链表(按照学号来排序）
-void sortStu(List* plist) {
+/*void sortStu(List* plist) {
 	Node* p, * p0, * r, * r0, * q;
 	p = p0 = r = r0 = q = NULL;
 	p = *plist;
@@ -56,9 +43,10 @@ void sortStu(List* plist) {
 		}
 	}
 }
+*/
 
 //初始化每个学生的课程链表并添加哨兵节点
-bool Initialize_Stu_Crslist(List phead) {
+/*bool Initialize_Stu_Crslist(List phead) {
 		List Ltmp = phead->next;
 		while (Ltmp != NULL) {
 			Crsnode* crs_head = (Crsnode*)malloc(sizeof(Crsnode));
@@ -70,9 +58,10 @@ bool Initialize_Stu_Crslist(List phead) {
 		}
 		return true;
 }
+*/
 
 // 添加学生（不包含课程）
-bool addStu(List* plist){
+/*bool addStu(List* plist) {
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL)
 		ptmp = ptmp->next;
@@ -101,10 +90,10 @@ bool addStu(List* plist){
 	ptmp->next = pnew;
 	return true;
 }
-	
+*/	
 
 // 为某个学生添加某课程及成绩
-bool addCrsToStu(List* plist) {
+/*bool addCrsToStu(List* plist) {
 	Node* ptmp= searchStu(plist);//通过搜索函数找到待修改学生
 	Crsnode* crs_head = ptmp->item.crslist;
 	Crsnode* crs_tmp = crs_head->crs_next;//课程链表需要有哨兵节点
@@ -140,37 +129,21 @@ bool addCrsToStu(List* plist) {
 	crs_tmp->crs_next = crs_new;//添加新节点
 	return true;
 }
+*/
 
 // 修改学生信息（不修改课程）
-bool modifyStu(List* plist){
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	int choice;
-	for (int i = 0; i < 7; i++) {
-		wprintf(L"选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
-		wscanf(L"%d", &choice);
-		if (choice > 7 || choice < 1)
-			wprintf(L" 您的选择无效");
-		if (choice == 1)
-			getText(ptmp->item.data.name);
-		if (choice == 2)
-			getNumber(ptmp->item.data.ID);
-		if (choice == 3)
-			getNumber(ptmp->item.data.gender);
-		if (choice == 4)
-			getNumber(ptmp->item.data.grade);
-		if (choice == 5)
-			getText(ptmp->item.data.college);
-		if (choice == 6)
-			getText(ptmp->item.data.major);
-		if (choice == 7)
-			break;
-	}
-	return true;
-}
-
+//bool modifyStu(List* plist , wchar_t* pname ,int pID ,int pgender,int pgrade,wchar_t* college,wchar_t major) {
+//	Node* ptmp = *plist;
+//	wcscpy(ptmp->item.data.name,pname);
+//	ptmp->item.data.ID = pID;
+//	ptmp->item.data.gender = pgender;
+//	ptmp->item.data.grade = pgrade;
+//	getText(ptmp->item.data.college);
+//	getText(ptmp->item.data.major);
+//}
 
 // 修改某个学生的某课程及成绩
-bool modifyCrsInStu(List* plist) {
+/*bool modifyCrsInStu(List* plist) {
 	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
 	Crsnode* crs_head = ptmp->item.crslist;
 	Crsnode* crs_mod = searchCrsInStu(crs_head); //找到待修改的课程
@@ -179,19 +152,20 @@ bool modifyCrsInStu(List* plist) {
 
 	return true; //不加这行会报错没有返回值
 }
+*/
 
 // 删除学生
-bool deleteStu(List* plist) {
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Node* ptmpp = *plist;
-	while (ptmpp->next != ptmp)
-		ptmpp = ptmpp->next;
-	ptmpp->next = ptmp->next;
+//参数：链表头节点，待删除学生节点
+bool deleteStu(List* plist, Node* delstu) {
+	Node* ptmp = *plist;
+	while (ptmp->next != delstu)
+		ptmp = ptmp->next;
+	ptmp->next = delstu->next;
+	free(delstu);
 	return true;
 }
 
-
-// 删除某个学生的某课程及成绩
+/*// 删除某个学生的某课程及成绩
 bool deleteCrsInStu(List* plist) {
 	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
 	Crsnode* crs_head = ptmp->item.crslist;
@@ -205,21 +179,19 @@ bool deleteCrsInStu(List* plist) {
 	wprintf(L"\n删除成功！");
 	return true;
 }
+*/
 
-// 在总学生链表中通过学号和名字搜索学生
-Node* searchStu(List* plist) {
+// 在总学生链表中通过学号和名字搜索学生 
+//参数：头节点，待搜索学号和姓名
+Node* searchStu(List* plist, wchar_t* pname, int pID) {
 	Node* ptmp = *plist;
-	int pid;
-	pid=getNumber(99999999); //输入学号
-	wchar_t pname[16];
-	getText(pname);
-	while (ptmp->item.data.ID != pid && _tcscmp(ptmp->item.data.name,pname) != 0 )//通过姓名或学号来检索
+	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0 )//通过姓名或学号来检索
 		ptmp = ptmp->next;
 	return (ptmp);//返回这个学生信息的节点地址
 }
 	
 // 在单个学生中搜索待删除/修改的课程
-Crsnode* searchCrsInStu(Crsnode* crs_head) {
+/*Crsnode* searchCrsInStu(Crsnode* crs_head) {
 	wchar_t pcourse_id[10];
 	wchar_t pcourse_name[100];
 	getText(pcourse_id);
@@ -229,3 +201,4 @@ Crsnode* searchCrsInStu(Crsnode* crs_head) {
 		crs_aim = crs_aim->crs_next;
 	return crs_aim;
 }
+*/
