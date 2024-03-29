@@ -4,11 +4,11 @@
 
 
 
-//int main()
-//{
-//	menu();
-//
-//	return 0;
-//
-//
-//}
+int jjmain()
+{
+	menu();
+
+	return 0;
+
+
+}

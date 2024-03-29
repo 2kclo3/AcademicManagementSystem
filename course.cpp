@@ -1,9 +1,8 @@
 #include"course.h"
-///要判断内存是否分配正确
 //注意内存泄露问题
-//初步先不对getNumber的参数做过多要求
 //之后GPA还得改改，他不是百分比换算
 //添加名次，实现对名次的维护
+//注意姓名、学号等的规范性判断
 
 //传课程链表头节点
 Cpnode showAllCrs(Cpnode phead)// 显示所有课程（不包含学生成绩）
@@ -308,6 +307,7 @@ int modifyCrs(Cpnode phead) // 修改课程信息（不修改成绩）
 	return 1;
 }
 
+//如果加名次，这个函数必须改
 int modifyStuInCrs(Cpnode phead) // 修改某个课程的某学生成绩
 {
 	system("cls");

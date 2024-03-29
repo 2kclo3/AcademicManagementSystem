@@ -4,19 +4,6 @@
 #pragma warning(disable:4996)
 
 
-
-
-//初始化链表
-void InitializeList(List* plist) {
-	//plist = (List**)malloc(sizeof(Node*));
-	//*plist = (List*)malloc(sizeof(Node));
-	//if (*plist == NULL) {
-	//	wprintf(L"内存分配失败！");
-	//	exit(EXIT_FAILURE);
-	//}
-	(*plist)->next = NULL;
-}
-
 // 显示所有学生信息（不包含课程）返回一个链表
 void showAllStu();
 	
@@ -30,7 +17,7 @@ void showCrsInStu();// 具体显示单个学生的某课程
 
 
 // 排序总学生链表(按照学号来排序）
-void sortStu(List* plist) {
+/*void sortStu(List* plist) {
 	Node* p, * p0, * r, * r0, * q;
 	p = p0 = r = r0 = q = NULL;
 	p = *plist;
@@ -56,9 +43,10 @@ void sortStu(List* plist) {
 		}
 	}
 }
+*/
 
 //初始化每个学生的课程链表并添加哨兵节点
-bool Initialize_Stu_Crslist(List phead) {
+/*bool Initialize_Stu_Crslist(List phead) {
 		List Ltmp = phead->next;
 		while (Ltmp != NULL) {
 			Crsnode* crs_head = (Crsnode*)malloc(sizeof(Crsnode));
@@ -70,160 +58,118 @@ bool Initialize_Stu_Crslist(List phead) {
 		}
 		return true;
 }
+*/
 
 // 添加学生（不包含课程）
-bool addStu(List* plist){
+bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL)
 		ptmp = ptmp->next;
-	Node* pnew = (Node*)malloc(sizeof(Node));//创建新节点
-	int choice;
-	for (int i = 0; i < 7; i++) {//录入新节点信息
-		wprintf(L"选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
-		wscanf(L"%d", &choice);
-		if (choice > 7 || choice < 1)
-			wprintf(L" 您的选择无效");
-		if (choice == 1)
-			getText(pnew->item.data.name);
-		if (choice == 2)
-			getNumber(pnew->item.data.ID);
-		if (choice == 3)
-			getNumber(pnew->item.data.gender);
-		if (choice == 4)
-			getNumber(pnew->item.data.grade);
-		if (choice == 5)
-			getText(pnew->item.data.college);
-		if (choice == 6)
-			getText(pnew->item.data.major);
-		if (choice == 7)
-			break;
-	}
+
+	Node* pnew = (Node*)malloc(sizeof(Node));
+	pnew->next = NULL;
+	pnew->item.crslist = (Crsnode*)malloc(sizeof(Crsnode));
+	pnew->item.crslist->crs_next = NULL;
+	pnew->item.rlist= (Rnode*)malloc(sizeof(Rnode));
+	pnew->item.rlist->rnext = NULL;
+	pnew->item.clist = (Cnode*)malloc(sizeof(Cnode));
+	pnew->item.clist->cnext = NULL;
+
+	wcscpy(pnew->item.data.name, pname);
+	pnew->item.data.ID = pID;
+	pnew->item.data.gender = pgender;
+	pnew->item.data.grade = pgrade;
+	wcscpy(pnew->item.data.college, pcollege);
+	wcscpy(pnew->item.data.major, pmajor);
+
 	ptmp->next = pnew;
 	return true;
 }
-	
 
-// 为某个学生添加某课程及成绩
-bool addCrsToStu(List* plist) {
-	Node* ptmp= searchStu(plist);//通过搜索函数找到待修改学生
-	Crsnode* crs_head = ptmp->item.crslist;
-	Crsnode* crs_tmp = crs_head->crs_next;//课程链表需要有哨兵节点
+ //为某个学生添加某课程及成绩
+bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
+	Crsnode* crs_tmp = chastu->item.crslist;//课程链表头节点
 	while (crs_tmp->crs_next != NULL)
 		crs_tmp = crs_tmp->crs_next;
 	Crsnode* crs_new = (Crsnode*)malloc(sizeof(Crsnode));//创建新节点
 	if (crs_new == NULL)
 		return false;
 	crs_new->crs_next = NULL;
-	int choice;
-	for (int i = 0; i < 9; i++) {//录入新节点信息
-		wprintf(L"选择你要录入的成绩信息(输入1-5）：\n 1.course_id 2.course_name 3.score 4.semester 5.course_nature 6.credit 7.credit 8.结束录入");
-		wscanf(L"%d", &choice);
-		if (choice > 8 || choice < 1)
-			wprintf(L" 您的选择无效");
-		if (choice == 1)
-			getText(crs_new->score.course_id);
-		if (choice == 2)
-			getText(crs_new->score.course_name);
-		if (choice == 3)
-			getNumber(crs_new->score.score);
-		if (choice == 4)
-			getNumber(crs_new->score.semester);
-		if (choice == 5)
-			getNumber(crs_new->score.course_nature);
-		if (choice == 6)
-			getNumber(crs_new->score.credit);
-		if (choice == 7)
-			getNumber(crs_new->score.grid);
-		if (choice == 8)
-			break;
-	}
+
+	wcscpy(crs_new->score.course_id, pcourse_id);
+	wcscpy(crs_new->score.course_name, pcourse_name);
+	crs_new->score.score = pscore;
+	crs_new->score.semester = psemester;
+	crs_new->score.course_nature = pcourse_nature;
+	crs_new->score.credit = pcredit;
+	crs_new->score.grid = pgrid;
+
 	crs_tmp->crs_next = crs_new;//添加新节点
 	return true;
 }
 
-// 修改学生信息（不修改课程）
-bool modifyStu(List* plist){
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	int choice;
-	for (int i = 0; i < 7; i++) {
-		wprintf(L"选择你要录入的学生信息(输入1-5）：\n1.name 2.ID 3.gender 4.grade 5.college 6.major 7.结束录入");
-		wscanf(L"%d", &choice);
-		if (choice > 7 || choice < 1)
-			wprintf(L" 您的选择无效");
-		if (choice == 1)
-			getText(ptmp->item.data.name);
-		if (choice == 2)
-			getNumber(ptmp->item.data.ID);
-		if (choice == 3)
-			getNumber(ptmp->item.data.gender);
-		if (choice == 4)
-			getNumber(ptmp->item.data.grade);
-		if (choice == 5)
-			getText(ptmp->item.data.college);
-		if (choice == 6)
-			getText(ptmp->item.data.major);
-		if (choice == 7)
-			break;
-	}
+
+ //修改学生信息（不修改课程）
+bool modifyStu(List* plist , Node* chastu ,wchar_t* pname ,int pID ,int pgender,int pgrade,wchar_t* pcollege,wchar_t* pmajor) {
+	Node* ptmp = *plist;
+	while (ptmp != chastu)
+		ptmp = ptmp->next;
+
+	wcscpy(ptmp->item.data.name,pname);
+	ptmp->item.data.ID = pID;
+	ptmp->item.data.gender = pgender;
+	ptmp->item.data.grade = pgrade;
+	wcscpy(ptmp->item.data.college,pcollege);
+	wcscpy(ptmp->item.data.major, pmajor);
 	return true;
 }
 
-
 // 修改某个学生的某课程及成绩
-bool modifyCrsInStu(List* plist) {
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Crsnode* crs_head = ptmp->item.crslist;
-	Crsnode* crs_mod = searchCrsInStu(crs_head); //找到待修改的课程
-	//......
-
+bool modifyCrsInStu(Crsnode* chacrs, wchar_t* pcourse_id,wchar_t* pcourse_name,double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
+	wcscpy(chacrs->score.course_id, pcourse_id);
+	wcscpy(chacrs->score.course_name, pcourse_name);
+	chacrs->score.score = pscore;
+	chacrs->score.semester = psemester;
+	chacrs->score.course_nature = pcourse_nature;
+	chacrs->score.credit = pcredit;
+	chacrs->score.grid = pgrid;
 
 	return true; //不加这行会报错没有返回值
 }
 
 // 删除学生
-bool deleteStu(List* plist) {
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Node* ptmpp = *plist;
-	while (ptmpp->next != ptmp)
-		ptmpp = ptmpp->next;
-	ptmpp->next = ptmp->next;
+bool deleteStu(List* plist, Node* delstu) {
+	Node* ptmp = *plist;
+	while (ptmp->next != delstu)
+		ptmp = ptmp->next;
+	ptmp->next = delstu->next;
+	free(delstu);
 	return true;
 }
-
 
 // 删除某个学生的某课程及成绩
-bool deleteCrsInStu(List* plist) {
-	Node* ptmp = searchStu(plist);//通过搜索函数找到待修改学生;
-	Crsnode* crs_head = ptmp->item.crslist;
-	Crsnode* crs_del = searchCrsInStu(crs_head);
-	Crsnode* crs_tmp = crs_head;//下面是寻找被删除课程节点的前继节点
-	while (crs_tmp!=NULL && crs_tmp->crs_next != crs_del) {
+bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
+	Node* ptmp = delstu;//学生节点
+	Crsnode* crs_tmp = ptmp->item.crslist;//课程头节点
+	while (crs_tmp!=NULL && crs_tmp->crs_next != delcrs) {//寻找被删除课程节点的前节点
 		crs_tmp = crs_tmp->crs_next;
 	}
-	crs_tmp->crs_next = crs_del->crs_next;
-	free(crs_del);
-	wprintf(L"\n删除成功！");
+	crs_tmp->crs_next = delcrs->crs_next;
+	free(delcrs);
 	return true;
 }
 
-// 在总学生链表中通过学号和名字搜索学生
-Node* searchStu(List* plist) {
+
+// 在总学生链表中通过学号和名字搜索学生 
+Node* searchStu(List* plist, wchar_t* pname, int pID) {
 	Node* ptmp = *plist;
-	int pid;
-	pid=getNumber(99999999); //输入学号
-	wchar_t pname[16];
-	getText(pname);
-	while (ptmp->item.data.ID != pid && _tcscmp(ptmp->item.data.name,pname) != 0 )//通过姓名或学号来检索
+	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0 )//通过姓名或学号来检索
 		ptmp = ptmp->next;
 	return (ptmp);//返回这个学生信息的节点地址
 }
 	
-// 在单个学生中搜索待删除/修改的课程
-Crsnode* searchCrsInStu(Crsnode* crs_head) {
-	wchar_t pcourse_id[10];
-	wchar_t pcourse_name[100];
-	getText(pcourse_id);
-	getText(pcourse_name);//输入待查找课程的编号和名称；
+// 在单个学生中搜索的课程
+Crsnode* searchCrsInStu(Crsnode* crs_head, wchar_t* pcourse_id, wchar_t* pcourse_name) {
 	Crsnode* crs_aim = crs_head->crs_next;
 	while (_tcscmp(crs_aim->score.course_id, pcourse_id) != 0 && _tcscmp(crs_aim->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
 		crs_aim = crs_aim->crs_next;
