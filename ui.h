@@ -12,6 +12,7 @@
 #include <conio.h>
 #include <Windows.h>
 #include <sysinfoapi.h>
+#include <tchar.h>
 #include "student.h"
 #include "course.h"
 #include "file.h"
@@ -258,7 +259,32 @@ private:
 };
 
 
-class Table {};
+class Table {
+private:
+	int x, y;
+	int width, height;
+	int offset;
+	int maxRow;
+	int colWidth[20] = {0};
+	int selectedRow;
+	wchar_t** data;
+
+public:
+	Table(int _x, int _y, int _width, int _height, wchar_t**& _data) {
+		x = _x;
+		y = _y;
+		width = _width;
+		height = _height;
+		data = _data;
+		offset = 0;
+		selectedRow = -1;
+		maxRow = -1;
+	}
+	void draw() {}
+	void calculateColWidth() {}
+	void calculateMaxRow() {}
+	void onScroll(ExMessage& msg) {}
+};
 
 
 

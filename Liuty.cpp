@@ -5,7 +5,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int mainAAAAA(void){ 
+int main(void){ 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -21,12 +21,12 @@ int mainAAAAA(void){
 	cleardevice();
 
 
+	
+	
+	//testUI();
 
 
-	testUI();
-
-
-	//loginUI();
+	loginUI();
 
 
 

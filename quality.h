@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include<stdbool.h>
+#include <tchar.h>
 #include"student.h"
 #include"io.h"
 #include"ui.h"
