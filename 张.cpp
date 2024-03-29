@@ -4,7 +4,7 @@
 
 
 
-int main()
+int jjmain()
 {
 	menu();
 

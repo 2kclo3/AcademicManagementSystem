@@ -131,16 +131,20 @@ void showCrsInStu();// 具体显示单个学生的某课程
 }
 */
 
-// 修改学生信息（不修改课程）
-//bool modifyStu(List* plist , wchar_t* pname ,int pID ,int pgender,int pgrade,wchar_t* college,wchar_t major) {
-//	Node* ptmp = *plist;
-//	wcscpy(ptmp->item.data.name,pname);
-//	ptmp->item.data.ID = pID;
-//	ptmp->item.data.gender = pgender;
-//	ptmp->item.data.grade = pgrade;
-//	getText(ptmp->item.data.college);
-//	getText(ptmp->item.data.major);
-//}
+ //修改学生信息（不修改课程）
+bool modifyStu(List* plist , Node* chastu ,wchar_t* pname ,int pID ,int pgender,int pgrade,wchar_t* pcollege,wchar_t* pmajor) {
+	Node* ptmp = *plist;
+	while (ptmp != chastu)
+		ptmp = ptmp->next;
+
+	wcscpy(ptmp->item.data.name,pname);
+	ptmp->item.data.ID = pID;
+	ptmp->item.data.gender = pgender;
+	ptmp->item.data.grade = pgrade;
+	wcscpy(ptmp->item.data.college,pcollege);
+	wcscpy(ptmp->item.data.major, pmajor);
+	return true;
+}
 
 // 修改某个学生的某课程及成绩
 /*bool modifyCrsInStu(List* plist) {

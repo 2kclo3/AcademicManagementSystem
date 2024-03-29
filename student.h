@@ -113,7 +113,7 @@ bool addCrsToStu();// 为某个学生添加某课程及成绩
 void sortStu();// 排序总学生链表
 
 
-bool modifyStu();// 修改学生信息（不修改课程）
+bool modifyStu(List* plist, Node* chastu, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor);// 修改学生信息（不修改课程）
 
 
 bool modifyCrsInStu(); // 修改某个学生的某课程及成绩

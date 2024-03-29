@@ -5,19 +5,32 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int jjmain(void) {
+int main(void) {
 	setlocale(LC_ALL, ""); //Ê¹¿ØÖÆÌ¨Ö§³Ö¿í×Ö·ûÊä³ö
 
 
 	List stu = readStu(STU_FILE);
 
 	printStu(stu);
-	wchar_t name[16];
+
+	wchar_t name[30];
+	//wcscpy(name, L"ÁõÅæÁØ");
 	int id;
+	int gender;
+	int grade;
+	wchar_t college[50];
+	//wcscpy(college, L"³ôôÎôÎ");
+	wchar_t major[50];
+	//wcscpy(major,L"³ÔôÎôÎ")
+
+	wchar_t pname[30];
+	int pid;
 	Node* test;
-	wscanf(L"%s %d", &name, &id);
-	test = searchStu(&stu, name, id);
-	deleteStu(&stu, test);
+	wscanf(L"%s %d", &pname, &pid);
+	wscanf(L"%s %d %d %d %s %s", &name, &id,&gender,&grade,&college,&major);
+	test = searchStu(&stu, pname, pid);
+	modifyStu(&stu, test, name, id, gender, grade, college, major);
+
 	printStu(stu);
 
 
