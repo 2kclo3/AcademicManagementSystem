@@ -6,10 +6,7 @@
 int Research_num = 0;
 int Competition_num = 0;
 
-Node* searchStuInQuality(List phead) { // 在素质类项目中搜索学生
-	wprintf(L"请输入学生姓名\n");
-	wchar_t str[30];
-	getText(str);
+Node* searchStuInQuality(List phead,wchar_t* str) { // 在素质类项目中搜索学生
 	Node* ptmp = phead->next;//别忘了考虑哨兵节点
 	while (ptmp!=NULL)
 	{
@@ -17,78 +14,48 @@ Node* searchStuInQuality(List phead) { // 在素质类项目中搜索学生
 			break;
 		ptmp = ptmp->next;
 	}
-	if (ptmp==NULL){
-		wprintf(L"查无此人\n");
-		return NULL;
-	}
+	if (ptmp == NULL)	return NULL;
 	return ptmp;
 }
 
 
-bool Initialize_Quality_List(List phead){// 初始化素质类项目的链表（为每个学生的r/clist链表加入哨兵节点）
-	List Ltmp = phead->next;
-	while (Ltmp != NULL) {
-		
-		Rnode* rhead = (Rnode*)malloc(sizeof(Rnode));
-		if (rhead == NULL)
-			return false;
-		rhead->rnext = NULL;
-		Ltmp->item.rlist = rhead;
-
-		Cnode* chead = (Cnode*)malloc(sizeof(Cnode));
-		if (chead == NULL)
-			return false;
-		chead->cnext = NULL;
-		Ltmp->item.clist = chead;
-
-		Ltmp = Ltmp->next;
-	}
-	return true;
-}
-
-
-bool addQuality_rlist(List* plist){
-	Node* ptmp = searchStu(plist);
-	Rnode* rhead = ptmp->item.rlist;
+bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
+	wchar_t * journal_or_conference_name,
+	wchar_t* author, 
+	wchar_t* date, 
+	wchar_t* volume_num, 
+	wchar_t* issue_num,
+	wchar_t* page,
+	double GPA_bonus){
+	Rnode* rhead = Stu->item.rlist;
 	Rnode* rtmp = rhead->rnext;//素质类rlist链表亦有哨兵节点
 	while (rtmp->rnext != NULL)
 		rtmp = rtmp->rnext;//尾插法
 	Rnode* rnew = (Rnode*)malloc(sizeof(Rnode));
 	if (rnew == NULL)
 		return false;//节点空间分配失败
-	rnew->rnext = NULL;
-	wprintf(L"请输入你所需要申请添加的科研成果的相关信息:\n ");
-	
-	wprintf(L"1.论文名称（必填）：\n");
-	getText(rnew->research.paper_name);
-	
-	wprintf(L"2.期刊/会议名称（必填）：\n");
-	getText(rnew->research.journal_or_conference_name);
-	
-	wprintf(L"3.作者情况（仅需本人情况即可 必填）：\n");
-	getText(rnew->research.author);
-	
-	wprintf(L"4.发表时间（年月 必填）：\n");
-	getText(rnew->research.date);
-	
-	wprintf(L"5.卷数（若无可不填）：\n");
-	getText(rnew->research.volume_num);
-	
-	wprintf(L"6.刊号（若无可不填）：\n");
-	getText(rnew->research.issue_num);
-	
-	wprintf(L"7.页码范围（必填）：\n");
-	getText(rnew->research.page);
 
-	wprintf(L"8.应得绩点加分（必填）：\n");
-	wscanf(L"%lf", &rnew->research.GPA_bonus);
-	
+	wcscpy(rnew->research.paper_name, paper_name);
+	wcscpy(rnew->research.journal_or_conference_name, journal_or_conference_name);
+	wcscpy(rnew->research.author, author);
+	wcscpy(rnew->research.date, date);
+	wcscpy(rnew->research.volume_num, volume_num);
+	wcscpy(rnew->research.issue_num, issue_num);
+	wcscpy(rnew->research.page, page);
+	rnew->research.GPA_bonus = GPA_bonus;
+
+	rnew->rnext = NULL;
 	rtmp->rnext = rnew;
 	return true;
 }
-bool addQuality_clist(List* plist) {
-	Node* ptmp = searchStu(plist);
-	Cnode* chead = ptmp->item.clist;
+
+bool addQuality_clist(Node* Stu,
+	wchar_t* competition_name,
+	wchar_t* organizer, 
+	wchar_t* category,
+	wchar_t* date,
+	double GPA_bonus) {
+	Cnode* chead = Stu->item.clist;
 	Cnode* ctmp = chead->cnext;//素质类clist链表亦有哨兵节点
 	while (ctmp->cnext != NULL)
 		ctmp = ctmp->cnext;//尾插法
@@ -96,22 +63,12 @@ bool addQuality_clist(List* plist) {
 	if (cnew == NULL)
 		return false;//节点空间分配失败
 	cnew->cnext = NULL;
-	wprintf(L"请输入你所需要申请添加的竞赛类获奖的相关信息:\n ");
-
-	wprintf(L"1.竞赛名称（必填）：\n");
-	getText(cnew->competition.competition_name);
-
-	wprintf(L"2.举办单位（必填）：\n");
-	getText(cnew->competition.organizer);
-
-	wprintf(L"3.获奖类别（必填）：\n");
-	getText(cnew->competition.category);
-
-	wprintf(L"4.获奖时间（年月 必填）：\n");
-	getText(cnew->competition.date);
-
-	wprintf(L"8.应得绩点加分（必填）：\n");
-	wscanf(L"%lf", &cnew->competition.GPA_bonus);
+	
+	wcscpy(cnew->competition.competition_name, competition_name);
+	wcscpy(cnew->competition.organizer, organizer);
+	wcscpy(cnew->competition.category, category);
+	wcscpy(cnew->competition.date, date);
+	cnew->competition.GPA_bonus = GPA_bonus;
 
 	ctmp->cnext = cnew;
 	return true;
@@ -162,9 +119,8 @@ Cnode* searchCnode(Cnode* chead) {
 }
 
 
-void modifyQuality_rlist(List* plist) { // 修改素质类项目之科研成果
-	Node* ptmp = searchStu(plist);//找到待修改学生
-	Rnode* rhead = ptmp->item.rlist;
+void modifyQuality_rlist(Node* Stu) { // 修改素质类项目之科研成果
+	Rnode* rhead = Stu->item.rlist;
 	Rnode* rmod = searchRnode(rhead);//找到待修改的科研成果节点
 	while (1) {
 		showMenu(L"请选择要修改的科研成果的相关信息：", 9, L"1.论文名称", L"2.期刊/会议名称", L"3.作者情况", L"4.发表时间", L"5.卷数", L"6.刊号", L"7.页码范围", L"8.应得绩点加分","9.退出");
@@ -226,9 +182,8 @@ void modifyQuality_rlist(List* plist) { // 修改素质类项目之科研成果
 	}
 
 }
-void modifyQuality_clist(List* plist) { // 修改素质类项目之竞赛获奖
-	Node* ptmp = searchStu(plist);//找到待修改学生
-	Cnode* chead = ptmp->item.clist;
+void modifyQuality_clist(Node* Stu) { // 修改素质类项目之竞赛获奖
+	Cnode* chead = Stu->item.clist;
 	Cnode* cmod = searchCnode(chead);
 	while (1) {
 		showMenu(L"请选择要修改的竞赛获奖的相关信息：", 6, L"1.竞赛名称", L"2.举办单位", L"3.获奖类别", L"4.获奖时间", L"5.应得绩点加分","6.退出");
@@ -274,9 +229,8 @@ void modifyQuality_clist(List* plist) { // 修改素质类项目之竞赛获奖
 }
 
 
-void deleteQuality_rlist(List* plist) {	// 删除素质类项目之科研成果
-	Node* ptmp = searchStu(plist);//找到待修改学生
-	Rnode* rhead = ptmp->item.rlist;
+void deleteQuality_rlist(Node* Stu) {	// 删除素质类项目之科研成果
+	Rnode* rhead = Stu->item.rlist;
 	Rnode* r_del = searchRnode(rhead);//找到待删除的科研成果节点
 	Rnode* rtmp = rhead;
 	while (rtmp->rnext != r_del) {
@@ -287,9 +241,8 @@ void deleteQuality_rlist(List* plist) {	// 删除素质类项目之科研成果
 	wprintf(L"\n删除成功！");
 	Research_num--;
 }
-void deleteQuality_clist(List* plist) {	// 删除素质类项目之竞赛获奖
-	Node* ptmp = searchStu(plist);//找到待修改学生
-	Cnode* chead = ptmp->item.clist;
+void deleteQuality_clist(Node* Stu) {	// 删除素质类项目之竞赛获奖
+	Cnode* chead = Stu->item.clist;
 	Cnode* c_del = searchCnode(chead);//找到待删除的科研成果节点
 	Cnode* ctmp = chead;
 	while (ctmp->cnext != c_del) {
