@@ -7,9 +7,11 @@
 #include<string.h>
 #include <tchar.h>
 #include"io.h"
+#include<iostream>//调试用
+using namespace std;
 
 
-//等到以后再加个名次项目
+
 typedef struct _Snode//课程节点下属的各个学生成绩节点
 {
 	wchar_t sname[30];//姓名
@@ -23,7 +25,7 @@ typedef struct Cnode_//课程节点
 {
 	wchar_t cname[30];//课程名
 	int cnum;//课程号
-	int character;//课程性质(必修/选修)，这玩意一共才几个啊，干脆别输了，让人选吧，防止输入错误
+	wchar_t character[5];//课程性质：选修、必修
 	int headcount;//总人数
 	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
 	double averscore;//平均成绩
@@ -41,17 +43,17 @@ Cpnode showCrs(Cpnode phead); // 显示单个课程信息（包含该课程所有学生的成绩）
 Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 
 
-//所有函数的传入值只有一个：课程链表的头节点
-int addCrs(Cpnode phead); // 添加课程（不包含成绩）
-int addStuToCrs(Cpnode phead); // 为某课程添加某学生成绩
-int modifyCrs(Cpnode phead); // 修改课程信息（不修改成绩）
-int modifyStuInCrs(Cpnode phead); // 修改某个课程的某学生成绩
-int deleteCrs(Cpnode phead); // 删除课程
-int deleteStuInCrs(Cpnode phead); // 删除某个课程的某学生成绩
-Cpnode searchCrs(Cpnode phead); // 在总课程链表中搜索课程
-Spnode searchStuInCrs(Spnode phead); // 在单个课程中搜索其下的学生
+int addCrs(Cpnode phead, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 添加课程（不包含成绩）
+int addStuToCrs(Cpnode cplist, const wchar_t* Sname, int Snum, double Score); // 为某课程添加某学生成绩
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 修改课程信息（不修改成绩）
+int modifyStuInCrs(Cpnode cplist, Spnode splist, wchar_t Sname, int Snum, double Score); // 修改某个课程的某学生成绩
+int deleteCrs(Cpnode pre_cplist); // 删除课程
+int deleteStuInCrs(Cpnode cplist, Spnode pre_splist); // 删除某个课程的某学生成绩
 
-int look(Cpnode phead);//调试时用来看数据的
+Cpnode searchCrs(Cpnode phead, const wchar_t* Cname, int Cnum); // 在总课程链表中搜索课程
+Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum); // 在单个课程中搜索其下的学生
+
+int look(Cpnode phead, const wchar_t* Cname, int Cnum);//调试时用来看数据的
 
 
 
