@@ -1,9 +1,8 @@
 #include"course.h"
-///要判断内存是否分配正确
 //注意内存泄露问题
-//初步先不对getNumber的参数做过多要求
 //之后GPA还得改改，他不是百分比换算
 //添加名次，实现对名次的维护
+//注意姓名、学号等的规范性判断
 
 //传课程链表头节点
 Cpnode showAllCrs(Cpnode phead)// 显示所有课程（不包含学生成绩）
@@ -105,7 +104,19 @@ int look(Cpnode phead)
 int addCrs(Cpnode phead) // 添加课程（不包含成绩）
 {
 	Cpnode p = (Cpnode)malloc(sizeof(_Cnode));
+	if (p == NULL)//判断内存是否分配正确，可有可无的感觉
+	{
+		printf("内存分配失败\n");
+		exit(0);
+	}
+
 	p->sphead = (Spnode)malloc(sizeof(Snode));
+	if (p->sphead == NULL)//判断内存是否分配正确，可有可无的感觉
+	{
+		printf("内存分配失败\n");
+		exit(0);
+	}
+
 	p->sphead->next = NULL;
 	p->headcount = 0;
 	p->totGPA = 0;
@@ -171,8 +182,11 @@ int addStuToCrs(Cpnode phead) // 为某课程添加某学生成绩
 		return 0;
 	}
 	Spnode pnode = (Spnode)malloc(sizeof(Snode));
-	pnode->next = p->sphead->next;
-	p->sphead->next = pnode;
+	if (pnode == NULL)//判断内存是否分配正确，可有可无的感觉
+	{
+		printf("内存分配失败\n");
+		exit(0);
+	}
 
 	printf("请输入学生姓名:");///////////////////////////////////////////以后要改
 	getText(pnode->sname);
@@ -199,6 +213,12 @@ int addStuToCrs(Cpnode phead) // 为某课程添加某学生成绩
 	p->totGPA += pnode->GPA;
 	p->averscore = p->totscore / p->headcount;
 	p->averGPA = p->totGPA / p->headcount;
+
+
+	pnode->next = p->sphead->next;
+	p->sphead->next = pnode;
+
+
 
 	printf("添加成功\n");
 	system("pause");
@@ -296,6 +316,7 @@ int modifyCrs(Cpnode phead) // 修改课程信息（不修改成绩）
 	return 1;
 }
 
+//如果加名次，这个函数必须改
 int modifyStuInCrs(Cpnode phead) // 修改某个课程的某学生成绩
 {
 	system("cls");
