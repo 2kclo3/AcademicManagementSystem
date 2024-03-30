@@ -295,16 +295,35 @@ public:
 	}
 
 	void draw() {
-		setfillcolor(bkColor);
-		fillroundrect(x + width + 5, y, x + width + 15, y + height, 10, 10);
 
 		setfillcolor(bkColor);
-		//setbkmode(TRANSPARENT);
-		fillroundrect(x, y, x + width, y + height, 20, 20); // 表格外框
+		setlinecolor(WHITE);
+		if (scollBarHeight != height) {
+			fillroundrect(x + width + 5, y, x + width + 15, y + height, 10, 10); // 滚动条外框
+
+			// 滚动条
+			setfillcolor(WHITE);
+			fillroundrect(x + width + 9,
+				4 + y + 1.0 * offset / data.size() * height,
+				x + width + 11,
+				-4 + y + 1.0 * offset / data.size() * height + scollBarHeight,
+				5, 5);
+
+		}
+		setfillcolor(bkColor);
+		fillroundrect(x, y, x + width, y + height, 10, 10); // 表格外框
 
 		int textHeight = textheight(data[0][0].c_str());
+
+		// 选中行高亮
+		if (offset < selectedRow && offset + maxRow > selectedRow) {
+			setfillcolor(RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30));
+			fillrectangle(x + 1, 1 + y + (selectedRow - offset) * textHeight, x + width - 1, -1 + y + (selectedRow - offset + 1) * textHeight);
+		}
+
 		setlinecolor(WHITE);
 
+		// 行
 		int ry = y;
 		for (int r = 0; r < min(maxRow, (int)data.size() - offset); r++) {
 
@@ -312,42 +331,33 @@ public:
 			if (r != min(maxRow, (int)data.size() - offset) - 1) {
 				line(x, ry, x + width, ry);
 			}
+
+			// 列
 			int cx = x;
-
-			// 选中行
-			if (r + offset == selectedRow && r != 0) {
-				setfillcolor(RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30));
-				fillrectangle(x + 1, ry - textHeight + 1, x + width - 1, ry - 1);
-			}
-
-			for (int c = 0; c < data[r].size(); c++) {
-				cx += colWidth[c];
-
-
-				if (c != data[r].size() - 1) {
-					line(cx, y, cx, y + height);
-				}
-				setbkmode(TRANSPARENT);
-				settextcolor(textColor);
-				if (r == 0) {
+			if (!r) {
+				// 表头（默认表头最长）
+				for (int c = 0; c < data[0].size(); c++) {
+					cx += colWidth[c];
+					if (c != data[0].size() - 1) {
+						line(cx, y, cx, y + height);
+					}
+					setbkmode(TRANSPARENT);
+					settextcolor(textColor);
 					settextstyle(30, 0, L"微软雅黑");
 					outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[0][c].c_str());
-					continue;
 				}
-				settextstyle(28, 0, L"微软雅黑");
-				outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
-
-
+			}
+			else {
+				// 数据
+				for (int c = 0; c < data[r + offset].size(); c++) {
+					cx += colWidth[c];
+					setbkmode(TRANSPARENT);
+					settextcolor(textColor);
+					settextstyle(28, 0, L"微软雅黑");
+					outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
+				}
 			}
 		}
-
-		setfillcolor(WHITE);
-		fillroundrect(x + width + 8,
-			3 + y + 1.0 * offset / data.size() * height,
-			x + width + 12,
-			-3 + y + 1.0 * offset / data.size() * height + scollBarHeight,
-			10, 10);
-
 	}
 	void calculateColWidth() { //计算每列宽度
 		colWidth.clear();
@@ -404,10 +414,10 @@ public:
 				break;
 			}
 		}
-			draw();
+		draw();
 	}
 	int getSelectedRow() {
-		return selectedRow;
+		return (selectedRow < data.size()) ? selectedRow : 0;
 	}
 private:
 	bool isHovered(int mouseX, int mouseY) const {
