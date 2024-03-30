@@ -33,6 +33,7 @@
     <ClCompile Include="course.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="io.cpp" />
+    <ClCompile Include="Ji.cpp" />
     <ClCompile Include="Liuty.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_quality.cpp" />

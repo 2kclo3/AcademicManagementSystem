@@ -9,14 +9,17 @@
 #include <stdbool.h>
 #include <graphics.h>
 #include <string>
+#include <vector>
 #include <conio.h>
 #include <Windows.h>
 #include <sysinfoapi.h>
 #include <tchar.h>
+#include <math.h>
 #include "student.h"
 #include "course.h"
 #include "file.h"
 
+using namespace std;
 
 
 
@@ -265,25 +268,151 @@ private:
 	int width, height;
 	int offset;
 	int maxRow;
-	int colWidth[20] = {0};
+	vector<int> colWidth;
 	int selectedRow;
-	wchar_t** data;
+	vector<vector<wstring>> data;
+	COLORREF bkColor;
+	COLORREF textColor;
+	int scollBarHeight;
 
 public:
-	Table(int _x, int _y, int _width, int _height, wchar_t**& _data) {
+	Table(int _x, int _y, int _width, int _height, COLORREF _bkColor, COLORREF _textColor, const vector<vector<wstring>>& _data) {
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
 		data = _data;
+		bkColor = _bkColor;
+		textColor = _textColor;
 		offset = 0;
-		selectedRow = -1;
-		maxRow = -1;
+		selectedRow = 0;
+		maxRow = 0;
+		calculateColWidth();
+		calculateMaxRow();
+		printf("%d\n", maxRow);
+		scollBarHeight = (data.size() > maxRow) ? 1.0 * maxRow / data.size() * height : height;
+		draw();
 	}
-	void draw() {}
-	void calculateColWidth() {}
-	void calculateMaxRow() {}
-	void onScroll(ExMessage& msg) {}
+
+	void draw() {
+		setfillcolor(bkColor);
+		fillroundrect(x + width + 5, y, x + width + 15, y + height, 10, 10);
+
+		setfillcolor(bkColor);
+		//setbkmode(TRANSPARENT);
+		fillroundrect(x, y, x + width, y + height, 20, 20); // 表格外框
+
+		int textHeight = textheight(data[0][0].c_str());
+		setlinecolor(WHITE);
+
+		int ry = y;
+		for (int r = 0; r < min(maxRow, (int)data.size() - offset); r++) {
+
+			ry += textHeight;
+			if (r != min(maxRow, (int)data.size() - offset) - 1) {
+				line(x, ry, x + width, ry);
+			}
+			int cx = x;
+
+			// 选中行
+			if (r + offset == selectedRow && r != 0) {
+				setfillcolor(RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30));
+				fillrectangle(x + 1, ry - textHeight + 1, x + width - 1, ry - 1);
+			}
+
+			for (int c = 0; c < data[r].size(); c++) {
+				cx += colWidth[c];
+
+
+				if (c != data[r].size() - 1) {
+					line(cx, y, cx, y + height);
+				}
+				setbkmode(TRANSPARENT);
+				settextcolor(textColor);
+				if (r == 0) {
+					settextstyle(30, 0, L"微软雅黑");
+					outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[0][c].c_str());
+					continue;
+				}
+				settextstyle(28, 0, L"微软雅黑");
+				outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
+
+
+			}
+		}
+
+		setfillcolor(WHITE);
+		fillroundrect(x + width + 8,
+			3 + y + 1.0 * offset / data.size() * height,
+			x + width + 12,
+			-3 + y + 1.0 * offset / data.size() * height + scollBarHeight,
+			10, 10);
+
+	}
+	void calculateColWidth() { //计算每列宽度
+		colWidth.clear();
+		if (!data.empty()) {
+			colWidth.resize(data[0].size(), 0);
+			for (vector<wstring> rowData : data) {
+				for (size_t colNum = 0; colNum < rowData.size(); colNum++) {
+					int maxWidth = textwidth(rowData[colNum].c_str());
+					if (maxWidth > colWidth[colNum]) {
+						colWidth[colNum] = maxWidth;
+					}
+				}
+			}
+
+			int sumWidth = 0;
+			for (auto it : colWidth) {
+				sumWidth += it;
+			}
+			for (auto& it : colWidth) {
+				it = (float)it / sumWidth * width;
+			}
+		}
+	}
+	void calculateMaxRow() { // 计算最大行数
+		maxRow = height / textheight(data[0][0].c_str());
+		height = maxRow * textheight(data[0][0].c_str());
+	}
+	void onScrollandClick(ExMessage& msg) {
+		if (isHovered(msg.x, msg.y)) {
+			switch (msg.message)
+			{
+			case WM_MOUSEWHEEL:
+				if (msg.wheel > 0 && offset > 0) { //向上滑
+					offset--;
+				}
+				else if (msg.wheel < 0 && offset < (int)data.size() - maxRow) { //向下滑
+					offset++;
+				}
+				break;
+			case WM_LBUTTONDOWN: {
+				int Rselect = int(1.0 * (msg.y - y) / height * maxRow);
+				if (Rselect != 0) {
+					if (selectedRow == Rselect + offset) {
+						selectedRow = 0;
+					}
+					else {
+						selectedRow = Rselect + offset;
+					}
+				}
+				//printf("%d\n", selectedRow);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+			draw();
+	}
+	int getSelectedRow() {
+		return selectedRow;
+	}
+private:
+	bool isHovered(int mouseX, int mouseY) const {
+		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
+	}
 };
 
 
