@@ -176,16 +176,17 @@ void testUI() {
 	//Text text1(100, 0, L"测试 Test", 50, BLACK);
 	//Button button2(-50, 160, 300, 50, L"测试按钮", 0x123456, WHITE);
 	Button exitButton(50, 500, 200, 60, L"退出", LIGHTBLUE, WHITE);
-	Button selectRowBtn1(350, 400, 300, 60, L"选择的行数", 0x123456, WHITE);
+	Button selectRowBtn1(350, 500, 300, 60, L"选择的行数", 0x123456, WHITE);
 
 	//TextBox box1(50, 250, 500, L"测试1", L"ceshi");
 	//TextBox box2(90, 400, 800, L"测试2", L"");
 
 
+	TextBox selectBox(280, 400, 300, L"哪个表格", L"");
 
-	Table table1(300, 100, 300, 250, RGB(55, 61, 53), WHITE,
+	Table table1(360, 100, 300, 250, RGB(55, 61, 53), WHITE,
 		{
-			{L"学号",L"姓名",L"性别",L"成绩"},
+			{L"1学号",L"姓名",L"性别",L"成绩"},
 			{L"2023001",L"张三",L"男",L"6000"},
 			{L"2023002",L"李四",L"男",L"50"},
 			{L"2023003",L"王五",L"男",L"90"},
@@ -257,10 +258,20 @@ void testUI() {
 		}
 	);
 
-	Table table2(700, 50, 400, 720, RGB(55, 61, 53), WHITE,
+	Table table3(30, 150, 300, 250, RGB(55, 61, 53), WHITE,
 		{
-			{L"学号",L"姓名",L"性别",L"成绩"},
+			{L"3学号",L"姓名",L"性别",L"成绩"},
 			{L"2023001",L"张三",L"男",L"6000"},
+			{L"2023002",L"李四",L"男",L"50"},
+			{L"2023003",L"王五",L"男",L"90"},
+			{L"2023015",L"Last",L"女",L"100"},
+		}
+	);
+
+	Table table2(700, 50, 450, 720, RGB(55, 61, 53), WHITE,
+		{
+			{L"2学号",L"姓名",L"性别",L"成绩", L"test1", L"test0333"},
+			{L"2023001",L"张三",L"男",L"6000", L"test222"},
 			{L"2023002",L"李四",L"男",L"50"},
 			{L"2023003",L"王五",L"男",L"90"},
 			{L"2023004",L"小红",L"女",L"80"},
@@ -330,6 +341,7 @@ void testUI() {
 			{L"2023015",L"Last",L"女",L"100"},
 		}
 	);
+
 
 
 	// 处理鼠标事件
@@ -338,6 +350,7 @@ void testUI() {
 		ULONGLONG start_time = GetTickCount();
 		//box1.draw();
 		//box2.draw();
+		selectBox.draw();
 
 		if (peekmessage(&msg, -1, true)) {
 
@@ -349,15 +362,26 @@ void testUI() {
 			//	wprintf(L"box1 is:%s\n", box1.text);
 			//}
 			if (selectRowBtn1.mouseClick(msg)) {
-				printf("%d\n", table1.getSelectedRow());
+				if (!wcscmp(selectBox.text, L"1")) {
+					printf("%d\n", table1.getSelectedRow());
+				}
+				else if (!wcscmp(selectBox.text, L"2")) {
+					printf("%d\n", table2.getSelectedRow());
+				}
+				else if (!wcscmp(selectBox.text, L"3")) {
+					printf("%d\n", table3.getSelectedRow());
+				}
+
 			}
 			if (exitButton.mouseClick(msg)) {
 				exit(0);
 			}
 			table1.onScrollandClick(msg);
 			table2.onScrollandClick(msg);
+			table3.onScrollandClick(msg);
 			////box1.onMessage(msg);
 			////box2.onMessage(msg);
+			selectBox.onMessage(msg);
 		}
 
 		showxy(msg);
