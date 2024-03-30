@@ -376,9 +376,9 @@ void testUI() {
 			if (exitButton.mouseClick(msg)) {
 				exit(0);
 			}
-			table1.onScrollandClick(msg);
-			table2.onScrollandClick(msg);
-			table3.onScrollandClick(msg);
+			table1.onMouse(msg);
+			table2.onMouse(msg);
+			table3.onMouse(msg);
 			////box1.onMessage(msg);
 			////box2.onMessage(msg);
 			selectBox.onMessage(msg);
@@ -520,18 +520,34 @@ void menuUI() {
 void allStuUI() {
 	cleardevice();
 
-	drawLine();
+	//drawLine();
 
+
+	List allStuList = readStu(".\\data\\Student.txt");
+
+	vector<vector<std::wstring>> allStuData;
+	showStuTest(allStuList, allStuData);
+
+	Table allStuTable(310, 30, 940, 160, RGB(55, 61, 53), WHITE, allStuData);
 
 	Text titleText(40, 50, L"所有学生", 64, RGB(228, 226, 223));
+
 	Button searchBtn(-50, 140, 330, 60, L"   查询学生", RGB(191, 202, 185), RGB(42, 51, 40));
+
 	Button addBtn(-50, 220, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
+
 	Button modifyBtn(-50, 300, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
+	
 	Button deleteBtn(-50, 380, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
+	
 	Button sortBtn(-50, 460, 330, 60, L"   排序", RGB(191, 202, 185), RGB(42, 51, 40));
+
 	Button exportBtn(-50, 540, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
+
 	Button inportBtn(-50, 620, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
+
 	Button backButton(-50, 700, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
+
 
 
 	// 处理鼠标事件
@@ -546,7 +562,11 @@ void allStuUI() {
 				//// 后续将修改输入方式
 				//wchar_t stuID[512];
 				//InputBox(stuID, 512, L"请输入学号", L"查询学生", L"", 0, 0, false);
-				printStu(readStu(".\\data\\Student.txt"));
+				printStu(allStuList);
+
+
+
+
 
 			}
 			if (addBtn.mouseClick(msg)) {
@@ -562,8 +582,11 @@ void allStuUI() {
 			if (inportBtn.mouseClick(msg)) {
 			}
 			if (backButton.mouseClick(msg)) {
+				free(allStuList);
 				menuUI();
 			}
+
+			allStuTable.onMouse(msg);
 		}
 
 		showxy(msg);
@@ -776,6 +799,46 @@ void settingsUI() {
 void QualityUI() {
 }
 
+
+
+
+
+
+
+
+
+bool showStuTest(const List StuList, vector<vector<std::wstring>>& data) {
+	List pCurrent = StuList->next; //从第一个有数据节点开始
+	data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+
+	//初始化表头
+	data[0][0] = L"学号";
+	data[0][1] = L"姓名";
+	data[0][2] = L"性别";
+	data[0][3] = L"年级";
+	data[0][4] = L"学院";
+	data[0][5] = L"专业";
+
+
+	int row = 1;
+	while (pCurrent != NULL) { //遍历链表
+		data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+
+		//每行的内容
+		data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
+		data[row][1] = pCurrent->item.data.name;
+		data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
+		data[row][3] = std::to_wstring(pCurrent->item.data.grade); //数字转为字符串
+		data[row][4] = pCurrent->item.data.college;
+		data[row][5] = pCurrent->item.data.major;
+
+		pCurrent = pCurrent->next; // 移向下一个节点
+		row++; // 行数+1
+
+	}
+
+	return true;
+}
 
 
 
