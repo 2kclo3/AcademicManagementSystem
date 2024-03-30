@@ -5,7 +5,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int main() {
+int main000() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 	//Cpnode  crs = readCrs(CRS_FILE);
@@ -27,7 +27,7 @@ int main() {
 
 	Node* Stu = searchStu_InQuality(stu, name);
 
-	deleteQuality_clist(Stu, a1);
+	deleteQuality_rlist(Stu, a1);
 
 	printStu(stu);
 	return 0;
