@@ -3,8 +3,6 @@
 //遗留问题：1.为每个学生的r/clist链表加入哨兵节点 (OK
 //			2.searchR/Cnode()函数的实现  (OK
 
-int Research_num = 0;
-int Competition_num = 0;
 
 Node* searchStu_InQuality(List phead,wchar_t* str) { // 在总链表中搜索学生(lzy调试专用
 	Node* ptmp = phead->next;//别忘了考虑哨兵节点
@@ -117,7 +115,7 @@ Cnode* searchCnode(Node* Stu,wchar_t* competition_name) {
 	return ctmp;
 }
 
-bool modifyQuality_rlist(Rnode* rmod,	// 添加素质类项目
+bool modifyQuality_rlist(Rnode* rmod,	// 修改素质类项目节点
 	wchar_t* paper_name,
 	wchar_t* journal_or_conference_name,
 	wchar_t* author,
@@ -165,6 +163,7 @@ bool deleteQuality_rlist(Node* Stu, wchar_t* paper_name) {	// 删除素质类项目之科
 		if (wcscmp(rtmp->research.paper_name, paper_name) == 0) {
 			rpre->rnext = rtmp->rnext;
 			free(rtmp);
+			break;
 		}
 		else {
 			rpre = rtmp;
@@ -185,6 +184,7 @@ bool deleteQuality_clist(Node* Stu, wchar_t* competition_name) {	// 删除素质类项
 		if (wcscmp(ctmp->competition.competition_name, competition_name) == 0) {
 			cpre->cnext = ctmp->cnext;
 			free(ctmp);
+			break;
 		}
 		else {
 			cpre = ctmp;
