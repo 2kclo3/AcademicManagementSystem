@@ -224,7 +224,7 @@ Cpnode readCrs(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %d %d %lf %lf %lf %lf",
+		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf",
 			&tcnode->cnum,
 			&tcnode->cname,
 			&tcnode->character,
@@ -378,7 +378,7 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d %s %d %d %.1lf %.2lf %.1lf %.2lf\n",
+		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,

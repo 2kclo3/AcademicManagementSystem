@@ -94,6 +94,11 @@ public:
 		draw();
 		return false;
 	}
+
+	void move(int _x, int _y) {
+		x = _x;
+		y = _y;
+	}
 private:
 	bool isHovered(int mouseX, int mouseY) const {
 		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
@@ -125,6 +130,10 @@ public:
 
 	}
 
+	void move(int _x, int _y) {
+		x = _x;
+		y = _y;
+	}
 };
 
 
@@ -254,6 +263,10 @@ public:
 		}
 
 	}
+	void move(int _x, int _y) {
+		x = _x;
+		y = _y;
+	}
 private:
 	bool isHovered(int mouseX, int mouseY) const {
 		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
@@ -289,7 +302,7 @@ public:
 		maxRow = 0;
 		calculateColWidth();
 		calculateMaxRow();
-		printf("%d\n", maxRow);
+		//printf("%d\n", maxRow);
 		scollBarHeight = (data.size() > maxRow) ? 1.0 * maxRow / data.size() * height : height;
 		draw();
 	}
@@ -303,11 +316,11 @@ public:
 
 			// ¹ö¶¯Ìõ
 			setfillcolor(WHITE);
-			fillroundrect(x + width + 9,
-				4 + y + 1.0 * offset / data.size() * height,
-				x + width + 11,
-				-4 + y + 1.0 * offset / data.size() * height + scollBarHeight,
-				5, 5);
+			fillroundrect(x + width + 8,
+				3 + y + 1.0 * offset / data.size() * height,
+				x + width + 12,
+				-3 + y + 1.0 * offset / data.size() * height + scollBarHeight,
+				4, 4);
 
 		}
 		setfillcolor(bkColor);
@@ -385,7 +398,7 @@ public:
 		maxRow = height / textheight(data[0][0].c_str());
 		height = maxRow * textheight(data[0][0].c_str());
 	}
-	void onScrollandClick(ExMessage& msg) {
+	void onMouse(ExMessage& msg) {
 		if (isHovered(msg.x, msg.y)) {
 			switch (msg.message)
 			{
@@ -419,6 +432,11 @@ public:
 	int getSelectedRow() {
 		return (selectedRow < data.size()) ? selectedRow : 0;
 	}
+	void move(int _x, int _y) {
+		x = _x;
+		y = _y;
+	}
+
 private:
 	bool isHovered(int mouseX, int mouseY) const {
 		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
@@ -454,6 +472,9 @@ void printStu(const List StuList);
 
 
 void printCrs(const Cpnode CrsList);
+
+
+bool showStuTest(const List StuList, vector<vector<std::wstring>>& data);
 
 
 

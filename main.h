@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <locale.h>
 #include <tchar.h>
+#include <vector>
 #include "graphics.h"
 #include "ui.h"
 #include "io.h"
