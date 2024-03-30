@@ -128,7 +128,7 @@ bool deleteCrsInStu(Node* delstu, Crsnode* delcrs); // É¾³ıÄ³¸öÑ§ÉúµÄÄ³¿Î³Ì¼°³É¼
 Node* searchStu(List* plist, wchar_t* pname, int pID); // ÔÚ×ÜÑ§ÉúÁ´±íÖĞËÑË÷Ñ§Éú
 
 
-Crsnode* searchCrsInStu(Crsnode* crs_head, wchar_t* pcourse_id, wchar_t* pcourse_name); // ÔÚµ¥¸öÑ§ÉúÖĞËÑË÷Æä¿Î³Ì
+Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name); // ÔÚµ¥¸öÑ§ÉúÖĞËÑË÷Æä¿Î³Ì
 
 
 

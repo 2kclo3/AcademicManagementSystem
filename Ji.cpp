@@ -5,44 +5,49 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int ½Ğmain(void) {
+int main(void) {
 	setlocale(LC_ALL, ""); //Ê¹¿ØÖÆÌ¨Ö§³Ö¿í×Ö·ûÊä³ö
-
-
 	List stu = readStu(STU_FILE);
-
 	printStu(stu);
 
 	wchar_t name[30];
-	//wcscpy(name, L"ÁõÅæÁØ");
 	int id;
-	int gender;
-	int grade;
-	wchar_t college[50];
-	//wcscpy(college, L"³ôôÎôÎ");
-	wchar_t major[50];
-	//wcscpy(major,L"³ÔôÎôÎ")
+	wscanf(L"%s %d", name, &id);
+	Node* test = searchStu(&stu, name, id);
 
-	wchar_t pname[30];
-	int pid;
-	//Node* test;
-	//wscanf(L"%s %d", &pname, &pid);
-	wscanf(L"%s %d %d %d %s %s", &name, &id,&gender,&grade,&college,&major);
-	//test = searchStu(&stu, pname, pid);
-	addStu(&stu,name, id, gender, grade, college, major);
+	wchar_t pcourse_id[10];
+	wchar_t pcourse_name[100];
+	wscanf(L"%s %s", pcourse_name, pcourse_id);
+	Crsnode* testcrs = searchCrsInStu(test, pcourse_id, pcourse_name);
+	//wprintf(L"%s", testcrs->score.course_id);
+	deleteCrsInStu(test, testcrs);
+
+
 
 	printStu(stu);
-
-
-
-
 	saveStu(stu, STU_FILE);
-
-
-
 	return 0;
 }
 
+
+//wchar_t name[30];
+//wcscpy(name, L"ÁõÅæÁØ");
+//int id;
+//int gender;
+//int grade;
+//wchar_t college[50];
+//wcscpy(college, L"³ôôÎôÎ");
+//wchar_t major[50];
+//wcscpy(major,L"³ÔôÎôÎ")
+//wchar_t pname[30];
+//int pid;
+//Node* test;
+//wscanf(L"%s %d", &pname, &pid);
+//wscanf(L"%s %d %d %d %s %s", &name, &id,&gender,&grade,&college,&major);
+//test = searchStu(&stu, pname, pid);
+//addStu(&stu,name, id, gender, grade, college, major);
+//ËïÆß 40240001
+//¸ßµÈÊıÑ§AI 10001
 
 
 

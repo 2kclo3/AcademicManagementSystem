@@ -169,9 +169,9 @@ Node* searchStu(List* plist, wchar_t* pname, int pID) {
 }
 	
 // 在单个学生中搜索的课程
-Crsnode* searchCrsInStu(Crsnode* crs_head, wchar_t* pcourse_id, wchar_t* pcourse_name) {
-	Crsnode* crs_aim = crs_head->crs_next;
-	while (_tcscmp(crs_aim->score.course_id, pcourse_id) != 0 && _tcscmp(crs_aim->score.course_name, pcourse_name) != 0)//通过课程编号或课程名来检索
-		crs_aim = crs_aim->crs_next;
-	return crs_aim;
+Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
+	Crsnode* crstmp = stu->item.crslist->crs_next;
+	while (_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0)//通过课程编号he课程名来检索
+		crstmp = crstmp->crs_next;
+	return crstmp;
 }
