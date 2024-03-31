@@ -17,12 +17,18 @@ int main(void) {
 
 	wchar_t pcourse_id[10];
 	wchar_t pcourse_name[100];
-	wscanf(L"%s %s", pcourse_name, pcourse_id);
-	Crsnode* testcrs = searchCrsInStu(test, pcourse_id, pcourse_name);
+	double pscore;
+	int psemester;
+	int pcourse_nature;
+	double pcredit;
+	double pgrid;
+	//wscanf(L"%s %s", pcourse_name, pcourse_id);
+	//Crsnode* testcrs = searchCrsInStu(test, pcourse_id, pcourse_name);
 	//wprintf(L"%s", testcrs->score.course_id);
-	deleteCrsInStu(test, testcrs);
-
-
+	//deleteCrsInStu(test, testcrs);
+	wscanf(L"%s %s %lf %d %d %lf %lf", pcourse_name, pcourse_id,&pscore,&psemester,&pcourse_nature,&pcredit,&pgrid);
+	//modifyCrsInStu(testcrs, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
+	addCrsToStu(test, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
 
 	printStu(stu);
 	saveStu(stu, STU_FILE);
