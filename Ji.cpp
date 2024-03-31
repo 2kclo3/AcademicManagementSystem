@@ -5,7 +5,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int main(void) {
+int jimain(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	List stu = readStu(STU_FILE);
 	printStu(stu);
