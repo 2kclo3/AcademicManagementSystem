@@ -19,6 +19,11 @@ double getDouble(double max);
 
 void getText(wchar_t* str); //输入文字
 
+
+bool getNumberInBox(int max, int* target, const wchar_t* line);
+bool getDoubleInBox(double max, double* target, const wchar_t* line);
+bool getTextInBox(wchar_t* target, const wchar_t* line);
+
 /*
 显示菜单并提供选择
 参数：(wchar_t*)标题，(int)选项数量，(wchar_t*)选项一，(wchar_t*)选项二...

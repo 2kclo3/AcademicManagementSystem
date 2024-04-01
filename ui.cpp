@@ -1,44 +1,9 @@
 #pragma warning(disable:4996)
 #include "ui.h"
 #define PAGE_FILE "Page.txt"
+#define STU_FILE ".\\data\\Student.txt"
+#define CRS_FILE ".\\data\\Course.txt"
 
-
-
-
-//wchar_t* show_page(wchar_t* page_name)
-//{
-//	system("cls");//清空控制台内容
-//	FILE* fp = NULL;
-//	fp = fopen(PAGE_FILE, "r");//以只读方式打开文件
-//	if (fp == NULL) {
-//		wprintf(L"Read %s errer, please check and reboot the system!", PAGE_FILE);
-//		exit(EXIT_FAILURE);
-//	}
-//	//当读取失败时，要求检查和重启本系统
-//
-//	wchar_t start_tag[30], end_tag[30];
-//	swprintf(start_tag, L"%s<<<", page_name);
-//	swprintf(end_tag, L">>>%s", page_name);//创建寻找的开始和结束标签
-//
-//	bool start_found = 0;
-//	wchar_t line[512];
-//	while (fgetws(line, sizeof(line), fp) != NULL) {//一行一行寻找标签并打印
-//		if (_tcsstr(line, start_tag) != NULL) {
-//			start_found = 1;
-//			continue;
-//		}//找到开始标签，跳过，从下一行开始打印
-//		if (_tcsstr(line, end_tag) != NULL) {
-//			break;
-//		}//找到结束标签，结束循环
-//		if (start_found == 1) {
-//			wprintf(L"%s", line);
-//		}//打印当前行
-//	}
-//
-//	fclose(fp);//关闭文件
-//	return page_name;
-//
-//}
 
 
 void printStu(const List StuList) {
@@ -104,10 +69,6 @@ void printStu(const List StuList) {
 
 
 }
-
-
-
-
 void printCrs(const Cpnode CrsList) {
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
@@ -135,9 +96,6 @@ void printCrs(const Cpnode CrsList) {
 		pCrs = pCrs->next; // 移动到下一个节点
 	}
 }
-
-
-
 
 
 
@@ -523,91 +481,398 @@ void allStuUI() {
 	//drawLine();
 
 
-	List allStuList = readStu(".\\data\\Student.txt");
+	List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allStuData;
-	showStuTest(allStuList, allStuData, L"");
+	showAllStuTest(allStuList, allStuData, L"");
 
 	Table allStuTable(310, 90, 940, 700, RGB(55, 61, 53), WHITE, allStuData);
 
-	Button searchBtn(1150, 20, 100, 50, L"搜索", RGB(191, 202, 185), RGB(42, 51, 40));
+	Text titleText(40, 50, L"所有学生", 64, RGB(228, 226, 223));
+	Text IDText(-500, 150, L"", 32, WHITE);
 
 	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+	TextBox IDBox(-500, 150, 290, L"学号(不可更改)", L"");
+	TextBox nameBox(-500, 220, 290, L"姓名", L"");
+	TextBox genderBox(-500, 290, 290, L"性别 (女:0,男:1)", L"");
+	TextBox gradeBox(-500, 360, 290, L"年级", L"");
+	TextBox collegeBox(-500, 430, 290, L"学院", L"");
+	TextBox majorBox(-500, 500, 290, L"专业", L"");
 
-	Text titleText(40, 50, L"所有学生", 64, RGB(228, 226, 223));
-
-	//Button searchBtn(-50, 140, 330, 60, L"   查询学生", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button addBtn(-50, 220, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button modifyBtn(-50, 300, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button deleteBtn(-50, 380, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button sortBtn(-50, 460, 330, 60, L"   排序", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button exportBtn(-50, 540, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button inportBtn(-50, 620, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
-
-	Button backButton(-50, 700, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
-
-
+	Button searchBtn(1150, 20, 100, 50, L"搜索", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button addBtn(-50, 150, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button modifyBtn(-50, 230, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button deleteBtn(-50, 310, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button sortBtn(-50, 390, 330, 60, L"   排序", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button exportBtn(-50, 470, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button inportBtn(-50, 550, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button backButton(-50, 650, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
+	Button addOKButton(-500, 580, 290, 60, L"确定添加", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", RGB(191, 202, 185), RGB(42, 51, 40));
+	Button cancelButton(-500, 660, 290, 60, L"取消", RGB(73, 78, 70), RGB(200, 198, 195));
 
 	// 处理鼠标事件
 	ExMessage msg;
 	while (!_kbhit()) {
 		ULONGLONG start_time = GetTickCount();
-		//->
+		//-------------------------------------------------
+
+		// 输入框绘制(必须)
 		searchInputBox.draw();
+		IDBox.draw();
+		nameBox.draw();
+		genderBox.draw();
+		gradeBox.draw();
+		collegeBox.draw();
+		majorBox.draw();
 
 		if (peekmessage(&msg, -1, true)) {
+
+			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
-
-				//// 后续将修改输入方式
-				//wchar_t stuID[512];
-				//InputBox(stuID, 512, L"请输入学号", L"查询学生", L"", 0, 0, false);
-
-				//printStu(allStuList);
-
-
-				showStuTest(allStuList, allStuData, searchInputBox.text);
+				showAllStuTest(allStuList, allStuData, searchInputBox.text);
 				allStuTable.setData(allStuData);
-
-
-
 			}
+
 			if (addBtn.mouseClick(msg)) {
+				// 更改标题
+				titleText.setText(L"添加学生");
+				// 隐藏
+				addBtn.move(-500, 150);
+				modifyBtn.move(-500, 230);
+				deleteBtn.move(-500, 310);
+				sortBtn.move(-500, 390);
+				exportBtn.move(-500, 470);
+				inportBtn.move(-500, 550);
+				backButton.move(-500, 650);
+
+				// 显示
+				IDBox.move(10, 150);
+				nameBox.move(10, 220);
+				genderBox.move(10, 290);
+				gradeBox.move(10, 360);
+				collegeBox.move(10, 430);
+				majorBox.move(10, 500);
+				addOKButton.move(10, 580);
+				cancelButton.move(10, 660);
 			}
+
+			if (cancelButton.mouseClick(msg)) {
+				// 更改标题
+				titleText.setText(L"所有学生");
+
+				// 清除输入框内容
+				IDBox.clear();
+				nameBox.clear();
+				genderBox.clear();
+				gradeBox.clear();
+				collegeBox.clear();
+				majorBox.clear();
+
+				// 使表格可变化
+				allStuTable.canChange = true;
+
+				// 隐藏
+				IDBox.move(-500, 150);
+				IDText.move(-500, 150);
+				nameBox.move(-500, 220);
+				genderBox.move(-500, 290);
+				gradeBox.move(-500, 360);
+				collegeBox.move(-500, 430);
+				majorBox.move(-500, 500);
+				addOKButton.move(-500, 580);
+				modifyOKButton.move(-500, 580);
+				cancelButton.move(-500, 660);
+
+				// 显示
+				addBtn.move(-50, 150);
+				modifyBtn.move(-50, 230);
+				deleteBtn.move(-50, 310);
+				sortBtn.move(-50, 390);
+				exportBtn.move(-50, 470);
+				inportBtn.move(-50, 550);
+				backButton.move(-50, 650);
+
+			}
+
+			if (addOKButton.mouseClick(msg)) {
+				int id;
+				wchar_t name[30];
+				int gender;
+				int grade;
+				wchar_t college[50];
+				wchar_t major[50];
+
+				// 获取当前年份(判断年级要用)
+				time_t Current_time = time(NULL);
+				int Current_year = localtime(&Current_time)->tm_year + 1900;
+
+				// 判断输入格式
+				if (
+					getNumberInBox(99999999, &id, IDBox.text) &&
+					getTextInBox(name, nameBox.text) &&
+					getNumberInBox(1, &gender, genderBox.text) &&
+					getNumberInBox(9999, &grade, gradeBox.text) &&
+					getTextInBox(college, collegeBox.text) &&
+					getTextInBox(major, majorBox.text) &&
+					(id > 9999999 && id < 100000000) &&
+					(grade > 1970 && grade <= Current_year)
+					) {
+
+					// 学号相同的情况,报错提醒
+					if (!addStu(&allStuList, name, id, gender, grade, college, major)) {
+						MessageBox(GetHWnd(), L"该学生已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+					}
+					// 否则保存
+					else {
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+						// 刷新表格
+						showAllStuTest(allStuList, allStuData, searchInputBox.text);
+						allStuTable.setData(allStuData);
+
+						// 清除输入框内容
+						IDBox.clear();
+						nameBox.clear();
+						genderBox.clear();
+						gradeBox.clear();
+						collegeBox.clear();
+						majorBox.clear();
+
+
+						// 更改标题
+						titleText.setText(L"所有学生");
+
+						// 隐藏
+						IDBox.move(-500, 150);
+						nameBox.move(-500, 220);
+						genderBox.move(-500, 290);
+						gradeBox.move(-500, 360);
+						collegeBox.move(-500, 430);
+						majorBox.move(-500, 500);
+						addOKButton.move(-500, 580);
+						cancelButton.move(-500, 660);
+
+						// 显示
+						addBtn.move(-50, 150);
+						modifyBtn.move(-50, 230);
+						deleteBtn.move(-50, 310);
+						sortBtn.move(-50, 390);
+						exportBtn.move(-50, 470);
+						inportBtn.move(-50, 550);
+						backButton.move(-50, 650);
+
+					}
+
+
+				}
+				// 输入错误
+				else {
+					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+				}
+
+			}
+
 			if (modifyBtn.mouseClick(msg)) {
+				// 未选择学生
+				if (allStuTable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 更改标题
+					titleText.setText(L"修改学生");
+					// 隐藏
+					addBtn.move(-500, 150);
+					modifyBtn.move(-500, 230);
+					deleteBtn.move(-500, 310);
+					sortBtn.move(-500, 390);
+					exportBtn.move(-500, 470);
+					inportBtn.move(-500, 550);
+					backButton.move(-500, 650);
+
+
+					// 使表格不可变化
+					allStuTable.canChange = false;
+
+
+					// 获取当前列
+					int selectedRow = allStuTable.getSelectedRow();
+					vector<std::wstring> selectedData = allStuData[selectedRow];
+
+
+					// 文本框默认内容
+					IDText.setText((L"学号:" + selectedData[0]).c_str()); // C++语法
+					nameBox.setText(selectedData[1].c_str());
+					genderBox.setText(wcscmp(selectedData[2].c_str(), L"男") ? L"0" : L"1");
+					gradeBox.setText(selectedData[3].c_str());
+					collegeBox.setText(selectedData[4].c_str());
+					majorBox.setText(selectedData[5].c_str());
+
+					// 显示
+					IDText.move(20, 180);
+					nameBox.move(10, 220);
+					genderBox.move(10, 290);
+					gradeBox.move(10, 360);
+					collegeBox.move(10, 430);
+					majorBox.move(10, 500);
+					modifyOKButton.move(10, 580);
+					cancelButton.move(10, 660);
+				}
+
 			}
+
+			if (modifyOKButton.mouseClick(msg)) {
+				int id;
+				wchar_t name[30];
+				int gender;
+				int grade;
+				wchar_t college[50];
+				wchar_t major[50];
+
+				// 获取当前年份(判断年级要用)
+				time_t Current_time = time(NULL);
+				int Current_year = localtime(&Current_time)->tm_year + 1900;
+
+				// 精确搜索学生节点
+				int tempID;
+				int selectedRow = allStuTable.getSelectedRow(); // 获取当前列
+				getNumberInBox(99999999, &tempID, allStuData[selectedRow][0].c_str());
+				Node* modifyingStu = searchStu(&allStuList, (wchar_t*)allStuData[selectedRow][1].c_str(), tempID);
+
+				// 判断输入格式
+				if (
+					getTextInBox(name, nameBox.text) &&
+					getNumberInBox(1, &gender, genderBox.text) &&
+					getNumberInBox(9999, &grade, gradeBox.text) &&
+					getTextInBox(college, collegeBox.text) &&
+					getTextInBox(major, majorBox.text) &&
+					(grade > 1970 && grade <= Current_year)
+					) {
+
+					// 修改
+					modifyStu(&allStuList, modifyingStu, name, tempID, gender, grade, college, major);
+
+					// 保存
+					saveStu(allStuList, STU_FILE);
+
+					// 使表格可变化
+					allStuTable.canChange = true;
+
+					// 刷新表格
+					showAllStuTest(allStuList, allStuData, searchInputBox.text);
+					allStuTable.setData(allStuData);
+
+					// 清除输入框内容
+					IDBox.clear();
+					nameBox.clear();
+					genderBox.clear();
+					gradeBox.clear();
+					collegeBox.clear();
+					majorBox.clear();
+
+
+					// 更改标题
+					titleText.setText(L"所有学生");
+
+					// 隐藏
+					IDBox.move(-500, 150);
+					nameBox.move(-500, 220);
+					genderBox.move(-500, 290);
+					gradeBox.move(-500, 360);
+					collegeBox.move(-500, 430);
+					majorBox.move(-500, 500);
+					modifyOKButton.move(-500, 580);
+					cancelButton.move(-500, 660);
+
+					// 显示
+					addBtn.move(-50, 150);
+					modifyBtn.move(-50, 230);
+					deleteBtn.move(-50, 310);
+					sortBtn.move(-50, 390);
+					exportBtn.move(-50, 470);
+					inportBtn.move(-50, 550);
+					backButton.move(-50, 650);
+
+
+
+				}
+				// 输入错误
+				else {
+					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+				}
+
+			}
+
 			if (deleteBtn.mouseClick(msg)) {
+				if (allStuTable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
+				}
+				else {
+					int result = MessageBox(GetHWnd(), L"确定删除这个学生吗?", L"删除学生", MB_YESNO | MB_ICONQUESTION);
+
+					if (result == IDYES) { // 点击确定
+
+						// 获取当前年份(判断年级要用)
+						time_t Current_time = time(NULL);
+						int Current_year = localtime(&Current_time)->tm_year + 1900;
+
+						// 精确搜索学生节点
+						int tempID;
+						int selectedRow = allStuTable.getSelectedRow(); // 获取当前列
+						getNumberInBox(99999999, &tempID, allStuData[selectedRow][0].c_str());
+						Node* deletingStu = searchStu(&allStuList, (wchar_t*)allStuData[selectedRow][1].c_str(), tempID);
+
+						// 删除
+						deleteStu(&allStuList, deletingStu);
+
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+
+						// 刷新表格
+						showAllStuTest(allStuList, allStuData, searchInputBox.text);
+						allStuTable.setData(allStuData);
+					}
+				}
 			}
+
 			if (sortBtn.mouseClick(msg)) {
+				//TODO
 			}
+
 			if (exportBtn.mouseClick(msg)) {
+				//TODO
 			}
+
 			if (inportBtn.mouseClick(msg)) {
+				//TODO
 			}
+
 			if (backButton.mouseClick(msg)) {
-				free(allStuList);
+				free(allStuList); //TODO
 				menuUI();
 			}
-			//if (searchInputBox.onMessage(msg)) {
-			//	showStuTest(allStuList, allStuData, searchInputBox.text);
-			//	allStuTable.setData(allStuData);
 
-			//}
 
+			//表格鼠标滑动与点击
 			allStuTable.onMouse(msg);
+
+			// 文本框输入
 			searchInputBox.onMessage(msg);
+			IDBox.onMessage(msg);
+			nameBox.onMessage(msg);
+			genderBox.onMessage(msg);
+			gradeBox.onMessage(msg);
+			collegeBox.onMessage(msg);
+			majorBox.onMessage(msg);
 		}
 
-		showxy(msg);
+		//showxy(msg); // 显示坐标
 
 
 
-		//<-
+		//-------------------------------------------------
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
@@ -821,7 +1086,7 @@ void QualityUI() {
 
 
 
-bool showStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm) {
+bool showAllStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm) {
 	List pCurrent = StuList->next; //从第一个有数据节点开始
 	data.clear(); // 清空数组
 	data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
