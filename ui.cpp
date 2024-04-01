@@ -348,8 +348,8 @@ void testUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 	}
 
@@ -400,8 +400,8 @@ void loginUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 	}
 
@@ -461,8 +461,8 @@ void menuUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 	}
 
@@ -876,8 +876,8 @@ void allStuUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 
 	}
@@ -937,8 +937,8 @@ void allCrsUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 
 	}
@@ -993,8 +993,8 @@ void allQualityUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 
 	}
@@ -1065,8 +1065,8 @@ void settingsUI() {
 		FlushBatchDraw(); //批量绘图
 
 		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1000 / 120) {
-			Sleep((DWORD)(1000 / 120 - (end_time - start_time)));
+		if (end_time - start_time < 1) {
+			Sleep(1);
 		}
 
 	}
