@@ -321,7 +321,9 @@ public:
 				x + width + 12,
 				-3 + y + 1.0 * offset / data.size() * height + scollBarHeight,
 				4, 4);
-
+		}
+		else {
+			solidrectangle(x + width + 5, y, x + width + 15, y + height); // 清除滚动条
 		}
 		setfillcolor(bkColor);
 		fillroundrect(x, y, x + width, y + height, 10, 10); // 表格外框
@@ -432,6 +434,16 @@ public:
 	int getSelectedRow() {
 		return (selectedRow < data.size()) ? selectedRow : 0;
 	}
+	void setData(const vector<vector<wstring>>& _data) {
+		data = _data;
+		offset = 0;
+		selectedRow = 0;
+		calculateColWidth();
+		//calculateMaxRow();
+		scollBarHeight = (data.size() > maxRow) ? 1.0 * maxRow / data.size() * height : height;
+		draw();
+
+	}
 	void move(int _x, int _y) {
 		x = _x;
 		y = _y;
@@ -439,7 +451,7 @@ public:
 
 private:
 	bool isHovered(int mouseX, int mouseY) const {
-		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
+		return (mouseX >= x && mouseX <= x + width + 15 && mouseY >= y && mouseY <= y + height);
 	}
 };
 
@@ -474,7 +486,7 @@ void printStu(const List StuList);
 void printCrs(const Cpnode CrsList);
 
 
-bool showStuTest(const List StuList, vector<vector<std::wstring>>& data);
+bool showStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm);
 
 
 

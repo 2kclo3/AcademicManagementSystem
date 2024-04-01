@@ -526,20 +526,24 @@ void allStuUI() {
 	List allStuList = readStu(".\\data\\Student.txt");
 
 	vector<vector<std::wstring>> allStuData;
-	showStuTest(allStuList, allStuData);
+	showStuTest(allStuList, allStuData, L"");
 
-	Table allStuTable(310, 30, 940, 160, RGB(55, 61, 53), WHITE, allStuData);
+	Table allStuTable(310, 90, 940, 700, RGB(55, 61, 53), WHITE, allStuData);
+
+	Button searchBtn(1150, 20, 100, 50, L"搜索", RGB(191, 202, 185), RGB(42, 51, 40));
+
+	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 
 	Text titleText(40, 50, L"所有学生", 64, RGB(228, 226, 223));
 
-	Button searchBtn(-50, 140, 330, 60, L"   查询学生", RGB(191, 202, 185), RGB(42, 51, 40));
+	//Button searchBtn(-50, 140, 330, 60, L"   查询学生", RGB(191, 202, 185), RGB(42, 51, 40));
 
 	Button addBtn(-50, 220, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
 
 	Button modifyBtn(-50, 300, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	
+
 	Button deleteBtn(-50, 380, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-	
+
 	Button sortBtn(-50, 460, 330, 60, L"   排序", RGB(191, 202, 185), RGB(42, 51, 40));
 
 	Button exportBtn(-50, 540, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
@@ -555,6 +559,7 @@ void allStuUI() {
 	while (!_kbhit()) {
 		ULONGLONG start_time = GetTickCount();
 		//->
+		searchInputBox.draw();
 
 		if (peekmessage(&msg, -1, true)) {
 			if (searchBtn.mouseClick(msg)) {
@@ -562,9 +567,12 @@ void allStuUI() {
 				//// 后续将修改输入方式
 				//wchar_t stuID[512];
 				//InputBox(stuID, 512, L"请输入学号", L"查询学生", L"", 0, 0, false);
-				printStu(allStuList);
+
+				//printStu(allStuList);
 
 
+				showStuTest(allStuList, allStuData, searchInputBox.text);
+				allStuTable.setData(allStuData);
 
 
 
@@ -585,8 +593,14 @@ void allStuUI() {
 				free(allStuList);
 				menuUI();
 			}
+			//if (searchInputBox.onMessage(msg)) {
+			//	showStuTest(allStuList, allStuData, searchInputBox.text);
+			//	allStuTable.setData(allStuData);
+
+			//}
 
 			allStuTable.onMouse(msg);
+			searchInputBox.onMessage(msg);
 		}
 
 		showxy(msg);
@@ -807,8 +821,9 @@ void QualityUI() {
 
 
 
-bool showStuTest(const List StuList, vector<vector<std::wstring>>& data) {
+bool showStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm) {
 	List pCurrent = StuList->next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
 	data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
 
 	//初始化表头
@@ -822,18 +837,30 @@ bool showStuTest(const List StuList, vector<vector<std::wstring>>& data) {
 
 	int row = 1;
 	while (pCurrent != NULL) { //遍历链表
-		data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+		//if (searchTerm != NULL) {
 
-		//每行的内容
-		data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
-		data[row][1] = pCurrent->item.data.name;
-		data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
-		data[row][3] = std::to_wstring(pCurrent->item.data.grade); //数字转为字符串
-		data[row][4] = pCurrent->item.data.college;
-		data[row][5] = pCurrent->item.data.major;
+		// 检测是否有搜索词
+		if (wcsstr(std::to_wstring(pCurrent->item.data.ID).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(pCurrent->item.data.name, searchTerm) != NULL
+			|| wcsstr(std::to_wstring(pCurrent->item.data.grade).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(pCurrent->item.data.college, searchTerm) != NULL
+			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
+			) {
+
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+
+			//每行的内容
+			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
+			data[row][1] = pCurrent->item.data.name;
+			data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
+			data[row][3] = std::to_wstring(pCurrent->item.data.grade); //数字转为字符串
+			data[row][4] = pCurrent->item.data.college;
+			data[row][5] = pCurrent->item.data.major;
+
+			row++; // 行数+1
+		}
 
 		pCurrent = pCurrent->next; // 移向下一个节点
-		row++; // 行数+1
 
 	}
 
