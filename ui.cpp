@@ -131,10 +131,10 @@ void testUI() {
 
 	// 创建按钮对象并绘制
 	//Button button1(-50, 100, 300, 50, L"测试按钮", 0x00009688, WHITE);
-	//Text text1(100, 0, L"测试 Test", 50, BLACK);
+	//Text text1(100, 0, L"测试 Test", 50);
 	//Button button2(-50, 160, 300, 50, L"测试按钮", 0x123456, WHITE);
-	Button exitButton(50, 500, 200, 60, L"退出", LIGHTBLUE, WHITE);
-	Button selectRowBtn1(350, 500, 300, 60, L"选择的行数", 0x123456, WHITE);
+	Button exitButton(50, 500, 200, 60, L"退出", 1);
+	Button selectRowBtn1(350, 500, 300, 60, L"选择的行数", 0);
 
 	//TextBox box1(50, 250, 500, L"测试1", L"ceshi");
 	//TextBox box2(90, 400, 800, L"测试2", L"");
@@ -142,7 +142,7 @@ void testUI() {
 
 	TextBox selectBox(280, 400, 300, L"哪个表格", L"");
 
-	Table table1(360, 100, 300, 250, RGB(55, 61, 53), WHITE,
+	Table table1(360, 100, 300, 250, 
 		{
 			{L"1学号",L"姓名",L"性别",L"成绩"},
 			{L"2023001",L"张三",L"男",L"6000"},
@@ -216,7 +216,7 @@ void testUI() {
 		}
 	);
 
-	Table table3(30, 150, 300, 250, RGB(55, 61, 53), WHITE,
+	Table table3(30, 150, 300, 250, 
 		{
 			{L"3学号",L"姓名",L"性别",L"成绩"},
 			{L"2023001",L"张三",L"男",L"6000"},
@@ -226,7 +226,7 @@ void testUI() {
 		}
 	);
 
-	Table table2(700, 50, 450, 720, RGB(55, 61, 53), WHITE,
+	Table table2(700, 50, 450, 720, 
 		{
 			{L"2学号",L"姓名",L"性别",L"成绩", L"test1", L"test0333"},
 			{L"2023001",L"张三",L"男",L"6000", L"test222"},
@@ -368,11 +368,11 @@ void loginUI() {
 	//drawLine();
 
 
-	Text titleText(200, 100, L"你好，请登录!", 64, RGB(228, 226, 223));
+	Text titleText(200, 100, L"你好，请登录!", 64);
 	TextBox accountBox(200, 300, 880, L"账号", L"");
 	TextBox passwordBox(200, 400, 880, L"密码", L"");
-	Button loginButton(200, 500, 420, 60, L"登录", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button exitButton(660, 500, 420, 60, L"退出", RGB(73, 78, 70), RGB(200, 198, 195));
+	Button loginButton(200, 500, 420, 60, L"登录", 1);
+	Button exitButton(660, 500, 420, 60, L"退出", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -419,13 +419,13 @@ void menuUI() {
 
 	//drawLine();
 
-	Text titleText(90, 50, L"欢迎", 64, RGB(228, 226, 223));
-	Button allStuButton(-50, 170, 350, 60, L"  查看学生", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button allCrsButton(-50, 250, 350, 60, L"  查看课程", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button allQualityButton(-50, 330, 350, 60, L"  素质类项目管理", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button changeMajorButton(-50, 410, 350, 60, L"  转专业管理", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button settingsButton(-50, 490, 350, 60, L"  设置", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button exitButton(-50, 580, 350, 60, L"  退出登录", RGB(73, 78, 70), RGB(200, 198, 195));
+	Text titleText(90, 50, L"欢迎", 64);
+	Button allStuButton(-50, 170, 350, 60, L"  查看学生", 1);
+	Button allCrsButton(-50, 250, 350, 60, L"  查看课程", 1);
+	Button allQualityButton(-50, 330, 350, 60, L"  素质类项目管理", 1);
+	Button changeMajorButton(-50, 410, 350, 60, L"  转专业管理", 1);
+	Button settingsButton(-50, 490, 350, 60, L"  设置", 1);
+	Button exitButton(-50, 580, 350, 60, L"  退出登录", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -486,30 +486,30 @@ void allStuUI() {
 	vector<vector<std::wstring>> allStuData;
 	showAllStuTest(allStuList, allStuData, L"");
 
-	Table allStuTable(310, 90, 940, 700, RGB(55, 61, 53), WHITE, allStuData);
+	Table allStuTable(310, 90, 940, 700, allStuData);
 
-	Text titleText(40, 50, L"所有学生", 64, RGB(228, 226, 223));
-	Text IDText(-500, 150, L"", 32, WHITE);
+	Text titleText(40, 50, L"所有学生", 64);
+	Text IDText(-500, 150, L"", 32);
 
 	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	TextBox IDBox(-500, 150, 290, L"学号(不可更改)", L"");
+	TextBox IDBox(-500, 150, 290, L"学号 ( 添加后不可更改！)", L"");
 	TextBox nameBox(-500, 220, 290, L"姓名", L"");
-	TextBox genderBox(-500, 290, 290, L"性别 (女:0,男:1)", L"");
+	TextBox genderBox(-500, 290, 290, L"性别 ( 女:0, 男:1 )", L"");
 	TextBox gradeBox(-500, 360, 290, L"年级", L"");
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
 
-	Button searchBtn(1150, 20, 100, 50, L"搜索", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button addBtn(-50, 150, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button modifyBtn(-50, 230, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button deleteBtn(-50, 310, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button sortBtn(-50, 390, 330, 60, L"   排序", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button exportBtn(-50, 470, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button inportBtn(-50, 550, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button backButton(-50, 650, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
-	Button addOKButton(-500, 580, 290, 60, L"确定添加", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button cancelButton(-500, 660, 290, 60, L"取消", RGB(73, 78, 70), RGB(200, 198, 195));
+	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button addBtn(-50, 150, 330, 60, L"   添加", 1);
+	Button modifyBtn(-50, 230, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 310, 330, 60, L"   删除", 1);
+	Button sortBtn(-50, 390, 330, 60, L"   排序", 1);
+	Button exportBtn(-50, 470, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 550, 330, 60, L"   导入", 1);
+	Button backButton(-50, 650, 330, 60, L"   返回", 0);
+	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
+	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
+	Button cancelButton(-500, 660, 290, 60, L"取消", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -850,7 +850,7 @@ void allStuUI() {
 			}
 
 			if (backButton.mouseClick(msg)) {
-				free(allStuList); //TODO
+				//freeAllStu(allStuList); //TODO
 				menuUI();
 			}
 
@@ -868,7 +868,7 @@ void allStuUI() {
 			majorBox.onMessage(msg);
 		}
 
-		//showxy(msg); // 显示坐标
+		showxy(msg); // 显示坐标
 
 
 
@@ -890,15 +890,15 @@ void allCrsUI() {
 	drawLine();
 
 
-	Text titleText(40, 50, L"所有课程", 64, RGB(228, 226, 223));
-	Button searchBtn(-50, 140, 330, 60, L"   查询课程", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button addBtn(-50, 220, 330, 60, L"   添加课程", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button modifyBtn(-50, 300, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button deleteBtn(-50, 380, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button statisticBtn(-50, 460, 330, 60, L"   统计", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button exportBtn(-50, 540, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button inportBtn(-50, 620, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button backButton(-50, 700, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
+	Text titleText(40, 50, L"所有课程", 64);
+	Button searchBtn(-50, 140, 330, 60, L"   查询课程", 1);
+	Button addBtn(-50, 220, 330, 60, L"   添加课程", 1);
+	Button modifyBtn(-50, 300, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 380, 330, 60, L"   删除", 1);
+	Button statisticBtn(-50, 460, 330, 60, L"   统计", 1);
+	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
+	Button backButton(-50, 700, 330, 60, L"   返回", 0);
 
 
 	// 处理鼠标事件
@@ -956,12 +956,12 @@ void allQualityUI() {
 	drawLine();
 
 
-	Text titleText(20, 50, L"素质类项目", 64, RGB(228, 226, 223));
-	Button searchBtn(-50, 190, 330, 60, L"   查询", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button addBtn(-50, 280, 330, 60, L"   添加", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button modifyBtn(-50, 370, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button deleteBtn(-50, 460, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button backButton(-50, 550, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
+	Text titleText(20, 50, L"素质类项目", 64);
+	Button searchBtn(-50, 190, 330, 60, L"   查询", 1);
+	Button addBtn(-50, 280, 330, 60, L"   添加", 1);
+	Button modifyBtn(-50, 370, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 460, 330, 60, L"   删除", 1);
+	Button backButton(-50, 550, 330, 60, L"   返回", 0);
 
 
 	// 处理鼠标事件
@@ -1020,15 +1020,15 @@ void settingsUI() {
 	drawLine();
 
 
-	Text titleText(90, 50, L"设置", 64, RGB(228, 226, 223));
-	Button searchBtn(-50, 140, 330, 60, L"   查询课程", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button addBtn(-50, 220, 330, 60, L"   添加课程", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button modifyBtn(-50, 300, 330, 60, L"   修改", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button deleteBtn(-50, 380, 330, 60, L"   删除", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button statisticBtn(-50, 460, 330, 60, L"   统计", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button exportBtn(-50, 540, 330, 60, L"   导出", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button inportBtn(-50, 620, 330, 60, L"   导入", RGB(191, 202, 185), RGB(42, 51, 40));
-	Button backButton(-50, 700, 330, 60, L"   返回", RGB(73, 78, 70), RGB(200, 198, 195));
+	Text titleText(90, 50, L"设置", 64);
+	Button searchBtn(-50, 140, 330, 60, L"   查询课程", 1);
+	Button addBtn(-50, 220, 330, 60, L"   添加课程", 1);
+	Button modifyBtn(-50, 300, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 380, 330, 60, L"   删除", 1);
+	Button statisticBtn(-50, 460, 330, 60, L"   统计", 1);
+	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
+	Button backButton(-50, 700, 330, 60, L"   返回", 0);
 
 
 	// 处理鼠标事件

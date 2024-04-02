@@ -36,14 +36,20 @@ private:
 	bool pressed;
 
 public:
-	Button(int _x, int _y, int _width, int _height, const wchar_t* _text, COLORREF _bkColor, COLORREF _textColor) {
+	Button(int _x, int _y, int _width, int _height, const wchar_t* _text, int style) {
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
 		text = _text;
-		bkColor = _bkColor;
-		textColor = _textColor;
+		if (style == 1) {
+			bkColor = RGB(191, 202, 185);
+			textColor = RGB(42, 51, 40);
+		}
+		else if (style == 0) {
+			bkColor = RGB(73, 78, 70);
+			textColor = RGB(200, 198, 195);
+		}
 		hovered = false;
 		pressed = false;
 		settextstyle(height / 2, 0, L"Î¢ÈíÑÅºÚ");
@@ -120,12 +126,12 @@ private:
 public:
 	int size;
 	COLORREF color;
-	Text(int _x, int _y, const wchar_t* _text, int _size, COLORREF _color) {
+	Text(int _x, int _y, const wchar_t* _text, int _size) {
 		x = _x;
 		y = _y;
 		_tcscpy(text, _text);
 		size = _size;
-		color = _color;
+		color = RGB(228, 226, 223);
 		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
 		draw();
 	}
@@ -326,15 +332,15 @@ private:
 
 public:
 	bool canChange;
-	Table(int _x, int _y, int _width, int _height, COLORREF _bkColor, COLORREF _textColor, const vector<vector<wstring>>& _data) {
+	Table(int _x, int _y, int _width, int _height, const vector<vector<wstring>>& _data) {
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
 		canChange = true;
 		data = _data;
-		bkColor = _bkColor;
-		textColor = _textColor;
+		bkColor = RGB(55, 61, 53);
+		textColor = WHITE;
 		offset = 0;
 		selectedRow = 0;
 		maxRow = 0;
