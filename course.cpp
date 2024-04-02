@@ -330,20 +330,19 @@ int look(Cpnode cplist)
 
 
 //参数列表：课程链表的头节点地址，课程名称，课程号，课程性质
-//正常返回1；如果内存分配失败，返回0;如果已经有了该课程,返回-1
 int addCrs(Cpnode cphead,const wchar_t * Cname,int Cnum,const wchar_t*Character) // 添加课程
 {
 	if (searchCrs(cphead, Cname, Cnum))
-		return -1; 
+		return 0; 
 	Cpnode cplist = (Cpnode)malloc(sizeof(_Cnode));
 	if (cplist == NULL) 
 	{
-		return 0;
+		return -1;
 	}
 	cplist->sphead = (Spnode)malloc(sizeof(Snode));
 	if (cplist->sphead == NULL) 
 	{
-		return 0;
+		return -1;
 	}
 
 	cplist->sphead->next = NULL;
@@ -366,15 +365,14 @@ int addCrs(Cpnode cphead,const wchar_t * Cname,int Cnum,const wchar_t*Character)
 
 
 //参数列表：目标课程的节点地址，学生姓名，学号，成绩
-//正常返回1;如果内存分配失败，返回0;如果已经有了该学生,返回-1
 int addStuToCrs(Cpnode cplist,const wchar_t* Sname,int Snum,double Score)// 为某课程添加某学生成绩
 {
 	if (searchStuInCrs(cplist, Sname, Snum))
-		return -1;
+		return 0;
 	Spnode splist = (Spnode)malloc(sizeof(Snode));
 	if (!splist)
 	{
-		return 0;
+		return -1;
 	}
 	splist->next = cplist->sphead->next;
 	cplist->sphead->next = splist;
