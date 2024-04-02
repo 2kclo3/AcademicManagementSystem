@@ -15,9 +15,11 @@
 #include <sysinfoapi.h>
 #include <tchar.h>
 #include <math.h>
+#include <time.h>
 #include "student.h"
 #include "course.h"
 #include "file.h"
+#include "io.h"
 
 using namespace std;
 
@@ -34,16 +36,23 @@ private:
 	bool pressed;
 
 public:
-	Button(int _x, int _y, int _width, int _height, const wchar_t* _text, COLORREF _bkColor, COLORREF _textColor) {
+	Button(int _x, int _y, int _width, int _height, const wchar_t* _text, int style) {
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
 		text = _text;
-		bkColor = _bkColor;
-		textColor = _textColor;
+		if (style == 1) {
+			bkColor = RGB(191, 202, 185);
+			textColor = RGB(42, 51, 40);
+		}
+		else if (style == 0) {
+			bkColor = RGB(73, 78, 70);
+			textColor = RGB(200, 198, 195);
+		}
 		hovered = false;
 		pressed = false;
+		settextstyle(height / 2, 0, L"Î¢ÈíÑÅºÚ");
 		draw();
 	}
 
@@ -96,8 +105,11 @@ public:
 	}
 
 	void move(int _x, int _y) {
+		setfillcolor(getbkcolor());
+		solidrectangle(x, y, x + width, y + height);
 		x = _x;
 		y = _y;
+		draw();
 	}
 private:
 	bool isHovered(int mouseX, int mouseY) const {
@@ -110,16 +122,17 @@ class Text {
 private:
 	int x;
 	int y;
-public:
 	wchar_t text[512];
+public:
 	int size;
 	COLORREF color;
-	Text(int _x, int _y, const wchar_t* _text, int _size, COLORREF _color) {
+	Text(int _x, int _y, const wchar_t* _text, int _size) {
 		x = _x;
 		y = _y;
 		_tcscpy(text, _text);
 		size = _size;
-		color = _color;
+		color = RGB(228, 226, 223);
+		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
 		draw();
 	}
 	void draw() {
@@ -129,10 +142,21 @@ public:
 		outtextxy(x, y, text);
 
 	}
+	void setText(const wchar_t* _text) {
+		setfillcolor(getbkcolor());
+		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
+		solidrectangle(x, y, x + textwidth(text), y + textheight(text));
+		_tcscpy(text, _text);
+		draw();
+	}
 
 	void move(int _x, int _y) {
+		setfillcolor(getbkcolor());
+		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
+		solidrectangle(x, y, x + textwidth(text), y + textheight(text));
 		x = _x;
 		y = _y;
+		draw();
 	}
 };
 
@@ -166,6 +190,12 @@ public:
 		hoveredColor = RGB(69, 73, 67);
 		borderColor = RGB(191, 202, 185);
 		textColor = WHITE;
+		if (wcscmp(_text, L"") == NULL) {
+			settextstyle(22, 0, L"Î¢ÈíÑÅºÚ");
+		}
+		else {
+			settextstyle((int)(height / 2.2), 0, L"Î¢ÈíÑÅºÚ");
+		}
 		//draw();
 	}
 	void draw() {
@@ -250,7 +280,8 @@ public:
 					break;
 				default:
 					//printf(L"press:%c\n", msg.ch);
-					if (len < 512 - 1 && textwidth(text) < width - 30) {
+					settextstyle((int)(height / 2.2), 0, L"Î¢ÈíÑÅºÚ");
+					if (len < 512 - 1 && textwidth(text) < width - 35) {
 						text[len++] = msg.ch;
 						text[len] = '\0';
 						//printf(L"%d\n", textwidth(text));
@@ -264,8 +295,19 @@ public:
 
 	}
 	void move(int _x, int _y) {
+		setfillcolor(getbkcolor());
+		solidrectangle(x, y, x + width, y + height);
 		x = _x;
 		y = _y;
+		draw();
+	}
+	void clear() {
+		wcscpy(text, L"");
+		draw();
+	}
+	void setText(const wchar_t* _text) {
+		wcscpy(text, _text);
+		draw();
 	}
 private:
 	bool isHovered(int mouseX, int mouseY) const {
@@ -289,14 +331,16 @@ private:
 	int scollBarHeight;
 
 public:
-	Table(int _x, int _y, int _width, int _height, COLORREF _bkColor, COLORREF _textColor, const vector<vector<wstring>>& _data) {
+	bool canChange;
+	Table(int _x, int _y, int _width, int _height, const vector<vector<wstring>>& _data) {
 		x = _x;
 		y = _y;
 		width = _width;
 		height = _height;
+		canChange = true;
 		data = _data;
-		bkColor = _bkColor;
-		textColor = _textColor;
+		bkColor = RGB(55, 61, 53);
+		textColor = WHITE;
 		offset = 0;
 		selectedRow = 0;
 		maxRow = 0;
@@ -321,7 +365,9 @@ public:
 				x + width + 12,
 				-3 + y + 1.0 * offset / data.size() * height + scollBarHeight,
 				4, 4);
-
+		}
+		else {
+			solidrectangle(x + width + 5, y, x + width + 15, y + height); // Çå³ý¹ö¶¯Ìõ
 		}
 		setfillcolor(bkColor);
 		fillroundrect(x, y, x + width, y + height, 10, 10); // ±í¸ñÍâ¿ò
@@ -395,6 +441,7 @@ public:
 		}
 	}
 	void calculateMaxRow() { // ¼ÆËã×î´óÐÐÊý
+		settextstyle(30, 0, L"Î¢ÈíÑÅºÚ");
 		maxRow = height / textheight(data[0][0].c_str());
 		height = maxRow * textheight(data[0][0].c_str());
 	}
@@ -411,16 +458,18 @@ public:
 				}
 				break;
 			case WM_LBUTTONDOWN: {
-				int Rselect = int(1.0 * (msg.y - y) / height * maxRow);
-				if (Rselect != 0) {
-					if (selectedRow == Rselect + offset) {
-						selectedRow = 0;
+				if (canChange) {
+					int Rselect = int(1.0 * (msg.y - y) / height * maxRow);
+					if (Rselect != 0) {
+						if (selectedRow == Rselect + offset) {
+							selectedRow = 0;
+						}
+						else {
+							selectedRow = Rselect + offset;
+						}
 					}
-					else {
-						selectedRow = Rselect + offset;
-					}
+					//printf("%d\n", selectedRow);
 				}
-				//printf("%d\n", selectedRow);
 				break;
 			}
 			default:
@@ -432,14 +481,28 @@ public:
 	int getSelectedRow() {
 		return (selectedRow < data.size()) ? selectedRow : 0;
 	}
+	void setData(const vector<vector<wstring>>& _data) {
+		if (canChange) {
+			data = _data;
+			offset = 0;
+			selectedRow = 0;
+			calculateColWidth();
+			//calculateMaxRow();
+			scollBarHeight = (data.size() > maxRow) ? 1.0 * maxRow / data.size() * height : height;
+			draw();
+		}
+	}
 	void move(int _x, int _y) {
+		setfillcolor(getbkcolor());
+		solidrectangle(x, y, x + width, y + height + 20);
 		x = _x;
 		y = _y;
+		draw();
 	}
 
 private:
 	bool isHovered(int mouseX, int mouseY) const {
-		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
+		return (mouseX >= x && mouseX <= x + width + 15 && mouseY >= y && mouseY <= y + height);
 	}
 };
 
@@ -474,7 +537,7 @@ void printStu(const List StuList);
 void printCrs(const Cpnode CrsList);
 
 
-bool showStuTest(const List StuList, vector<vector<std::wstring>>& data);
+bool showAllStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm);
 
 
 
