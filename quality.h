@@ -5,11 +5,22 @@
 #define _QUALITY_H_
 
 #include <stdio.h>
-#include<stdbool.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <graphics.h>
+#include <string>
+#include <vector>
+#include <conio.h>
+#include <Windows.h>
+#include <sysinfoapi.h>
 #include <tchar.h>
+#include <math.h>
+#include <time.h>
 #include"student.h"
 #include"io.h"
 #include"ui.h"
+using namespace std;
+
 
 
 Node* searchStu_InQuality(List,wchar_t*);// 在总链表中搜索学生(lzy调试专用

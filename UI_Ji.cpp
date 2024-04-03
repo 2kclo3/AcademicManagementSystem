@@ -8,34 +8,22 @@
 
 int mainJi(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-
-
-
 	// 初始化图形窗口
 	initgraph(1280, 810);
 	BeginBatchDraw(); //开始批量绘图
 	setbkcolor(RGB(55, 61, 53)); //背景颜色
 	cleardevice();
 
-
-
-
 	//testUI();
 
-
-	loginUI();
-
-
-
+	//------------
+	allStuUI();
+	//------------
 
 
 
 	EndBatchDraw(); //结束批量绘图
 	closegraph(); // 关闭图形窗口
-
-
-
-
 	return 0;
 }
 
@@ -49,7 +37,7 @@ void allStuUI() {
 	List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allStuData;
-	showAllStuTest(allStuList, allStuData, L"");
+	showAllStu(allStuList, allStuData, L"");
 
 	Table allStuTable(310, 90, 940, 700, allStuData);
 
@@ -95,7 +83,7 @@ void allStuUI() {
 
 			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
-				showAllStuTest(allStuList, allStuData, searchInputBox.text);
+				showAllStu(allStuList, allStuData, searchInputBox.text);
 				allStuTable.setData(allStuData);
 			}
 
@@ -194,7 +182,7 @@ void allStuUI() {
 						saveStu(allStuList, STU_FILE);
 
 						// 刷新表格
-						showAllStuTest(allStuList, allStuData, L"");
+						showAllStu(allStuList, allStuData, L"");
 						allStuTable.setData(allStuData);
 
 						// 清除输入框内容
@@ -325,7 +313,7 @@ void allStuUI() {
 					allStuTable.canChange = true;
 
 					// 刷新表格
-					showAllStuTest(allStuList, allStuData, searchInputBox.text);
+					showAllStu(allStuList, allStuData, searchInputBox.text);
 					allStuTable.setData(allStuData);
 
 					// 清除输入框内容
@@ -392,7 +380,7 @@ void allStuUI() {
 
 
 						// 刷新表格
-						showAllStuTest(allStuList, allStuData, searchInputBox.text);
+						showAllStu(allStuList, allStuData, searchInputBox.text);
 						allStuTable.setData(allStuData);
 					}
 				}

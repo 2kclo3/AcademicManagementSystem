@@ -4,10 +4,20 @@
 #define _STUDENT_H_
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
+#include <graphics.h>
+#include <string>
+#include <vector>
+#include <conio.h>
+#include <Windows.h>
+#include <sysinfoapi.h>
 #include <tchar.h>
+#include <math.h>
+#include <time.h>
 #include "io.h"
+
+using namespace std;
 
 
 
@@ -94,7 +104,9 @@ typedef Node* List; //链表
 
 
 
-void showAllStu(); // 显示所有学生信息（不包含课程）
+
+
+bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示所有学生信息（不包含课程）
 
 
 void showStu(); // 显示单个学生信息（包含其课程成绩）

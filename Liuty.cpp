@@ -6,7 +6,7 @@
 
 
 
-int main(void) {
+int mainAAA(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 

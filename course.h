@@ -3,9 +3,17 @@
 #ifndef _COURSE_H_
 #define _COURSE_H_
 #include <stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <graphics.h>
+#include <string>
+#include <vector>
+#include <conio.h>
+#include <Windows.h>
+#include <sysinfoapi.h>
 #include <tchar.h>
+#include <math.h>
+#include <time.h>
 #include"io.h"
 #include<iostream>//µ˜ ‘”√
 using namespace std;
