@@ -23,7 +23,8 @@ int main(void) {
 	//testUI();
 
 
-	loginUI();
+	allStuUI();
+	//loginUI();
 
 
 
