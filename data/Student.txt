@@ -68,7 +68,7 @@ paper_name2 jorc_name3 autor4 date5 volume_numissue_num6page666 issue_num6page66
 
 
 
-55230004 张三3 0 2023 软件学院 数据科学与大数据技术
+55230004 张三 0 2023 软件学院 数据科学与大数据技术
 
 
 

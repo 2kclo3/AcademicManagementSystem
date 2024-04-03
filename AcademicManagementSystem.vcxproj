@@ -40,6 +40,10 @@
     <ClCompile Include="quality.cpp" />
     <ClCompile Include="student.cpp" />
     <ClCompile Include="ui.cpp" />
+    <ClCompile Include="UI_Ji.cpp" />
+    <ClCompile Include="UI_Lin.cpp" />
+    <ClCompile Include="UI_Liu.cpp" />
+    <ClCompile Include="UI_Zhang.cpp" />
     <ClCompile Include="张.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -84,6 +84,19 @@
     <ClCompile Include="Liuty.cpp" />
     <ClCompile Include="main_quality.cpp" />
     <ClCompile Include="张.cpp" />
+    <ClCompile Include="Ji.cpp" />
+    <ClCompile Include="UI_Lin.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Ji.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Zhang.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Liu.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Page.txt" />

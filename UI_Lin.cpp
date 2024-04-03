@@ -6,7 +6,7 @@
 
 
 
-int main(void) {
+int mainLin(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -30,27 +30,13 @@ int main(void) {
 
 
 
-
 	EndBatchDraw(); //结束批量绘图
 	closegraph(); // 关闭图形窗口
 
 
 
 
-
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
