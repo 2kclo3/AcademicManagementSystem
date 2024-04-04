@@ -1,9 +1,117 @@
 #pragma warning(disable:4996)
+
 #include"quality.h"
-//遗留问题：1.为每个学生的r/clist链表加入哨兵节点 (OK
-//			2.searchR/Cnode()函数的实现  (OK
 
 
+
+bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm) {
+	List pStu_Current = StuList->next;
+	Rnode* pR_Current;
+	Cnode* pC_Current;//考虑学生主链表以及素质类链表均有哨兵节点
+
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(6, L"")); //增加一行(每行6列)
+
+	//初始化表头
+	data[0][0] = L"学号";
+	data[0][1] = L"姓名";
+	data[0][2] = L"性别";
+	data[0][3] = L"年级";
+	data[0][4] = L"学院";
+	data[0][5] = L"专业";
+
+
+	int row = 1;
+	while (pStu_Current != NULL) { //遍历链表
+		
+		pR_Current = pStu_Current->item.rlist->rnext;
+		pC_Current = pStu_Current->item.clist->cnext;
+
+		if (((pR_Current != NULL) || (pC_Current != NULL)) && (wcsstr(std::to_wstring(pStu_Current->item.data.ID).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(pStu_Current->item.data.name, searchTerm) != NULL
+			|| wcsstr(std::to_wstring(pStu_Current->item.data.grade).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(pStu_Current->item.data.college, searchTerm) != NULL
+			|| wcsstr(pStu_Current->item.data.major, searchTerm) != NULL
+			)) {
+
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+
+			//每行的内容
+			data[row][0] = std::to_wstring(pStu_Current->item.data.ID); //数字转为字符串
+			data[row][1] = pStu_Current->item.data.name;
+			data[row][2] = (pStu_Current->item.data.gender) ? L"男" : L"女";
+			data[row][3] = std::to_wstring(pStu_Current->item.data.grade); //数字转为字符串
+			data[row][4] = pStu_Current->item.data.college;
+			data[row][5] = pStu_Current->item.data.major;
+
+			row++; // 行数+1
+		}
+
+		pStu_Current = pStu_Current->next; // 移向下一个节点
+
+	}
+
+	return true;
+
+}
+
+
+
+
+
+	/*//初始化表头
+	data[0][0] = L"论文名称";
+	data[0][1] = L"发表的期刊/会议名称";
+	data[0][2] = L"作者情况";
+	data[0][3] = L"发表时间";
+	data[0][4] = L"卷数";
+	data[0][5] = L"刊号";
+	data[0][6] = L"页码范围";
+	data[0][7] = L"绩点加分";
+
+	int row = 1;
+
+	while (pStu_Current != NULL) {//遍历主链表
+		
+		pR_Current = pStu_Current->item.rlist->rnext;
+		
+		while (pR_Current != NULL) { //遍历支链表
+			//if (searchTerm != NULL) {
+
+			// 检测是否有搜索词
+			if (wcsstr(pR_Current->research.paper_name, searchTerm) != NULL
+				|| wcsstr(pR_Current->research.journal_or_conference_name, searchTerm) != NULL
+				|| wcsstr(pR_Current->research.author, searchTerm) != NULL
+				|| wcsstr(pR_Current->research.date, searchTerm) != NULL
+				) {
+
+				data.push_back(vector<std::wstring>(8, L"")); //增加一行(每行8列)
+
+				//每行的内容
+				data[row][0] = pR_Current->research.paper_name;
+				data[row][1] = pR_Current->research.journal_or_conference_name;
+				data[row][2] = pR_Current->research.author;
+				data[row][3] = pR_Current->research.date;
+				data[row][4] = pR_Current->research.volume_num;
+				data[row][5] = pR_Current->research.issue_num;
+				data[row][6] = pR_Current->research.page;
+				data[row][7] = to_wstring(pR_Current->research.GPA_bonus);
+
+				row++; // 行数+1
+			}
+
+			pR_Current = pR_Current->rnext; // 移向下一个节点
+
+		}
+		
+		pStu_Current = pStu_Current->next;
+	
+	}
+
+	return true;
+
+}
+*/
 Node* searchStu_InQuality(List phead,wchar_t* str) { // 在总链表中搜索学生(lzy调试专用
 	Node* ptmp = phead->next;//别忘了考虑哨兵节点
 	while (ptmp!=NULL)

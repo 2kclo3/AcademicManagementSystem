@@ -19,9 +19,11 @@
 #include"student.h"
 #include"io.h"
 #include"ui.h"
+
 using namespace std;
 
 
+bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
 Node* searchStu_InQuality(List,wchar_t*);// 在总链表中搜索学生(lzy调试专用
 

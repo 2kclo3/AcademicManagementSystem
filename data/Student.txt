@@ -18,7 +18,7 @@
 30004 高等数学AII 80.5 2 1 2.0 3.0
 30005 面向对象程序设计 89.0 2 1 2.0 3.7
 
-paper_name jorc_name autor date volume_numissue_num issue_num page 2.22
+paper1 jorc1 autor date volume1 issue1 10-11 2.22
 
 c_name org class date 1.20
 
@@ -39,7 +39,7 @@ c_name11 org22 class333 date4 3.30
 30004 高等数学AII 84.5 2 1 2.0 3.3
 30005 面向对象程序设计 96.0 2 1 2.0 4.0
 
-paper_name2 jorc_name3 autor4 date5 volume_numissue_num6page666 issue_num6page666 page666 6.67
+paper2 jorc2 autor2 date2 volume issue 10-11  6.67
 
 
 40240001 孙七7 1 2024 人工智能学院 人工智能
