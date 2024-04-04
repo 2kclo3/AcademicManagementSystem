@@ -2,25 +2,99 @@
 //之后GPA还得改改，他不是百分比换算
 //添加名次，实现对名次的维护
 //筛选、排序、特殊的查找（最高成绩、最低成绩），这些功能可以加上
+//可以把int改成bool
+
+//把Cname这些大写开头的改成小写开头
+
+//传课程链表头节点
+void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm) 
+{
+	Cpnode cplist=cphead->next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(6, L"")); //增加一行(每行6列)
+
+	//初始化表头
+	data[0][0] = L"课程名称";
+	data[0][1] = L"课程号";
+	data[0][2] = L"课程性质";
+	data[0][3] = L"总人数";
+	data[0][4] = L"平均成绩";
+	data[0][5] = L"平均GPA";
 
 
-////传课程链表头节点
-//Cpnode showAllCrs(Cpnode phead)// 显示所有课程（不包含学生成绩）
-//{
-//	return phead;
-//}这个函数多余了，删去
-// 
-////传某课程下学生链表头节点
-//Cpnode showCrs(Cpnode phead) // 显示单个课程信息（包含该课程所有学生的成绩）
-//{
-//	Cpnode p = searchCrs(phead);
-//	if (!p)
-//	{
-//		system("pause");
-//		return NULL;
-//	}
-//	return p;
-//}
+	int row = 1;
+	while (cplist != NULL)//遍历链表w
+	{
+		// 检测是否有搜索词
+		if(
+			wcsstr(cplist->cname,searchTerm)!=NULL||
+			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm)!=NULL||
+			wcsstr(cplist->character,searchTerm)!=NULL
+		   )
+		{
+
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+
+			//每行的内容
+			data[row][0] = cplist->cname;
+			data[row][1] = std::to_wstring(cplist->cnum);
+			data[row][2] = cplist->character;
+			data[row][3] = std::to_wstring(cplist->headcount);
+			data[row][4] = std::to_wstring(cplist->averscore);
+			data[row][5] = std::to_wstring(cplist->averGPA);
+
+			row++; // 行数+1
+		}
+
+		cplist=cplist->next; // 移向下一个节点
+
+	}
+
+	return;
+}
+
+//传某课程下学生链表头节点
+void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm) // 显示单个课程信息（包含该课程所有学生的成绩）
+{
+	Spnode splist = cplist->sphead->next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(4, L"")); //增加一行(每行6列)
+
+	//初始化表头
+	data[0][0] = L"学生姓名";
+	data[0][1] = L"学号";
+	data[0][2] = L"学生成绩";
+	data[0][3] = L"GPA";
+
+
+	int row = 1;
+	while (splist != NULL)//遍历链表w
+	{
+		// 检测是否有搜索词
+		if (
+			wcsstr(splist->sname, searchTerm) != NULL ||
+			wcsstr(std::to_wstring(splist->snum).c_str(), searchTerm) != NULL
+			)
+		{
+
+			data.push_back(vector<std::wstring>(4, L"")); //增加一行(每行6列)
+
+			//每行的内容
+			data[row][0] = splist->sname;
+			data[row][1] = std::to_wstring(splist->snum);
+			data[row][2] = std::to_wstring(splist->score);
+			data[row][3] = std::to_wstring(splist->GPA);
+
+
+			row++; // 行数+1
+		}
+
+		splist = splist->next; // 移向下一个节点
+
+	}
+
+	return;
+}
 ////传指定的学生节点
 //Spnode showStuInCrs(Cpnode phead) // 具体显示单个课程的某学生
 //{
@@ -136,7 +210,7 @@ void menu()
 			wcout << L"成绩："; wcin >> Score;
 			wcout << endl;
 
-			int flag=addStuToCrs(cplist,Sname,Snum,Score);
+			int flag=addStuInCrs(cplist,Sname,Snum,Score);
 			if (flag == -1)
 			{
 				wcout << L"已有此人" << endl;
@@ -265,7 +339,7 @@ void menu()
 				break;
 			}
 
-			deleteCrs(cphead,cplist);
+			deleteCrs(cphead,Cname,Cnum);
 
 			wcout << L"删除成功" << endl;
 			system("pause");
@@ -288,13 +362,13 @@ void menu()
 				break;
 			}
 
-			wchar_t Sname[10];
-			int Snum;
-			wcout << L"学生姓名："; wcin >> Sname;
+			wchar_t sname[10];
+			int snum;
+			wcout << L"学生姓名："; wcin >> sname;
 			wcout << endl;
-			wcout << L"学号："; wcin >> Snum;
+			wcout << L"学号："; wcin >> snum;
 			wcout << endl;
-			Spnode splist = searchStuInCrs(cplist, Sname,Snum);
+			Spnode splist = searchStuInCrs(cplist, sname,snum);
 			if (!splist)
 			{
 				wcout << L"查无此人" << endl;
@@ -302,7 +376,7 @@ void menu()
 				break;
 			}
 
-			deleteStuInCrs(cplist,splist);
+			deleteStuInCrs(cplist,sname,snum);
 
 			wcout << L"删除成功" << endl;
 			system("pause");
@@ -365,7 +439,7 @@ int addCrs(Cpnode cphead,const wchar_t * Cname,int Cnum,const wchar_t*Character)
 
 
 //参数列表：目标课程的节点地址，学生姓名，学号，成绩
-int addStuToCrs(Cpnode cplist,const wchar_t* Sname,int Snum,double Score)// 为某课程添加某学生成绩
+int addStuInCrs(Cpnode cplist,const wchar_t* Sname,int Snum,double Score)// 为某课程添加某学生成绩
 {
 	if (searchStuInCrs(cplist, Sname, Snum))
 		return 0;
@@ -428,19 +502,22 @@ int modifyStuInCrs(Cpnode cplist,Spnode splist, const wchar_t *Sname,int Snum, d
 
 
 //参数列表：课程链表的头节点地址，目标课程的节点地址
-//正常返回1
-int deleteCrs(Cpnode cphead,Cpnode target_cplist) // 删除课程
+//正常返回1,没找到返回0
+int deleteCrs(Cpnode cphead,wchar_t *cname,int cnum) // 删除课程
 {
 	Cpnode pre_cplist = cphead;
 	Cpnode cplist = pre_cplist->next;
 
 	while (cplist)
 	{
-		if (cplist == target_cplist)
-			break;
+		if (wcscmp(cplist->cname,cname)==0)
+			if(cplist->cnum==cnum)
+				break;
 		pre_cplist = pre_cplist->next;
 		cplist = cplist->next;
 	}
+	if (!cplist)
+		return 0;
 
 	Spnode sphead = cplist->sphead;
 	Spnode splist=sphead->next;
@@ -461,13 +538,14 @@ int deleteCrs(Cpnode cphead,Cpnode target_cplist) // 删除课程
 
 //参数列表：目标课程的节点地址，目标学生的节点地址
 //正常返回1
-int deleteStuInCrs(Cpnode cplist,Spnode target_splist) // 删除某个课程的某学生成绩
+int deleteStuInCrs(Cpnode cplist,wchar_t* sname,int snum) // 删除某个课程的某学生成绩
 {
 	Spnode pre_splist = cplist->sphead;
 	Spnode splist = pre_splist->next;
 	while (splist)
 	{
-		if (splist== target_splist)
+		if (wcscmp(splist->sname,sname)==0)
+			if(splist->snum==snum)
 				break;
 		pre_splist = pre_splist->next;
 		splist = splist->next;
@@ -516,14 +594,13 @@ Cpnode searchCrs(Cpnode cphead,const wchar_t *Cname,int Cnum)// 在课程链表中搜索
 
 //参数列表：目标课程的节点地址，学生姓名，学号
 //找到了返回目标学生的节点地址，没找到返回NULL
-Spnode searchStuInCrs(Cpnode cplist,const wchar_t *Sname,int Snum) // 在单个课程中搜索其下的学生
+Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum) // 在单个课程中搜索其下的学生
 {
 	Spnode splist = cplist->sphead->next;
 	while (splist)
 	{
-		if (wcscmp(Sname, splist->sname) == 0)
-			if (Snum==splist->snum)
-				break;
+		if (Snum == splist->snum)
+			break;
 		splist = splist->next;
 	}
 	if (!splist)

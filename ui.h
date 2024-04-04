@@ -519,7 +519,7 @@ void menuUI();
 void allStuUI();
 void StuUI();
 void allCrsUI();
-void CrsUI();
+void CrsUI(Cpnode cphead,Cpnode cplist);
 void allQualityUI();
 void allQualityUI();
 void changeMajorUI();
