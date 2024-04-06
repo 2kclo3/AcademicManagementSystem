@@ -25,6 +25,8 @@ using namespace std;
 
 bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
+bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data);
+
 Node* searchStu_InQuality(List,wchar_t*);// 在总链表中搜索学生(lzy调试专用
 
 

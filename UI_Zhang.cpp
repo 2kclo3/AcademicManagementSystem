@@ -6,7 +6,7 @@
 
 //修改完后也要查重,避免出现把连个人的学号改重了或者课程改重了
 
-int main(void) 
+int main0(void) 
 {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 

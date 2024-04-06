@@ -22,6 +22,7 @@ bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, 
 
 
 	int row = 1;
+
 	while (pStu_Current != NULL) { //遍历链表
 		
 		pR_Current = pStu_Current->item.rlist->rnext;
@@ -55,11 +56,14 @@ bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, 
 
 }
 
+bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data) {
 
+	Rnode* pR_Current = Stu->item.rlist->rnext;
 
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(8, L"")); //增加一行(每行8列)
 
-
-	/*//初始化表头
+	//初始化表头
 	data[0][0] = L"论文名称";
 	data[0][1] = L"发表的期刊/会议名称";
 	data[0][2] = L"作者情况";
@@ -71,47 +75,32 @@ bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, 
 
 	int row = 1;
 
-	while (pStu_Current != NULL) {//遍历主链表
-		
-		pR_Current = pStu_Current->item.rlist->rnext;
-		
-		while (pR_Current != NULL) { //遍历支链表
-			//if (searchTerm != NULL) {
+	while (pR_Current != NULL) { //遍历科研支链表
 
-			// 检测是否有搜索词
-			if (wcsstr(pR_Current->research.paper_name, searchTerm) != NULL
-				|| wcsstr(pR_Current->research.journal_or_conference_name, searchTerm) != NULL
-				|| wcsstr(pR_Current->research.author, searchTerm) != NULL
-				|| wcsstr(pR_Current->research.date, searchTerm) != NULL
-				) {
+		data.push_back(vector<std::wstring>(8, L"")); //增加一行(每行8列)
 
-				data.push_back(vector<std::wstring>(8, L"")); //增加一行(每行8列)
+		//每行的内容
+		data[row][0] = pR_Current->research.paper_name;
+		data[row][1] = pR_Current->research.journal_or_conference_name;
+		data[row][2] = pR_Current->research.author;
+		data[row][3] = pR_Current->research.date;
+		data[row][4] = pR_Current->research.volume_num;
+		data[row][5] = pR_Current->research.issue_num;
+		data[row][6] = pR_Current->research.page;
+		data[row][7] = to_wstring(pR_Current->research.GPA_bonus);
 
-				//每行的内容
-				data[row][0] = pR_Current->research.paper_name;
-				data[row][1] = pR_Current->research.journal_or_conference_name;
-				data[row][2] = pR_Current->research.author;
-				data[row][3] = pR_Current->research.date;
-				data[row][4] = pR_Current->research.volume_num;
-				data[row][5] = pR_Current->research.issue_num;
-				data[row][6] = pR_Current->research.page;
-				data[row][7] = to_wstring(pR_Current->research.GPA_bonus);
+		row++; // 行数+1
 
-				row++; // 行数+1
-			}
+		pR_Current = pR_Current->rnext; // 移向下一个节点
 
-			pR_Current = pR_Current->rnext; // 移向下一个节点
-
-		}
-		
-		pStu_Current = pStu_Current->next;
-	
 	}
 
 	return true;
 
 }
-*/
+
+
+
 Node* searchStu_InQuality(List phead,wchar_t* str) { // 在总链表中搜索学生(lzy调试专用
 	Node* ptmp = phead->next;//别忘了考虑哨兵节点
 	while (ptmp!=NULL)

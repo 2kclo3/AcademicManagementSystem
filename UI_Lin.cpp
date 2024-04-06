@@ -6,8 +6,9 @@
 
 
 
-int main(void) {
+int main() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+	
 	// 初始化图形窗口
 	initgraph(1280, 810);
 	BeginBatchDraw(); //开始批量绘图
@@ -34,42 +35,216 @@ void allQualityUI() {
 
 	List allStuList = readStu(STU_FILE);
 	
-	vector<vector<std::wstring>> allQuality_ResearchData;
+	vector<vector<std::wstring>> allQuality_Data;
+	vector<vector<std::wstring>> Stu_Research_Data;
 
-	ShowAllStu_with_quality(allStuList, allQuality_ResearchData, L"");
+	ShowAllStu_with_quality(allStuList, allQuality_Data, L"");
 
-	Table allQuality_ResearchTable(310, 90, 940, 700, allQuality_ResearchData);
+	Table allQuality_Table(310, 90, 940, 700, allQuality_Data);
 
-	Text titleText(20, 50, L"素质类项目", 64);
-	Button searchBtn(-50, 190, 330, 60, L"   查询", 1);
-	Button addBtn(-50, 280, 330, 60, L"   添加", 1);
-	Button modifyBtn(-50, 370, 330, 60, L"   修改", 1);
-	Button deleteBtn(-50, 460, 330, 60, L"   删除", 1);
-	Button backButton(-50, 550, 330, 60, L"   返回", 0);
+	Text titleText(10, 100, L"素质类项目管理", 50);
+	Text IDText(-500, 200, L"", 32);
 
+	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+	TextBox paper_nameBox(-500, 200, 290, L"论文名称", L"");
+	TextBox journal_or_conference_nameBox(-500, 270, 290, L"发表的期刊/会议名称", L"");
+	TextBox authorBox(-500, 340, 290, L"作者情况", L"");
+	TextBox dateBox(-500, 410, 290, L"发表时间", L"");
+	TextBox volume_numBox(-500, 480, 290, L"卷数", L"");
+	TextBox issue_numBox(-500, 550, 290, L"刊号", L"");
+	TextBox pageBox(-500, 620, 290, L"页码范围", L"");
+	TextBox GPA_bonusBox(-500, 690, 290, L"绩点加分", L"");
+
+
+
+	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button addBtn(-50, 200, 330, 60, L"   添加", 1);
+	Button modifyBtn(-50, 280, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 360, 330, 60, L"   删除", 1);
+	Button exportBtn(-50, 440, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 520, 330, 60, L"   导入", 1);
+	Button backButton(-50, 600, 330, 60, L"   返回", 0);
+
+	Button modify_Research_Btn(-500, 280, 330, 60, L"   科研成果修改", 1);
+	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
+	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
+	Button cancelButton(-500, 680, 290, 60, L"取消", 0);
+	Button cancel_ModifyResearch_Button(-500, 680, 290, 60, L"取消", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
 	while (!_kbhit()) {
 		ULONGLONG start_time = GetTickCount();
 		//->
+		// 输入框绘制(必须)
+		searchInputBox.draw();
+		paper_nameBox.draw();
+		journal_or_conference_nameBox.draw();
+		authorBox.draw();
+		dateBox.draw();
+		volume_numBox.draw();
+		issue_numBox.draw();
+		pageBox.draw();
+		GPA_bonusBox.draw();
+
 
 		if (peekmessage(&msg, -1, true)) {
+
+			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
+				ShowAllStu_with_quality(allStuList, allQuality_Data, searchInputBox.text);
+				allQuality_Table.setData(allQuality_Data);
 			}
+
 			if (addBtn.mouseClick(msg)) {
 			}
+
 			if (modifyBtn.mouseClick(msg)) {
+				// 未选择学生
+				if (allQuality_Table.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 更改标题
+					titleText.setText(L"修改素质类项目");
+					//隐藏
+					addBtn.move(-500,200);
+					modifyBtn.move(-500, 280);
+					deleteBtn.move(-500,360);
+					exportBtn.move(-500, 440);
+					inportBtn.move(-500, 520);
+					backButton.move(-500, 600);
+
+					//显示
+					modify_Research_Btn.move(-50, 280);
+
+					// 获取当前行并精确搜索学生节点
+					int tempID;
+					int selectedRow = allQuality_Table.getSelectedRow();
+					getNumberInBox(99999999, &tempID, allQuality_Data[selectedRow][0].c_str());
+					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)allQuality_Data[selectedRow][1].c_str(), tempID);
+
+					ShowStu_Research(modifyingStu, Stu_Research_Data);
+					allQuality_Table.setData(Stu_Research_Data);
+
+					//隐藏
+					searchInputBox.move(-1500, 20);
+					searchBtn.move(-500, 20);
+
+				
+				}
 			}
+
+			if (modify_Research_Btn.mouseClick(msg)) {
+
+				if (allQuality_Table.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个科研成果", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 更改标题
+					titleText.setText(L"修改此科研成果");
+					titleText.move(20, 3);
+
+					//隐藏
+					modify_Research_Btn.move(-500, 280);
+
+					// 使表格不可变化
+					allQuality_Table.canChange = false;
+
+					// 获取当前行
+					int selectedRow = allQuality_Table.getSelectedRow();
+					vector<std::wstring> selectedResearch_Data = Stu_Research_Data[selectedRow];
+
+					// 文本框默认内容
+					paper_nameBox.setText(selectedResearch_Data[0].c_str());
+					journal_or_conference_nameBox.setText(selectedResearch_Data[1].c_str());
+					authorBox.setText(selectedResearch_Data[2].c_str());
+					dateBox.setText(selectedResearch_Data[3].c_str());
+					volume_numBox.setText(selectedResearch_Data[4].c_str());
+					issue_numBox.setText(selectedResearch_Data[5].c_str());
+					pageBox.setText(selectedResearch_Data[6].c_str());
+					GPA_bonusBox.setText(selectedResearch_Data[7].c_str());
+
+
+					//显示
+					paper_nameBox.move(10, 70);
+					journal_or_conference_nameBox.move(10, 140);
+					authorBox.move(10, 210);
+					dateBox.move(10, 280);
+					volume_numBox.move(10, 350);
+					issue_numBox.move(10, 420);
+					pageBox.move(10, 490);
+					GPA_bonusBox.move(10, 560);
+					modifyOKButton.move(10, 640);
+					cancel_ModifyResearch_Button.move(10, 720);
+
+
+				}
+			}
+
+			if (cancel_ModifyResearch_Button.mouseClick(msg)) {
+				// 更改标题
+				titleText.setText(L"修改素质类项目");
+
+				// 清除输入框内容
+				paper_nameBox.clear();
+				journal_or_conference_nameBox.clear();
+				authorBox.clear();
+				dateBox.clear();
+				volume_numBox.clear();
+				issue_numBox.clear();
+				pageBox.clear();
+				GPA_bonusBox.clear();
+
+
+				// 使表格可变化
+				allQuality_Table.canChange = true;
+
+				//隐藏
+				paper_nameBox.move(-500,70);
+				journal_or_conference_nameBox.move(-500, 140);
+				authorBox.move(-500, 210);
+				dateBox.move(-500, 280);
+				volume_numBox.move(-500, 350);
+				issue_numBox.move(-500, 420);
+				pageBox.move(-500, 490);
+				GPA_bonusBox.move(-500, 560);
+				modifyOKButton.move(-500, 640);
+				cancel_ModifyResearch_Button.move(-500, 720);
+
+
+				//显示
+				modify_Research_Btn.move(-50, 280);
+
+			}
+
+
 			if (deleteBtn.mouseClick(msg)) {
 			}
+
 			if (backButton.mouseClick(msg)) {
 				menuUI();
 			}
+
+			
+			//表格鼠标滑动与点击
+			allQuality_Table.onMouse(msg);
+
+			// 文本框输入
+			searchInputBox.onMessage(msg);
+			paper_nameBox.onMessage(msg);
+			journal_or_conference_nameBox.onMessage(msg);
+			authorBox.onMessage(msg);
+			dateBox.onMessage(msg);
+			volume_numBox.onMessage(msg);
+			issue_numBox.onMessage(msg);
+			pageBox.onMessage(msg);
+			GPA_bonusBox.onMessage(msg);
+		
 		}
-
-
-		showxy(msg);
+		
+		
+		//showxy(msg);
 
 
 
@@ -82,7 +257,6 @@ void allQualityUI() {
 		}
 
 	}
-
 
 }
 
