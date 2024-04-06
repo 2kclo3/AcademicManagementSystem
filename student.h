@@ -48,19 +48,19 @@ struct score_info {
 struct quality_projects_research {//科研成果
 	wchar_t paper_name[200];//论文名称
 	wchar_t journal_or_conference_name[200];//所发表的期刊或会议名称
-	wchar_t author[300];// 作者情况（是否为通讯作者及作者排序）
-	wchar_t date[11];// 发表年月
-	wchar_t volume_num[10];// 卷数
-	wchar_t issue_num[10];// 刊号
-	wchar_t page[15];// 页码范围
+	wchar_t author[200];// 作者情况（是否为通讯作者及作者排序）
+	wchar_t date[200];// 发表年月
+	wchar_t volume_num[200];// 卷数
+	wchar_t issue_num[200];// 刊号
+	wchar_t page[200];// 页码范围
 	double GPA_bonus;
 };
 
 struct quality_projects_competition {//竞赛获奖
 	wchar_t competition_name[200];//竞赛名称
-	wchar_t organizer[100];//举办单位
-	wchar_t category[100];//获奖类别
-	wchar_t date[11];//获奖时间 年月
+	wchar_t organizer[200];//举办单位
+	wchar_t category[200];//获奖类别
+	wchar_t date[200];//获奖时间 年月
 	double GPA_bonus;
 };
 

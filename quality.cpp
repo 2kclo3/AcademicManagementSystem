@@ -187,18 +187,34 @@ void show_Competition_menu(const wchar_t* title, Cnode* chead) {//方便修改函数确
 		ctmp = ctmp->cnext;
 	}
 }*/
-Rnode* searchRnode(Node* Stu,wchar_t* paper_name) {//找出待修改的素质类项目节点
-	Rnode* rhead = Stu->item.rlist;//别忘了考虑哨兵节点
-	Rnode* rtmp = rhead->rnext;
-	while (rtmp != NULL)
-	{
-		if (wcscmp(paper_name, rtmp->research.paper_name) == 0)
+Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改的素质类项目节点
+	Node* Stu = (*StuList)->next;
+	while (Stu != NULL) {
+		Rnode* rtmp = Stu->item.rlist->rnext;//别忘了考虑哨兵节点
+		while (rtmp != NULL){
+			if (wcscmp(paper_name, rtmp->research.paper_name) == 0)
+				break;
+			rtmp = rtmp->rnext;
+		}
+		if (rtmp == NULL)
+			Stu = Stu->next;
+		else
 			break;
-		rtmp = rtmp->rnext;
 	}
-	if (rtmp == NULL)	return NULL;
-	return rtmp;
+	return Stu;
 }// 找出此学生待修改的素质类项目节点
+
+Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name) {
+	Rnode* pR_Current = Stu->item.rlist->rnext;
+
+	while (pR_Current != NULL) {
+		if (wcscmp(paper_name, pR_Current->research.paper_name) == 0)
+			break;
+		pR_Current = pR_Current->rnext;
+	}
+	return pR_Current;
+
+}
 Cnode* searchCnode(Node* Stu,wchar_t* competition_name) {
 	Cnode* chead = Stu->item.clist;//别忘了考虑哨兵节点
 	Cnode* ctmp = chead->cnext;

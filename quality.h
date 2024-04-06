@@ -50,7 +50,9 @@ bool addQuality_clist(Node* Stu,
 void show_Competition_menu(const wchar_t* title, Cnode* chead);*/
 
 
-Rnode* searchRnode(Node* Stu, wchar_t* paper_name);// 找出此学生待修改的素质类项目节点
+Node* searchStu_with_thisRnode(List* StuList,  wchar_t* paper_name);// 找出此学生待修改的素质类项目节点
+Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name);
+
 Cnode* searchCnode(Node* Stu, wchar_t* competition_name);
 
 
