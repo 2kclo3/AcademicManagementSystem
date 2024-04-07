@@ -5,12 +5,13 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int jimain(void) {
+int mainji(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	List stu = readStu(STU_FILE);
 	printStu(stu);
-
-	wchar_t name[30];
+	sortStu(&stu);
+	wprintf(L"111");
+	/*wchar_t name[30];
 	int id;
 	wscanf(L"%s %d", name, &id);
 	Node* test = searchStu(&stu, name, id);
@@ -21,14 +22,14 @@ int jimain(void) {
 	int psemester;
 	int pcourse_nature;
 	double pcredit;
-	double pgrid;
+	double pgrid;*/
 	//wscanf(L"%s %s", pcourse_name, pcourse_id);
 	//Crsnode* testcrs = searchCrsInStu(test, pcourse_id, pcourse_name);
 	//wprintf(L"%s", testcrs->score.course_id);
 	//deleteCrsInStu(test, testcrs);
-	wscanf(L"%s %s %lf %d %d %lf %lf", pcourse_name, pcourse_id,&pscore,&psemester,&pcourse_nature,&pcredit,&pgrid);
-	//modifyCrsInStu(testcrs, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
-	addCrsToStu(test, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
+	//wscanf(L"%s %s %lf %d %d %lf %lf", pcourse_name, pcourse_id,&pscore,&psemester,&pcourse_nature,&pcredit,&pgrid);
+	////modifyCrsInStu(testcrs, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
+	//addCrsToStu(test, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
 
 	printStu(stu);
 	saveStu(stu, STU_FILE);

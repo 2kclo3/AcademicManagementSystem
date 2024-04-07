@@ -109,11 +109,10 @@ typedef Node* List; //链表
 bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示所有学生信息（不包含课程）
 
 
-void showStu(); // 显示单个学生信息（包含其课程成绩）
+void showStu(Crsnode* Crs); // 显示单个学生信息（包含其课程成绩）
 
 bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 
-void showCrsInStu(); // 具体显示单个学生的某课程
 
 
 bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor); // 添加学生（不包含课程）
@@ -122,7 +121,7 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid);// 为某个学生添加某课程及成绩
 
 
-void sortStu();// 排序总学生链表
+void sortStu(List* plist);// 排序总学生链表
 
 
 bool modifyStu(List* plist, Node* chastu, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor);// 修改学生信息（不修改课程）

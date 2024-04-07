@@ -6,7 +6,7 @@
 
 
 
-int mainJi(void) {
+int main(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	// 初始化图形窗口
 	initgraph(1280, 810);
@@ -43,6 +43,11 @@ void allStuUI() {
 
 	Text titleText(40, 50, L"所有学生", 64);
 	Text IDText(-500, 150, L"", 32);
+	Text nameText(-500, 220, L"", 32);
+	Text genderText(-500, 290, L"", 32);
+	Text gradeText(-500, 360, L"", 32);
+	Text collegeText(-500, 430, L"", 32);
+	Text majorText(-500, 500, L"", 32);
 
 	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 	TextBox IDBox(-500, 150, 290, L"学号 ( 添加后不可更改！)", L"");
@@ -51,15 +56,16 @@ void allStuUI() {
 	TextBox gradeBox(-500, 360, 290, L"年级", L"");
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
-
 	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
-	Button addBtn(-50, 150, 330, 60, L"   添加", 1);
-	Button modifyBtn(-50, 230, 330, 60, L"   修改", 1);
-	Button deleteBtn(-50, 310, 330, 60, L"   删除", 1);
-	Button sortBtn(-50, 390, 330, 60, L"   排序", 1);
-	Button exportBtn(-50, 470, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 550, 330, 60, L"   导入", 1);
-	Button backButton(-50, 650, 330, 60, L"   返回", 0);
+	Button lookBtn(-50, 150, 330, 60, L"   学生课程", 1);//
+	Button lookcancelBtn(-500, 150, 290, 60, L"   返回主页面", 1);
+	Button addBtn(-50, 230, 330, 60, L"   添加", 1);//
+	Button modifyBtn(-50, 310, 330, 60, L"   修改", 1);
+	Button deleteBtn(-50, 390, 330, 60, L"   删除", 1);
+	Button sortBtn(-50, 470, 330, 60, L"   排序", 1);
+	Button exportBtn(-50, 550, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 630, 330, 60, L"   导入", 1);
+	Button backButton(-50, 730, 330, 60, L"   返回", 0);
 	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
 	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
 	Button cancelButton(-500, 660, 290, 60, L"取消", 0);
@@ -91,13 +97,14 @@ void allStuUI() {
 				// 更改标题
 				titleText.setText(L"添加学生");
 				// 隐藏
-				addBtn.move(-500, 150);
-				modifyBtn.move(-500, 230);
-				deleteBtn.move(-500, 310);
-				sortBtn.move(-500, 390);
-				exportBtn.move(-500, 470);
-				inportBtn.move(-500, 550);
-				backButton.move(-500, 650);
+				lookBtn.move(-500, 150);
+				addBtn.move(-500, 230);
+				modifyBtn.move(-500, 310);
+				deleteBtn.move(-500, 390);
+				sortBtn.move(-500, 470);
+				exportBtn.move(-500, 550);
+				inportBtn.move(-500, 630);
+				backButton.move(-500, 730);
 
 				// 显示
 				IDBox.move(10, 150);
@@ -109,6 +116,90 @@ void allStuUI() {
 				addOKButton.move(10, 580);
 				cancelButton.move(10, 660);
 			}
+
+			if (lookBtn.mouseClick(msg)) {
+
+				////更改标题
+				//titleText.setText(L"课程信息");
+
+				if (allStuTable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
+				}
+				else {
+					wchar_t cname[30];
+					wchar_t cid[30];
+					int selectedRow = allStuTable.getSelectedRow();
+					getTextInBox(cid, allStuData[selectedRow][0].c_str());
+					getTextInBox(cname, allStuData[selectedRow][1].c_str());
+					Crsnode* Crs = searchCrsInStu(allStuList, cid, cname);
+					StuUI(Crs);
+
+					//	// 隐藏
+					//	lookBtn.move(-500, 150);
+					//	addBtn.move(-500, 230);
+					//	modifyBtn.move(-500, 310);
+					//	deleteBtn.move(-500, 390);
+					//	sortBtn.move(-500, 470);
+					//	exportBtn.move(-500, 550);
+					//	inportBtn.move(-500, 630);
+					//	backButton.move(-500, 730);
+
+					//	// 获取当前行
+					//	int selectedRow = allStuTable.getSelectedRow();
+					//	vector<std::wstring> selectedData = allStuData[selectedRow];
+
+					//	// 使表格不可变化
+					//	allStuTable.canChange = false;
+
+					//	// 文本框默认内容
+					//	IDText.setText((L"学号:" + selectedData[0]).c_str()); // C++语法
+					//	nameText.setText((L"姓名:"+ selectedData[1]).c_str());
+					//	genderText.setText((L"性别:"+selectedData[2]).c_str());
+					//	gradeText.setText((L"年级:" + selectedData[3]).c_str());
+					//	collegeText.setText((L"学院:" + selectedData[4]).c_str());
+					//	majorText.setText((L"专业:" + selectedData[5]).c_str());
+
+					//	//显示
+					//	IDText.move(10, 150);
+					//	nameText.move(10, 220);
+					//	genderText.move(10, 290);
+					//	gradeText.move(10, 360);
+					//	collegeText.move(10, 430);
+					//	majorText.move(10, 500);
+					//	lookcancelBtn.move(10, 570);
+
+						//gaibianshuzu
+				}
+
+			}
+
+			////if (lookcancelBtn.mouseClick(msg)) {
+
+				//// 更改标题
+				//titleText.setText(L"所有学生");
+
+				//// 使表格可变化
+				//allStuTable.canChange = true;
+
+				////隐藏
+				//IDText.move(-500, 150);
+				//nameText.move(-500, 220);
+				//genderText.move(-500, 290);
+				//gradeText.move(-500, 360);
+				//collegeText.move(-500, 430);
+				//majorText.move(-500, 500);
+				//lookcancelBtn.move(-500, 570);
+
+				//// 显示
+				//lookBtn.move(-50, 150);
+				//addBtn.move(-50, 230);
+				//modifyBtn.move(-50, 310);
+				//deleteBtn.move(-50, 390);
+				//sortBtn.move(-50, 470);
+				//exportBtn.move(-50, 550);
+				//inportBtn.move(-50, 630);
+				//backButton.move(-50, 730);
+		/*}*/
 
 			if (cancelButton.mouseClick(msg)) {
 				// 更改标题
@@ -138,13 +229,14 @@ void allStuUI() {
 				cancelButton.move(-500, 660);
 
 				// 显示
-				addBtn.move(-50, 150);
-				modifyBtn.move(-50, 230);
-				deleteBtn.move(-50, 310);
-				sortBtn.move(-50, 390);
-				exportBtn.move(-50, 470);
-				inportBtn.move(-50, 550);
-				backButton.move(-50, 650);
+				lookBtn.move(-50, 150);
+				addBtn.move(-50, 230);
+				modifyBtn.move(-50, 310);
+				deleteBtn.move(-50, 390);
+				sortBtn.move(-50, 470);
+				exportBtn.move(-50, 550);
+				inportBtn.move(-50, 630);
+				backButton.move(-50, 730);
 
 			}
 
@@ -208,13 +300,14 @@ void allStuUI() {
 						cancelButton.move(-500, 660);
 
 						// 显示
-						addBtn.move(-50, 150);
-						modifyBtn.move(-50, 230);
-						deleteBtn.move(-50, 310);
-						sortBtn.move(-50, 390);
-						exportBtn.move(-50, 470);
-						inportBtn.move(-50, 550);
-						backButton.move(-50, 650);
+						lookBtn.move(-50, 150);
+						addBtn.move(-50, 230);
+						modifyBtn.move(-50, 310);
+						deleteBtn.move(-50, 390);
+						sortBtn.move(-50, 470);
+						exportBtn.move(-50, 550);
+						inportBtn.move(-50, 630);
+						backButton.move(-50, 730);
 
 					}
 
@@ -236,13 +329,14 @@ void allStuUI() {
 					// 更改标题
 					titleText.setText(L"修改学生");
 					// 隐藏
-					addBtn.move(-500, 150);
-					modifyBtn.move(-500, 230);
-					deleteBtn.move(-500, 310);
-					sortBtn.move(-500, 390);
-					exportBtn.move(-500, 470);
-					inportBtn.move(-500, 550);
-					backButton.move(-500, 650);
+					lookBtn.move(-500, 150);
+					addBtn.move(-500, 230);
+					modifyBtn.move(-500, 310);
+					deleteBtn.move(-500, 390);
+					sortBtn.move(-500, 470);
+					exportBtn.move(-500, 550);
+					inportBtn.move(-500, 630);
+					backButton.move(-500, 730);
 
 
 					// 使表格不可变化
@@ -339,13 +433,14 @@ void allStuUI() {
 					cancelButton.move(-500, 660);
 
 					// 显示
-					addBtn.move(-50, 150);
-					modifyBtn.move(-50, 230);
-					deleteBtn.move(-50, 310);
-					sortBtn.move(-50, 390);
-					exportBtn.move(-50, 470);
-					inportBtn.move(-50, 550);
-					backButton.move(-50, 650);
+					lookBtn.move(-50, 150);
+					addBtn.move(-50, 230);
+					modifyBtn.move(-50, 310);
+					deleteBtn.move(-50, 390);
+					sortBtn.move(-50, 470);
+					exportBtn.move(-50, 550);
+					inportBtn.move(-50, 630);
+					backButton.move(-50, 730);
 
 
 
@@ -387,7 +482,11 @@ void allStuUI() {
 			}
 
 			if (sortBtn.mouseClick(msg)) {
-				//TODO
+				sortStu(&allStuList);
+
+				// 刷新表格
+				showAllStu(allStuList, allStuData, L"");
+				allStuTable.setData(allStuData);
 			}
 
 			if (exportBtn.mouseClick(msg)) {
@@ -433,6 +532,12 @@ void allStuUI() {
 }
 
 
-void StuUI() {
-}
+
+	void StuUI(Crsnode * Crs) {
+		cleardevice();
+
+
+		Crsnode allCrsInStuList = Crs;
+
+	}
 
