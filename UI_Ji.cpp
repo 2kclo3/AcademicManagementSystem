@@ -129,7 +129,7 @@ void allStuUI() {
 					getNumberInBox(99999999,&cid, allStuData[selectedRow][0].c_str());
 					getTextInBox(cname, allStuData[selectedRow][1].c_str());
 					Node* Crs = searchStu(&allStuList, cname, cid);
-					StuUI(Crs);
+					StuUI(Crs, allStuList);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -528,7 +528,7 @@ void allStuUI() {
 
 
 
-	void StuUI(Node* Crs) {
+	void StuUI(Node* Crs,List allStuList) {
 
 
 		cleardevice();
@@ -539,15 +539,25 @@ void allStuUI() {
 		Table allCrsINStuTable(310, 90, 940, 700, allCrsINStuData);
 
 
-
+		//输入框
 		TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 
+		TextBox course_idBox(-500, 100, 290, L"课程编号", L"");
+		TextBox course_nameBox(-500, 150, 290, L"课程名字", L"");
+		TextBox scoreBox(-500, 220, 290, L"成绩", L"");
+		TextBox course_natureBox(-500, 250, 290, L"课程性质", L"");
+		TextBox creditBox(-500, 300, 290, L"学分", L"");
+		TextBox gridBox(-500, 350, 290, L"绩点", L"");
+		TextBox semesterBox(-500, 400, 290, L"学期", L"");//////////////////////////////////////
 
+
+		//按钮
 		Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
-		Button addCrsBtn(-50, 140, 330, 60, L"   添加课程", 1);
-		Button modifyCrsBtn(-50, 220, 330, 60, L"   修改课程", 1);
-		Button deleteCrsBtn(-50, 300, 330, 60, L"   删除课程", 1);
-		Button backButton(-50, 380, 330, 60, L"   返回", 0);
+
+		Button addCrsBtn(-50, 220, 330, 60, L"   添加课程", 1);
+		Button modifyCrsBtn(-50, 300, 330, 60, L"   修改课程", 1);
+		Button deleteCrsBtn(-50, 380, 330, 60, L"   删除课程", 1);
+		Button backButton(-50, 700, 330, 60, L"   返回", 0);
 
 		Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
 		Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
@@ -559,8 +569,168 @@ void allStuUI() {
 			ULONGLONG start_time = GetTickCount();
 			//-------------------------------------------------
 
+			searchInputBox.draw();
+
+			course_idBox.draw();
+			course_nameBox.draw();
+			scoreBox.draw();
+			course_natureBox.draw();
+			creditBox.draw();
+			gridBox.draw();
+			semesterBox.draw();/////////////////////////////
 
 
+			if (peekmessage(&msg, -1, true)) {
+				//鼠标点击事件
+
+				//搜索
+				if (searchBtn.mouseClick(msg)) {
+					showStu(Crs, allCrsINStuData, searchInputBox.text);
+					allCrsINStuTable.setData(allCrsINStuData);
+				}
+
+				if (addCrsBtn.mouseClick(msg)) {
+
+					// 使表格不可变化
+					allCrsINStuTable.canChange = false;
+
+
+					//隐藏
+					addCrsBtn.move(-500, 220);
+					modifyCrsBtn.move(-500, 300);
+					deleteCrsBtn.move(-500, 380);
+					backButton.move(-500, 700);
+
+					//显示
+					course_idBox.move(10, 100);
+					course_nameBox.move(10, 180);
+					scoreBox.move(10, 260);
+					course_natureBox.move(10, 340);
+					creditBox.move(10, 420);
+					gridBox.move(10, 500);
+					semesterBox.move(10,580);
+
+					addOKButton.move(10, 650);
+					cancelButton.move(10, 730);
+
+				}
+
+				if (addOKButton.mouseClick(msg)) {
+					wchar_t course_id[10];//课程号
+					wchar_t course_name[100];//课程名
+					double score;//课程成绩
+					int semester;//学年学期
+					int course_nature;//课程性质
+					double credit;//学分
+					double grid;//绩点
+
+					//判断出输入格式
+					if (
+						getTextInBox(course_id, course_idBox.text) &&
+						getTextInBox(course_name, course_nameBox.text) &&
+						getDoubleInBox(100, &score, scoreBox.text) &&
+						getNumberInBox(8, &semester, semesterBox.text) &&
+						getNumberInBox(1, &course_nature, course_natureBox.text) &&
+						getDoubleInBox(4, &credit, creditBox.text) &&
+						getDoubleInBox(4, &grid, gridBox.text)&&
+						grid>=0 && credit>=0 && score>=0 && semester >= 0 && course_nature>= 0 
+						) {
+						addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
+						
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+						// 刷新表格
+						showStu(Crs, allCrsINStuData, L"");
+						allCrsINStuTable.setData(allCrsINStuData);
+
+						//清除
+						course_idBox.clear();
+						course_nameBox.clear();
+						scoreBox.clear();
+						course_natureBox.clear();
+						semesterBox.clear();
+						creditBox.clear();
+						gridBox.clear();
+
+						//隐藏
+						course_idBox.move(-500, 100);
+						course_nameBox.move(-500, 180);
+						scoreBox.move(-500, 260);
+						course_natureBox.move(-500, 340);
+						creditBox.move(-500, 420);
+						gridBox.move(-500, 500);
+						semesterBox.move(-500, 580);
+
+						addOKButton.move(-500, 650);
+						cancelButton.move(-500, 730);
+
+						//显示
+						addCrsBtn.move(-50, 220);
+						modifyCrsBtn.move(-50, 300);
+						deleteCrsBtn.move(-50, 380);
+						backButton.move(-50, 700);
+
+						allCrsINStuTable.canChange = true;
+					}
+				}
+
+				if (cancelButton.mouseClick(msg)) {
+
+					// 使表格可变化
+					allCrsINStuTable.canChange = true;
+
+
+					//清除
+					course_idBox.clear();
+					course_nameBox.clear();
+					scoreBox.clear();
+					course_natureBox.clear();
+					semesterBox.clear();
+					creditBox.clear();
+					gridBox.clear();
+
+					//隐藏
+					course_idBox.move(-500, 100);
+					course_nameBox.move(-500, 180);
+					scoreBox.move(-500, 260);
+					course_natureBox.move(-500, 340);
+					creditBox.move(-500, 420);
+					gridBox.move(-500, 500);
+
+					addOKButton.move(-500, 600);
+					cancelButton.move(-500, 700);
+
+					//显示
+					addCrsBtn.move(-50, 220);
+					modifyCrsBtn.move(-50, 300);
+					deleteCrsBtn.move(-50, 380);
+					backButton.move(-50, 700);
+				}
+
+				if (backButton.mouseClick(msg))
+				{
+					allStuUI();
+				}
+
+
+				//表格鼠标滑动与点击
+				allCrsINStuTable.onMouse(msg);
+
+
+				// 文本框输入
+				searchInputBox.onMessage(msg);
+				course_idBox.onMessage(msg);
+				course_nameBox.onMessage(msg);
+				scoreBox.onMessage(msg);
+				course_natureBox.onMessage(msg);
+				creditBox.onMessage(msg);
+				gridBox.onMessage(msg);
+				semesterBox.onMessage(msg);
+			}
+
+
+			showxy(msg);
 			//-------------------------------------------------
 			FlushBatchDraw(); //批量绘图
 
