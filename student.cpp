@@ -51,7 +51,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 }
 
 // 显示单个学生信息（包含其课程成绩）	
-void showStu(const Node* stu, vector<vector<wstring>>& data) {
+void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* searchTerm) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
 	data.clear(); // 清空数组
 	data.push_back(vector<wstring>(7, L"")); //增加一行(每行6列)
@@ -67,19 +67,28 @@ void showStu(const Node* stu, vector<vector<wstring>>& data) {
 
 	int row = 1;
 	while (crstmp != NULL) {
-		data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行7列)
+		data.push_back(vector<std::wstring>(7, L"")); //增加一行(每行7列)
 
+		// 检测是否有搜索词
+		if (wcsstr(crstmp->score.course_id, searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(crstmp->score.course_name,searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.score).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(std::to_wstring(crstmp->score.semester).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.credit).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.grid).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.course_nature).c_str(), searchTerm) != NULL
+			){
+			//每行的内容
+			data[row][0] = crstmp->score.course_id;
+			data[row][1] = crstmp->score.course_name;
+			data[row][2] = std::to_wstring(crstmp->score.score); //数字转为字符串
+			data[row][3] = std::to_wstring(crstmp->score.semester); //数字转为字符串
+			data[row][4] = std::to_wstring(crstmp->score.credit);//数字转为字符串
+			data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
+			data[row][6] = std::to_wstring(crstmp->score.course_nature); //数字转为字符串
 
-		//每行的内容
-		data[row][0] = crstmp->score.course_id;
-		data[row][1] = crstmp->score.course_name;
-		data[row][2] = std::to_wstring(crstmp->score.score); //数字转为字符串
-		data[row][3] = std::to_wstring(crstmp->score.semester); //数字转为字符串
-		data[row][4] = std::to_wstring(crstmp->score.credit);//数字转为字符串
-		data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
-		data[row][6] = std::to_wstring(crstmp->score.course_nature); //数字转为字符串
-
-		row++; // 行数+1
+			row++; // 行数+1
+		}
 		crstmp = crstmp->crs_next;
 	}
 

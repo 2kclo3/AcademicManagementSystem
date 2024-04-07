@@ -127,12 +127,12 @@ void allStuUI() {
 				}
 				else {
 					wchar_t cname[30];
-					wchar_t cid[30];
+					int cid;
 					int selectedRow = allStuTable.getSelectedRow();
-					getTextInBox(cid, allStuData[selectedRow][0].c_str());
+					getNumberInBox(99999999,&cid, allStuData[selectedRow][0].c_str());
 					getTextInBox(cname, allStuData[selectedRow][1].c_str());
-					Crsnode* Crs = searchCrsInStu(allStuList, cid, cname);
-					//StuUI(Crs);
+					Node* Crs = searchStu(&allStuList, cname, cid);
+					StuUI(Crs);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -167,13 +167,11 @@ void allStuUI() {
 					//	collegeText.move(10, 430);
 					//	majorText.move(10, 500);
 					//	lookcancelBtn.move(10, 570);
-
-						//gaibianshuzu
 				}
 
 			}
 
-			////if (lookcancelBtn.mouseClick(msg)) {
+			//if (lookcancelBtn.mouseClick(msg)) {
 
 				//// 更改标题
 				//titleText.setText(L"所有学生");
@@ -199,7 +197,7 @@ void allStuUI() {
 				//exportBtn.move(-50, 550);
 				//inportBtn.move(-50, 630);
 				//backButton.move(-50, 730);
-		/*}*/
+		//}
 
 			if (cancelButton.mouseClick(msg)) {
 				// 更改标题
@@ -533,11 +531,21 @@ void allStuUI() {
 
 
 
-	void StuUI(Crsnode * Crs) {
+	void StuUI(Node* Crs) {
 		cleardevice();
 
 
-		//Crsnode allCrsInStuList = Crs;
+		Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
+		vector<vector<std::wstring>>allCrsINStuData;
+		showStu(Crs, allCrsINStuData, L"");
+
+		Table allStuInCrsTable(310, 90, 940, 700, allCrsINStuData);
+
+
+
+		TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+
+
 
 	}
 
