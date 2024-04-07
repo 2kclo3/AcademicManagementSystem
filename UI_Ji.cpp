@@ -6,7 +6,7 @@
 
 
 
-int main(void) {
+int mainJi(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	// 初始化图形窗口
 	initgraph(1280, 810);
@@ -132,7 +132,7 @@ void allStuUI() {
 					getTextInBox(cid, allStuData[selectedRow][0].c_str());
 					getTextInBox(cname, allStuData[selectedRow][1].c_str());
 					Crsnode* Crs = searchCrsInStu(allStuList, cid, cname);
-					StuUI(Crs);
+					//StuUI(Crs);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -537,7 +537,7 @@ void allStuUI() {
 		cleardevice();
 
 
-		Crsnode allCrsInStuList = Crs;
+		//Crsnode allCrsInStuList = Crs;
 
 	}
 
