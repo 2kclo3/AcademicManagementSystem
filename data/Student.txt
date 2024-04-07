@@ -18,36 +18,36 @@
 30004 高等数学AII 80.5 2 1 2.0 3.0
 30005 面向对象程序设计 89.0 2 1 2.0 3.7
 
-paper202 jorc1 author1 date1 volume1 issue1 10-11 2.22
-paper2 jorc2 author2 date2 volume2 issue2 10-11 2.22
-paper3 jorc3 author3 date3 volume3 issue3 10-11 2.22
-paper4 jorc4 author4 date4 volume4 issue4 10-11 2.22
-paper5 jorc5 author5 date5 volume5 issue5 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
-paper6 jorc6 author6 date6 volume6 issue6 10-11 2.22
+paper1 jorc24124 author1 date1 volume1 issue1 10-11 1.10
+paper3 jorc3 author3 date3 volume3 issue3 10-11 1.10
+paper4 jorc4 author4 date4 volume4 issue4 10-11 1.10
+paper5 jorc5 author5 date5 volume5 issue5 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
+paper7 jorc7 author7 data7 v7 i7 10-11 2.00
 
 
 21230001 王五 1 2023 计算机科学与技术学院 计算机科学与技术

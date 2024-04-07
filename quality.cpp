@@ -87,7 +87,10 @@ bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data) {
 		data[row][4] = pR_Current->research.volume_num;
 		data[row][5] = pR_Current->research.issue_num;
 		data[row][6] = pR_Current->research.page;
-		data[row][7] = to_wstring(pR_Current->research.GPA_bonus);
+		wchar_t tmpGPA[6];
+		swprintf(tmpGPA, L"%.2lf", pR_Current->research.GPA_bonus);
+		wprintf(L"%s\n", tmpGPA);
+		data[row][7] = tmpGPA;
 
 		row++; // 行数+1
 
@@ -187,7 +190,7 @@ void show_Competition_menu(const wchar_t* title, Cnode* chead) {//方便修改函数确
 		ctmp = ctmp->cnext;
 	}
 }*/
-Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改的素质类项目节点
+/*Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改的素质类项目节点
 	Node* Stu = (*StuList)->next;
 	while (Stu != NULL) {
 		Rnode* rtmp = Stu->item.rlist->rnext;//别忘了考虑哨兵节点
@@ -203,7 +206,7 @@ Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改
 	}
 	return Stu;
 }// 找出此学生待修改的素质类项目节点
-
+*/
 Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name) {
 	Rnode* pR_Current = Stu->item.rlist->rnext;
 
