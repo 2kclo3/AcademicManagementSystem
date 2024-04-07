@@ -30,7 +30,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
 			) {
 
-			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行7列)
 
 			//每行的内容
 			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
@@ -54,7 +54,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* searchTerm) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
 	data.clear(); // 清空数组
-	data.push_back(vector<wstring>(7, L"")); //增加一行(每行6列)
+	data.push_back(vector<wstring>(7, L"")); //增加一行(每行7列)
 
 	//初始化
 	data[0][0] = L"课程号";
@@ -94,6 +94,11 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 
 }
+
+
+
+
+
 // 排序总学生链表(按照学号来排序）
 void sortStu(List* plist) {
 	Node* p, * p0, * r, * r0, * q;

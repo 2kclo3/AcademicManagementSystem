@@ -119,9 +119,6 @@ void allStuUI() {
 
 			if (lookBtn.mouseClick(msg)) {
 
-				////更改标题
-				//titleText.setText(L"课程信息");
-
 				if (allStuTable.getSelectedRow() == 0) {
 					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
 				}
@@ -532,20 +529,46 @@ void allStuUI() {
 
 
 	void StuUI(Node* Crs) {
+
+
 		cleardevice();
-
-
 		Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 		vector<vector<std::wstring>>allCrsINStuData;
 		showStu(Crs, allCrsINStuData, L"");
 
-		Table allStuInCrsTable(310, 90, 940, 700, allCrsINStuData);
+		Table allCrsINStuTable(310, 90, 940, 700, allCrsINStuData);
 
 
 
 		TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 
 
+		Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+		Button addCrsBtn(-50, 140, 330, 60, L"   添加课程", 1);
+		Button modifyCrsBtn(-50, 220, 330, 60, L"   修改课程", 1);
+		Button deleteCrsBtn(-50, 300, 330, 60, L"   删除课程", 1);
+		Button backButton(-50, 380, 330, 60, L"   返回", 0);
 
+		Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
+		Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
+		Button cancelButton(-500, 660, 290, 60, L"取消", 0);
+
+		// 处理鼠标事件
+		ExMessage msg;
+		while (!_kbhit()) {
+			ULONGLONG start_time = GetTickCount();
+			//-------------------------------------------------
+
+
+
+			//-------------------------------------------------
+			FlushBatchDraw(); //批量绘图
+
+			ULONGLONG end_time = GetTickCount();
+			if (end_time - start_time < 1) {
+				Sleep(1);
+			}
+
+		}
 	}
 
