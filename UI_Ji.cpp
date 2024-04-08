@@ -129,7 +129,9 @@ void allStuUI() {
 					getNumberInBox(99999999,&cid, allStuData[selectedRow][0].c_str());
 					getTextInBox(cname, allStuData[selectedRow][1].c_str());
 					Node* Crs = searchStu(&allStuList, cname, cid);
-					StuUI(Crs, allStuList);
+
+
+					StuUI(Crs, allStuList,cname,&cid);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -479,6 +481,9 @@ void allStuUI() {
 			if (sortBtn.mouseClick(msg)) {
 				sortStu(&allStuList);
 
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
 				// 刷新表格
 				showAllStu(allStuList, allStuData, L"");
 				allStuTable.setData(allStuData);
@@ -528,17 +533,19 @@ void allStuUI() {
 
 
 
-	void StuUI(Node* Crs,List allStuList) {
+	void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
+
 
 
 		cleardevice();
+
 		Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 		vector<vector<std::wstring>>allCrsINStuData;
 		showStu(Crs, allCrsINStuData, L"");
 
 		Table allCrsINStuTable(310, 90, 940, 700, allCrsINStuData);
 
-
+		Text titleText(40, 20, L"所有课程", 64);
 		//输入框
 		TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 
@@ -554,9 +561,15 @@ void allStuUI() {
 		//按钮
 		Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
 
-		Button addCrsBtn(-50, 220, 330, 60, L"   添加课程", 1);
-		Button modifyCrsBtn(-50, 300, 330, 60, L"   修改课程", 1);
-		Button deleteCrsBtn(-50, 380, 330, 60, L"   删除课程", 1);
+		wchar_t aa[30];
+		getTextInBox(aa, std::to_wstring(*pid).c_str());
+
+		Button idBtn(40, 100, 200, 50,aa, 1);
+		Button nameBtn(40, 180, 200, 50, pname, 1);
+
+		Button addCrsBtn(-50, 300, 330, 60, L"   添加课程", 1);
+		Button modifyCrsBtn(-50, 380, 330, 60, L"   修改课程", 1);
+		Button deleteCrsBtn(-50, 460, 330, 60, L"   删除课程", 1);
 		Button backButton(-50, 700, 330, 60, L"   返回", 0);
 
 		Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
@@ -591,14 +604,22 @@ void allStuUI() {
 
 				if (addCrsBtn.mouseClick(msg)) {
 
+
+					// 更改标题
+					titleText.setText(L"添加课程");
+
+
 					// 使表格不可变化
 					allCrsINStuTable.canChange = false;
 
 
 					//隐藏
-					addCrsBtn.move(-500, 220);
-					modifyCrsBtn.move(-500, 300);
-					deleteCrsBtn.move(-500, 380);
+					idBtn.move(-500, 100);
+					nameBtn.move(-500, 180);
+
+					addCrsBtn.move(-500, 300);
+					modifyCrsBtn.move(-500, 380);
+					deleteCrsBtn.move(-500, 460);
 					backButton.move(-500, 700);
 
 					//显示
@@ -615,6 +636,7 @@ void allStuUI() {
 
 				}
 
+				//
 				if (addOKButton.mouseClick(msg)) {
 					wchar_t course_id[10];//课程号
 					wchar_t course_name[100];//课程名
@@ -623,6 +645,7 @@ void allStuUI() {
 					int course_nature;//课程性质
 					double credit;//学分
 					double grid;//绩点
+
 
 					//判断出输入格式
 					if (
@@ -639,6 +662,9 @@ void allStuUI() {
 						
 						// 保存
 						saveStu(allStuList, STU_FILE);
+
+
+						allCrsINStuTable.canChange = true;
 
 						// 刷新表格
 						showStu(Crs, allCrsINStuData, L"");
@@ -665,13 +691,20 @@ void allStuUI() {
 						addOKButton.move(-500, 650);
 						cancelButton.move(-500, 730);
 
+						// 更改标题
+						titleText.setText(L"学生课程");
+
 						//显示
-						addCrsBtn.move(-50, 220);
-						modifyCrsBtn.move(-50, 300);
-						deleteCrsBtn.move(-50, 380);
+						idBtn.move(40, 100);
+						nameBtn.move(40, 180);
+
+
+						addCrsBtn.move(-50, 300);
+						modifyCrsBtn.move(-50, 380);
+						deleteCrsBtn.move(-50, 460);
 						backButton.move(-50, 700);
 
-						allCrsINStuTable.canChange = true;
+
 					}
 				}
 
@@ -697,15 +730,198 @@ void allStuUI() {
 					course_natureBox.move(-500, 340);
 					creditBox.move(-500, 420);
 					gridBox.move(-500, 500);
+					semesterBox.move(-500, 580);
 
 					addOKButton.move(-500, 600);
 					cancelButton.move(-500, 700);
 
 					//显示
-					addCrsBtn.move(-50, 220);
-					modifyCrsBtn.move(-50, 300);
-					deleteCrsBtn.move(-50, 380);
+					idBtn.move(40, 100);
+					nameBtn.move(40, 180);
+
+
+					addCrsBtn.move(-50, 300);
+					modifyCrsBtn.move(-50, 380);
+					deleteCrsBtn.move(-50, 460);
 					backButton.move(-50, 700);
+
+					// 更改标题
+					titleText.setText(L"学生课程");
+
+
+				}
+
+				if (modifyCrsBtn.mouseClick(msg)) {
+
+					if (allCrsINStuTable.getSelectedRow() == 0)
+					{
+						MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
+					}else
+					{
+						// 更改标题
+						titleText.setText(L"修改课程");
+
+
+						// 使表格不可变化
+						allCrsINStuTable.canChange = false;
+
+
+						//隐藏
+						idBtn.move(-500, 100);
+						nameBtn.move(-500, 180);
+
+						addCrsBtn.move(-500, 300);
+						modifyCrsBtn.move(-500, 380);
+						deleteCrsBtn.move(-500, 460);
+						backButton.move(-500, 700);
+
+						//显示
+						course_idBox.move(10, 100);
+						course_nameBox.move(10, 180);
+						scoreBox.move(10, 260);
+						course_natureBox.move(10, 340);
+						creditBox.move(10, 420);
+						gridBox.move(10, 500);
+						semesterBox.move(10, 580);
+
+						modifyOKButton.move(10, 650);
+						cancelButton.move(10, 730);
+
+					}
+				}
+
+				//
+				if (modifyOKButton.mouseClick(msg)) {
+
+					wchar_t course_id[10];//课程号
+					wchar_t course_name[100];//课程名
+					double score;//课程成绩
+					int semester;//学年学期
+					int course_nature;//课程性质
+					double credit;//学分
+					double grid;//绩点
+
+					wchar_t pcourse_id[10];//待搜索课程号
+					wchar_t pcourse_name[30];//待搜索课程名 
+					int selectedRow = allCrsINStuTable.getSelectedRow(); // 获取当前行
+					getTextInBox(pcourse_id, allCrsINStuData[selectedRow][0].c_str());
+					getTextInBox(pcourse_name, allCrsINStuData[selectedRow][1].c_str());
+					Crsnode* tmp = searchCrsInStu(Crs, pcourse_id, pcourse_name);
+
+					//判断出输入格式
+					if (
+						getTextInBox(course_id, course_idBox.text) &&
+						getTextInBox(course_name, course_nameBox.text) &&
+						getDoubleInBox(100, &score, scoreBox.text) &&
+						getNumberInBox(8, &semester, semesterBox.text) &&
+						getNumberInBox(1, &course_nature, course_natureBox.text) &&
+						getDoubleInBox(4, &credit, creditBox.text) &&
+						getDoubleInBox(4, &grid, gridBox.text) &&
+						grid >= 0 && credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+						) {
+
+						modifyCrsInStu(tmp, course_id, course_name, score, semester, course_nature, credit, grid);
+
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+
+						//课程变化
+						allCrsINStuTable.canChange = true;
+
+						// 刷新表格
+						showStu(Crs, allCrsINStuData, L"");
+						allCrsINStuTable.setData(allCrsINStuData);
+						
+						//清除
+						course_idBox.clear();
+						course_nameBox.clear();
+						scoreBox.clear();
+						course_natureBox.clear();
+						semesterBox.clear();
+						creditBox.clear();
+						gridBox.clear();
+
+						//隐藏
+						course_idBox.move(-500, 100);
+						course_nameBox.move(-500, 180);
+						scoreBox.move(-500, 260);
+						course_natureBox.move(-500, 340);
+						creditBox.move(-500, 420);
+						gridBox.move(-500, 500);
+						semesterBox.move(-500, 580);
+
+						modifyOKButton.move(-500, 650);
+						cancelButton.move(-500, 730);
+
+						// 更改标题
+						titleText.setText(L"学生课程");
+
+						//显示
+						idBtn.move(40, 100);
+						nameBtn.move(40, 180);
+
+
+						addCrsBtn.move(-50, 300);
+						modifyCrsBtn.move(-50, 380);
+						deleteCrsBtn.move(-50, 460);
+						backButton.move(-50, 700);
+
+
+					}
+				}
+
+				if (deleteCrsBtn.mouseClick(msg)) {
+					if (allCrsINStuTable.getSelectedRow() == 0)
+					{
+						MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
+					}
+					else
+					{
+						int result = MessageBox(GetHWnd(), L"确定删除这名学生吗?", L"删除学生", MB_YESNO | MB_ICONQUESTION);
+
+						if (result == IDYES) {
+							wchar_t pcourse_id[10];//待搜索课程号
+							wchar_t pcourse_name[30];//待搜索课程名 
+							int selectedRow = allCrsINStuTable.getSelectedRow(); // 获取当前行
+							getTextInBox(pcourse_id, allCrsINStuData[selectedRow][0].c_str());
+							getTextInBox(pcourse_name, allCrsINStuData[selectedRow][1].c_str());
+							Crsnode* ttmp = searchCrsInStu(Crs, pcourse_id, pcourse_name);
+
+							deleteCrsInStu(Crs, ttmp);
+
+							// 保存
+							saveStu(allStuList, STU_FILE);
+
+							// 刷新表格
+							showStu(Crs, allCrsINStuData, L"");
+							allCrsINStuTable.setData(allCrsINStuData);
+
+							//显示
+							idBtn.move(40, 100);
+							nameBtn.move(40, 180);
+
+
+							addCrsBtn.move(-50, 300);
+							modifyCrsBtn.move(-50, 380);
+							deleteCrsBtn.move(-50, 460);
+							backButton.move(-50, 700);
+
+							//隐藏
+							course_idBox.move(-500, 100);
+							course_nameBox.move(-500, 180);
+							scoreBox.move(-500, 260);
+							course_natureBox.move(-500, 340);
+							creditBox.move(-500, 420);
+							gridBox.move(-500, 500);
+							semesterBox.move(-500, 580);
+
+							addOKButton.move(-500, 650);
+							cancelButton.move(-500, 730);
+						}
+
+
+					}
 				}
 
 				if (backButton.mouseClick(msg))
@@ -730,7 +946,6 @@ void allStuUI() {
 			}
 
 
-			showxy(msg);
 			//-------------------------------------------------
 			FlushBatchDraw(); //批量绘图
 
