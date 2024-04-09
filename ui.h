@@ -372,7 +372,9 @@ public:
 		setfillcolor(bkColor);
 		fillroundrect(x, y, x + width, y + height, 10, 10); // 表格外框
 
-		int textHeight = textheight(data[0][0].c_str());
+		//int textHeight = textheight(data[0][0].c_str());
+		int textHeight = height / maxRow;
+
 
 		// 选中行高亮
 		if (offset < selectedRow && offset + maxRow > selectedRow) {
@@ -412,8 +414,19 @@ public:
 					cx += colWidth[c];
 					setbkmode(TRANSPARENT);
 					settextcolor(textColor);
-					settextstyle(28, 0, L"微软雅黑");
-					outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
+					int textSize = 28;
+					//while (colWidth[c] < textwidth(data[r + offset][c].c_str())) {
+					//	textSize -= 10;
+					//	settextstyle(textSize, 0, L"微软雅黑");
+					//}
+					//settextstyle(textSize, 0, L"微软雅黑");
+					//if (textwidth(data[r + offset][c].c_str()) > colWidth[c]) {
+					//	wstring tempText = data[r + offset][c].substr(0, colWidth[c] / textwidth(L"一" - 4)) + L"...";
+					//	outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, tempText.c_str());
+					//}
+					//else {
+						outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
+					//}
 				}
 			}
 		}
@@ -423,7 +436,7 @@ public:
 		if (!data.empty()) {
 			colWidth.resize(data[0].size(), 0);
 			for (vector<wstring> rowData : data) {
-				for (size_t colNum = 0; colNum < rowData.size(); colNum++) {
+				for (int colNum = 0; colNum < rowData.size(); colNum++) {
 					int maxWidth = textwidth(rowData[colNum].c_str());
 					if (maxWidth > colWidth[colNum]) {
 						colWidth[colNum] = maxWidth;
@@ -442,6 +455,13 @@ public:
 	}
 	void calculateMaxRow() { // 计算最大行数
 		settextstyle(30, 0, L"微软雅黑");
+		//int times = 0;
+		//for (int r = 0; r < data.size(); r++) {
+		//	for (int c = 0; c < data[r].size(); c++) {
+		//		times = max(times, textwidth(data[r][c].c_str()) / colWidth[c]);
+		//		printf("%d\n", times);
+		//	}
+		//}
 		maxRow = height / textheight(data[0][0].c_str());
 		height = maxRow * textheight(data[0][0].c_str());
 	}
@@ -517,9 +537,9 @@ void testUI();
 void loginUI();
 void menuUI();
 void allStuUI();
-void StuUI();
+void StuUI(Node* Crs,List allStuList, wchar_t* pname, int* pid);
 void allCrsUI();
-void CrsUI(Cpnode cphead,Cpnode cplist);
+void CrsUI(Cpnode cphead, Cpnode cplist);
 void allQualityUI();
 void allQualityUI();
 void changeMajorUI();
