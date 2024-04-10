@@ -9,7 +9,7 @@ int mainji(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	List stu = readStu(STU_FILE);
 	printStu(stu);
-	sortStu(&stu);
+	sortStuaccID(&stu);
 	wprintf(L"111");
 	/*wchar_t name[30];
 	int id;

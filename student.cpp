@@ -96,11 +96,63 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 }
 
 
+//平均绩点(所有）
+int AllGrid(Crsnode* crss){
+	int number = 0;
+	int allcredit = 0;
+	Crsnode* crs = crss;
+	for (; crs->crs_next != NULL; number++) {
+		allcredit += crs->score.credit;
+	}
 
+	//防止课程不够
+	if (allcredit == 0) {
+		return -1;
+	}
+
+
+	int result = 0;
+	for (; crss->crs_next != NULL; number++) {
+		result += crss->score.grid * (crss->score.credit / allcredit);
+	}
+	return result;
+}
+
+int MustGrid(Crsnode* crss) {
+	int number = 0;
+	int allcredit = 0;
+	Crsnode* crs = crss;
+	for (; crs->crs_next != NULL; number++) {
+		if (crs->score.course_nature == 1) {
+			allcredit += crs->score.credit;
+		}
+		else {
+			continue;
+		}
+	}
+		
+		//防止课程不够
+	if (allcredit == 0) {
+			return -1;
+	}
+
+
+	int result = 0;
+	for (; crss->crs_next != NULL; number++) {
+		if (crs->score.course_nature == 1) {
+			result += crss->score.grid * (crss->score.credit / allcredit);
+		}
+		else {
+			continue;
+		}
+	}
+
+		return result;
+}
 
 
 // 排序总学生链表(按照学号来排序）
-void sortStu(List* plist) {
+void sortStuaccID(List* plist) {
 	Node* p, * p0, * r, * r0, * q;
 	p = p0 = r = r0 = q = NULL;
 	p = *plist;
@@ -129,6 +181,36 @@ void sortStu(List* plist) {
 	}
 }
 
+
+// 排序总学生链表(按照入学年份来排序）
+void sortStuaccyear(List* plist) {
+	Node* p, * p0, * r, * r0, * q;
+	p = p0 = r = r0 = q = NULL;
+	p = *plist;
+	while (p) {
+		r = *plist;
+		while (r->item.data.grade < p->item.data.grade && r != p) {
+			r0 = r;
+			r = r->next;
+		}//找位置
+
+		if (r != p) {
+			q = p;
+			p0->next = p->next;
+			p = p0;
+			if (r != *plist) {
+				r0->next = q;
+				q->next = r;
+			}
+			else {
+				q->next = *plist;
+				*plist = q;
+			}
+		}
+		p0 = p;
+		p = p->next;
+	}
+}
 
 
 // 添加学生（不包含课程）

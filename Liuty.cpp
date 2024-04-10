@@ -325,7 +325,7 @@ void changeMajorUI() {
 
 
 			if (sortBtn.mouseClick(msg)) {
-				sortStu(&allStuList);
+				sortStuaccID(&allStuList);
 
 				// ±£´æ
 				saveStu(allStuList, STU_FILE);
