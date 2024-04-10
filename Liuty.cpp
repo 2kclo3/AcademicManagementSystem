@@ -6,7 +6,7 @@
 
 
 
-int mainAJKFJDKF(void) {
+int mainIIIIII(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -23,8 +23,8 @@ int mainAJKFJDKF(void) {
 	//testUI();
 
 
-	allStuUI();
-	//loginUI();
+	//allStuUI();
+	loginUI();
 
 
 

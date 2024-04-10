@@ -155,6 +155,10 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	pnew->item.data.grade = pgrade;
 	wcscpy(pnew->item.data.college, pcollege);
 	wcscpy(pnew->item.data.major, pmajor);
+	wcscpy(pnew->item.data.original_college, pcollege);
+	wcscpy(pnew->item.data.original_major, pmajor);
+	wcscpy(pnew->item.data.password, to_wstring(pnew->item.data.ID).c_str());
+
 
 	ptmp->next = pnew;
 	return true;

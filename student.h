@@ -27,8 +27,13 @@ struct student_data
 	int ID;//学号
 	int gender;//性别
 	int grade;//年级
-	wchar_t college[50];//学院
-	wchar_t major[50];//专业
+	wchar_t college[100];//学院
+	wchar_t major[100];//专业
+
+	wchar_t original_college[100];//原学院(新建学生的话与college相同)
+	wchar_t original_major[100]; //原专业(新建学生的话与major相同)
+
+	wchar_t password[100]; //密码(新建学生的话为学号,要转换类型)
 };
 
 struct score_info {
