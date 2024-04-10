@@ -72,6 +72,7 @@ void loginUI() {
 	//drawLine();
 
 	List StuList = readStu(STU_FILE);
+	
 	Node* Stu = StuList->next;
 
 
@@ -98,9 +99,9 @@ void loginUI() {
 
 				while (Stu != NULL) {
 					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), accountBox.text) == 0) {
-						tmp_password = Stu->item.data.password;
+						tmp_password = wstring(Stu->item.data.password);
 						break;
-					}
+					}					
 					Stu = Stu->next;
 				}
 
