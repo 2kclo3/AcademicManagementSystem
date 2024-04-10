@@ -10,13 +10,17 @@ void printStu(const List StuList) {
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		wprintf(L"学生信息:\n%d\t%s\t%d\t%d\t%s\t%s\n\n课程：\n",
+		wprintf(L"学生信息:\n%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n\n课程：\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
 			pStu->item.data.gender,
 			pStu->item.data.grade,
 			pStu->item.data.college,
-			pStu->item.data.major);
+			pStu->item.data.major,
+			pStu->item.data.original_college,
+			pStu->item.data.original_major,
+			pStu->item.data.password
+		);
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
 		while (pcrs != NULL) {
