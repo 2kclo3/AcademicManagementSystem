@@ -45,10 +45,10 @@ typedef struct Cnode_//课程节点
 
 void menu();//调试时用，最后删除
 
-void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示所有课程（不包含学生成绩）
+void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max); // 显示所有课程（不包含学生成绩）
 //Cpnode showCrs(Cpnode phead); // 显示单个课程信息（包含该课程所有学生的成绩）
 //Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
-void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm);
+void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
 int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 添加课程（不包含成绩）
 int addStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum, double Score); // 为某课程添加某学生成绩
@@ -58,6 +58,9 @@ int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* Sname, int Snum,
 
 int deleteCrs(Cpnode cphead, wchar_t* cname,int cnum); // 删除课程
 int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum); // 删除某个课程的某学生成绩
+
+void sortStuInCrs(Cpnode cplist, int op);//对某个课程节点中的学生链表排序
+void sortCrs(Cpnode cphead, int op);//对课程链表排序
 
 Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum); // 在总课程链表中搜索课程
 Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum); // 在单个课程中搜索其下的学生

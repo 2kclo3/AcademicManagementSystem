@@ -372,7 +372,7 @@ void loginUI() {
 	TextBox passwordBox(200, 400, 880, L"密码", L"");
 	Button loginButton(200, 500, 420, 60, L"登录", 1);
 	Button exitButton(660, 500, 420, 60, L"退出", 0);
-
+	std::cout << 1 << std::endl;
 	// 处理鼠标事件
 	ExMessage msg;
 	while (!_kbhit()) {

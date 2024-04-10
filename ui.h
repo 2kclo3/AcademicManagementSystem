@@ -111,6 +111,7 @@ public:
 		y = _y;
 		draw();
 	}
+
 private:
 	bool isHovered(int mouseX, int mouseY) const {
 		return (mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height);
@@ -149,7 +150,7 @@ public:
 		_tcscpy(text, _text);
 		draw();
 	}
-
+	
 	void move(int _x, int _y) {
 		setfillcolor(getbkcolor());
 		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
