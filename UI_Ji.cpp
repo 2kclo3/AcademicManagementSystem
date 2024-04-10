@@ -576,6 +576,9 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 		TextBox gridBox(-500, 350, 290, L"绩点", L"");
 		TextBox semesterBox(-500, 400, 290, L"学期", L"");
 
+		TextBox allButton(-500, 330, 290 ,L"   所有", L"");
+		TextBox mustButton(-500, 380, 290, L"   必修", L"");
+
 
 		//按钮
 		Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
@@ -606,6 +609,9 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 		Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
 		Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
 		Button cancelButton(-500, 660, 290, 60, L"取消", 0);
+
+
+
 
 		// 处理鼠标事件
 		ExMessage msg;
@@ -832,9 +838,9 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 						course_idBox.setText(selectedData[0].c_str());
 						course_nameBox.setText(selectedData[1].c_str());
 						scoreBox.setText(selectedData[2].c_str());
-						course_natureBox.setText(selectedData[4].c_str());
-						creditBox.setText(selectedData[5].c_str());
-						gridBox.setText(selectedData[6].c_str());
+						course_natureBox.setText(selectedData[6].c_str());
+						creditBox.setText(selectedData[4].c_str());
+						gridBox.setText(selectedData[5].c_str());
 						semesterBox.setText(selectedData[3].c_str());
 
 					}
@@ -995,7 +1001,19 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 					//显示
 
+					allButton.move(0, 300);
+					mustButton.move(0, 380);
+
 					cancelButton.move(10, 730);
+
+					//计算绩点
+					int all, must;
+
+					all = AllGrid(Crs->item.crslist);
+					must = MustGrid(Crs->item.crslist);
+					
+					allButton.setText(std::to_wstring(2).c_str());
+					mustButton.setText(std::to_wstring(5).c_str());
 
 				}
 
