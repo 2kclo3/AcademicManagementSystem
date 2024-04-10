@@ -363,58 +363,6 @@ void testUI() {
 }
 
 
-void loginUI() {
-	cleardevice();
-
-
-
-	//drawLine();
-
-
-	Text titleText(200, 100, L"你好，请登录!", 64);
-	TextBox accountBox(200, 300, 880, L"账号", L"");
-	TextBox passwordBox(200, 400, 880, L"密码", L"");
-	Button loginButton(200, 500, 420, 60, L"登录", 1);
-	Button exitButton(660, 500, 420, 60, L"退出", 0);
-
-	// 处理鼠标事件
-	ExMessage msg;
-	while (!_kbhit()) {
-		ULONGLONG start_time = GetTickCount();
-		accountBox.draw();
-		passwordBox.draw();
-
-		if (peekmessage(&msg, -1, true)) {
-			accountBox.onMessage(msg);
-			passwordBox.onMessage(msg);
-			if (loginButton.mouseClick(msg)) {
-				wprintf(L"Account:%s\nPassword:%s\n", accountBox.text, passwordBox.text);
-				menuUI();
-			}
-			if (exitButton.mouseClick(msg)) {
-				exit(0);
-			}
-		}
-
-		showxy(msg);
-
-
-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1) {
-			Sleep(1);
-		}
-	}
-
-
-
-
-
-
-}
-
 
 void menuUI() {
 	cleardevice();
