@@ -7,9 +7,9 @@
 
 void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
+void loginUI();
 
-
-int mainLin() {
+int main() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	
 	// 初始化图形窗口
@@ -52,7 +52,7 @@ int mainLin() {
 	printStu(Stu);
 	*/
 
-	allQualityUI();
+	loginUI();
 
 
 
@@ -63,6 +63,59 @@ int mainLin() {
 
 	return 0;
 }
+
+
+void loginUI() {
+	cleardevice();
+
+
+	//drawLine();
+
+
+	Text titleText(200, 100, L"你好，请登录!", 64);
+	TextBox accountBox(200, 300, 880, L"账号", L"");
+	TextBox passwordBox(200, 400, 880, L"密码", L"");
+	Button loginButton(200, 500, 420, 60, L"登录", 1);
+	Button exitButton(660, 500, 420, 60, L"退出", 0);
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+		
+		accountBox.draw();
+		passwordBox.draw();
+
+		if (peekmessage(&msg, -1, true)) {
+			
+			if (loginButton.mouseClick(msg)) {
+				wprintf(L"Account:%s\nPassword:%s\n", accountBox.text, passwordBox.text);
+				
+				menuUI();
+			}
+			if (exitButton.mouseClick(msg)) {
+				exit(0);
+			}
+			
+			
+			accountBox.onMessage(msg);
+			passwordBox.onMessage(msg);
+		}
+
+		showxy(msg);
+
+
+
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+	}
+
+}
+
 
 void allQualityUI() {
 	
@@ -165,7 +218,15 @@ void QualityUI(Node* Stu, List allStuList) {
 
 
 	//TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	Text titleText(5, 80, L"该学生素质类项目", 50);
+	Text titleText(5, 30, L"该学生素质类项目", 50);
+	Text IDText(500, 45, L"", 32);
+	wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
+	IDText.setText(show_ID.c_str());
+	
+	Text nameText(850, 45, L"", 32);
+	wstring tmp_name = Stu->item.data.name;
+	wstring show_name = L"姓名：" + tmp_name;
+	nameText.setText(show_name.c_str());
 
 	TextBox paper_nameBox(-500, 200, 290, L"论文名称", L"");
 	TextBox journal_or_conference_nameBox(-500, 270, 290, L"发表的期刊/会议名称", L"");
@@ -227,6 +288,8 @@ void QualityUI(Node* Stu, List allStuList) {
 		C_dateBox.draw();
 		C_GPA_bonusBox.draw();
 
+
+
 		if (peekmessage(&msg, -1, true)) {
 
 			if (add_Research_Btn.mouseClick(msg)) {
@@ -284,6 +347,18 @@ void QualityUI(Node* Stu, List allStuList) {
 						journal_or_conference_name, author, date,
 						volume_num, issue_num, page, GPA_bonus)) {
 						MessageBox(GetHWnd(), L"该科研成果已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+
+
+						// 清除输入框内容
+						paper_nameBox.clear();
+						journal_or_conference_nameBox.clear();
+						authorBox.clear();
+						dateBox.clear();
+						volume_numBox.clear();
+						issue_numBox.clear();
+						pageBox.clear();
+						GPA_bonusBox.clear();
+
 					}
 					else {
 						// 保存
@@ -329,7 +404,7 @@ void QualityUI(Node* Stu, List allStuList) {
 						modify_Competition_Btn.move(-50, 540);
 						delete_Competition_Btn.move(-50, 620);
 						backButton.move(-50, 700);
-						titleText.move(5, 80);
+						titleText.move(5, 30);
 
 					}
 				}
@@ -374,7 +449,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				modify_Competition_Btn.move(-50, 540);
 				delete_Competition_Btn.move(-50, 620);
 				backButton.move(-50, 700);
-				titleText.move(5, 80);
+				titleText.move(5, 30);
 
 
 			}
@@ -424,6 +499,15 @@ void QualityUI(Node* Stu, List allStuList) {
 
 					if (!addQuality_clist(Stu, competition_name, organizer, category, C_date, C_GPA_bonus) ){
 						MessageBox(GetHWnd(), L"该竞赛获奖已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+
+						// 清除输入框内容
+						competition_nameBox.clear();
+						organizerBox.clear();
+						categoryBox.clear();
+						C_dateBox.clear();
+						C_GPA_bonusBox.clear();
+						
+					
 					}
 					else {
 						// 保存
@@ -463,7 +547,7 @@ void QualityUI(Node* Stu, List allStuList) {
 						modify_Competition_Btn.move(-50, 540);
 						delete_Competition_Btn.move(-50, 620);
 						backButton.move(-50, 700);
-						titleText.move(5, 80);
+						titleText.move(5, 30);
 
 					}
 				}
@@ -502,7 +586,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				modify_Competition_Btn.move(-50, 540);
 				delete_Competition_Btn.move(-50, 620);
 				backButton.move(-50, 700);
-				titleText.move(5, 80);
+				titleText.move(5, 30);
 
 
 			}
@@ -636,7 +720,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					modify_Competition_Btn.move(-50, 540);
 					delete_Competition_Btn.move(-50, 620);
 					backButton.move(-50, 700);
-					titleText.move(5, 80);
+					titleText.move(5, 30);
 
 
 				}
@@ -682,7 +766,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				modify_Competition_Btn.move(-50, 540);
 				delete_Competition_Btn.move(-50, 620);
 				backButton.move(-50, 700);
-				titleText.move(5, 80);
+				titleText.move(5, 30);
 
 				// 使表格可变化
 				Stu_Rtable.canChange = true;
@@ -798,7 +882,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					modify_Competition_Btn.move(-50, 540);
 					delete_Competition_Btn.move(-50, 620);
 					backButton.move(-50, 700);
-					titleText.move(5, 80);
+					titleText.move(5, 30);
 
 				}
 				// 输入错误
@@ -837,7 +921,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				modify_Competition_Btn.move(-50, 540);
 				delete_Competition_Btn.move(-50, 620);
 				backButton.move(-50, 700);
-				titleText.move(5, 80);
+				titleText.move(5, 30);
 
 				Stu_Ctable.canChange = true;
 
@@ -930,7 +1014,7 @@ void QualityUI(Node* Stu, List allStuList) {
 
 		
 		}
-			showxy(msg);
+			//showxy(msg);
 
 			
 			FlushBatchDraw(); //批量绘图

@@ -174,8 +174,11 @@ bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	
 	Rnode* rtmp = Stu->item.rlist;//素质类rlist链表亦有哨兵节点
 	
-	while (rtmp->rnext != NULL)
+	while (rtmp->rnext != NULL) {
+		if (wcscmp(rtmp->research.paper_name, paper_name) == 0)
+			return false;
 		rtmp = rtmp->rnext;//尾插法
+	}
 
 	Rnode* rnew = (Rnode*)malloc(sizeof(Rnode));
 	if (rnew == NULL)
@@ -193,7 +196,7 @@ bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	rnew->rnext = NULL;
 	rtmp->rnext = rnew;
 	return true;
-}  //补充一个判断有无重复添加功能
+} 
 
 bool addQuality_clist(Node* Stu,
 	wchar_t* competition_name,
@@ -204,8 +207,11 @@ bool addQuality_clist(Node* Stu,
 
 	Cnode* ctmp = Stu->item.clist;//素质类clist链表亦有哨兵节点
 	
-	while (ctmp->cnext != NULL)
+	while (ctmp->cnext != NULL) {
+		if (wcscmp(ctmp->competition.competition_name, competition_name) == 0)
+			return false;
 		ctmp = ctmp->cnext;//尾插法
+	}
 
 	Cnode* cnew = (Cnode*)malloc(sizeof(Cnode));
 	if (cnew == NULL)
