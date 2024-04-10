@@ -9,7 +9,7 @@ void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
 
 
-int maingg() {
+int mainLin() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	
 	// 初始化图形窗口
@@ -155,12 +155,17 @@ void QualityUI(Node* Stu, List allStuList) {
 	cleardevice();
 
 	vector<vector<std::wstring>>ResearchData;
+	vector<vector<std::wstring>>CompetitionData;
+
 	ShowStu_Research(Stu, ResearchData);
-	
+	ShowStu_Competition(Stu, CompetitionData);
+
 	Table Stu_Rtable(310, 90, 940, 350, ResearchData);
+	Table Stu_Ctable(310, 450, 940, 350, CompetitionData);
+
 
 	//TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	Text titleText(10, 100, L"该学生素质类项目管理", 50);
+	Text titleText(5, 80, L"该学生素质类项目", 50);
 
 	TextBox paper_nameBox(-500, 200, 290, L"论文名称", L"");
 	TextBox journal_or_conference_nameBox(-500, 270, 290, L"发表的期刊/会议名称", L"");
@@ -170,19 +175,36 @@ void QualityUI(Node* Stu, List allStuList) {
 	TextBox issue_numBox(-500, 550, 290, L"刊号", L"");
 	TextBox pageBox(-500, 620, 290, L"页码范围", L"");
 	TextBox GPA_bonusBox(-500, 690, 290, L"绩点加分", L"");
+
+	TextBox competition_nameBox(-500, 200, 290, L"竞赛名称", L"");
+	TextBox organizerBox(-500, 270, 290, L"举办单位", L"");
+	TextBox categoryBox(-500, 340, 290, L"获奖类别", L"");
+	TextBox C_dateBox(-500, 410, 290, L"获奖时间", L"");
+	TextBox C_GPA_bonusBox(-500, 690, 290, L"绩点加分", L"");
+
+
 	
 	//进入单个学生的素质类界面后 一开始显示的
 	Button add_Research_Btn(-50, 200, 330, 60, L"   科研成果添加", 1);
 	Button modify_Research_Btn(-50, 280, 330, 60, L"   科研成果修改", 1);
 	Button delete_Research_Btn(-50, 360, 330, 60, L"   科研成果删除", 1);
-	Button backButton(-50, 680, 290, 60, L"返回", 0);
+	Button add_Competition_Btn(-50, 460, 330, 60, L"   竞赛获奖添加", 1);
+	Button modify_Competition_Btn(-50, 540, 330, 60, L"   竞赛获奖修改", 1);
+	Button delete_Competition_Btn(-50, 620, 330, 60, L"   竞赛获奖删除", 1);
+
+
+	Button backButton(-50, 700, 290, 60, L"返回", 0);
 
 	
 	Button modify_ResearchOK_Btn(-500, 580, 290, 60, L"确定修改", 1);
 	Button add_ResearchOK_Btn(-500, 640, 290, 60, L"确定添加", 1);
+	Button modify_CompetitionOK_Btn(-500, 580, 290, 60, L"确定修改", 1);
+	Button add_CompetitionOK_Btn(-500, 640, 290, 60, L"确定添加", 1);
 	
 	Button cancel_modifyResearch_Btn(-500, 720, 290, 60, L"取消修改", 0);
 	Button cancel_addResearch_Btn(-500, 720, 290, 60, L"取消添加", 0);
+	Button cancel_modifyCompetition_Btn(-500, 720, 290, 60, L"取消修改", 0);
+	Button cancel_addCompetition_Btn(-500, 720, 290, 60, L"取消添加", 0);
 
 
 	ExMessage msg;
@@ -199,21 +221,30 @@ void QualityUI(Node* Stu, List allStuList) {
 		pageBox.draw();
 		GPA_bonusBox.draw();
 
+		competition_nameBox.draw();
+		organizerBox.draw();
+		categoryBox.draw();
+		C_dateBox.draw();
+		C_GPA_bonusBox.draw();
+
 		if (peekmessage(&msg, -1, true)) {
 
 			if (add_Research_Btn.mouseClick(msg)) {
 
-				titleText.setText(L"科研成果添加");
+				titleText.setText(L"  科研成果添加");
 				titleText.move(10, 3);
 				//隐藏
 				add_Research_Btn.move(-500, 200);
 				modify_Research_Btn.move(-500, 280);
 				delete_Research_Btn.move(-500, 360);
-				backButton.move(-500, 600);
+				add_Competition_Btn.move(-500, 460);
+				modify_Competition_Btn.move(-500, 540);
+				delete_Competition_Btn.move(-500, 620);
+				backButton.move(-500, 700);
 
 				//显示
-				add_ResearchOK_Btn.move(-50, 640);
-				cancel_addResearch_Btn.move(-50, 720);
+				add_ResearchOK_Btn.move(10, 640);
+				cancel_addResearch_Btn.move(10, 720);
 
 				paper_nameBox.move(10, 70);
 				journal_or_conference_nameBox.move(10, 140);
@@ -276,7 +307,7 @@ void QualityUI(Node* Stu, List allStuList) {
 						GPA_bonusBox.clear();
 
 						// 更改标题
-						titleText.setText(L"该学生素质类项目管理");
+						titleText.setText(L"该学生素质类项目");
 
 						//隐藏
 						paper_nameBox.move(-500, 70);
@@ -294,8 +325,11 @@ void QualityUI(Node* Stu, List allStuList) {
 						add_Research_Btn.move(-50, 200);
 						modify_Research_Btn.move(-50, 280);
 						delete_Research_Btn.move(-50, 360);
-						backButton.move(-50, 600);
-						titleText.move(10, 100);
+						add_Competition_Btn.move(-50, 460);
+						modify_Competition_Btn.move(-50, 540);
+						delete_Competition_Btn.move(-50, 620);
+						backButton.move(-50, 700);
+						titleText.move(5, 80);
 
 					}
 				}
@@ -307,7 +341,7 @@ void QualityUI(Node* Stu, List allStuList) {
 
 			if (cancel_addResearch_Btn.mouseClick(msg)) {
 				// 更改标题
-				titleText.setText(L"该学生素质类项目管理");
+				titleText.setText(L"该学生素质类项目");
 
 				// 清除输入框内容
 				paper_nameBox.clear();
@@ -336,12 +370,143 @@ void QualityUI(Node* Stu, List allStuList) {
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
-				backButton.move(-50, 600);
-				titleText.move(10, 100);
+				add_Competition_Btn.move(-50, 460);
+				modify_Competition_Btn.move(-50, 540);
+				delete_Competition_Btn.move(-50, 620);
+				backButton.move(-50, 700);
+				titleText.move(5, 80);
 
 
 			}
 
+			if (add_Competition_Btn.mouseClick(msg)) {
+
+				titleText.setText(L" 竞赛获奖添加");
+				titleText.move(10,100);
+				
+				//隐藏
+				add_Research_Btn.move(-500, 200);
+				modify_Research_Btn.move(-500, 280);
+				delete_Research_Btn.move(-500, 360);
+				add_Competition_Btn.move(-500, 460);
+				modify_Competition_Btn.move(-500, 540);
+				delete_Competition_Btn.move(-500, 620);
+				backButton.move(-500, 700);
+
+				//显示
+				add_CompetitionOK_Btn.move(10, 570);
+				cancel_addCompetition_Btn.move(10, 650);
+
+				competition_nameBox.move(10, 200);
+				organizerBox.move(10, 270);
+				categoryBox.move(10, 340);
+				C_dateBox.move(10, 410);
+				C_GPA_bonusBox.move(10, 480);
+
+			}
+			
+			if (add_CompetitionOK_Btn.mouseClick(msg)) {
+
+				wchar_t competition_name[200];//竞赛名称
+				wchar_t organizer[200];//举办单位
+				wchar_t category[200];//获奖类别
+				wchar_t C_date[200];//获奖时间 年月
+				double C_GPA_bonus;
+
+				// 判断输入格式
+				if (
+					getTextInBox(competition_name, competition_nameBox.text) &&
+					getTextInBox(organizer, organizerBox.text) &&
+					getTextInBox(category, categoryBox.text) &&
+					getTextInBox(C_date, C_dateBox.text) &&
+					getDoubleInBox(10, &C_GPA_bonus, C_GPA_bonusBox.text)
+					) {
+
+					if (!addQuality_clist(Stu, competition_name, organizer, category, C_date, C_GPA_bonus) ){
+						MessageBox(GetHWnd(), L"该竞赛获奖已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+					}
+					else {
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+						// 使表格可变化
+						Stu_Ctable.canChange = true;
+
+						// 刷新表格
+						ShowStu_Competition(Stu, CompetitionData);
+						Stu_Ctable.setData(CompetitionData);
+
+						// 清除输入框内容
+						competition_nameBox.clear();
+						organizerBox.clear();
+						categoryBox.clear();
+						C_dateBox.clear();
+						C_GPA_bonusBox.clear();
+
+						// 更改标题
+						titleText.setText(L"该学生素质类项目");
+
+						//隐藏
+						competition_nameBox.move(-500, 200);
+						organizerBox.move(-500, 270);
+						categoryBox.move(-500, 340);
+						C_dateBox.move(-500, 410);
+						C_GPA_bonusBox.move(-500, 690);
+						add_CompetitionOK_Btn.move(-500, 640);
+						cancel_addCompetition_Btn.move(-500, 720);
+
+						//显示
+						add_Research_Btn.move(-50, 200);
+						modify_Research_Btn.move(-50, 280);
+						delete_Research_Btn.move(-50, 360);
+						add_Competition_Btn.move(-50, 460);
+						modify_Competition_Btn.move(-50, 540);
+						delete_Competition_Btn.move(-50, 620);
+						backButton.move(-50, 700);
+						titleText.move(5, 80);
+
+					}
+				}
+				// 输入错误
+				else {
+					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+				}
+			}
+			
+			if (cancel_addCompetition_Btn.mouseClick(msg)) {
+				// 更改标题
+				titleText.setText(L"该学生素质类项目");
+
+				// 清除输入框内容
+				competition_nameBox.clear();
+				organizerBox.clear();
+				categoryBox.clear();
+				C_dateBox.clear();
+				C_GPA_bonusBox.clear();
+
+
+				//隐藏
+				competition_nameBox.move(-500, 200);
+				organizerBox.move(-500, 270);
+				categoryBox.move(-500, 340);
+				C_dateBox.move(-500, 410);
+				C_GPA_bonusBox.move(-500, 690);
+				add_CompetitionOK_Btn.move(-500, 640);
+				cancel_addCompetition_Btn.move(-500, 720);
+
+				//显示
+				add_Research_Btn.move(-50, 200);
+				modify_Research_Btn.move(-50, 280);
+				delete_Research_Btn.move(-50, 360);
+				add_Competition_Btn.move(-50, 460);
+				modify_Competition_Btn.move(-50, 540);
+				delete_Competition_Btn.move(-50, 620);
+				backButton.move(-50, 700);
+				titleText.move(5, 80);
+
+
+			}
+			
 			if (modify_Research_Btn.mouseClick(msg)) {
 				//选择一个要更改的科研成果
 				if (Stu_Rtable.getSelectedRow() == 0) {
@@ -349,18 +514,20 @@ void QualityUI(Node* Stu, List allStuList) {
 				}
 				else {
 					// 更改标题
-					titleText.setText(L"修改素质类项目");
-					titleText.move(10, 3);
+					titleText.setText(L"修改此科研成果");
 
 					//隐藏
 					add_Research_Btn.move(-500, 200);
 					modify_Research_Btn.move(-500, 280);
 					delete_Research_Btn.move(-500, 360);
-					backButton.move(-500, 600);
+					add_Competition_Btn.move(-500, 460);
+					modify_Competition_Btn.move(-500, 540);
+					delete_Competition_Btn.move(-500, 620);
+					backButton.move(-500, 700);
 
 					//显示
-					modify_ResearchOK_Btn.move(-50, 640);
-					cancel_modifyResearch_Btn.move(-50, 720);
+					modify_ResearchOK_Btn.move(10, 640);
+					cancel_modifyResearch_Btn.move(10, 720);
 
 					paper_nameBox.move(10, 70);
 					journal_or_conference_nameBox.move(10, 140);
@@ -370,6 +537,8 @@ void QualityUI(Node* Stu, List allStuList) {
 					issue_numBox.move(10, 420);
 					pageBox.move(10, 490);
 					GPA_bonusBox.move(10, 560);
+					titleText.move(10, 3);
+
 
 					// 使表格不可变化
 					Stu_Rtable.canChange = false;
@@ -445,7 +614,7 @@ void QualityUI(Node* Stu, List allStuList) {
 
 
 					// 更改标题
-					titleText.setText(L"该学生素质类项目管理");
+					titleText.setText(L"该学生素质类项目");
 
 					//隐藏
 					paper_nameBox.move(-500, 70);
@@ -463,8 +632,11 @@ void QualityUI(Node* Stu, List allStuList) {
 					add_Research_Btn.move(-50, 200);
 					modify_Research_Btn.move(-50, 280);
 					delete_Research_Btn.move(-50, 360);
-					backButton.move(-50, 600);
-					titleText.move(10, 100);
+					add_Competition_Btn.move(-50, 460);
+					modify_Competition_Btn.move(-50, 540);
+					delete_Competition_Btn.move(-50, 620);
+					backButton.move(-50, 700);
+					titleText.move(5, 80);
 
 
 				}
@@ -477,7 +649,7 @@ void QualityUI(Node* Stu, List allStuList) {
 
 			if (cancel_modifyResearch_Btn.mouseClick(msg)) {
 				// 更改标题
-				titleText.setText(L"该学生素质类项目管理");
+				titleText.setText(L"该学生素质类项目");
 
 				// 清除输入框内容
 				paper_nameBox.clear();
@@ -506,11 +678,170 @@ void QualityUI(Node* Stu, List allStuList) {
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
-				backButton.move(-50, 600);
-				titleText.move(10, 100);
+				add_Competition_Btn.move(-50, 460);
+				modify_Competition_Btn.move(-50, 540);
+				delete_Competition_Btn.move(-50, 620);
+				backButton.move(-50, 700);
+				titleText.move(5, 80);
 
 				// 使表格可变化
 				Stu_Rtable.canChange = true;
+			}
+
+			if (modify_Competition_Btn.mouseClick(msg)) {
+				//选择一个要更改的竞赛获奖
+				if (Stu_Ctable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个竞赛获奖", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 更改标题
+					titleText.setText(L"修改此竞赛获奖");
+
+					//隐藏
+					add_Research_Btn.move(-500, 200);
+					modify_Research_Btn.move(-500, 280);
+					delete_Research_Btn.move(-500, 360);
+					add_Competition_Btn.move(-500, 460);
+					modify_Competition_Btn.move(-500, 540);
+					delete_Competition_Btn.move(-500, 620);
+					backButton.move(-500, 700);
+					
+					//显示
+					modify_CompetitionOK_Btn.move(10, 570);
+					cancel_modifyCompetition_Btn.move(10, 650);
+
+					competition_nameBox.move(10, 200);
+					organizerBox.move(10, 270);
+					categoryBox.move(10, 340);
+					C_dateBox.move(10, 410);
+					C_GPA_bonusBox.move(10, 480);
+					titleText.move(10, 100);
+
+
+					// 使表格不可变化
+					Stu_Ctable.canChange = false;
+
+					// 获取当前行
+					int selectedRow = Stu_Ctable.getSelectedRow();
+					vector<std::wstring> selectedCompetition_Data = CompetitionData[selectedRow];
+
+					// 文本框默认内容
+					competition_nameBox.setText(selectedCompetition_Data[0].c_str());
+					organizerBox.setText(selectedCompetition_Data[1].c_str());
+					categoryBox.setText(selectedCompetition_Data[2].c_str());
+					C_dateBox.setText(selectedCompetition_Data[3].c_str());
+					C_GPA_bonusBox.setText(selectedCompetition_Data[4].c_str());
+
+				}
+			}
+
+			if (modify_CompetitionOK_Btn.mouseClick(msg)) {
+				wchar_t competition_name[200];//竞赛名称
+				wchar_t organizer[200];//举办单位
+				wchar_t category[200];//获奖类别
+				wchar_t C_date[200];//获奖时间 年月
+				double C_GPA_bonus;
+
+				// 精确搜索素质类项目节点
+				wchar_t temp[200];
+				int selectedRow = Stu_Ctable.getSelectedRow();
+				getTextInBox(temp, CompetitionData[selectedRow][0].c_str());
+				Cnode* modifying_Cnode = searchCnode_in_thisStu(Stu, temp);
+
+				// 判断输入格式
+				if (
+					getTextInBox(competition_name, competition_nameBox.text) &&
+					getTextInBox(organizer, organizerBox.text) &&
+					getTextInBox(category, categoryBox.text) &&
+					getTextInBox(C_date, C_dateBox.text) &&
+					getDoubleInBox(10, &C_GPA_bonus, C_GPA_bonusBox.text)
+					) {
+
+					// 修改
+					modifyQuality_clist(modifying_Cnode, competition_name, organizer, category, C_date, C_GPA_bonus);
+
+					// 保存
+					saveStu(allStuList, STU_FILE);
+
+					// 使表格可变化
+					Stu_Ctable.canChange = true;
+
+					// 刷新表格
+					ShowStu_Competition(Stu, CompetitionData);
+					Stu_Ctable.setData(CompetitionData);
+
+
+					// 清除输入框内容
+					competition_nameBox.clear();
+					organizerBox.clear();
+					categoryBox.clear();
+					C_dateBox.clear();
+					C_GPA_bonusBox.clear();
+
+					// 更改标题
+					titleText.setText(L"该学生素质类项目");
+
+					//隐藏
+					competition_nameBox.move(-500, 200);
+					organizerBox.move(-500, 270);
+					categoryBox.move(-500, 340);
+					C_dateBox.move(-500, 410);
+					C_GPA_bonusBox.move(-500, 690);
+					modify_CompetitionOK_Btn.move(-500, 640);
+					cancel_modifyCompetition_Btn.move(-500, 720);
+
+					//显示
+					add_Research_Btn.move(-50, 200);
+					modify_Research_Btn.move(-50, 280);
+					delete_Research_Btn.move(-50, 360);
+					add_Competition_Btn.move(-50, 460);
+					modify_Competition_Btn.move(-50, 540);
+					delete_Competition_Btn.move(-50, 620);
+					backButton.move(-50, 700);
+					titleText.move(5, 80);
+
+				}
+				// 输入错误
+				else {
+					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+				}
+
+			}
+
+			if (cancel_modifyCompetition_Btn.mouseClick(msg)) {
+				// 更改标题
+				titleText.setText(L"该学生素质类项目");
+
+				// 清除输入框内容
+				competition_nameBox.clear();
+				organizerBox.clear();
+				categoryBox.clear();
+				C_dateBox.clear();
+				C_GPA_bonusBox.clear();
+
+
+				//隐藏
+				competition_nameBox.move(-500, 200);
+				organizerBox.move(-500, 270);
+				categoryBox.move(-500, 340);
+				C_dateBox.move(-500, 410);
+				C_GPA_bonusBox.move(-500, 690);
+				modify_CompetitionOK_Btn.move(-500, 640);
+				cancel_modifyCompetition_Btn.move(-500, 720);
+
+				//显示
+				add_Research_Btn.move(-50, 200);
+				modify_Research_Btn.move(-50, 280);
+				delete_Research_Btn.move(-50, 360);
+				add_Competition_Btn.move(-50, 460);
+				modify_Competition_Btn.move(-50, 540);
+				delete_Competition_Btn.move(-50, 620);
+				backButton.move(-50, 700);
+				titleText.move(5, 80);
+
+				Stu_Ctable.canChange = true;
+
+
 			}
 
 			if (delete_Research_Btn.mouseClick(msg)) {
@@ -542,12 +873,43 @@ void QualityUI(Node* Stu, List allStuList) {
 				}
 			}
 
+			if (delete_Competition_Btn.mouseClick(msg)) {
+				if (Stu_Ctable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个竞赛获奖", L"错误!", MB_ICONERROR);
+				}
+				else {
+					int result = MessageBox(GetHWnd(), L"确定删除这个竞赛获奖吗?", L"删除竞赛获奖", MB_YESNO | MB_ICONQUESTION);
+
+					if (result == IDYES) { // 点击确定
+
+						// 精确搜索素质类项目节点
+						wchar_t temp[200];
+						int selectedRow = Stu_Ctable.getSelectedRow();
+						getTextInBox(temp, CompetitionData[selectedRow][0].c_str());
+						Cnode* modifying_Cnode = searchCnode_in_thisStu(Stu, temp);
+
+						// 删除
+						deleteQuality_clist(Stu, temp);
+
+						// 保存
+						saveStu(allStuList, STU_FILE);
+
+
+						// 刷新表格
+						ShowStu_Competition(Stu,CompetitionData);
+						Stu_Ctable.setData(CompetitionData);
+					}
+				}
+			}
+
 			if (backButton.mouseClick(msg)) {
 				allQualityUI();
 			}
 
 			//表格鼠标滑动与点击
 			Stu_Rtable.onMouse(msg);
+			Stu_Ctable.onMouse(msg);
+
 
 			// 文本框输入
 			paper_nameBox.onMessage(msg);
@@ -558,9 +920,17 @@ void QualityUI(Node* Stu, List allStuList) {
 			issue_numBox.onMessage(msg);
 			pageBox.onMessage(msg);
 			GPA_bonusBox.onMessage(msg);
+
+			competition_nameBox.onMessage(msg);
+			organizerBox.onMessage(msg);
+			categoryBox.onMessage(msg);
+			C_dateBox.onMessage(msg);
+			C_GPA_bonusBox.onMessage(msg);
+
+
 		
 		}
-			//showxy(msg);
+			showxy(msg);
 
 			
 			FlushBatchDraw(); //批量绘图

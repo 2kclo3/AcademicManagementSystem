@@ -537,7 +537,7 @@ void testUI();
 void loginUI();
 void menuUI();
 void allStuUI();
-void StuUI(Node* Crs,List allStuList);
+void StuUI(Node* Crs,List allStuList, wchar_t* pname, int* pid);
 void allCrsUI();
 void CrsUI(Cpnode cphead, Cpnode cplist);
 void allQualityUI();
