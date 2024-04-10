@@ -479,10 +479,6 @@ void menuUI() {
 
 
 
-void changeMajorUI() {
-
-}
-
 
 
 
