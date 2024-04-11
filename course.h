@@ -14,6 +14,8 @@
 #include <tchar.h>
 #include <math.h>
 #include <time.h>
+#include <iomanip>
+#include<sstream>
 #include"io.h"
 #include<iostream>//调试用
 using namespace std;
@@ -35,12 +37,14 @@ typedef struct Cnode_//课程节点
 	wchar_t character[5];//课程性质：选修、必修
 	int SchYear;//学年
 	int headcount;//总人数
-	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
+	double totscore;//总成绩
 	double averscore;//平均成绩
-	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
+	double totGPA;//总GPA
 	double averGPA;//平均GPA
-	int PassNum;//及格人数，用来算及格率
-	int ExcelNum;//优秀人数，用来算优秀率
+	int PassNum;//及格人数
+	double PassRate;//及格率
+	int ExcelNum;//优秀人数
+	double ExcelRate;//优秀率
 	struct Cnode_ * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }_Cnode,*Cpnode;
