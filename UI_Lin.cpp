@@ -6,7 +6,7 @@
 
 
 void loginUI();
-void Modify_Password_UI(wchar_t* account, Node* Stu);
+void Modify_Password_UI(const wchar_t* account, Node* Stu);
 void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
 
@@ -53,8 +53,14 @@ int mainLin() {
 	printStu(Stu);
 	*/
 
-	loginUI();
+	/*ist StuList = readStu(STU_FILE);
+	wchar_t name[20] = L"李四";
+	Node* Stu = searchStu_InQuality(StuList, name);
+	wstring tmp_account = to_wstring(Stu->item.data.ID);
+	Modify_Password_UI(tmp_account.c_str(), Stu);
+	*/
 
+	loginUI();
 
 
 	EndBatchDraw(); //结束批量绘图
@@ -72,6 +78,7 @@ void loginUI() {
 	//drawLine();
 
 	List StuList = readStu(STU_FILE);
+	
 	Node* Stu = StuList->next;
 
 
@@ -97,19 +104,20 @@ void loginUI() {
 				wstring tmp_password;
 
 				while (Stu != NULL) {
-					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), accountBox.text) == 0) {
-						tmp_password = Stu->item.data.password;
+					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), (const wchar_t*)accountBox.text) == 0) {
+						tmp_password = wstring(Stu->item.data.password);
 						break;
-					}
+					}				
 					Stu = Stu->next;
 				}
+				wprintf(L"%s\n", tmp_password);
 
 				if (Stu == NULL) { //没有学生ID与之对应
 					MessageBox(GetHWnd(), L"不存在这个账号！请重新输入！", L"错误!", MB_ICONWARNING);
 					accountBox.clear();
 					passwordBox.clear();
 				}
-				else if (wcscmp(tmp_password.c_str(), passwordBox.text) == 0) {//把这个学生对应的正确密码和输入的密码进行比较
+				else if (wcscmp(tmp_password.c_str(), (const wchar_t*)passwordBox.text) == 0) {//把这个学生对应的正确密码和输入的密码进行比较
 					menuUI();
 				}
 				else {
@@ -168,7 +176,7 @@ void loginUI() {
 
 }
 
-void Modify_Password_UI(wchar_t* account,Node* Stu) {
+void Modify_Password_UI(const wchar_t* account,Node* Stu) {
 
 	cleardevice();
 
@@ -180,18 +188,18 @@ void Modify_Password_UI(wchar_t* account,Node* Stu) {
 
 	Text titleText(200, 100, L"请修改你的密码", 64);
 
-	TextBox accountBox(500, 300, 880, L"账号", L"");
-	TextBox old_passwordBox(500, 400, 880, L"原密码", L"");
-	TextBox new_passwordBox(500, 500, 880, L"新密码", L"");
-	TextBox confirm_passwordBox(500, 500, 880, L"确认新密码", L"");
-	Button modify_OK_Button(500, 550, 880, 60, L"确认修改", 1);
-	Button backButton(660, 500, 420, 60, L"返回", 0);
+	TextBox accountBox(450, 300, 200, L"账号", L"");
+	TextBox old_passwordBox(450, 380, 200, L"原密码", L"");
+	TextBox new_passwordBox(450, 460, 200, L"新密码", L"");
+	TextBox confirm_passwordBox(450, 540, 200, L"确认新密码", L"");
+	Button modify_OK_Button(450, 620, 200, 60, L"确认修改", 1);
+	Button backButton(660, 700, 200, 60, L"返回", 0);
 
-	Text IDText(500, 45, L"", 32);
+	Text IDText(450, 200, L"", 32);
 	wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
 	IDText.setText(show_ID.c_str());
 
-	Text nameText(500, 90, L"", 32);
+	Text nameText(450, 220, L"", 32);
 	wstring tmp_name = Stu->item.data.name;
 	wstring show_name = L"姓名：" + tmp_name;
 	nameText.setText(show_name.c_str());
