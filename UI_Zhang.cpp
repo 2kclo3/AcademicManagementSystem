@@ -9,26 +9,24 @@
 //有的地方先隐藏了cancelButton，后显示了cancelButton，重来，之后小优化一下
 //有的标题太长，显示不出来，以后小优化一下，先解决主要矛盾
 
-//int main(void) 
-//{
-//
-//+
-//	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-//
-//	// 初始化图形窗口
-//	initgraph(1280, 810);
-//	BeginBatchDraw(); //开始批量绘图
-//	setbkcolor(RGB(55, 61, 53)); //背景颜色
-//	cleardevice();
-//
-//	menuUI();
-//
-//	EndBatchDraw(); //结束批量绘图
-//	closegraph(); // 关闭图形窗口
-//	return 0;
-//}
+int main(void) 
+{
 
-//还没改完
+	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+
+	// 初始化图形窗口
+	initgraph(1500, 810);
+	BeginBatchDraw(); //开始批量绘图
+	setbkcolor(RGB(55, 61, 53)); //背景颜色
+	cleardevice();
+
+	menuUI();
+
+	EndBatchDraw(); //结束批量绘图
+	closegraph(); // 关闭图形窗口
+	return 0;
+}
+
 void allCrsUI()
 {
 	return;
