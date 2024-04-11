@@ -21,7 +21,6 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 
 	int row = 1;
 	while (pCurrent != NULL) { //遍历链表
-		//if (searchTerm != NULL) {
 
 		// 检测是否有搜索词
 		if (wcsstr(std::to_wstring(pCurrent->item.data.ID).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
@@ -31,7 +30,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
 			) {
 
-			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行7列)
 
 			//每行的内容
 			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
@@ -51,20 +50,57 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 	return true;
 }
 
+// 显示单个学生信息（包含其课程成绩）	
+void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* searchTerm) {
+	Crsnode* crstmp = stu->item.crslist->crs_next;
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(7, L"")); //增加一行(每行7列)
+
+	//初始化
+	data[0][0] = L"课程号";
+	data[0][1] = L"课程名";
+	data[0][2] = L"成绩";
+	data[0][3] = L"学期";
+	data[0][4] = L"学分";
+	data[0][5] = L"绩点";
+	data[0][6] = L"课程性质";
+
+	int row = 1;
+	while (crstmp != NULL) {
+		data.push_back(vector<std::wstring>(7, L"")); //增加一行(每行7列)
+
+		// 检测是否有搜索词
+		if (wcsstr(crstmp->score.course_id, searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(crstmp->score.course_name,searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.score).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(std::to_wstring(crstmp->score.semester).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.credit).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.grid).c_str(), searchTerm) != NULL
+			|| wcsstr(std::to_wstring(crstmp->score.course_nature).c_str(), searchTerm) != NULL
+			){
+			//每行的内容
+			data[row][0] = crstmp->score.course_id;
+			data[row][1] = crstmp->score.course_name;
+			data[row][2] = std::to_wstring(crstmp->score.score); //数字转为字符串
+			data[row][3] = std::to_wstring(crstmp->score.semester); //数字转为字符串
+			data[row][4] = std::to_wstring(crstmp->score.credit);//数字转为字符串
+			data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
+			data[row][6] = std::to_wstring(crstmp->score.course_nature); //数字转为字符串
+
+			row++; // 行数+1
+		}
+		crstmp = crstmp->crs_next;
+	}
 
 
-	
-void showStu(); // 显示单个学生信息（包含其课程成绩）
-
-void showCrsInStu();// 具体显示单个学生的某课程
+}
 
 
 
-//。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。已编辑，存在getNumber只能返回int但是成绩等数据为float的问题；
 
 
 // 排序总学生链表(按照学号来排序）
-/*void sortStu(List* plist) {
+void sortStu(List* plist) {
 	Node* p, * p0, * r, * r0, * q;
 	p = p0 = r = r0 = q = NULL;
 	p = *plist;
@@ -88,24 +124,12 @@ void showCrsInStu();// 具体显示单个学生的某课程
 				*plist = q;
 			}
 		}
+		p0 = p;
+		p = p->next;
 	}
 }
-*/
 
-//初始化每个学生的课程链表并添加哨兵节点
-/*bool Initialize_Stu_Crslist(List phead) {
-		List Ltmp = phead->next;
-		while (Ltmp != NULL) {
-			Crsnode* crs_head = (Crsnode*)malloc(sizeof(Crsnode));
-			if (crs_head == NULL)
-				return false;
-			crs_head->crs_next = NULL;
-			Ltmp->item.crslist = crs_head;
-			Ltmp = Ltmp->next;
-		}
-		return true;
-}
-*/
+
 
 // 添加学生（不包含课程）
 bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
@@ -131,6 +155,10 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	pnew->item.data.grade = pgrade;
 	wcscpy(pnew->item.data.college, pcollege);
 	wcscpy(pnew->item.data.major, pmajor);
+	wcscpy(pnew->item.data.original_college, pcollege);
+	wcscpy(pnew->item.data.original_major, pmajor);
+	wcscpy(pnew->item.data.password, to_wstring(pnew->item.data.ID).c_str());
+
 
 	ptmp->next = pnew;
 	return true;
@@ -225,3 +253,19 @@ Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
 		crstmp = crstmp->crs_next;
 	return crstmp;
 }
+
+//初始化每个学生的课程链表并添加哨兵节点
+/*bool Initialize_Stu_Crslist(List phead) {
+		List Ltmp = phead->next;
+		while (Ltmp != NULL) {
+			Crsnode* crs_head = (Crsnode*)malloc(sizeof(Crsnode));
+			if (crs_head == NULL)
+				return false;
+			crs_head->crs_next = NULL;
+			Ltmp->item.crslist = crs_head;
+			Ltmp = Ltmp->next;
+		}
+		return true;
+}
+*/
+

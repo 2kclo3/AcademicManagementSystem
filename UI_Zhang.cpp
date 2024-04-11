@@ -187,7 +187,7 @@ void allCrsUI()
 
 				}
 			}
-
+			////////////////////////////////////////////
 			if (addCrsBtn.mouseClick(msg))
 			{
 				// 更改标题
@@ -792,11 +792,10 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 	Text GPAText(-500, 370, L"", 32);
 
 	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	TextBox snameBox(-500, 0, 290, L"学生姓名", L"");
-	TextBox snumBox(-500, 0, 290, L"学号", L"");
-	TextBox scoreBox(-500, 0, 290, L"成绩", L"");
-	TextBox minBox(-500, 0, 290, L"最小值", L"");
-	TextBox maxBox(-500, 0, 290, L"最大值", L"");
+
+	TextBox snameBox(-500, 150, 290, L"学生姓名", L"");
+	TextBox snumBox(-500, 220, 290, L"学号", L"");
+	TextBox scoreBox(-500, 290, 290, L"成绩", L"");
 
 
 	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
@@ -937,11 +936,12 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 				backButton.move(-500, 0);
 
 				// 显示
-				snameBox.move(10, 220);
-				snumBox.move(10, 300);
-				scoreBox.move(10, 380);
-				addOKButton.move(10, 460);
-				cancelButton.move(10, 540);
+				snameBox.move(10, 140);
+				snumBox.move(10, 220);
+				scoreBox.move(10, 300);
+
+				addOKButton.move(10, 380);
+				cancelButton.move(10, 460);
 			}
 
 			if (addOKButton.mouseClick(msg))

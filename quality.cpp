@@ -87,7 +87,11 @@ bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data) {
 		data[row][4] = pR_Current->research.volume_num;
 		data[row][5] = pR_Current->research.issue_num;
 		data[row][6] = pR_Current->research.page;
-		data[row][7] = to_wstring(pR_Current->research.GPA_bonus);
+		
+		wchar_t tmpGPA[6];
+		swprintf(tmpGPA, L"%.2lf", pR_Current->research.GPA_bonus);
+
+		data[row][7] = tmpGPA;
 
 		row++; // 行数+1
 
@@ -99,7 +103,52 @@ bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data) {
 
 }
 
+bool ShowStu_Competition(const Node* Stu, vector<vector<wstring>>& data) {
 
+	Cnode* pC_Current = Stu->item.clist->cnext;
+
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(5, L"")); //增加一行(每行5列)
+	
+	wchar_t competition_name[200];//竞赛名称
+	wchar_t organizer[200];//举办单位
+	wchar_t category[200];//获奖类别
+	wchar_t date[200];//获奖时间 年月
+	double GPA_bonus;
+
+	//初始化表头
+	data[0][0] = L"竞赛名称";
+	data[0][1] = L"举办单位";
+	data[0][2] = L"获奖类别";
+	data[0][3] = L"获奖时间";
+	data[0][4] = L"绩点加分";
+
+	int row = 1;
+
+	while (pC_Current != NULL) { //遍历竞赛支链表
+
+		data.push_back(vector<std::wstring>(5, L"")); //增加一行(每行5列)
+
+		//每行的内容
+		data[row][0] = pC_Current->competition.competition_name;
+		data[row][1] = pC_Current->competition.organizer;
+		data[row][2] = pC_Current->competition.category;
+		data[row][3] = pC_Current->competition.date;
+
+		wchar_t tmpGPA[6];
+		swprintf(tmpGPA, L"%.2lf", pC_Current->competition.GPA_bonus);
+		
+		data[row][4] = tmpGPA;
+
+		row++; // 行数+1
+
+		pC_Current = pC_Current->cnext; // 移向下一个节点
+
+	}
+
+	return true;
+
+}
 
 Node* searchStu_InQuality(List phead,wchar_t* str) { // 在总链表中搜索学生(lzy调试专用
 	Node* ptmp = phead->next;//别忘了考虑哨兵节点
@@ -122,10 +171,15 @@ bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	wchar_t* issue_num,
 	wchar_t* page,
 	double GPA_bonus){
-	Rnode* rhead = Stu->item.rlist;
-	Rnode* rtmp = rhead->rnext;//素质类rlist链表亦有哨兵节点
-	while (rtmp->rnext != NULL)
+	
+	Rnode* rtmp = Stu->item.rlist;//素质类rlist链表亦有哨兵节点
+	
+	while (rtmp->rnext != NULL) {
+		if (wcscmp(rtmp->research.paper_name, paper_name) == 0)
+			return false;
 		rtmp = rtmp->rnext;//尾插法
+	}
+
 	Rnode* rnew = (Rnode*)malloc(sizeof(Rnode));
 	if (rnew == NULL)
 		return false;//节点空间分配失败
@@ -142,7 +196,7 @@ bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	rnew->rnext = NULL;
 	rtmp->rnext = rnew;
 	return true;
-}
+} 
 
 bool addQuality_clist(Node* Stu,
 	wchar_t* competition_name,
@@ -150,10 +204,15 @@ bool addQuality_clist(Node* Stu,
 	wchar_t* category,
 	wchar_t* date,
 	double GPA_bonus) {
-	Cnode* chead = Stu->item.clist;
-	Cnode* ctmp = chead->cnext;//素质类clist链表亦有哨兵节点
-	while (ctmp->cnext != NULL)
+
+	Cnode* ctmp = Stu->item.clist;//素质类clist链表亦有哨兵节点
+	
+	while (ctmp->cnext != NULL) {
+		if (wcscmp(ctmp->competition.competition_name, competition_name) == 0)
+			return false;
 		ctmp = ctmp->cnext;//尾插法
+	}
+
 	Cnode* cnew = (Cnode*)malloc(sizeof(Cnode));
 	if (cnew == NULL)
 		return false;//节点空间分配失败
@@ -187,7 +246,7 @@ void show_Competition_menu(const wchar_t* title, Cnode* chead) {//方便修改函数确
 		ctmp = ctmp->cnext;
 	}
 }*/
-Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改的素质类项目节点
+/*Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改的素质类项目节点
 	Node* Stu = (*StuList)->next;
 	while (Stu != NULL) {
 		Rnode* rtmp = Stu->item.rlist->rnext;//别忘了考虑哨兵节点
@@ -203,7 +262,7 @@ Node* searchStu_with_thisRnode(List* StuList, wchar_t* paper_name) {//找出待修改
 	}
 	return Stu;
 }// 找出此学生待修改的素质类项目节点
-
+*/
 Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name) {
 	Rnode* pR_Current = Stu->item.rlist->rnext;
 
@@ -215,17 +274,15 @@ Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name) {
 	return pR_Current;
 
 }
-Cnode* searchCnode(Node* Stu,wchar_t* competition_name) {
-	Cnode* chead = Stu->item.clist;//别忘了考虑哨兵节点
-	Cnode* ctmp = chead->cnext;
-	while (ctmp != NULL)
-	{
-		if (wcscmp(competition_name, ctmp->competition.competition_name) == 0)
+Cnode* searchCnode_in_thisStu(Node* Stu,wchar_t* competition_name) {
+	Cnode* pC_Current = Stu->item.clist->cnext;
+
+	while (pC_Current != NULL) {
+		if (wcscmp(competition_name, pC_Current->competition.competition_name) == 0)
 			break;
-		ctmp = ctmp->cnext;
+		pC_Current = pC_Current->cnext;
 	}
-	if (ctmp == NULL)	return NULL;
-	return ctmp;
+	return pC_Current;
 }
 
 bool modifyQuality_rlist(Rnode* rmod,	// 修改素质类项目节点

@@ -9,8 +9,8 @@ List readStu(const char* file_name) {
 	FILE* fp;
 	List StuList = (List)malloc(sizeof(Node));
 	StuList->next = NULL;
-	StuList->item.crslist = (Crsnode*)malloc(sizeof(Crsnode));
-	StuList->item.crslist->crs_next = NULL;
+	//StuList->item.crslist = (Crsnode*)malloc(sizeof(Crsnode));
+	//StuList->item.crslist->crs_next = NULL;
 
 	fp = fopen(file_name, "r");//读取文件
 	if (fp == NULL) {
@@ -27,7 +27,6 @@ List readStu(const char* file_name) {
 	Cnode* tcnode = (Cnode*)malloc(sizeof(Cnode)); //为tcnode申请内存(临时存放)
 	tcnode->cnext = NULL;
 
-	//TODO
 
 	if (tnode == NULL || tcrs == NULL || trnode == NULL || tcnode == NULL) {
 		wprintf(L"error!");
@@ -40,14 +39,18 @@ List readStu(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %d %d %s %s",
+		if (swscanf(line, L"%d %s %d %d %s %s %s %s %s",
 			&tnode->item.data.ID,
 			&tnode->item.data.name,
 			&tnode->item.data.gender,
 			&tnode->item.data.grade,
 			&tnode->item.data.college,
-			&tnode->item.data.major
-		) == 6) { // 读取学生信息
+			&tnode->item.data.major,
+			&tnode->item.data.original_college,
+			&tnode->item.data.original_major,
+			&tnode->item.data.password
+
+		) == 9) { // 读取学生信息
 
 
 
@@ -306,13 +309,17 @@ bool saveStu(List StuList, const char* file_name) {
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		fwprintf(fp, L"%d %s %d %d %s %s\n",
+		fwprintf(fp, L"%d %s %d %d %s %s %s %s %s\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
 			pStu->item.data.gender,
 			pStu->item.data.grade,
 			pStu->item.data.college,
-			pStu->item.data.major); // 写入
+			pStu->item.data.major,
+			pStu->item.data.original_college,
+			pStu->item.data.original_major,
+			pStu->item.data.password
+		); // 写入
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
 		while (pcrs != NULL) {

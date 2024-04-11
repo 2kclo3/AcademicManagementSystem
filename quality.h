@@ -22,10 +22,11 @@
 
 using namespace std;
 
-
 bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
 bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data);
+bool ShowStu_Competition(const Node* Stu, vector<vector<wstring>>& data);
+
 
 Node* searchStu_InQuality(List,wchar_t*);// 在总链表中搜索学生(lzy调试专用
 
@@ -50,10 +51,10 @@ bool addQuality_clist(Node* Stu,
 void show_Competition_menu(const wchar_t* title, Cnode* chead);*/
 
 
-Node* searchStu_with_thisRnode(List* StuList,  wchar_t* paper_name);// 找出此学生待修改的素质类项目节点
+//Node* searchStu_with_thisRnode(List* StuList,  wchar_t* paper_name);// 找出此学生待修改的素质类项目节点
 Rnode* searchRnode_in_thisStu(Node* Stu,  wchar_t* paper_name);
 
-Cnode* searchCnode(Node* Stu, wchar_t* competition_name);
+Cnode* searchCnode_in_thisStu(Node* Stu, wchar_t* competition_name);
 
 
 bool modifyQuality_rlist(Rnode* rmod,// 修改素质类项目

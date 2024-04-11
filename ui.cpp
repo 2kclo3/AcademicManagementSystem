@@ -10,13 +10,17 @@ void printStu(const List StuList) {
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		wprintf(L"学生信息:\n%d\t%s\t%d\t%d\t%s\t%s\n\n课程：\n",
+		wprintf(L"学生信息:\n%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n\n课程：\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
 			pStu->item.data.gender,
 			pStu->item.data.grade,
 			pStu->item.data.college,
-			pStu->item.data.major);
+			pStu->item.data.major,
+			pStu->item.data.original_college,
+			pStu->item.data.original_major,
+			pStu->item.data.password
+		);
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
 		while (pcrs != NULL) {
@@ -359,58 +363,6 @@ void testUI() {
 }
 
 
-void loginUI() {
-	cleardevice();
-
-
-
-	//drawLine();
-
-
-	Text titleText(200, 100, L"你好，请登录!", 64);
-	TextBox accountBox(200, 300, 880, L"账号", L"");
-	TextBox passwordBox(200, 400, 880, L"密码", L"");
-	Button loginButton(200, 500, 420, 60, L"登录", 1);
-	Button exitButton(660, 500, 420, 60, L"退出", 0);
-	std::cout << 1 << std::endl;
-	// 处理鼠标事件
-	ExMessage msg;
-	while (!_kbhit()) {
-		ULONGLONG start_time = GetTickCount();
-		accountBox.draw();
-		passwordBox.draw();
-
-		if (peekmessage(&msg, -1, true)) {
-			accountBox.onMessage(msg);
-			passwordBox.onMessage(msg);
-			if (loginButton.mouseClick(msg)) {
-				wprintf(L"Account:%s\nPassword:%s\n", accountBox.text, passwordBox.text);
-				menuUI();
-			}
-			if (exitButton.mouseClick(msg)) {
-				exit(0);
-			}
-		}
-
-		showxy(msg);
-
-
-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1) {
-			Sleep(1);
-		}
-	}
-
-
-
-
-
-
-}
-
 
 void menuUI() {
 	cleardevice();
@@ -474,10 +426,6 @@ void menuUI() {
 }
 
 
-
-void changeMajorUI() {
-
-}
 
 
 
