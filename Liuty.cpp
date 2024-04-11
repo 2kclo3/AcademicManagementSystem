@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLLLL(void) {
+int main(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -22,11 +22,11 @@ int mainLLLL(void) {
 
 
 
-	//testUI();
+	testUI();
 
 
 	//allStuUI();
-	loginUI();
+	//loginUI();
 
 
 
