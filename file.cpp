@@ -227,7 +227,7 @@ Cpnode readCrs(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf",
+		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf %d %d %lf %d %lf",
 			&tcnode->cnum,
 			&tcnode->cname,
 			&tcnode->character,
@@ -235,8 +235,13 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->totscore,
 			&tcnode->averscore,
 			&tcnode->totGPA,
-			&tcnode->averGPA
-		) == 8) { // 读取课程信息
+			&tcnode->averGPA,
+			&tcnode->SchYear,
+			&tcnode->PassNum,
+			&tcnode->PassRate,
+			&tcnode->ExcelNum,
+			&tcnode->ExcelRate
+		) == 13) { // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
 			if (tcnode->sphead == NULL) {
@@ -385,7 +390,7 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf\n",
+		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,
@@ -393,7 +398,13 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 			pCrs->totscore,
 			pCrs->averscore,
 			pCrs->totGPA,
-			pCrs->averGPA); // 写入
+			pCrs->averGPA,
+			pCrs->SchYear,
+			pCrs->PassNum,
+			pCrs->PassRate,
+			pCrs->ExcelNum,
+			pCrs->ExcelRate
+		); // 写入
 
 		Spnode pstu = pCrs->sphead->next; // 从下一个学生节点开始
 		while (pstu != NULL) {

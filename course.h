@@ -40,7 +40,9 @@ typedef struct Cnode_//课程节点
 	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
 	double averGPA;//平均GPA
 	int PassNum;//及格人数，用来算及格率
+	double PassRate;//及格率
 	int ExcelNum;//优秀人数，用来算优秀率
+	double ExcelRate;//优秀率
 	struct Cnode_ * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }_Cnode,*Cpnode;

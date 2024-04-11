@@ -1,171 +1,3 @@
-10000004 æµ‹è¯•104 1 2004 10004 10004 10004 10004 10000004
-
-
-
-10000005 107 0 2005 10005 10005a 10005 10005a 10000005
-å•?345966 å•Šå•Šå•Šå•Šå•Šå•Šå•Šå•Šå•?20.0 0 1 4.0 3.0
-
-
-
-10000006 æµ‹è¯•106 1 2006 10006é™?10006ä¸“ä¸š 10006é™?10006ä¸“ä¸š 10000006
-uyhgfc ascasc 23.0 1 1 1.0 1.0
-
-
-
-43434343 dddddd 1 2021 404444 404555555 404 404 43434343
-
-
-
-12300000 ±ò±ò±ò 0 2021 ²âÊÔ222 ²âÊÔ2222 ²âÊÔ ²âÊÔ2 12300000
-
-
-
-13245685 ²âÊÔ¹ý 1 2022 Ð¡Ñ§Ôº ´ó×¨Òµ2 Ð¡Ñ§Ôº ´ó×¨Òµ 13245685
-
-
-
-10000003 103 0 2022 10003Ñ§Ôº 10003×¨Òµ 10003Ñ§Ôº 10003×¨Òµ 10000003
-z1111 ¸ã»ù 100.0 2 1 4.0 4.0
-
-lqtcbb lzyÈËÀàÑÐ¾¿µ÷²é lzy 5.20 v1 i1 99-100 0.99
-
-c_name1 org22 class333 date4 3.30
-c_name2 org2 class2 date2 2.20
-
-77777777 ÁùÁùÁù 0 2023 ²âÊÔ3×ª ²âÊÔ4×ª ²âÊÔ3 ²âÊÔ4 77777777
-
-
-
-77654321 ²âÊÔÔ±2 1 2023 ²âÊÔÑ§Ôº ²âÊÔ×¨Òµ12 ²âÊÔÑ§Ôº ²âÊÔ×¨Òµ1 77654321
-
-
-
-66666666 Ã÷ÁÁ 1 2023 Ç°ÑØ½»²æÑ§¿ÆÑ§Ôº ¹âµçÐÅÏ¢¿ÆÑ§Óë¹¤³Ì Ç°ÑØ½»²æÑ§¿ÆÑ§Ôº ¹âµçÐÅÏ¢¿ÆÑ§Óë¹¤³Ì 66666666
-
-
-
-55230004 ÕÅÈý 0 2023 Èí¼þÑ§Ôº Êý¾Ý¿ÆÑ§Óë´óÊý¾Ý¼¼Êõ Èí¼þÑ§Ôº Êý¾Ý¿ÆÑ§Óë´óÊý¾Ý¼¼Êõ 55230004
-
-
-
-55230002 ÀîËÄ 0 2023 Èí¼þÑ§Ôº Èí¼þ¹¤³Ì ¼ÆËã»ú¿ÆÑ§Óë¼¼ÊõÑ§Ôº ¼ÆËã»ú¿ÆÑ§Óë¼¼Êõ 55230101
-10001 11ee 89.9 1 1 3.5 3.7
-10002 Êý×ÖÂß¼­ 91.1 1 1 2.0 4.0
-22223 ÒôÀÖ¼øÉÍ 87.0 1 0 2.0 3.7
-30004 ¸ßµÈÊýÑ§AII 80.5 2 1 2.0 3.0
-30005 ÃæÏò¶ÔÏó³ÌÐòÉè¼Æ 89.0 2 1 2.0 3.7
-
-paper1 jorc24124 author1 date1 volume1 issue1 10-11 1.10
-paper3 jorc3 author3 date3 volume3 issue3 10-11 1.10
-paper4 jorc4 author4 date4 volume4 issue4 10-11 1.10
-paper5 jorc5 author5 date5 volume5 issue5 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper7 jorc7 author7 data7 v7 i7 10-11 2.00
-
-
-22222222 jjj 0 2023 111 111 111 111 22222222
-
-
-
-21230002 ÕÔÁù 0 2023 ¼ÆËã»ú¿ÆÑ§Óë¼¼ÊõÑ§Ôº ¼ÆËã»ú¿ÆÑ§Óë¼¼Êõ ¼ÆËã»ú¿ÆÑ§Óë¼¼ÊõÑ§Ôº ¼ÆËã»ú¿ÆÑ§Óë¼¼Êõ 21230101
-10001 ¸ßµÈÊýÑ§AI 99.0 1 1 3.5 4.0
-10002 Êý×ÖÂß¼­ 89.0 1 1 2.0 3.7
-22222 ÃÀÊõ¼øÉÍ 88.0 1 0 2.0 3.7
-30004 ¸ßµÈÊýÑ§AII 84.5 2 1 2.0 3.3
-30005 ÃæÏò¶ÔÏó³ÌÐòÉè¼Æ 100.0 2 0 2.0 2.0
-3006 ¸ã»ù 100.0 4 1 2.0 1.0
-
-paper2 jorc2 autor2 date2 volume issue 10-11 6.67
-
-
-21230001 çŽ‹äº” 1 2023 è®¡ç®—æœºç§‘å­¦ä¸ŽæŠ€æœ¯å­¦é™?è®¡ç®—æœºç§‘å­¦ä¸ŽæŠ€æœ?è®¡ç®—æœºç§‘å­¦ä¸ŽæŠ€æœ¯å­¦é™?è®¡ç®—æœºç§‘å­¦ä¸ŽæŠ€æœ?21230001
-10001 é«˜ç­‰æ•°å­¦AI 83.0 1 1 3.5 3.3
-10002 æ•°å­—é€»è¾‘ 90.1 1 1 2.0 4.0
-22224 ä¹¦æ³•é‰´èµ 86.0 1 0 2.0 3.3
-30004 é«˜ç­‰æ•°å­¦AII 83.5 2 1 2.0 3.3
-30005 é¢å‘å¯¹è±¡ç¨‹åºè®¾è®¡ 90.6 2 1 2.0 4.0
-
-
-c_name11 org22 class333 date4 3.30
-
-12345679 1æµ‹è¯• 0 2023 æµ‹è¯•å­¦é™¢22222 æµ‹è¯•ä¸“ä¸š3 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š3 12345679
-
-
-
-12345678 æµ‹è¯•å‘? 0 2023 æµ‹è¯•å­¦é™¢111 æµ‹è¯•ä¸“ä¸š2111 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š2 12345678
-1 1 1.0 1 1 1.0 1.0
-
-
-
-11223344 ä¸€äºŒä¸‰ 1 2023 ä¸‰äºŒä¸€ äºŒå››å…?ä¸‰äºŒä¸€ äºŒå››å…?11223344
-
-
-
-10000000 1111 0 2023 111 1111 111 1111 10000000
-
-
-
-55555555 jhk 0 2024 55667788 66 55 66 55555555
-
-
-
-55230001 æµ‹è¯•3 1 2024 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š 55230001
-10001 é«˜ç­‰æ•°å­¦AI 99.9 1 1 3.5 4.0
-10002 æ•°å­—é€»è¾‘ 90.0 1 1 2.0 4.0
-22222 ç¾Žæœ¯é‰´èµ 84.0 1 0 2.0 3.3
-30004 é«˜ç­‰æ•°å­¦AII 83.5 2 1 2.0 3.3
-30005 é¢å‘å¯¹è±¡ç¨‹åºè®¾è®¡ 91.0 2 1 2.0 4.0
-
-
-
-40240001 å‹? 1 2024 äººå·¥æ™ºèƒ½å­¦é™¢ äººå·¥æ™ºèƒ½ äººå·¥æ™ºèƒ½å­¦é™¢ äººå·¥æ™ºèƒ½ 40240001
-10005 äººå·¥æ™ºèƒ½å¤§å¯¼è®?89.9 1 2 2.1 2.1
-30004 é«˜ç­‰æ•°å­¦AII 82.5 2 1 2.0 3.3
-
-
-
-33333330 æµ‹è¯•å‘? 1 2024 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š 33333330
-
-
-
-22222220 æµ‹è¯•å‘? 0 2024 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š 22222220
-
-
-
-11111110 æµ‹è¯•3 1 2024 æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š æµ‹è¯•å­¦é™¢ æµ‹è¯•ä¸“ä¸š 11111110
-
-
-
-10000007 107d 0 2024 10007 10007ddd 10007 10007ddd 10000007
-2 1 1.0 1 1 1.0 1.0
-1 1 1.0 1 1 1.0 1.0
-
-
-
 10000002 102 1 2024 10002 10002 10002 10002 10000002
 
 paper1 jorc2 author1 date1 volume1 issue1 10-11 1.10
@@ -185,21 +17,21 @@ paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 
-Test å‰æž—å¤§å­¦ å›½å®¶çº?2222 0.01
-è“æ¡¥æ?å‰æž—çœè®¡ç®—æœºåä¼š çœçº§ 4.9 2.00
+Test ¼ªÁÖ´óÑ§ ¹ú¼Ò¼¶ 2222 0.01
+À¶ÇÅ±­ ¼ªÁÖÊ¡¼ÆËã»úÐ­»á Ê¡¼¶ 4.9 2.00
+À¶ÇÅ±­ ¼ªÁÖÊ¡¼ÆËã»úÐ­»á Ê¡¼¶ 4.9 2.00
 
 10000001 101 0 2024 10001 10001 10001 10001 10000001
 2 2 2.0 2 1 2.0 2.0
+
+
+
+98765432 ²âÊÔÎÄ¼þ 0 2022 ²âÊÔ 11111 ²âÊÔ 11111 98765432
+
+
+
+11111115 ²âÊÔÄØ 0 2024 ²â²â²â ÊÇÊÇÊÇ ²â²â²â ÊÇÊÇÊÇ 11111115
 
 
 
