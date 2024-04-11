@@ -33,6 +33,11 @@ struct student_data
 	wchar_t original_college[100];//原学院(新建学生的话与college相同)
 	wchar_t original_major[100]; //原专业(新建学生的话与major相同)
 
+	double all_avg_score; //所有加权平均分
+	double all_avg_grid; //所有加权平均绩点
+	double req_avg_score; //必修加权平均分
+	double req_avg_grid; //必修加权平均绩点
+
 	wchar_t password[100]; //密码(新建学生的话为学号,要转换类型)
 };
 
@@ -118,10 +123,13 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 
-int AllGrid(Crsnode* crss);
+double AllGrid(Node* crss);
 
-int MustGrid(Crsnode* crss);
+double MustGrid(Node* crss);
 
+double AllScore(Node* Crs);
+
+double MustScore(Node* Crs);
 
 bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor); // 添加学生（不包含课程）
 

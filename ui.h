@@ -426,7 +426,7 @@ public:
 					//	outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, tempText.c_str());
 					//}
 					//else {
-						outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
+					outtextxy(cx - colWidth[c] + 5, ry - textHeight + (textHeight - textheight(data[0][0].c_str())) / 2, data[r + offset][c].c_str());
 					//}
 				}
 			}
@@ -528,6 +528,54 @@ private:
 };
 
 
+class Chart {
+private:
+	int x, y;
+	int width, height;
+	vector<vector<wstring>> data;
+	COLORREF bkColor;
+	int colWidth;
+
+public:
+	Chart(int _x, int _y, int _width, int _height, const vector<vector<wstring>>& _data) {
+		x = _x;
+		y = _y;
+		width = _width;
+		height = _height;
+		data = _data;
+		bkColor = getbkcolor();
+		draw();
+	}
+	void draw() {
+		setfillcolor(bkColor);
+		setlinecolor(WHITE);
+		setfillcolor(bkColor);
+		//fillroundrect(x, y, x + width, y + height, 10, 10); // 图表外框
+
+
+	}
+	void drawText(int _x, int _y, wstring _text) { // 竖直绘制文字
+
+	}
+	void drawCol() { //画每列
+		int cnt = data.size();
+		colWidth = width / cnt;
+		width = colWidth * cnt;
+	}
+	void drawYandLine() { // 画y轴
+		//int maxNum = 1;
+		//for (auto& numStr : data[1]) {
+		//	maxNum = max(maxNum, stof(numStr));
+		//}
+		int maxNum = 100;
+		int rowHeight = height / maxNum;
+		line(x, y, x, y + height);
+	/*	for(int i = y + height; i >= )*/
+
+
+	}
+};
+
 
 
 
@@ -538,7 +586,7 @@ void testUI();
 void loginUI();
 void menuUI();
 void allStuUI();
-void StuUI(Node* Crs,List allStuList, wchar_t* pname, int* pid);
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid);
 void allCrsUI();
 void CrsUI(Cpnode cphead, Cpnode cplist);
 void allQualityUI();

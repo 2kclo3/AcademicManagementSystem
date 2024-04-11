@@ -11,7 +11,7 @@
 //感觉，修改课程可以放到查看后的界面里
 //学年有区间吗
 
-int main(void) 
+int mainZZZZ(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出

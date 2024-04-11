@@ -97,12 +97,13 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 
 //平均绩点(所有）
-int AllGrid(Crsnode* crss){
-	int number = 0;
-	int allcredit = 0;
-	Crsnode* crs = crss;
-	for (; crs->crs_next != NULL; number++) {
-		allcredit += crs->score.credit;
+double AllGrid(Node* Crs){
+	double allcredit = 0;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+	Crsnode* tmp2 = Crs->item.crslist->crs_next;
+	for (; tmp1 != NULL; ) {
+		allcredit += tmp1->score.credit;
+		tmp1 = tmp1->crs_next;
 	}
 
 	//防止课程不够
@@ -111,24 +112,32 @@ int AllGrid(Crsnode* crss){
 	}
 
 
-	int result = 0;
-	for (; crss->crs_next != NULL; number++) {
-		result += crss->score.grid * (crss->score.credit / allcredit);
+	double result = 0;
+	for (; tmp2 != NULL; ) {
+		result += tmp2->score.grid * (tmp2->score.credit);
+		tmp2 = tmp2->crs_next;
 	}
-	return result;
+	return result/allcredit;
 }
 
-int MustGrid(Crsnode* crss) {
-	int number = 0;
-	int allcredit = 0;
-	Crsnode* crs = crss;
-	for (; crs->crs_next != NULL; number++) {
-		if (crs->score.course_nature == 1) {
-			allcredit += crs->score.credit;
+double MustGrid(Node* Crs) {
+	double number = 0;
+	double allcredit = 0;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+	Crsnode* tmp2 = Crs->item.crslist->crs_next;
+
+
+	for (; tmp1 != NULL; ) {
+
+		if (tmp1->score.course_nature == 1) {
+			allcredit += tmp1->score.credit;
+			tmp1 = tmp1->crs_next;
 		}
 		else {
+			tmp1 = tmp1->crs_next;
 			continue;
 		}
+
 	}
 		
 		//防止课程不够
@@ -137,19 +146,84 @@ int MustGrid(Crsnode* crss) {
 	}
 
 
-	int result = 0;
-	for (; crss->crs_next != NULL; number++) {
-		if (crs->score.course_nature == 1) {
-			result += crss->score.grid * (crss->score.credit / allcredit);
+	double result = 0;
+	for (; tmp2 != NULL; ) {
+		if (tmp2->score.course_nature == 1) {
+			result += tmp2->score.grid * (tmp2->score.credit);
+			tmp2 = tmp2->crs_next;
 		}
 		else {
+			tmp2 = tmp2->crs_next;
 			continue;
 		}
-	}
 
-		return result;
+	}
+	return result / allcredit;
 }
 
+double AllScore(Node* Crs) {
+	double allcredit = 0;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+	Crsnode* tmp2 = Crs->item.crslist->crs_next;
+	for (; tmp1 != NULL; ) {
+		allcredit += tmp1->score.credit;
+		tmp1 = tmp1->crs_next;
+	}
+
+	//防止课程不够
+	if (allcredit == 0) {
+		return -1;
+	}
+
+
+	double result = 0;
+	for (; tmp2 != NULL; ) {
+		result += tmp2->score.score * (tmp2->score.credit);
+		tmp2 = tmp2->crs_next;
+	}
+	return result / allcredit;
+}
+
+double MustScore(Node* Crs) {
+	double number = 0;
+	double allcredit = 0;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+	Crsnode* tmp2 = Crs->item.crslist->crs_next;
+
+
+	for (; tmp1 != NULL; ) {
+
+		if (tmp1->score.course_nature == 1) {
+			allcredit += tmp1->score.credit;
+			tmp1 = tmp1->crs_next;
+		}
+		else {
+			tmp1 = tmp1->crs_next;
+			continue;
+		}
+
+	}
+
+	//防止课程不够
+	if (allcredit == 0) {
+		return -1;
+	}
+
+
+	double result = 0;
+	for (; tmp2 != NULL; ) {
+		if (tmp2->score.course_nature == 1) {
+			result += tmp2->score.score * (tmp2->score.credit);
+			tmp2 = tmp2->crs_next;
+		}
+		else {
+			tmp2 = tmp2->crs_next;
+			continue;
+		}
+
+	}
+	return result / allcredit;
+}
 
 // 排序总学生链表(按照学号来排序）
 void sortStuaccID(List* plist) {
@@ -240,6 +314,10 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	wcscpy(pnew->item.data.original_college, pcollege);
 	wcscpy(pnew->item.data.original_major, pmajor);
 	wcscpy(pnew->item.data.password, to_wstring(pnew->item.data.ID).c_str());
+	pnew->item.data.all_avg_score = 0;
+	pnew->item.data.all_avg_grid = 0;
+	pnew->item.data.req_avg_score = 0;
+	pnew->item.data.req_avg_grid = 0;
 
 
 	ptmp->next = pnew;

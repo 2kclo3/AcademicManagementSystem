@@ -17,10 +17,10 @@ int mainJi1(void) {
 	//printStu(stu);
 	int all, must;
 
-	all = AllGrid(stuu->item.crslist->crs_next);
+	//all = AllGrid(stuu->item.crslist->crs_next);
 	//must = MustGrid(stu->item.crslist);
 
-	wprintf(L"%d",all);
+	//wprintf(L"%d",all);
 	wprintf(L"111");
 	/*wchar_t name[30];
 	int id;

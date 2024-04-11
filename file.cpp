@@ -39,7 +39,7 @@ List readStu(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %d %d %s %s %s %s %s",
+		if (swscanf(line, L"%d %s %d %d %s %s %s %s %s %lf %lf %lf %lf",
 			&tnode->item.data.ID,
 			&tnode->item.data.name,
 			&tnode->item.data.gender,
@@ -48,9 +48,14 @@ List readStu(const char* file_name) {
 			&tnode->item.data.major,
 			&tnode->item.data.original_college,
 			&tnode->item.data.original_major,
-			&tnode->item.data.password
+			&tnode->item.data.password,
 
-		) == 9) { // 读取学生信息
+			&tnode->item.data.all_avg_score,
+			&tnode->item.data.all_avg_grid,
+			&tnode->item.data.req_avg_score,
+			&tnode->item.data.req_avg_grid
+
+		) == 13) { // 读取学生信息
 
 
 
@@ -227,7 +232,7 @@ Cpnode readCrs(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf",
+		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf %d %d %lf %d %lf",
 			&tcnode->cnum,
 			&tcnode->cname,
 			&tcnode->character,
@@ -235,8 +240,13 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->totscore,
 			&tcnode->averscore,
 			&tcnode->totGPA,
-			&tcnode->averGPA
-		) == 8) { // 读取课程信息
+			&tcnode->averGPA,
+			&tcnode->SchYear,
+			&tcnode->PassNum,
+			&tcnode->PassRate,
+			&tcnode->ExcelNum,
+			&tcnode->ExcelRate
+		) == 13) { // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
 			if (tcnode->sphead == NULL) {
@@ -309,7 +319,7 @@ bool saveStu(List StuList, const char* file_name) {
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		fwprintf(fp, L"%d %s %d %d %s %s %s %s %s\n",
+		fwprintf(fp, L"%d %s %d %d %s %s %s %s %s %.2lf %.4lf %.2lf %.4lf\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
 			pStu->item.data.gender,
@@ -318,7 +328,13 @@ bool saveStu(List StuList, const char* file_name) {
 			pStu->item.data.major,
 			pStu->item.data.original_college,
 			pStu->item.data.original_major,
-			pStu->item.data.password
+			pStu->item.data.password, 
+
+			pStu->item.data.all_avg_score,
+			pStu->item.data.all_avg_grid,
+			pStu->item.data.req_avg_score,
+			pStu->item.data.req_avg_grid
+
 		); // 写入
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始
@@ -385,7 +401,7 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf\n",
+		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,
@@ -393,7 +409,13 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 			pCrs->totscore,
 			pCrs->averscore,
 			pCrs->totGPA,
-			pCrs->averGPA); // 写入
+			pCrs->averGPA,
+			pCrs->SchYear,
+			pCrs->PassNum,
+			pCrs->PassRate,
+			pCrs->ExcelNum,
+			pCrs->ExcelRate
+		); // 写入
 
 		Spnode pstu = pCrs->sphead->next; // 从下一个学生节点开始
 		while (pstu != NULL) {
