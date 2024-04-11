@@ -62,7 +62,8 @@ void allStuUI() {
 	Button addBtn(-50, 230, 330, 60, L"   添加", 1);//
 	Button modifyBtn(-50, 310, 330, 60, L"   修改", 1);
 	Button deleteBtn(-50, 390, 330, 60, L"   删除", 1);
-	Button sortBtn(-50, 470, 330, 60, L"   排序", 1);
+	Button sortBtn(0, 470, 120, 60, L"排序(ID)", 1);//////////////
+	Button sortyearBtn(140, 470, 120, 60, L"排序(year)", 1);////////////////////
 	Button exportBtn(-50, 550, 330, 60, L"   导出", 1);
 	Button inportBtn(-50, 630, 330, 60, L"   导入", 1);
 	Button backButton(-50, 730, 330, 60, L"   返回", 0);
@@ -102,6 +103,7 @@ void allStuUI() {
 				modifyBtn.move(-500, 310);
 				deleteBtn.move(-500, 390);
 				sortBtn.move(-500, 470);
+				sortyearBtn.move(-500, 470);
 				exportBtn.move(-500, 550);
 				inportBtn.move(-500, 630);
 				backButton.move(-500, 730);
@@ -230,7 +232,8 @@ void allStuUI() {
 				addBtn.move(-50, 230);
 				modifyBtn.move(-50, 310);
 				deleteBtn.move(-50, 390);
-				sortBtn.move(-50, 470);
+				sortBtn.move(0, 470);/////////
+				sortyearBtn.move(140, 470);
 				exportBtn.move(-50, 550);
 				inportBtn.move(-50, 630);
 				backButton.move(-50, 730);
@@ -301,7 +304,8 @@ void allStuUI() {
 						addBtn.move(-50, 230);
 						modifyBtn.move(-50, 310);
 						deleteBtn.move(-50, 390);
-						sortBtn.move(-50, 470);
+						sortBtn.move(0, 470);
+						sortyearBtn.move(140, 470);
 						exportBtn.move(-50, 550);
 						inportBtn.move(-50, 630);
 						backButton.move(-50, 730);
@@ -331,6 +335,7 @@ void allStuUI() {
 					modifyBtn.move(-500, 310);
 					deleteBtn.move(-500, 390);
 					sortBtn.move(-500, 470);
+					sortyearBtn.move(-500, 470);
 					exportBtn.move(-500, 550);
 					inportBtn.move(-500, 630);
 					backButton.move(-500, 730);
@@ -434,7 +439,8 @@ void allStuUI() {
 					addBtn.move(-50, 230);
 					modifyBtn.move(-50, 310);
 					deleteBtn.move(-50, 390);
-					sortBtn.move(-50, 470);
+					sortBtn.move(0, 470);
+					sortyearBtn.move(140, 470);
 					exportBtn.move(-50, 550);
 					inportBtn.move(-50, 630);
 					backButton.move(-50, 730);
@@ -479,7 +485,7 @@ void allStuUI() {
 			}
 
 			if (sortBtn.mouseClick(msg)) {
-				sortStu(&allStuList);
+				sortStuaccID(&allStuList);
 
 				// 保存
 				saveStu(allStuList, STU_FILE);
@@ -487,6 +493,19 @@ void allStuUI() {
 				// 刷新表格
 				showAllStu(allStuList, allStuData, L"");
 				allStuTable.setData(allStuData);
+			}
+	
+			if (sortyearBtn.mouseClick(msg)) {
+
+				sortStuaccyear(&allStuList);
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
+				// 刷新表格
+				showAllStu(allStuList, allStuData, L"");
+				allStuTable.setData(allStuData);
+
 			}
 
 			if (exportBtn.mouseClick(msg)) {
@@ -533,7 +552,7 @@ void allStuUI() {
 
 
 
-	void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
+void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 
 
@@ -555,26 +574,44 @@ void allStuUI() {
 		TextBox course_natureBox(-500, 250, 290, L"课程性质", L"");
 		TextBox creditBox(-500, 300, 290, L"学分", L"");
 		TextBox gridBox(-500, 350, 290, L"绩点", L"");
-		TextBox semesterBox(-500, 400, 290, L"学期", L"");//////////////////////////////////////
+		TextBox semesterBox(-500, 400, 290, L"学期", L"");
+
+		TextBox allButton(-500, 330, 290 ,L"   所有", L"");
+		TextBox mustButton(-500, 380, 290, L"   必修", L"");
 
 
 		//按钮
 		Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
 
-		wchar_t aa[30];
-		getTextInBox(aa, std::to_wstring(*pid).c_str());
+		wchar_t aa[100];
+		wchar_t bb[100];
+		wchar_t cc[100];
+		getTextInBox(cc, std::to_wstring(*pid).c_str());//防止乱码的转化
+		getTextInBox(aa, (wstring(L"学号：") + cc).c_str());
+		getTextInBox(bb, (wstring(L"姓名：") + pname).c_str());
 
-		Button idBtn(40, 100, 200, 50,aa, 1);
-		Button nameBtn(40, 180, 200, 50, pname, 1);
+		Button idBtn(40, 100, 200, 50, aa, 1);
+		Button nameBtn(40, 180, 200, 50, bb, 1);
+		//(wstring(L"学号：")+aa).c_str()
+		// (wstring(L"姓名：") + pname).c_str()
+
+
+
 
 		Button addCrsBtn(-50, 300, 330, 60, L"   添加课程", 1);
 		Button modifyCrsBtn(-50, 380, 330, 60, L"   修改课程", 1);
 		Button deleteCrsBtn(-50, 460, 330, 60, L"   删除课程", 1);
+		Button GridCrsBtn(-50, 540, 330, 60, L"   查看绩点", 1);
+
 		Button backButton(-50, 700, 330, 60, L"   返回", 0);
+
 
 		Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
 		Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
 		Button cancelButton(-500, 660, 290, 60, L"取消", 0);
+
+
+
 
 		// 处理鼠标事件
 		ExMessage msg;
@@ -620,6 +657,7 @@ void allStuUI() {
 					addCrsBtn.move(-500, 300);
 					modifyCrsBtn.move(-500, 380);
 					deleteCrsBtn.move(-500, 460);
+					GridCrsBtn.move(-500, 540);
 					backButton.move(-500, 700);
 
 					//显示
@@ -636,7 +674,6 @@ void allStuUI() {
 
 				}
 
-				//
 				if (addOKButton.mouseClick(msg)) {
 					wchar_t course_id[10];//课程号
 					wchar_t course_name[100];//课程名
@@ -702,6 +739,7 @@ void allStuUI() {
 						addCrsBtn.move(-50, 300);
 						modifyCrsBtn.move(-50, 380);
 						deleteCrsBtn.move(-50, 460);
+						GridCrsBtn.move(-500, 540);
 						backButton.move(-50, 700);
 
 
@@ -733,6 +771,7 @@ void allStuUI() {
 					semesterBox.move(-500, 580);
 
 					addOKButton.move(-500, 600);
+					modifyOKButton.move(-500, 650);
 					cancelButton.move(-500, 700);
 
 					//显示
@@ -743,6 +782,8 @@ void allStuUI() {
 					addCrsBtn.move(-50, 300);
 					modifyCrsBtn.move(-50, 380);
 					deleteCrsBtn.move(-50, 460);
+					GridCrsBtn.move(-50, 540);
+
 					backButton.move(-50, 700);
 
 					// 更改标题
@@ -756,7 +797,8 @@ void allStuUI() {
 					if (allCrsINStuTable.getSelectedRow() == 0)
 					{
 						MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
-					}else
+					}
+					else
 					{
 						// 更改标题
 						titleText.setText(L"修改课程");
@@ -773,6 +815,7 @@ void allStuUI() {
 						addCrsBtn.move(-500, 300);
 						modifyCrsBtn.move(-500, 380);
 						deleteCrsBtn.move(-500, 460);
+						GridCrsBtn.move(-500, 540);
 						backButton.move(-500, 700);
 
 						//显示
@@ -787,10 +830,22 @@ void allStuUI() {
 						modifyOKButton.move(10, 650);
 						cancelButton.move(10, 730);
 
+						// 获取当前行
+						int selectedRow = allCrsINStuTable.getSelectedRow(); 
+						vector<std::wstring> selectedData = allCrsINStuData[selectedRow];
+
+						//文本框默认内容
+						course_idBox.setText(selectedData[0].c_str());
+						course_nameBox.setText(selectedData[1].c_str());
+						scoreBox.setText(selectedData[2].c_str());
+						course_natureBox.setText(selectedData[6].c_str());
+						creditBox.setText(selectedData[4].c_str());
+						gridBox.setText(selectedData[5].c_str());
+						semesterBox.setText(selectedData[3].c_str());
+
 					}
 				}
 
-				//
 				if (modifyOKButton.mouseClick(msg)) {
 
 					wchar_t course_id[10];//课程号
@@ -865,6 +920,7 @@ void allStuUI() {
 						addCrsBtn.move(-50, 300);
 						modifyCrsBtn.move(-50, 380);
 						deleteCrsBtn.move(-50, 460);
+						GridCrsBtn.move(-500, 540);
 						backButton.move(-50, 700);
 
 
@@ -878,7 +934,7 @@ void allStuUI() {
 					}
 					else
 					{
-						int result = MessageBox(GetHWnd(), L"确定删除这名学生吗?", L"删除学生", MB_YESNO | MB_ICONQUESTION);
+						int result = MessageBox(GetHWnd(), L"确定删除这名课程吗?", L"删除课程", MB_YESNO | MB_ICONQUESTION);
 
 						if (result == IDYES) {
 							wchar_t pcourse_id[10];//待搜索课程号
@@ -905,6 +961,7 @@ void allStuUI() {
 							addCrsBtn.move(-50, 300);
 							modifyCrsBtn.move(-50, 380);
 							deleteCrsBtn.move(-50, 460);
+							GridCrsBtn.move(-500, 540);
 							backButton.move(-50, 700);
 
 							//隐藏
@@ -924,10 +981,50 @@ void allStuUI() {
 					}
 				}
 
+				if (GridCrsBtn.mouseClick(msg)) {
+					// 更改标题
+					titleText.setText(L"个人成绩");
+
+
+					// 使表格不可变化
+					allCrsINStuTable.canChange = false;
+
+
+					//隐藏
+
+					addCrsBtn.move(-500, 300);
+					modifyCrsBtn.move(-500, 380);
+					deleteCrsBtn.move(-500, 460);
+					GridCrsBtn.move(-500, 540);
+
+					backButton.move(-500, 700);
+
+					//显示
+
+					allButton.move(0, 300);
+					mustButton.move(0, 380);
+
+					cancelButton.move(10, 730);
+
+					//计算绩点
+					int all, must;
+
+					all = AllGrid(Crs->item.crslist);
+					must = MustGrid(Crs->item.crslist);
+					
+					allButton.setText(std::to_wstring(2).c_str());
+					mustButton.setText(std::to_wstring(5).c_str());
+
+				}
+
+
+
+
 				if (backButton.mouseClick(msg))
 				{
 					allStuUI();
 				}
+
 
 
 				//表格鼠标滑动与点击

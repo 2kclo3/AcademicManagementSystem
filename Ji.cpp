@@ -5,11 +5,22 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int mainji(void) {
+int mainJi(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	List stu = readStu(STU_FILE);
-	printStu(stu);
-	sortStu(&stu);
+
+	wchar_t name[30];
+	wcscpy(name, L"李四");
+	int id = 55230002;
+
+	Node* stuu = searchStu(&stu, name,id);
+	//printStu(stu);
+	int all, must;
+
+	all = AllGrid(stuu->item.crslist->crs_next);
+	//must = MustGrid(stu->item.crslist);
+
+	wprintf(L"%d",all);
 	wprintf(L"111");
 	/*wchar_t name[30];
 	int id;
@@ -31,8 +42,8 @@ int mainji(void) {
 	////modifyCrsInStu(testcrs, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
 	//addCrsToStu(test, pcourse_id, pcourse_name, pscore, psemester, pcourse_nature, pcredit, pgrid);
 
-	printStu(stu);
-	saveStu(stu, STU_FILE);
+	//printStu(stu);
+	//saveStu(stu, STU_FILE);
 	return 0;
 }
 
