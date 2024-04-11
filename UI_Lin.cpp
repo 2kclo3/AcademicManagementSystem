@@ -1,7 +1,7 @@
 #pragma warning(disable:4996)
 
 #include "main.h"
-#define STU_FILE ".\\data\\Student0.txt"
+#define STU_FILE ".\\data\\Student - 副本.txt"
 #define CRS_FILE ".\\data\\Course.txt"
 
 
@@ -110,7 +110,6 @@ void loginUI() {
 					}				
 					Stu = Stu->next;
 				}
-				wprintf(L"%s\n", tmp_password);
 
 				if (Stu == NULL) { //没有学生ID与之对应
 					MessageBox(GetHWnd(), L"不存在这个账号！请重新输入！", L"错误!", MB_ICONWARNING);
@@ -199,7 +198,7 @@ void Modify_Password_UI(const wchar_t* account,Node* Stu) {
 	wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
 	IDText.setText(show_ID.c_str());
 
-	Text nameText(450, 220, L"", 32);
+	Text nameText(450, 230, L"", 32);
 	wstring tmp_name = Stu->item.data.name;
 	wstring show_name = L"姓名：" + tmp_name;
 	nameText.setText(show_name.c_str());
