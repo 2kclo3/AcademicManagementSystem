@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLiuLLL(void) {
+int mainLIULIU(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -22,6 +22,9 @@ int mainLiuLLL(void) {
 
 	Cpnode tmpCrs = readCrs(CRS_FILE);
 	saveCrs(tmpCrs, CRS_FILE);
+
+	List tmpStu = readStu(STU_FILE);
+	saveStu(tmpStu, STU_FILE);
 
 
 	//testUI();

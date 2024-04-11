@@ -9,7 +9,7 @@
 //有的地方先隐藏了cancelButton，后显示了cancelButton，重来，之后小优化一下
 //有的标题太长，显示不出来，以后小优化一下，先解决主要矛盾
 
-int main(void) 
+int mainZZZZ(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出

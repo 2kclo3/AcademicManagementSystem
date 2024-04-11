@@ -33,6 +33,11 @@ struct student_data
 	wchar_t original_college[100];//原学院(新建学生的话与college相同)
 	wchar_t original_major[100]; //原专业(新建学生的话与major相同)
 
+	double all_avg_score; //所有加权平均分
+	double all_avg_grid; //所有加权平均绩点
+	double req_avg_score; //必修加权平均分
+	double req_avg_grid; //必修加权平均绩点
+
 	wchar_t password[100]; //密码(新建学生的话为学号,要转换类型)
 };
 

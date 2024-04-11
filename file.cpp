@@ -39,7 +39,7 @@ List readStu(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %d %d %s %s %s %s %s",
+		if (swscanf(line, L"%d %s %d %d %s %s %s %s %s %lf %lf %lf %lf",
 			&tnode->item.data.ID,
 			&tnode->item.data.name,
 			&tnode->item.data.gender,
@@ -48,9 +48,14 @@ List readStu(const char* file_name) {
 			&tnode->item.data.major,
 			&tnode->item.data.original_college,
 			&tnode->item.data.original_major,
-			&tnode->item.data.password
+			&tnode->item.data.password,
 
-		) == 9) { // 读取学生信息
+			&tnode->item.data.all_avg_score,
+			&tnode->item.data.all_avg_grid,
+			&tnode->item.data.req_avg_score,
+			&tnode->item.data.req_avg_grid
+
+		) == 13) { // 读取学生信息
 
 
 
@@ -314,7 +319,7 @@ bool saveStu(List StuList, const char* file_name) {
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		fwprintf(fp, L"%d %s %d %d %s %s %s %s %s\n",
+		fwprintf(fp, L"%d %s %d %d %s %s %s %s %s %.2lf %.4lf %.2lf %.4lf\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
 			pStu->item.data.gender,
@@ -323,7 +328,13 @@ bool saveStu(List StuList, const char* file_name) {
 			pStu->item.data.major,
 			pStu->item.data.original_college,
 			pStu->item.data.original_major,
-			pStu->item.data.password
+			pStu->item.data.password, 
+
+			pStu->item.data.all_avg_score,
+			pStu->item.data.all_avg_grid,
+			pStu->item.data.req_avg_score,
+			pStu->item.data.req_avg_grid
+
 		); // 写入
 
 		Crsnode* pcrs = pStu->item.crslist->crs_next; // 从下一个课程节点开始

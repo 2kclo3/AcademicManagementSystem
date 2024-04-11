@@ -314,6 +314,10 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	wcscpy(pnew->item.data.original_college, pcollege);
 	wcscpy(pnew->item.data.original_major, pmajor);
 	wcscpy(pnew->item.data.password, to_wstring(pnew->item.data.ID).c_str());
+	pnew->item.data.all_avg_score = 0;
+	pnew->item.data.all_avg_grid = 0;
+	pnew->item.data.req_avg_score = 0;
+	pnew->item.data.req_avg_grid = 0;
 
 
 	ptmp->next = pnew;
