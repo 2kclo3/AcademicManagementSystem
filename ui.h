@@ -150,7 +150,7 @@ public:
 		_tcscpy(text, _text);
 		draw();
 	}
-	
+
 	void move(int _x, int _y) {
 		setfillcolor(getbkcolor());
 		settextstyle(size, 0, L"Î¢ÈíÑÅºÚ");
@@ -535,6 +535,7 @@ private:
 	vector<vector<wstring>> data;
 	COLORREF bkColor;
 	int colWidth;
+	int rowHeight;
 
 public:
 	Chart(int _x, int _y, int _width, int _height, const vector<vector<wstring>>& _data) {
@@ -549,28 +550,61 @@ public:
 	void draw() {
 		setfillcolor(bkColor);
 		setlinecolor(WHITE);
-		setfillcolor(bkColor);
+		setfillcolor(WHITE);
+
+		setbkmode(TRANSPARENT);
+		settextcolor(WHITE);
+		settextstyle(24, 0, L"Î¢ÈíÑÅºÚ");
 		//fillroundrect(x, y, x + width, y + height, 10, 10); // Í¼±íÍâ¿ò
+
+		drawYandLine();
+		drawCol();
+
+		for (int i = 0; i < data[1].size() - 1; i++) {
+			line(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight,
+				x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight
+				);
+			solidroundrect(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i]) / 10.0 * rowHeight - 5,
+				x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i]) / 10.0 * rowHeight + 5,
+				10, 10);
+			solidroundrect(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 5,
+				x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight + 5,
+				10, 10);
+
+		}
 
 
 	}
 	void drawText(int _x, int _y, wstring _text) { // ÊúÖ±»æÖÆÎÄ×Ö
-
+		for (int i = 0; i < _text.length(); i++) {
+			outtextxy(_x, _y + i * textheight(L"²â"), _text[i]);
+		}
 	}
 	void drawCol() { //»­Ã¿ÁÐ
-		int cnt = data.size();
+		int cnt = data[0].size();
 		colWidth = width / cnt;
-		width = colWidth * cnt;
+		//width = colWidth * cnt;
+		line(x, y + height, x + width, y + height);
+		for (int i = 0; i < data[0].size(); i++) {
+			drawText(x + i * colWidth + colWidth / 2, y + height + 5, data[0][i]);
+
+		}
 	}
 	void drawYandLine() { // »­yÖá
-		//int maxNum = 1;
-		//for (auto& numStr : data[1]) {
-		//	maxNum = max(maxNum, stof(numStr));
-		//}
-		int maxNum = 100;
-		int rowHeight = height / maxNum;
+		int maxNum = 1;
+		for (auto& numStr : data[1]) {
+			maxNum = max(maxNum, stof(numStr));
+		}
+		//int maxNum = 100;
+		rowHeight = 10.0 * height / maxNum;
 		line(x, y, x, y + height);
-	/*	for(int i = y + height; i >= )*/
+		int num = 0;
+		for (int i = y + height; i >= y; i -= rowHeight) {
+			line(x - 5, i, x + 10, i);
+			outtextxy(x - 30, i - textheight(L"1") / 2, to_wstring(num).c_str());
+			num += 10;
+		}
+
 
 
 	}
@@ -594,6 +628,7 @@ void allQualityUI();
 void allQualityUI();
 void changeMajorUI();
 void settingsUI();
+void chartUI(vector<vector<wstring>> data);
 
 
 

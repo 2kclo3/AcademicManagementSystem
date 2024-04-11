@@ -6,30 +6,38 @@
 //Ò»°ãÀ´Ëµ£¬»á³öÏÖÁ½¸öÏàÍ¬Ğ¡Êı²»ÏàµÈµÄÇé¿ö£¬µ«³ÌĞòÖĞÈ´Ã»ÓĞ£¬²»ÖªµÀÎªÊ²Ã´£¬±£³Ö¾¯Ìè
 
 
-
 void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max)
 {
 	Cpnode cplist = cphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
 	data.clear(); // Çå¿ÕÊı×é
-	data.push_back(vector<wstring>(6, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
+	data.push_back(vector<wstring>(9, L""));
 
 	//³õÊ¼»¯±íÍ·
 	data[0][0] = L"¿Î³ÌÃû³Æ";
 	data[0][1] = L"¿Î³ÌºÅ";
 	data[0][2] = L"¿Î³ÌĞÔÖÊ";
-	data[0][3] = L"×ÜÈËÊı";
-	data[0][4] = L"Æ½¾ù³É¼¨";
-	data[0][5] = L"Æ½¾ùGPA";
+	data[0][3] = L"Ñ§Äê";
+	data[0][4] = L"×ÜÈËÊı";
+	data[0][5] = L"Æ½¾ù³É¼¨";
+	data[0][6] = L"Æ½¾ù¼¨µã";
+	data[0][7] = L"¼°¸ñÂÊ";
+	data[0][8] = L"ÓÅĞãÂÊ";
 
 
 	int row = 1;
-	while (cplist != NULL)//±éÀúÁ´±íw
+	while (cplist != NULL)//±éÀúÁ´±í
 	{
 		// ¼ì²âÊÇ·ñÓĞËÑË÷´Ê
 		if (
 			wcsstr(cplist->cname, searchTerm) != NULL ||
 			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm) != NULL ||
-			wcsstr(cplist->character, searchTerm) != NULL
+			wcsstr(cplist->character, searchTerm) != NULL||
+			wcsstr(std::to_wstring(cplist->SchYear).c_str(), searchTerm) != NULL||
+			wcsstr(std::to_wstring(cplist->headcount).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->averscore).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->averGPA).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->PassRate).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->ExcelRate).c_str(), searchTerm) != NULL
 			)
 		{
 
@@ -37,25 +45,28 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 				op == 0 ||
 				(op == 1 && cplist->headcount >= min && cplist->headcount <= max) ||
 				(op == 2 && cplist->averscore >= min && cplist->averscore <= max) ||
-				(op == 3 && cplist->averGPA >= min && cplist->averGPA <= max)
+				(op == 3 && cplist->averGPA >= min && cplist->averGPA <= max)||
+				(op == 4 && cplist->SchYear >= min && cplist->SchYear <= max)||
+				(op == 5 && cplist->PassRate >= min && cplist->PassRate <= max)||
+				(op == 6 && cplist->ExcelRate >= min && cplist->ExcelRate <= max)
 				)
 			{
-				data.push_back(vector<std::wstring>(6, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
+				data.push_back(vector<std::wstring>(9, L""));
 
 				//Ã¿ĞĞµÄÄÚÈİ
 				data[row][0] = cplist->cname;
 				data[row][1] = std::to_wstring(cplist->cnum);
 				data[row][2] = cplist->character;
-				data[row][3] = std::to_wstring(cplist->headcount);
-				data[row][4] = std::to_wstring(cplist->averscore);
-				data[row][5] = std::to_wstring(cplist->averGPA);
-
+				data[row][3] = std::to_wstring(cplist->SchYear);
+				data[row][4] = std::to_wstring(cplist->headcount);
+				data[row][5] = std::to_wstring(cplist->averscore);
+				data[row][6] = std::to_wstring(cplist->averGPA);
+				data[row][7] = std::to_wstring(cplist->PassRate);
+				data[row][8] = std::to_wstring(cplist->ExcelRate);
 				row++; // ĞĞÊı+1
 			}
 		}
-
 		cplist = cplist->next; // ÒÆÏòÏÂÒ»¸ö½Úµã
-
 	}
 
 	return;
@@ -439,6 +450,10 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	cplist->totscore = 0;
 	cplist->averGPA = 0;
 	cplist->averscore = 0;
+	cplist->PassNum = 0;
+	cplist->PassRate = 0;
+	cplist->ExcelNum = 0;
+	cplist->ExcelRate = 0;
 	//³õÊ¼»¯
 
 	cplist->next = cphead->next;
@@ -474,11 +489,17 @@ int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// Î
 	cplist->totscore += splist->score;
 	cplist->totGPA += splist->GPA;
 	if (splist->score >= 90)
+	{
 		cplist->ExcelNum++;
+		cplist->ExcelRate = round(double(cplist->ExcelNum) / cplist->headcount * 10000)/10000;
+	}
 	if (splist->score >= 60)
+	{
 		cplist->PassNum++;
-	cplist->averscore = cplist->totscore / cplist->headcount;
-	cplist->averGPA = cplist->totGPA / cplist->headcount;
+		cplist->PassRate = round(double(cplist->PassNum) / cplist->headcount * 10000) / 10000;
+	}
+	cplist->averscore = round(cplist->totscore / cplist->headcount*1000)/1000;
+	cplist->averGPA = round(cplist->totGPA / cplist->headcount*1000)/1000;
 
 	return 1;
 }
@@ -512,8 +533,10 @@ int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* sname, int snum,
 		cplist->ExcelNum++;
 	if (splist->score >= 60)
 		cplist->PassNum++;
-	cplist->averscore = cplist->totscore / cplist->headcount;
-	cplist->averGPA = cplist->totGPA / cplist->headcount;
+	cplist->ExcelRate = round(double(cplist->ExcelNum) / cplist->headcount * 10000) / 10000;
+	cplist->PassRate = round(double(cplist->PassNum) / cplist->headcount * 10000) / 10000;
+	cplist->averscore = round(cplist->totscore / cplist->headcount * 1000) / 1000;
+	cplist->averGPA = round(cplist->totGPA / cplist->headcount * 1000) / 1000;
 
 	return 1;
 }
@@ -569,13 +592,19 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ıÄ³¸ö¿Î³ÌµÄÄ³Ñ
 	cplist->totscore -= splist->score;
 	cplist->totGPA -= splist->GPA;
 	if (splist->score >= 90)
+	{
 		cplist->ExcelNum--;
+		cplist->ExcelRate = round(double(cplist->ExcelNum) / cplist->headcount * 10000) / 10000;
+	}
 	if (splist->score >= 60)
+	{
 		cplist->PassNum--;
+		cplist->PassRate = round(double(cplist->PassNum) / cplist->headcount * 10000) / 10000;
+	}
 	if (cplist->headcount)
 	{
-		cplist->averscore = cplist->totscore / cplist->headcount;
-		cplist->averGPA = cplist->totGPA / cplist->headcount;
+		cplist->averscore = round(cplist->totscore / cplist->headcount * 1000) / 1000;
+		cplist->averGPA = round(cplist->totGPA / cplist->headcount * 1000) / 1000;
 	}
 	else
 	{
@@ -645,18 +674,30 @@ bool cmp_sortCrs(Cpnode cplist, int op)
 		return cplist->cnum < cplist->next->cnum;
 	case 2://°´¿Î³ÌºÅ½µĞò
 		return cplist->cnum > cplist->next->cnum;
-	case 3://°´×ÜÈËÊıÉıĞò
+	case 3://°´Ñ§ÄêÉıĞò
+		return cplist->SchYear < cplist->next->SchYear;
+	case 4://°´Ñ§Äê½µĞò
+		return cplist->SchYear > cplist->next->SchYear;
+	case 5://°´×ÜÈËÊıÉıĞò
 		return cplist->headcount < cplist->next->headcount;
-	case 4://°´×ÜÈËÊı½µĞò
+	case 6://°´×ÜÈËÊı½µĞò
 		return cplist->headcount > cplist->next->headcount;
-	case 5://°´Æ½¾ù³É¼¨ÉıĞò
+	case 7://°´Æ½¾ù³É¼¨ÉıĞò
 		return cplist->averscore < cplist->next->averscore;
-	case 6://°´Æ½¾ù³É¼¨½µĞò
+	case 8://°´Æ½¾ù³É¼¨½µĞò
 		return cplist->averscore > cplist->next->averscore;
-	case 7://°´Æ½¾ù¼¨µãÉıĞò
+	case 9://°´Æ½¾ù¼¨µãÉıĞò
 		return cplist->averGPA < cplist->next->averGPA;
-	case 8://°´Æ½¾ù¼¨µã½µĞò
+	case 10://°´Æ½¾ù¼¨µã½µĞò
 		return cplist->averGPA > cplist->next->averGPA;
+	case 11://°´¼°¸ñÂÊÉıĞò
+		return cplist->PassRate < cplist->next->PassRate;
+	case 12://°´¼°¸ñÂÊ½µĞò
+		return cplist->PassRate > cplist->next->PassRate;
+	case 13://°´ÓÅĞãÂÊÉıĞò
+		return cplist->ExcelRate < cplist->next->ExcelRate;
+	case 14://°´ÓÅĞãÂÊ½µĞò
+		return cplist->ExcelRate > cplist->next->ExcelRate;
 	}
 }
 void sortCrs(Cpnode cphead, int op)
