@@ -6,7 +6,7 @@
 //Ò»°ãÀ´Ëµ£¬»á³öÏÖÁ½¸öÏàÍ¬Ð¡Êý²»ÏàµÈµÄÇé¿ö£¬µ«³ÌÐòÖÐÈ´Ã»ÓÐ£¬²»ÖªµÀÎªÊ²Ã´£¬±£³Ö¾¯Ìè
 
 
-//´«¿Î³ÌÁ´±íÍ·½Úµã
+
 void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max)
 {
 	Cpnode cplist = cphead->next; //´ÓµÚÒ»¸öÓÐÊý¾Ý½Úµã¿ªÊ¼
@@ -61,7 +61,6 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 	return;
 }
 
-//´«Ä³¿Î³ÌÏÂÑ§ÉúÁ´±íÍ·½Úµã
 void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm,int op,int min,int max) // ÏÔÊ¾µ¥¸ö¿Î³ÌÐÅÏ¢£¨°üº¬¸Ã¿Î³ÌËùÓÐÑ§ÉúµÄ³É¼¨£©
 {
 	Spnode splist = cplist->sphead->next; //´ÓµÚÒ»¸öÓÐÊý¾Ý½Úµã¿ªÊ¼
@@ -108,277 +107,276 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 	return;
 }
 
-void menu()
-{
-	Cpnode cphead = (Cpnode)malloc(sizeof(_Cnode));
-	cphead->next = NULL;
-	while (1)
-	{
-		fflush(stdin);
-		system("CLS");
-		showMenu(L"ÇëÑ¡Ôñ¹¦ÄÜ", 8, L"ÍË³ö", L"²é¿´", L"Ìí¼Ó¿Î³Ì", L"ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨", L"ÐÞ¸Ä¿Î³Ì", L"ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨", L"É¾³ý¿Î³Ì", L"É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨");
-		int op = getNumber(10);
-		switch (op)
-		{
-		case 1://ÍË³ö
-			return;
-		case 2://²é¿´
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			look(cplist);
-
-			break;
-		}
-		case 3://Ìí¼Ó¿Î³Ì
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wchar_t Character[10];
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			wcout << L"¿Î³ÌÐÔÖÊ£º"; wcin >> Character;
-			wcout << endl;
-
-			int flag = addCrs(cphead, Cname, Cnum, Character,0);////////////////////////////////////////////////
-			if (flag == -1)
-			{
-				wcout << L"ÒÑÓÐ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-			else if (flag == 0)
-			{
-				wcout << L"ÄÚ´æ·ÖÅäÊ§°Ü" << endl;
-				system("pause");
-				exit(0);
-			}
-			else if (flag == 1)
-			{
-				wcout << L"Ìí¼Ó³É¹¦" << endl;
-				system("pause");
-				break;
-			}
-		}
-		case 4://ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			wchar_t Sname[10];
-			int Snum;
-			double Score;
-			wcout << L"Ñ§ÉúÐÕÃû£º"; wcin >> Sname;
-			wcout << endl;
-			wcout << L"Ñ§ºÅ£º"; wcin >> Snum;
-			wcout << endl;
-			wcout << L"³É¼¨£º"; wcin >> Score;
-			wcout << endl;
-
-			int flag = addStuInCrs(cplist, Sname, Snum, Score);
-			if (flag == -1)
-			{
-				wcout << L"ÒÑÓÐ´ËÈË" << endl;
-				system("pause");
-				break;
-			}
-			else if (flag == 0)
-			{
-				wcout << L"ÄÚ´æ·ÖÅäÊ§°Ü" << endl;
-				system("pause");
-				exit(0);
-			}
-			else if (flag == 1)
-			{
-				wcout << L"Ìí¼Ó³É¹¦" << endl;
-				system("pause");
-				break;
-			}
-		}
-		case 5://ÐÞ¸Ä¿Î³Ì
-		{
-			system("CLS");
-			wchar_t original_Cname[10];
-			int original_Cnum;
-			wcout << L"Ô­¿Î³ÌÃû³Æ£º"; wcin >> original_Cname;
-			wcout << endl;
-			wcout << L"Ô­¿Î³ÌºÅ£º"; wcin >> original_Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, original_Cname, original_Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			wchar_t Cname[10];
-			int Cnum;
-			wchar_t Character[10];
-			wcout << L"Ô­¿Î³ÌÃû³Æ£º" << cplist->cname;
-			wcout << endl;
-			wcout << L"ÐÂ¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"Ô­¿Î³ÌºÅ£º" << cplist->cnum;
-			wcout << endl;
-			wcout << L"ÐÂ¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			wcout << L"Ô­¿Î³ÌÐÔÖÊ£º" << cplist->character;
-			wcout << endl;
-			wcout << L"ÐÂ¿Î³ÌÐÔÖÊ£º"; wcin >> Character;
-			wcout << endl;
-
-			modifyCrs(cplist, Cname, Cnum, Character);
-
-			wcout << L"ÐÞ¸Ä³É¹¦" << endl;
-			system("pause");
-			break;
-		}
-		case 6://ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			wchar_t original_Sname[10];
-			int original_Snum;
-			wcout << L"Ô­Ñ§ÉúÐÕÃû£º"; wcin >> original_Sname;
-			wcout << endl;
-			wcout << L"Ô­Ñ§ºÅ£º"; wcin >> original_Snum;
-			wcout << endl;
-			Spnode splist = searchStuInCrs(cplist, original_Sname, original_Snum);
-			if (!splist)
-			{
-				wcout << L"²éÎÞ´ËÈË" << endl;
-				system("pause");
-				break;
-			}
-
-			wchar_t Sname[10];
-			int Snum;
-			double Score;
-			wcout << L"Ô­Ñ§ÉúÐÕÃû£º" << splist->sname;
-			wcout << endl;
-			wcout << L"ÐÂÑ§ÉúÐÕÃû£º"; wcin >> Sname;
-			wcout << endl;
-			wcout << L"Ô­Ñ§ºÅ£º" << splist->snum;
-			wcout << endl;
-			wcout << L"ÐÂÑ§ºÅ£º"; wcin >> Snum;
-			wcout << endl;
-			wcout << L"Ô­³É¼¨£º" << splist->score;
-			wcout << endl;
-			wcout << L"ÐÂ³É¼¨£º"; wcin >> Score;
-			wcout << endl;
-
-			modifyStuInCrs(cplist, splist, Sname, Snum, Score);
-
-			wcout << L"ÐÞ¸Ä³É¹¦" << endl;
-			system("pause");
-			break;
-		}
-		case 7://É¾³ý¿Î³Ì
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			deleteCrs(cphead, Cname, Cnum);
-
-			wcout << L"É¾³ý³É¹¦" << endl;
-			system("pause");
-			break;
-		}
-		case 8://É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
-		{
-			system("CLS");
-			wchar_t Cname[10];
-			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
-			wcout << endl;
-			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
-			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
-			if (!cplist)
-			{
-				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
-				system("pause");
-				break;
-			}
-
-			wchar_t sname[10];
-			int snum;
-			wcout << L"Ñ§ÉúÐÕÃû£º"; wcin >> sname;
-			wcout << endl;
-			wcout << L"Ñ§ºÅ£º"; wcin >> snum;
-			wcout << endl;
-			Spnode splist = searchStuInCrs(cplist, sname, snum);
-			if (!splist)
-			{
-				wcout << L"²éÎÞ´ËÈË" << endl;
-				system("pause");
-				break;
-			}
-
-			deleteStuInCrs(cplist, sname, snum);
-
-			wcout << L"É¾³ý³É¹¦" << endl;
-			system("pause");
-			break;
-		}
-		}
-	}
-}
-
+//void menu()
+//{
+//	Cpnode cphead = (Cpnode)malloc(sizeof(_Cnode));
+//	cphead->next = NULL;
+//	while (1)
+//	{
+//		fflush(stdin);
+//		system("CLS");
+//		showMenu(L"ÇëÑ¡Ôñ¹¦ÄÜ", 8, L"ÍË³ö", L"²é¿´", L"Ìí¼Ó¿Î³Ì", L"ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨", L"ÐÞ¸Ä¿Î³Ì", L"ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨", L"É¾³ý¿Î³Ì", L"É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨");
+//		int op = getNumber(10);
+//		switch (op)
+//		{
+//		case 1://ÍË³ö
+//			return;
+//		case 2://²é¿´
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			look(cplist);
+//
+//			break;
+//		}
+//		case 3://Ìí¼Ó¿Î³Ì
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wchar_t Character[10];
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌÐÔÖÊ£º"; wcin >> Character;
+//			wcout << endl;
+//
+//			int flag = addCrs(cphead, Cname, Cnum, Character,0);////////////////////////////////////////////////
+//			if (flag == -1)
+//			{
+//				wcout << L"ÒÑÓÐ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//			else if (flag == 0)
+//			{
+//				wcout << L"ÄÚ´æ·ÖÅäÊ§°Ü" << endl;
+//				system("pause");
+//				exit(0);
+//			}
+//			else if (flag == 1)
+//			{
+//				wcout << L"Ìí¼Ó³É¹¦" << endl;
+//				system("pause");
+//				break;
+//			}
+//		}
+//		case 4://ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			wchar_t Sname[10];
+//			int Snum;
+//			double Score;
+//			wcout << L"Ñ§ÉúÐÕÃû£º"; wcin >> Sname;
+//			wcout << endl;
+//			wcout << L"Ñ§ºÅ£º"; wcin >> Snum;
+//			wcout << endl;
+//			wcout << L"³É¼¨£º"; wcin >> Score;
+//			wcout << endl;
+//
+//			int flag = addStuInCrs(cplist, Sname, Snum, Score);
+//			if (flag == -1)
+//			{
+//				wcout << L"ÒÑÓÐ´ËÈË" << endl;
+//				system("pause");
+//				break;
+//			}
+//			else if (flag == 0)
+//			{
+//				wcout << L"ÄÚ´æ·ÖÅäÊ§°Ü" << endl;
+//				system("pause");
+//				exit(0);
+//			}
+//			else if (flag == 1)
+//			{
+//				wcout << L"Ìí¼Ó³É¹¦" << endl;
+//				system("pause");
+//				break;
+//			}
+//		}
+//		case 5://ÐÞ¸Ä¿Î³Ì
+//		{
+//			system("CLS");
+//			wchar_t original_Cname[10];
+//			int original_Cnum;
+//			wcout << L"Ô­¿Î³ÌÃû³Æ£º"; wcin >> original_Cname;
+//			wcout << endl;
+//			wcout << L"Ô­¿Î³ÌºÅ£º"; wcin >> original_Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, original_Cname, original_Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wchar_t Character[10];
+//			wcout << L"Ô­¿Î³ÌÃû³Æ£º" << cplist->cname;
+//			wcout << endl;
+//			wcout << L"ÐÂ¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"Ô­¿Î³ÌºÅ£º" << cplist->cnum;
+//			wcout << endl;
+//			wcout << L"ÐÂ¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			wcout << L"Ô­¿Î³ÌÐÔÖÊ£º" << cplist->character;
+//			wcout << endl;
+//			wcout << L"ÐÂ¿Î³ÌÐÔÖÊ£º"; wcin >> Character;
+//			wcout << endl;
+//
+//			//modifyCrs(cplist, Cname, Cnum, Character£¬0£¬0);
+//
+//			wcout << L"ÐÞ¸Ä³É¹¦" << endl;
+//			system("pause");
+//			break;
+//		}
+//		case 6://ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			wchar_t original_Sname[10];
+//			int original_Snum;
+//			wcout << L"Ô­Ñ§ÉúÐÕÃû£º"; wcin >> original_Sname;
+//			wcout << endl;
+//			wcout << L"Ô­Ñ§ºÅ£º"; wcin >> original_Snum;
+//			wcout << endl;
+//			Spnode splist = searchStuInCrs(cplist, original_Sname, original_Snum);
+//			if (!splist)
+//			{
+//				wcout << L"²éÎÞ´ËÈË" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			wchar_t Sname[10];
+//			int Snum;
+//			double Score;
+//			wcout << L"Ô­Ñ§ÉúÐÕÃû£º" << splist->sname;
+//			wcout << endl;
+//			wcout << L"ÐÂÑ§ÉúÐÕÃû£º"; wcin >> Sname;
+//			wcout << endl;
+//			wcout << L"Ô­Ñ§ºÅ£º" << splist->snum;
+//			wcout << endl;
+//			wcout << L"ÐÂÑ§ºÅ£º"; wcin >> Snum;
+//			wcout << endl;
+//			wcout << L"Ô­³É¼¨£º" << splist->score;
+//			wcout << endl;
+//			wcout << L"ÐÂ³É¼¨£º"; wcin >> Score;
+//			wcout << endl;
+//
+//			modifyStuInCrs(cplist, splist, Sname, Snum, Score);
+//
+//			wcout << L"ÐÞ¸Ä³É¹¦" << endl;
+//			system("pause");
+//			break;
+//		}
+//		case 7://É¾³ý¿Î³Ì
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			deleteCrs(cphead, Cname, Cnum);
+//
+//			wcout << L"É¾³ý³É¹¦" << endl;
+//			system("pause");
+//			break;
+//		}
+//		case 8://É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
+//		{
+//			system("CLS");
+//			wchar_t Cname[10];
+//			int Cnum;
+//			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
+//			wcout << endl;
+//			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+//			wcout << endl;
+//			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
+//			if (!cplist)
+//			{
+//				wcout << L"²éÎÞ´Ë¿Î³Ì" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			wchar_t sname[10];
+//			int snum;
+//			wcout << L"Ñ§ÉúÐÕÃû£º"; wcin >> sname;
+//			wcout << endl;
+//			wcout << L"Ñ§ºÅ£º"; wcin >> snum;
+//			wcout << endl;
+//			Spnode splist = searchStuInCrs(cplist, sname, snum);
+//			if (!splist)
+//			{
+//				wcout << L"²éÎÞ´ËÈË" << endl;
+//				system("pause");
+//				break;
+//			}
+//
+//			deleteStuInCrs(cplist, sname, snum);
+//
+//			wcout << L"É¾³ý³É¹¦" << endl;
+//			system("pause");
+//			break;
+//		}
+//		}
+//	}
+//}
 
 int look(Cpnode cplist)
 {
@@ -395,8 +393,6 @@ int look(Cpnode cplist)
 	return 1;
 }
 
-
-//×¢ÒâÐ¡ÊýÅÐ¶ÏÏàµÈµÄ²»¾«È·Çé¿ö
 double CalculGPA(double score)
 {
 	if (score >= 90 && score <= 100)
@@ -422,9 +418,9 @@ double CalculGPA(double score)
 	
 }
 
-int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character, int SchYear) // Ìí¼Ó¿Î³Ì
+int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, int SchYear) // Ìí¼Ó¿Î³Ì
 {
-	if (searchCrs(cphead, Cname, Cnum))
+	if (searchCrs(cphead, cname, cnum))
 		return 0;
 	Cpnode cplist = (Cpnode)malloc(sizeof(_Cnode));
 	if (cplist == NULL)
@@ -449,9 +445,9 @@ int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Charact
 	cphead->next = cplist;//Í·²å
 
 
-	wcscpy(cplist->cname, Cname);
-	cplist->cnum = Cnum;
-	wcscpy(cplist->character, Character);
+	wcscpy(cplist->cname, cname);
+	cplist->cnum = cnum;
+	wcscpy(cplist->character, character);
 	cplist->SchYear = SchYear;
 	return 1;
 }
@@ -477,48 +473,51 @@ int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// Î
 	cplist->headcount++;
 	cplist->totscore += splist->score;
 	cplist->totGPA += splist->GPA;
-	if(score>=90)
+	if (splist->score >= 90)
+		cplist->ExcelNum++;
+	if (splist->score >= 60)
+		cplist->PassNum++;
 	cplist->averscore = cplist->totscore / cplist->headcount;
 	cplist->averGPA = cplist->totGPA / cplist->headcount;
 
 	return 1;
 }
 
-
-//²ÎÊýÁÐ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬¿Î³ÌÃû³Æ£¬¿Î³ÌºÅ£¬¿Î³ÌÐÔÖÊ
-//Õý³£·µ»Ø1
-int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character) // ÐÞ¸Ä¿Î³ÌÐÅÏ¢
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character,int SchYear) // ÐÞ¸Ä¿Î³ÌÐÅÏ¢
 {
 	wcscpy(cplist->cname, Cname);
 	cplist->cnum = Cnum;
 	wcscpy(cplist->character, Character);
+	cplist->SchYear = SchYear;
 	return 1;
 }
 
-
-//²ÎÊýÁÐ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ä¿±êÑ§ÉúµÄ½ÚµãµØÖ·,Ñ§ÉúÐÕÃû£¬Ñ§ºÅ£¬³É¼¨
-//Õý³£·µ»Ø1
-int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* Sname, int Snum, double Score) // ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§ÉúÐÅÏ¢
+int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* sname, int snum, double score) // ÐÞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§ÉúÐÅÏ¢
 {
 	cplist->totscore -= splist->score;
 	cplist->totGPA -= splist->GPA;
+	if (splist->score >= 90)
+		cplist->ExcelNum--;
+	if (splist->score >= 60)
+		cplist->PassNum--;
 
-	wcscpy(splist->sname, Sname);
-	splist->snum = Snum;
-	splist->score = Score;
-	splist->GPA = splist->score / 100 * 4;
+	wcscpy(splist->sname, sname);
+	splist->snum = snum;
+	splist->score = score;
+	splist->GPA = CalculGPA(score);
 
 	cplist->totscore += splist->score;
 	cplist->totGPA += splist->GPA;
+	if (splist->score >= 90)
+		cplist->ExcelNum++;
+	if (splist->score >= 60)
+		cplist->PassNum++;
 	cplist->averscore = cplist->totscore / cplist->headcount;
 	cplist->averGPA = cplist->totGPA / cplist->headcount;
 
 	return 1;
 }
 
-
-//²ÎÊýÁÐ±í£º¿Î³ÌÁ´±íµÄÍ·½ÚµãµØÖ·£¬Ä¿±ê¿Î³ÌµÄ½ÚµãµØÖ·
-//Õý³£·µ»Ø1,Ã»ÕÒµ½·µ»Ø0
 int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // É¾³ý¿Î³Ì
 {
 	Cpnode pre_cplist = cphead;
@@ -551,9 +550,6 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // É¾³ý¿Î³Ì
 	return 1;
 }
 
-
-//²ÎÊýÁÐ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ä¿±êÑ§ÉúµÄ½ÚµãµØÖ·
-//Õý³£·µ»Ø1
 int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
 {
 	Spnode pre_splist = cplist->sphead;
@@ -566,10 +562,16 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ
 		pre_splist = pre_splist->next;
 		splist = splist->next;
 	}
+	if (!splist)
+		return 0;
 
 	cplist->headcount--;
 	cplist->totscore -= splist->score;
 	cplist->totGPA -= splist->GPA;
+	if (splist->score >= 90)
+		cplist->ExcelNum--;
+	if (splist->score >= 60)
+		cplist->PassNum--;
 	if (cplist->headcount)
 	{
 		cplist->averscore = cplist->totscore / cplist->headcount;
@@ -586,7 +588,6 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ
 
 	return 1;
 }
-
 
 //¸¨Öúº¯Êý£¬¾Í²»°üº¬µ½Í·ÎÄ¼þÀïÁË
 bool cmp_sortStuInCrs(Spnode splist, int op)
@@ -688,8 +689,6 @@ void sortCrs(Cpnode cphead, int op)
 	return;
 }
 
-//²ÎÊýÁÐ±í£º¿Î³ÌÁ´±íµÄÍ·½ÚµãµØÖ·£¬¿Î³ÌÃû³Æ£¬¿Î³ÌºÅ
-//ÕÒµ½ÁË·µ»ØÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ã»ÕÒµ½·µ»ØNULL
 Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖÐËÑË÷¿Î³Ì
 {
 	Cpnode cplist = cphead->next;
@@ -707,9 +706,6 @@ Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖÐËÑ
 	return cplist;
 }
 
-
-//²ÎÊýÁÐ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ñ§ÉúÐÕÃû£¬Ñ§ºÅ
-//ÕÒµ½ÁË·µ»ØÄ¿±êÑ§ÉúµÄ½ÚµãµØÖ·£¬Ã»ÕÒµ½·µ»ØNULL
 Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum) // ÔÚµ¥¸ö¿Î³ÌÖÐËÑË÷ÆäÏÂµÄÑ§Éú
 {
 	Spnode splist = cplist->sphead->next;

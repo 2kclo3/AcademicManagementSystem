@@ -6,7 +6,7 @@
 
 
 
-int mainJi(void) {
+int mainji(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	// 初始化图形窗口
 	initgraph(1280, 810);
@@ -578,6 +578,8 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 		TextBox allButton(-500, 330, 290 ,L"   所有", L"");
 		TextBox mustButton(-500, 380, 290, L"   必修", L"");
+		TextBox allsButton(-500, 430, 290, L"   所有", L"");
+		TextBox mustsButton(-500, 480, 290, L"   必修", L"");
 
 
 		//按钮
@@ -770,6 +772,11 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					gridBox.move(-500, 500);
 					semesterBox.move(-500, 580);
 
+					allButton.move(-500, 300);
+					mustButton.move(-500, 380);
+					allsButton.move(-500, 300);
+					mustsButton.move(-500, 380);
+
 					addOKButton.move(-500, 600);
 					modifyOKButton.move(-500, 650);
 					cancelButton.move(-500, 700);
@@ -838,10 +845,11 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 						course_idBox.setText(selectedData[0].c_str());
 						course_nameBox.setText(selectedData[1].c_str());
 						scoreBox.setText(selectedData[2].c_str());
+						semesterBox.setText(selectedData[3].c_str());
 						course_natureBox.setText(selectedData[6].c_str());
 						creditBox.setText(selectedData[4].c_str());
 						gridBox.setText(selectedData[5].c_str());
-						semesterBox.setText(selectedData[3].c_str());
+
 
 					}
 				}
@@ -1003,17 +1011,27 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 					allButton.move(0, 300);
 					mustButton.move(0, 380);
+					allsButton.move(0, 460);
+					mustsButton.move(0, 540);
 
 					cancelButton.move(10, 730);
 
 					//计算绩点
-					int all, must;
+					double all, must,alls,musts;
 
-					all = AllGrid(Crs->item.crslist);
-					must = MustGrid(Crs->item.crslist);
+					all = AllGrid(Crs);
+					must = MustGrid(Crs);
+					alls = AllScore(Crs);
+					musts = MustScore(Crs);
+
+
+
 					
-					allButton.setText(std::to_wstring(2).c_str());
-					mustButton.setText(std::to_wstring(5).c_str());
+					allButton.setText((wstring(L"所有课程绩点：") + std::to_wstring(all)).c_str());
+					mustButton.setText((wstring(L"必修课程绩点：") + std::to_wstring(must)).c_str());
+					allsButton.setText((wstring(L"所有课程成绩：") + std::to_wstring(alls)).c_str());
+					mustsButton.setText((wstring(L"必修课程成绩：") + std::to_wstring(musts)).c_str());
+
 
 				}
 
