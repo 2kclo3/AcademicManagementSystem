@@ -33,11 +33,14 @@ typedef struct Cnode_//课程节点
 	wchar_t cname[30];//课程名
 	int cnum;//课程号，五位数字
 	wchar_t character[5];//课程性质：选修、必修
+	int SchYear;//学年
 	int headcount;//总人数
 	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
 	double averscore;//平均成绩
 	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
 	double averGPA;//平均GPA
+	int PassNum;//及格人数，用来算及格率
+	int ExcelNum;//优秀人数，用来算优秀率
 	struct Cnode_ * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }_Cnode,*Cpnode;
@@ -50,7 +53,13 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 //Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
-int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 添加课程（不包含成绩）
+
+//参数列表：课程链表的头节点地址，课程名称，课程号，课程性质,学年
+//如果已存在这门课，添加失败，返回0；否则返回1
+int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character,int SchYear); // 添加课程（不包含成绩）
+
+//参数列表：目标课程的节点地址，学生姓名，学号，成绩
+//如果已存在这名学生，添加失败，返回0；否则返回1
 int addStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum, double Score); // 为某课程添加某学生成绩
 
 int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 修改课程信息（不修改成绩）
