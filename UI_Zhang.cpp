@@ -11,1408 +11,1417 @@
 
 int main(void) 
 {
+
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 	// 初始化图形窗口
-	initgraph(1280, 810);
+	initgraph(1500, 810);
 	BeginBatchDraw(); //开始批量绘图
 	setbkcolor(RGB(55, 61, 53)); //背景颜色
 	cleardevice();
 
-	loginUI();
+	menuUI();
 
 	EndBatchDraw(); //结束批量绘图
 	closegraph(); // 关闭图形窗口
 	return 0;
 }
 
-//还没改完
 void allCrsUI()
 {
-	cleardevice();
-	Cpnode allCrsList = readCrs(CRS_FILE);
-	vector<vector<std::wstring>> allCrsData;
-	showAllCrs(allCrsList, allCrsData, L"",0,0,0);
-
-	Table allCrsTable(310, 90, 940, 700, allCrsData);
-
-	Text titleText(40, 10, L"所有课程", 64);
-
-	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
-	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
-	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
-	TextBox minBox(-500, 0, 290, L"最小值", L"");
-	TextBox maxBox(-500, 0, 290, L"最大值", L"");
-
-	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
-
-	int y = 90-80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
-	Button viewCrsBtn(-50, y += dy, 330, 60, L"   查看", 1);
-	Button addCrsBtn(-50, y+=dy, 330, 60, L"   添加", 1);
-	Button modifyCrsBtn(-50, y += dy, 330, 60, L"   修改", 1);
-	Button deleteCrsBtn(-50, y += dy, 330, 60, L"   删除", 1);
-	Button sortCrsBtn(-50, y += dy, 330, 60, L"   排序", 1);
-	Button screenCrsBtn(-50, y += dy, 330, 60, L"   筛选", 1);
-	Button screenCancelBtn(-500, 0, 330, 60, L"   取消筛选", 1);
-	Button exportBtn(-50, y += dy, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, y += dy, 330, 60, L"   导入", 1);
-	Button backButton(-50, y += dy, 330, 60, L"   返回", 0);
-
-	Button sortByCnumBtn(-500, 0, 290, 60, L"按课程号排序", 1);
-	Button sortByHeadcountBtn(-500, 0, 290, 60, L"按总人数排序", 1);
-	Button sortByAverscoreBtn(-500, 0, 290, 60, L"按平均成绩排序", 1);
-	Button sortByAverGPABtn(-500, 0, 290, 60, L"按平均绩点排序", 1);
-	Button AscendingOrderBtn(-500, 0, 290, 60, L"升序", 1);
-	Button DescendingOrderBtn(-500, 0, 290, 60, L"降序", 1);
-
-	Button screenByHeadcountBtn(-500, 0, 290, 60, L"按总人数筛选", 1);
-	Button screenByAverscoreBtn(-500, 0, 290, 60, L"按平均成绩筛选", 1);
-	Button screenByAverGPABtn(-500, 0, 290, 60, L"按平均绩点筛选", 1);
-
-	Button addOKButton(-500, 0, 290, 60, L"确定添加", 1);
-	Button modifyOKButton(-500, 0, 290, 60, L"确定修改", 1);
-	Button screenOKButton(-500, 0, 290, 60, L"确定筛选", 1);
-	Button cancelButton(-500, 0, 290, 60, L"取消", 0);
-
-
-	// 处理鼠标事件
-	ExMessage msg;
-	int sortOption = 0;//用来排序
-	wchar_t searchTerm[512] = L"";
-	bool IsInScreen = false;
-	int screenOption = 0;
-	double screenMin = 0;
-	double screenMax = 0;
-	while (!_kbhit())
-	{
-		ULONGLONG start_time = GetTickCount();
-		//->
-
-		searchInputBox.draw();
-		cnameBox.draw();
-		cnumBox.draw();
-		characterBox.draw();
-		minBox.draw();
-		maxBox.draw();
-
-		if (peekmessage(&msg, -1, true))
-		{
-			if (cancelButton.mouseClick(msg)) {
-
-				sortOption = 0;
-				if (IsInScreen)
-				{
-					screenOption = 0;
-					IsInScreen = false;
-				}
-
-				// 更改标题
-				titleText.setText(L"所有课程");
-				titleText.move(40, 10);
-
-				// 清除输入框内容
-				cnameBox.clear();
-				cnumBox.clear();
-				characterBox.clear();
-				minBox.clear();
-				maxBox.clear();
-
-				// 使表格可变化
-				allCrsTable.canChange = true;
-
-				// 隐藏
-				cnameBox.move(-500, 0);
-				cnumBox.move(-500, 0);
-				characterBox.move(-500, 0);
-				minBox.move(-500, 0);
-				maxBox.move(-500, 0);
-
-				sortByCnumBtn.move(-500, 0);
-				sortByHeadcountBtn.move(-500, 0);
-				sortByAverscoreBtn.move(-500, 0);
-				sortByAverGPABtn.move(-500, 0);
-				AscendingOrderBtn.move(-500, 0);
-				DescendingOrderBtn.move(-500, 0);
-
-				screenByHeadcountBtn.move(-500, 0);
-				screenByAverscoreBtn.move(-500, 0);
-				screenByAverGPABtn.move(-500, 0);
-
-				addOKButton.move(-500, 0);
-				modifyOKButton.move(-500, 0);
-				screenOKButton.move(-500, 0);
-				cancelButton.move(-500, 0);
-
-				// 显示
-				y = 90 - 80, dy = 80;
-				viewCrsBtn.move(-50, y += dy);
-				addCrsBtn.move(-50, y += dy);
-				modifyCrsBtn.move(-50, y += dy);
-				deleteCrsBtn.move(-50, y += dy);
-				sortCrsBtn.move(-50, y += dy);
-				if (!screenOption)
-					screenCrsBtn.move(-50, y += dy);
-				else
-					screenCancelBtn.move(-50, y += dy);
-				exportBtn.move(-50, y += dy);
-				inportBtn.move(-50, y += dy);
-				backButton.move(-50, y += dy);
-
-			}
-
-			if (searchBtn.mouseClick(msg))
-			{
-				wcscpy(searchTerm, searchInputBox.text);
-				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allCrsTable.setData(allCrsData);
-			}
-
-			if (viewCrsBtn.mouseClick(msg))
-			{
-				if (allCrsTable.getSelectedRow() == 0)
-				{
-					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
-				}
-				else
-				{
-					// 获取课程节点信息
-					wchar_t cname[30];
-					int cnum;
-					int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
-					getTextInBox(cname, allCrsData[selectedRow][0].c_str());
-					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
-					Cpnode cplist = searchCrs(allCrsList, cname, cnum);
-					CrsUI(allCrsList, cplist);
-
-				}
-			}
-			////////////////////////////////////////////
-			if (addCrsBtn.mouseClick(msg))
-			{
-				// 更改标题
-				titleText.setText(L"添加课程");
-
-				// 隐藏
-				viewCrsBtn.move(-500, 0);
-				addCrsBtn.move(-500, 0);
-				modifyCrsBtn.move(-500, 0);
-				deleteCrsBtn.move(-500, 0);
-				sortCrsBtn.move(-500, 0);
-				screenCrsBtn.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-				exportBtn.move(-500, 0);
-				inportBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 显示
-				y = 150 - 80, dy = 80;
-				cnameBox.move(10, y += dy);
-				cnumBox.move(10, y += dy);
-				characterBox.move(10, y += dy);
-				addOKButton.move(10, y += dy);
-				cancelButton.move(10, y += dy);
-			}
-
-			if (addOKButton.mouseClick(msg))
-			{
-				wchar_t cname[30];
-				int cnum;
-				wchar_t character[5];
-
-				// 判断输入格式
-				if (
-					getTextInBox(cname, cnameBox.text) &&
-					getNumberInBox(99999, &cnum, cnumBox.text) &&
-					getTextInBox(character, characterBox.text) &&
-					cnum > 9999
-					)
-				{
-
-					// 课程相同的情况,报错提醒
-					if (!addCrs(allCrsList, cname, cnum, character))
-					{
-						MessageBox(GetHWnd(), L"该课程已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
-					}
-					else
-					{
-						// 保存
-						saveCrs(allCrsList, CRS_FILE);
-
-						// 刷新表格
-						showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-						allCrsTable.setData(allCrsData);
-
-						// 清除输入框内容
-						cnameBox.clear();
-						cnumBox.clear();
-						characterBox.clear();
-
-
-						// 更改标题
-						titleText.setText(L"所有课程");
-
-						// 隐藏
-						cnameBox.move(-500, 0);
-						cnumBox.move(-500, 0);
-						characterBox.move(-500, 0);
-						addOKButton.move(-500, 0);
-						cancelButton.move(-500, 0);
-
-						// 显示
-						y = 90-80, dy = 80;
-						viewCrsBtn.move(-50, y += dy);
-						addCrsBtn.move(-50, y += dy);
-						modifyCrsBtn.move(-50, y += dy);
-						deleteCrsBtn.move(-50, y += dy);
-						sortCrsBtn.move(-50, y += dy);
-						if (!screenOption)
-							screenCrsBtn.move(-50, y += dy);
-						else
-							screenCancelBtn.move(-50, y += dy);
-						exportBtn.move(-50, y += dy);
-						inportBtn.move(-50, y += dy);
-						backButton.move(-50, y += dy);
-					}
-
-
-				}
-				// 输入错误
-				else
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-
-			}
-
-			if (modifyCrsBtn.mouseClick(msg))
-			{
-				if (allCrsTable.getSelectedRow() == 0)
-				{
-					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
-				}
-				else
-				{
-					// 隐藏
-					viewCrsBtn.move(-500, 0);
-					addCrsBtn.move(-500, 0);
-					modifyCrsBtn.move(-500, 0);
-					deleteCrsBtn.move(-500, 0);
-					sortCrsBtn.move(-500, 0);
-					screenCrsBtn.move(-500, 0);
-					screenCancelBtn.move(-500, 0);
-					exportBtn.move(-500, 0);
-					inportBtn.move(-500, 0);
-					backButton.move(-500, 0);
-
-					// 更改标题
-					titleText.setText(L"修改课程");
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(L"修改课程");
-					int x = 10 + (290 - TextWidth) / 2;
-					titleText.move(x, 10);
-
-
-					// 使表格不可变化
-					allCrsTable.canChange = false;
-
-
-					// 获取当前行
-					int selectedRow = allCrsTable.getSelectedRow();
-					vector<std::wstring> selectedData = allCrsData[selectedRow];
-
-
-					// 文本框默认内容
-					cnameBox.setText(selectedData[0].c_str());
-					cnumBox.setText(selectedData[1].c_str());
-					characterBox.setText(selectedData[2].c_str());
-
-
-					// 显示
-					y = 150 - 80, dy = 80;
-					cnameBox.move(10, y += dy);
-					cnumBox.move(10, y += dy);
-					characterBox.move(10, y += dy);
-					modifyOKButton.move(10, y += dy);
-					cancelButton.move(10, y += dy);
-				}
-
-			}
-
-			if (modifyOKButton.mouseClick(msg))
-			{
-				wchar_t cname[30];
-				int cnum;
-				wchar_t character[5];
-
-
-				// 精确搜索课程节点
-				wchar_t original_cname[30];
-				int original_cnum;
-				int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
-				getTextInBox(original_cname, allCrsData[selectedRow][0].c_str());
-				getNumberInBox(99999, &original_cnum, allCrsData[selectedRow][1].c_str());
-				Cpnode modifyingCrs = searchCrs(allCrsList, original_cname, original_cnum);
-				
-
-				// 判断输入格式
-				if (
-					getTextInBox(cname, cnameBox.text) &&
-					getNumberInBox(99999, &cnum, cnumBox.text) &&
-					getTextInBox(character, characterBox.text) &&
-					cnum > 9999
-					)
-				{
-
-					// 修改
-					modifyCrs(modifyingCrs, cname, cnum, character);
-
-					// 保存
-					saveCrs(allCrsList, CRS_FILE);
-
-					// 使表格可变化
-					allCrsTable.canChange = true;
-
-					// 刷新表格
-					showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-					allCrsTable.setData(allCrsData);
-
-					// 清除输入框内容
-					cnameBox.clear();
-					cnumBox.clear();
-					characterBox.clear();
-
-
-					// 更改标题
-					titleText.setText(L"所有课程");
-
-					// 隐藏
-					cnameBox.move(-500, 0);
-					cnumBox.move(-500, 0);
-					characterBox.move(-500, 0);
-					modifyOKButton.move(-500, 0);
-					cancelButton.move(-500, 0);
-
-					// 显示
-					y = 90, dy = 80;
-					viewCrsBtn.move(-50, y);
-					addCrsBtn.move(-50, y += dy);
-					modifyCrsBtn.move(-50, y += dy);
-					deleteCrsBtn.move(-50, y += dy);
-					sortCrsBtn.move(-50, y += dy);
-					if (!screenOption)
-						screenCrsBtn.move(-50, y += dy);
-					else
-						screenCancelBtn.move(-50, y += dy);
-					exportBtn.move(-50, y += dy);
-					inportBtn.move(-50, y += dy);
-					backButton.move(-50, y += dy);
-
-				}
-				// 输入错误
-				else
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-
-			}
-
-			if (deleteCrsBtn.mouseClick(msg))
-			{
-				if (allCrsTable.getSelectedRow() == 0)
-				{
-					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
-				}
-				else
-				{
-					int result = MessageBox(GetHWnd(), L"确定删除这门课程吗?", L"删除课程", MB_YESNO | MB_ICONQUESTION);
-
-					if (result == IDYES)
-					{ // 点击确定
-
-						// 获取课程节点信息
-						wchar_t cname[30];
-						int cnum;
-						int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
-						getTextInBox(cname, allCrsData[selectedRow][0].c_str());
-						getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
-
-						// 删除
-						deleteCrs(allCrsList, cname, cnum);
-
-						// 保存
-						saveCrs(allCrsList, CRS_FILE);
-
-
-						// 刷新表格
-						showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-						allCrsTable.setData(allCrsData);
-					}
-				}
-			}
-
-
-			
-			if (sortCrsBtn.mouseClick(msg))
-			{
-				//要先隐藏后更改标题，否侧会出bug，不知道为啥
-				
-				// 隐藏
-				viewCrsBtn.move(-500, 0);
-				addCrsBtn.move(-500, 0);
-				modifyCrsBtn.move(-500, 0);
-				deleteCrsBtn.move(-500, 0);
-				sortCrsBtn.move(-500, 0);
-				screenCrsBtn.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-				exportBtn.move(-500, 0);
-				inportBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 更改标题
-				titleText.setText(L"排序");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"排序");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 显示
-				y = 150-80, dy = 80;
-				sortByCnumBtn.move(10, y += dy);
-				sortByHeadcountBtn.move(10, y += dy);
-				sortByAverscoreBtn.move(10, y += dy);
-				sortByAverGPABtn.move(10, y +=dy);
-				cancelButton.move(10, y +=dy);
-			}
-
-			if (sortByCnumBtn.mouseClick(msg))
-				sortOption = 1;
-			if (sortByHeadcountBtn.mouseClick(msg))
-				sortOption = 3;
-			if (sortByAverscoreBtn.mouseClick(msg))
-				sortOption = 5;
-			if (sortByAverGPABtn.mouseClick(msg))
-				sortOption = 7;
-
-			if (sortOption)
-			{
-				// 隐藏
-				sortByCnumBtn.move(-500,0);
-				sortByHeadcountBtn.move(-500, 0);
-				sortByAverscoreBtn.move(-500, 0);
-				sortByAverGPABtn.move(-500, 0);
-				cancelButton.move(-500, 0);
-
-				// 更改标题
-				wchar_t titletext[512];
-				switch (sortOption)
-				{
-				case 1:
-					wcscpy(titletext, L"按课程号排序");
-					break;
-				case 3:
-					wcscpy(titletext, L"按总人数排序");
-					break;
-				case 5:
-					wcscpy(titletext, L"按平均成绩排序");
-					break;
-				case 7:
-					wcscpy(titletext, L"按平均绩点排序");
-					break;
-				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 显示
-				y = 150-80, dy = 80;
-				AscendingOrderBtn.move(10, y += dy);
-				DescendingOrderBtn.move(10, y += dy);
-				cancelButton.move(10, y += dy);
-			}
-
-			bool flag_AscendingOrderBtn = AscendingOrderBtn.mouseClick(msg);//不这么做，AscendingOrderBtn.mouseClick(msg)在一个循环中只会被检测一次
-			bool flag_DescendingOrderBtn = DescendingOrderBtn.mouseClick(msg);
-			if (flag_DescendingOrderBtn)
-				sortOption++;
-
-			if (flag_AscendingOrderBtn || flag_DescendingOrderBtn)
-			{
-				//链表排序
-				sortCrs(allCrsList, sortOption);
-
-				// 刷新表格
-				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allCrsTable.setData(allCrsData);
-
-				// 更改标题
-				titleText.setText(L"所有课程");
-				titleText.move(40, 10);
-
-				// 隐藏
-				AscendingOrderBtn.move(-500, 0);
-				DescendingOrderBtn.move(-500, 0);
-				cancelButton.move(-500, 0);
-
-				// 显示
-				y = 90-80, dy = 80;
-				viewCrsBtn.move(-50, y += dy);
-				addCrsBtn.move(-50, y += dy);
-				modifyCrsBtn.move(-50, y += dy);
-				deleteCrsBtn.move(-50, y += dy);
-				sortCrsBtn.move(-50, y += dy);
-				if (!screenOption)
-					screenCrsBtn.move(-50, y += dy);
-				else
-					screenCancelBtn.move(-50, y += dy);
-				exportBtn.move(-50, y += dy);
-				inportBtn.move(-50, y += dy);
-				backButton.move(-50, y += dy);
-
-				sortOption = 0;
-			}
-
-
-
-			if (screenCrsBtn.mouseClick(msg))
-			{
-				// 隐藏
-				viewCrsBtn.move(-500, 0);
-				addCrsBtn.move(-500, 0);
-				modifyCrsBtn.move(-500, 0);
-				deleteCrsBtn.move(-500, 0);
-				sortCrsBtn.move(-500, 0);
-				screenCrsBtn.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-				exportBtn.move(-500, 0);
-				inportBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 更改标题
-				titleText.setText(L"筛选");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"筛选");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 显示
-				y = 150 - 80, dy = 80;
-				screenByHeadcountBtn.move(10, y += dy);
-				screenByAverscoreBtn.move(10, y += dy);
-				screenByAverGPABtn.move(10, y += dy);
-				cancelButton.move(10, y += dy);
-			}
-
-			if (screenByHeadcountBtn.mouseClick(msg))
-			{
-				screenOption = 1;
-				IsInScreen = true;
-			}
-			if (screenByAverscoreBtn.mouseClick(msg))
-			{
-				screenOption = 2;
-				IsInScreen = true;
-			}
-			if (screenByAverGPABtn.mouseClick(msg))
-			{
-				screenOption = 3;
-				IsInScreen = true;
-			}
-
-			if (IsInScreen)
-			{
-				// 更改标题
-				wchar_t titletext[512];
-				switch (screenOption)
-				{
-				case 1:
-					wcscpy(titletext, L"按总人数筛选");
-					break;
-				case 2:
-					wcscpy(titletext, L"按平均成绩筛选");
-					break;
-				case 3:
-					wcscpy(titletext, L"按平均绩点筛选");
-					break;
-				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				screenByHeadcountBtn.move(-500, 0);
-				screenByAverscoreBtn.move(-500, 0);
-				screenByAverGPABtn.move(-500, 0);
-
-				// 显示
-				y = 150 - 80, dy = 80;
-				minBox.move(10, y+=dy);
-				maxBox.move(10, y += dy);
-				screenOKButton.move(10, y += dy);
-				cancelButton.move(10, y += dy);
-			}
-
-			if (screenOKButton.mouseClick(msg))
-			{
-				double MAX;
-				switch (screenOption)
-				{
-				case 1://按总人数筛选
-					MAX = 99999;//随便多大都行
-					break;
-				case 2://按平均成绩
-					MAX = 100;
-					break;
-				case 3://按平均绩点
-					MAX = 4;
-					break;
-				}
-				if (
-					getDoubleInBox(MAX, &screenMin, minBox.text) &&
-					getDoubleInBox(MAX, &screenMax, maxBox.text) &&
-					screenMin >= 0 && screenMax >= 0 && screenMin <= screenMax
-					)
-				{
-					// 刷新表格
-					showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-					allCrsTable.setData(allCrsData);
-
-					// 清除输入框内容
-					minBox.clear();
-					maxBox.clear();
-
-					// 更改标题
-					titleText.setText(L"所有课程");
-					titleText.move(40, 10);
-
-					// 隐藏
-					minBox.move(-500, 0);
-					maxBox.move(-500, 0);
-					screenOKButton.move(-500, 0);
-					cancelButton.move(-500, 0);
-
-					// 显示
-					y = 90 - 80, dy = 80;
-					viewCrsBtn.move(-50, y += dy);
-					addCrsBtn.move(-50, y += dy);
-					modifyCrsBtn.move(-50, y += dy);
-					deleteCrsBtn.move(-50, y += dy);
-					sortCrsBtn.move(-50, y += dy);
-					if (!screenOption)
-						screenCrsBtn.move(-50, y += dy);
-					else
-						screenCancelBtn.move(-50, y += dy);
-					exportBtn.move(-50, y += dy);
-					inportBtn.move(-50, y += dy);
-					backButton.move(-50, y += dy);
-
-					IsInScreen = false;
-				}
-				else// 输入错误
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-			}
-
-			if (screenCancelBtn.mouseClick(msg))
-			{
-				screenOption = 0;
-				screenMin = 0;
-				screenMax = 0;
-
-				// 刷新表格
-				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allCrsTable.setData(allCrsData);
-
-				screenCancelBtn.move(-500, 0);
-				screenCrsBtn.move(-50, 490);
-			}
-
-
-
-			if (exportBtn.mouseClick(msg)) {
-			}
-			if (inportBtn.mouseClick(msg)) {
-			}
-			if (backButton.mouseClick(msg))
-			{
-				//return;不能直接return
-				menuUI();
-			}
-
-			//表格鼠标滑动与点击
-			allCrsTable.onMouse(msg);
-
-			// 文本框输入
-			searchInputBox.onMessage(msg);
-			cnameBox.onMessage(msg);
-			cnumBox.onMessage(msg);
-			characterBox.onMessage(msg);
-			minBox.onMessage(msg);
-			maxBox.onMessage(msg);
-		}
-
-		showxy(msg);
-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1)
-		{
-			Sleep(1);
-		}
-
-	}
-
+	return;
 }
-
+//void allCrsUI()
+//{
+//	cleardevice();
+//	Cpnode allCrsList = readCrs(CRS_FILE);
+//	vector<vector<std::wstring>> allCrsData;
+//	showAllCrs(allCrsList, allCrsData, L"",0,0,0);
+//
+//	Table allCrsTable(310, 90, 940, 700, allCrsData);
+//
+//	Text titleText(40, 10, L"所有课程", 64);
+//
+//	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+//	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
+//	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
+//	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
+//	TextBox minBox(-500, 0, 290, L"最小值", L"");
+//	TextBox maxBox(-500, 0, 290, L"最大值", L"");
+//
+//	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+//
+//	int y = 90-80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
+//	Button viewCrsBtn(-50, y += dy, 330, 60, L"   查看", 1);
+//	Button addCrsBtn(-50, y+=dy, 330, 60, L"   添加", 1);
+//	Button modifyCrsBtn(-50, y += dy, 330, 60, L"   修改", 1);
+//	Button deleteCrsBtn(-50, y += dy, 330, 60, L"   删除", 1);
+//	Button sortCrsBtn(-50, y += dy, 330, 60, L"   排序", 1);
+//	Button screenCrsBtn(-50, y += dy, 330, 60, L"   筛选", 1);
+//	Button screenCancelBtn(-500, 0, 330, 60, L"   取消筛选", 1);
+//	Button exportBtn(-50, y += dy, 330, 60, L"   导出", 1);
+//	Button inportBtn(-50, y += dy, 330, 60, L"   导入", 1);
+//	Button backButton(-50, y += dy, 330, 60, L"   返回", 0);
+//
+//	Button sortByCnumBtn(-500, 0, 290, 60, L"按课程号排序", 1);
+//	Button sortByHeadcountBtn(-500, 0, 290, 60, L"按总人数排序", 1);
+//	Button sortByAverscoreBtn(-500, 0, 290, 60, L"按平均成绩排序", 1);
+//	Button sortByAverGPABtn(-500, 0, 290, 60, L"按平均绩点排序", 1);
+//	Button AscendingOrderBtn(-500, 0, 290, 60, L"升序", 1);
+//	Button DescendingOrderBtn(-500, 0, 290, 60, L"降序", 1);
+//
+//	Button screenByHeadcountBtn(-500, 0, 290, 60, L"按总人数筛选", 1);
+//	Button screenByAverscoreBtn(-500, 0, 290, 60, L"按平均成绩筛选", 1);
+//	Button screenByAverGPABtn(-500, 0, 290, 60, L"按平均绩点筛选", 1);
+//
+//	Button addOKButton(-500, 0, 290, 60, L"确定添加", 1);
+//	Button modifyOKButton(-500, 0, 290, 60, L"确定修改", 1);
+//	Button screenOKButton(-500, 0, 290, 60, L"确定筛选", 1);
+//	Button cancelButton(-500, 0, 290, 60, L"取消", 0);
+//
+//
+//	// 处理鼠标事件
+//	ExMessage msg;
+//	int sortOption = 0;//用来排序
+//	wchar_t searchTerm[512] = L"";
+//	bool IsInScreen = false;
+//	int screenOption = 0;
+//	double screenMin = 0;
+//	double screenMax = 0;
+//	while (!_kbhit())
+//	{
+//		ULONGLONG start_time = GetTickCount();
+//		//->
+//
+//		searchInputBox.draw();
+//		cnameBox.draw();
+//		cnumBox.draw();
+//		characterBox.draw();
+//		minBox.draw();
+//		maxBox.draw();
+//
+//		if (peekmessage(&msg, -1, true))
+//		{
+//			if (cancelButton.mouseClick(msg)) {
+//
+//				sortOption = 0;
+//				if (IsInScreen)
+//				{
+//					screenOption = 0;
+//					IsInScreen = false;
+//				}
+//
+//				// 更改标题
+//				titleText.setText(L"所有课程");
+//				titleText.move(40, 10);
+//
+//				// 清除输入框内容
+//				cnameBox.clear();
+//				cnumBox.clear();
+//				characterBox.clear();
+//				minBox.clear();
+//				maxBox.clear();
+//
+//				// 使表格可变化
+//				allCrsTable.canChange = true;
+//
+//				// 隐藏
+//				cnameBox.move(-500, 0);
+//				cnumBox.move(-500, 0);
+//				characterBox.move(-500, 0);
+//				minBox.move(-500, 0);
+//				maxBox.move(-500, 0);
+//
+//				sortByCnumBtn.move(-500, 0);
+//				sortByHeadcountBtn.move(-500, 0);
+//				sortByAverscoreBtn.move(-500, 0);
+//				sortByAverGPABtn.move(-500, 0);
+//				AscendingOrderBtn.move(-500, 0);
+//				DescendingOrderBtn.move(-500, 0);
+//
+//				screenByHeadcountBtn.move(-500, 0);
+//				screenByAverscoreBtn.move(-500, 0);
+//				screenByAverGPABtn.move(-500, 0);
+//
+//				addOKButton.move(-500, 0);
+//				modifyOKButton.move(-500, 0);
+//				screenOKButton.move(-500, 0);
+//				cancelButton.move(-500, 0);
+//
+//				// 显示
+//				y = 90 - 80, dy = 80;
+//				viewCrsBtn.move(-50, y += dy);
+//				addCrsBtn.move(-50, y += dy);
+//				modifyCrsBtn.move(-50, y += dy);
+//				deleteCrsBtn.move(-50, y += dy);
+//				sortCrsBtn.move(-50, y += dy);
+//				if (!screenOption)
+//					screenCrsBtn.move(-50, y += dy);
+//				else
+//					screenCancelBtn.move(-50, y += dy);
+//				exportBtn.move(-50, y += dy);
+//				inportBtn.move(-50, y += dy);
+//				backButton.move(-50, y += dy);
+//
+//			}
+//
+//			if (searchBtn.mouseClick(msg))
+//			{
+//				wcscpy(searchTerm, searchInputBox.text);
+//				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allCrsTable.setData(allCrsData);
+//			}
+//
+//			if (viewCrsBtn.mouseClick(msg))
+//			{
+//				if (allCrsTable.getSelectedRow() == 0)
+//				{
+//					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
+//				}
+//				else
+//				{
+//					// 获取课程节点信息
+//					wchar_t cname[30];
+//					int cnum;
+//					int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
+//					getTextInBox(cname, allCrsData[selectedRow][0].c_str());
+//					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
+//					Cpnode cplist = searchCrs(allCrsList, cname, cnum);
+//					CrsUI(allCrsList, cplist);
+//
+//				}
+//			}
+//			////////////////////////////////////////////
+//			if (addCrsBtn.mouseClick(msg))
+//			{
+//				// 更改标题
+//				titleText.setText(L"添加课程");
+//
+//				// 隐藏
+//				viewCrsBtn.move(-500, 0);
+//				addCrsBtn.move(-500, 0);
+//				modifyCrsBtn.move(-500, 0);
+//				deleteCrsBtn.move(-500, 0);
+//				sortCrsBtn.move(-500, 0);
+//				screenCrsBtn.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//				exportBtn.move(-500, 0);
+//				inportBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 显示
+//				y = 150 - 80, dy = 80;
+//				cnameBox.move(10, y += dy);
+//				cnumBox.move(10, y += dy);
+//				characterBox.move(10, y += dy);
+//				addOKButton.move(10, y += dy);
+//				cancelButton.move(10, y += dy);
+//			}
+//
+//			if (addOKButton.mouseClick(msg))
+//			{
+//				wchar_t cname[30];
+//				int cnum;
+//				wchar_t character[5];
+//
+//				// 判断输入格式
+//				if (
+//					getTextInBox(cname, cnameBox.text) &&
+//					getNumberInBox(99999, &cnum, cnumBox.text) &&
+//					getTextInBox(character, characterBox.text) &&
+//					cnum > 9999
+//					)
+//				{
+//
+//					// 课程相同的情况,报错提醒
+//					if (!addCrs(allCrsList, cname, cnum, character))
+//					{
+//						MessageBox(GetHWnd(), L"该课程已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+//					}
+//					else
+//					{
+//						// 保存
+//						saveCrs(allCrsList, CRS_FILE);
+//
+//						// 刷新表格
+//						showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//						allCrsTable.setData(allCrsData);
+//
+//						// 清除输入框内容
+//						cnameBox.clear();
+//						cnumBox.clear();
+//						characterBox.clear();
+//
+//
+//						// 更改标题
+//						titleText.setText(L"所有课程");
+//
+//						// 隐藏
+//						cnameBox.move(-500, 0);
+//						cnumBox.move(-500, 0);
+//						characterBox.move(-500, 0);
+//						addOKButton.move(-500, 0);
+//						cancelButton.move(-500, 0);
+//
+//						// 显示
+//						y = 90-80, dy = 80;
+//						viewCrsBtn.move(-50, y += dy);
+//						addCrsBtn.move(-50, y += dy);
+//						modifyCrsBtn.move(-50, y += dy);
+//						deleteCrsBtn.move(-50, y += dy);
+//						sortCrsBtn.move(-50, y += dy);
+//						if (!screenOption)
+//							screenCrsBtn.move(-50, y += dy);
+//						else
+//							screenCancelBtn.move(-50, y += dy);
+//						exportBtn.move(-50, y += dy);
+//						inportBtn.move(-50, y += dy);
+//						backButton.move(-50, y += dy);
+//					}
+//
+//
+//				}
+//				// 输入错误
+//				else
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//
+//			}
+//
+//			if (modifyCrsBtn.mouseClick(msg))
+//			{
+//				if (allCrsTable.getSelectedRow() == 0)
+//				{
+//					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
+//				}
+//				else
+//				{
+//					// 隐藏
+//					viewCrsBtn.move(-500, 0);
+//					addCrsBtn.move(-500, 0);
+//					modifyCrsBtn.move(-500, 0);
+//					deleteCrsBtn.move(-500, 0);
+//					sortCrsBtn.move(-500, 0);
+//					screenCrsBtn.move(-500, 0);
+//					screenCancelBtn.move(-500, 0);
+//					exportBtn.move(-500, 0);
+//					inportBtn.move(-500, 0);
+//					backButton.move(-500, 0);
+//
+//					// 更改标题
+//					titleText.setText(L"修改课程");
+//					settextstyle(64, 0, L"微软雅黑");
+//					int TextWidth = textwidth(L"修改课程");
+//					int x = 10 + (290 - TextWidth) / 2;
+//					titleText.move(x, 10);
+//
+//
+//					// 使表格不可变化
+//					allCrsTable.canChange = false;
+//
+//
+//					// 获取当前行
+//					int selectedRow = allCrsTable.getSelectedRow();
+//					vector<std::wstring> selectedData = allCrsData[selectedRow];
+//
+//
+//					// 文本框默认内容
+//					cnameBox.setText(selectedData[0].c_str());
+//					cnumBox.setText(selectedData[1].c_str());
+//					characterBox.setText(selectedData[2].c_str());
+//
+//
+//					// 显示
+//					y = 150 - 80, dy = 80;
+//					cnameBox.move(10, y += dy);
+//					cnumBox.move(10, y += dy);
+//					characterBox.move(10, y += dy);
+//					modifyOKButton.move(10, y += dy);
+//					cancelButton.move(10, y += dy);
+//				}
+//
+//			}
+//
+//			if (modifyOKButton.mouseClick(msg))
+//			{
+//				wchar_t cname[30];
+//				int cnum;
+//				wchar_t character[5];
+//
+//
+//				// 精确搜索课程节点
+//				wchar_t original_cname[30];
+//				int original_cnum;
+//				int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
+//				getTextInBox(original_cname, allCrsData[selectedRow][0].c_str());
+//				getNumberInBox(99999, &original_cnum, allCrsData[selectedRow][1].c_str());
+//				Cpnode modifyingCrs = searchCrs(allCrsList, original_cname, original_cnum);
+//				
+//
+//				// 判断输入格式
+//				if (
+//					getTextInBox(cname, cnameBox.text) &&
+//					getNumberInBox(99999, &cnum, cnumBox.text) &&
+//					getTextInBox(character, characterBox.text) &&
+//					cnum > 9999
+//					)
+//				{
+//
+//					// 修改
+//					modifyCrs(modifyingCrs, cname, cnum, character);
+//
+//					// 保存
+//					saveCrs(allCrsList, CRS_FILE);
+//
+//					// 使表格可变化
+//					allCrsTable.canChange = true;
+//
+//					// 刷新表格
+//					showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//					allCrsTable.setData(allCrsData);
+//
+//					// 清除输入框内容
+//					cnameBox.clear();
+//					cnumBox.clear();
+//					characterBox.clear();
+//
+//
+//					// 更改标题
+//					titleText.setText(L"所有课程");
+//
+//					// 隐藏
+//					cnameBox.move(-500, 0);
+//					cnumBox.move(-500, 0);
+//					characterBox.move(-500, 0);
+//					modifyOKButton.move(-500, 0);
+//					cancelButton.move(-500, 0);
+//
+//					// 显示
+//					y = 90, dy = 80;
+//					viewCrsBtn.move(-50, y);
+//					addCrsBtn.move(-50, y += dy);
+//					modifyCrsBtn.move(-50, y += dy);
+//					deleteCrsBtn.move(-50, y += dy);
+//					sortCrsBtn.move(-50, y += dy);
+//					if (!screenOption)
+//						screenCrsBtn.move(-50, y += dy);
+//					else
+//						screenCancelBtn.move(-50, y += dy);
+//					exportBtn.move(-50, y += dy);
+//					inportBtn.move(-50, y += dy);
+//					backButton.move(-50, y += dy);
+//
+//				}
+//				// 输入错误
+//				else
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//
+//			}
+//
+//			if (deleteCrsBtn.mouseClick(msg))
+//			{
+//				if (allCrsTable.getSelectedRow() == 0)
+//				{
+//					MessageBox(GetHWnd(), L"请选择课程", L"错误!", MB_ICONERROR);
+//				}
+//				else
+//				{
+//					int result = MessageBox(GetHWnd(), L"确定删除这门课程吗?", L"删除课程", MB_YESNO | MB_ICONQUESTION);
+//
+//					if (result == IDYES)
+//					{ // 点击确定
+//
+//						// 获取课程节点信息
+//						wchar_t cname[30];
+//						int cnum;
+//						int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
+//						getTextInBox(cname, allCrsData[selectedRow][0].c_str());
+//						getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
+//
+//						// 删除
+//						deleteCrs(allCrsList, cname, cnum);
+//
+//						// 保存
+//						saveCrs(allCrsList, CRS_FILE);
+//
+//
+//						// 刷新表格
+//						showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//						allCrsTable.setData(allCrsData);
+//					}
+//				}
+//			}
+//
+//
+//			
+//			if (sortCrsBtn.mouseClick(msg))
+//			{
+//				//要先隐藏后更改标题，否侧会出bug，不知道为啥
+//				
+//				// 隐藏
+//				viewCrsBtn.move(-500, 0);
+//				addCrsBtn.move(-500, 0);
+//				modifyCrsBtn.move(-500, 0);
+//				deleteCrsBtn.move(-500, 0);
+//				sortCrsBtn.move(-500, 0);
+//				screenCrsBtn.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//				exportBtn.move(-500, 0);
+//				inportBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 更改标题
+//				titleText.setText(L"排序");
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(L"排序");
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 显示
+//				y = 150-80, dy = 80;
+//				sortByCnumBtn.move(10, y += dy);
+//				sortByHeadcountBtn.move(10, y += dy);
+//				sortByAverscoreBtn.move(10, y += dy);
+//				sortByAverGPABtn.move(10, y +=dy);
+//				cancelButton.move(10, y +=dy);
+//			}
+//
+//			if (sortByCnumBtn.mouseClick(msg))
+//				sortOption = 1;
+//			if (sortByHeadcountBtn.mouseClick(msg))
+//				sortOption = 3;
+//			if (sortByAverscoreBtn.mouseClick(msg))
+//				sortOption = 5;
+//			if (sortByAverGPABtn.mouseClick(msg))
+//				sortOption = 7;
+//
+//			if (sortOption)
+//			{
+//				// 隐藏
+//				sortByCnumBtn.move(-500,0);
+//				sortByHeadcountBtn.move(-500, 0);
+//				sortByAverscoreBtn.move(-500, 0);
+//				sortByAverGPABtn.move(-500, 0);
+//				cancelButton.move(-500, 0);
+//
+//				// 更改标题
+//				wchar_t titletext[512];
+//				switch (sortOption)
+//				{
+//				case 1:
+//					wcscpy(titletext, L"按课程号排序");
+//					break;
+//				case 3:
+//					wcscpy(titletext, L"按总人数排序");
+//					break;
+//				case 5:
+//					wcscpy(titletext, L"按平均成绩排序");
+//					break;
+//				case 7:
+//					wcscpy(titletext, L"按平均绩点排序");
+//					break;
+//				}
+//				titleText.setText(titletext);
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(titletext);
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 显示
+//				y = 150-80, dy = 80;
+//				AscendingOrderBtn.move(10, y += dy);
+//				DescendingOrderBtn.move(10, y += dy);
+//				cancelButton.move(10, y += dy);
+//			}
+//
+//			bool flag_AscendingOrderBtn = AscendingOrderBtn.mouseClick(msg);//不这么做，AscendingOrderBtn.mouseClick(msg)在一个循环中只会被检测一次
+//			bool flag_DescendingOrderBtn = DescendingOrderBtn.mouseClick(msg);
+//			if (flag_DescendingOrderBtn)
+//				sortOption++;
+//
+//			if (flag_AscendingOrderBtn || flag_DescendingOrderBtn)
+//			{
+//				//链表排序
+//				sortCrs(allCrsList, sortOption);
+//
+//				// 刷新表格
+//				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allCrsTable.setData(allCrsData);
+//
+//				// 更改标题
+//				titleText.setText(L"所有课程");
+//				titleText.move(40, 10);
+//
+//				// 隐藏
+//				AscendingOrderBtn.move(-500, 0);
+//				DescendingOrderBtn.move(-500, 0);
+//				cancelButton.move(-500, 0);
+//
+//				// 显示
+//				y = 90-80, dy = 80;
+//				viewCrsBtn.move(-50, y += dy);
+//				addCrsBtn.move(-50, y += dy);
+//				modifyCrsBtn.move(-50, y += dy);
+//				deleteCrsBtn.move(-50, y += dy);
+//				sortCrsBtn.move(-50, y += dy);
+//				if (!screenOption)
+//					screenCrsBtn.move(-50, y += dy);
+//				else
+//					screenCancelBtn.move(-50, y += dy);
+//				exportBtn.move(-50, y += dy);
+//				inportBtn.move(-50, y += dy);
+//				backButton.move(-50, y += dy);
+//
+//				sortOption = 0;
+//			}
+//
+//
+//
+//			if (screenCrsBtn.mouseClick(msg))
+//			{
+//				// 隐藏
+//				viewCrsBtn.move(-500, 0);
+//				addCrsBtn.move(-500, 0);
+//				modifyCrsBtn.move(-500, 0);
+//				deleteCrsBtn.move(-500, 0);
+//				sortCrsBtn.move(-500, 0);
+//				screenCrsBtn.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//				exportBtn.move(-500, 0);
+//				inportBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 更改标题
+//				titleText.setText(L"筛选");
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(L"筛选");
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 显示
+//				y = 150 - 80, dy = 80;
+//				screenByHeadcountBtn.move(10, y += dy);
+//				screenByAverscoreBtn.move(10, y += dy);
+//				screenByAverGPABtn.move(10, y += dy);
+//				cancelButton.move(10, y += dy);
+//			}
+//
+//			if (screenByHeadcountBtn.mouseClick(msg))
+//			{
+//				screenOption = 1;
+//				IsInScreen = true;
+//			}
+//			if (screenByAverscoreBtn.mouseClick(msg))
+//			{
+//				screenOption = 2;
+//				IsInScreen = true;
+//			}
+//			if (screenByAverGPABtn.mouseClick(msg))
+//			{
+//				screenOption = 3;
+//				IsInScreen = true;
+//			}
+//
+//			if (IsInScreen)
+//			{
+//				// 更改标题
+//				wchar_t titletext[512];
+//				switch (screenOption)
+//				{
+//				case 1:
+//					wcscpy(titletext, L"按总人数筛选");
+//					break;
+//				case 2:
+//					wcscpy(titletext, L"按平均成绩筛选");
+//					break;
+//				case 3:
+//					wcscpy(titletext, L"按平均绩点筛选");
+//					break;
+//				}
+//				titleText.setText(titletext);
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(titletext);
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				screenByHeadcountBtn.move(-500, 0);
+//				screenByAverscoreBtn.move(-500, 0);
+//				screenByAverGPABtn.move(-500, 0);
+//
+//				// 显示
+//				y = 150 - 80, dy = 80;
+//				minBox.move(10, y+=dy);
+//				maxBox.move(10, y += dy);
+//				screenOKButton.move(10, y += dy);
+//				cancelButton.move(10, y += dy);
+//			}
+//
+//			if (screenOKButton.mouseClick(msg))
+//			{
+//				double MAX;
+//				switch (screenOption)
+//				{
+//				case 1://按总人数筛选
+//					MAX = 99999;//随便多大都行
+//					break;
+//				case 2://按平均成绩
+//					MAX = 100;
+//					break;
+//				case 3://按平均绩点
+//					MAX = 4;
+//					break;
+//				}
+//				if (
+//					getDoubleInBox(MAX, &screenMin, minBox.text) &&
+//					getDoubleInBox(MAX, &screenMax, maxBox.text) &&
+//					screenMin >= 0 && screenMax >= 0 && screenMin <= screenMax
+//					)
+//				{
+//					// 刷新表格
+//					showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//					allCrsTable.setData(allCrsData);
+//
+//					// 清除输入框内容
+//					minBox.clear();
+//					maxBox.clear();
+//
+//					// 更改标题
+//					titleText.setText(L"所有课程");
+//					titleText.move(40, 10);
+//
+//					// 隐藏
+//					minBox.move(-500, 0);
+//					maxBox.move(-500, 0);
+//					screenOKButton.move(-500, 0);
+//					cancelButton.move(-500, 0);
+//
+//					// 显示
+//					y = 90 - 80, dy = 80;
+//					viewCrsBtn.move(-50, y += dy);
+//					addCrsBtn.move(-50, y += dy);
+//					modifyCrsBtn.move(-50, y += dy);
+//					deleteCrsBtn.move(-50, y += dy);
+//					sortCrsBtn.move(-50, y += dy);
+//					if (!screenOption)
+//						screenCrsBtn.move(-50, y += dy);
+//					else
+//						screenCancelBtn.move(-50, y += dy);
+//					exportBtn.move(-50, y += dy);
+//					inportBtn.move(-50, y += dy);
+//					backButton.move(-50, y += dy);
+//
+//					IsInScreen = false;
+//				}
+//				else// 输入错误
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//			}
+//
+//			if (screenCancelBtn.mouseClick(msg))
+//			{
+//				screenOption = 0;
+//				screenMin = 0;
+//				screenMax = 0;
+//
+//				// 刷新表格
+//				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allCrsTable.setData(allCrsData);
+//
+//				screenCancelBtn.move(-500, 0);
+//				screenCrsBtn.move(-50, 490);
+//			}
+//
+//
+//
+//			if (exportBtn.mouseClick(msg)) {
+//			}
+//			if (inportBtn.mouseClick(msg)) {
+//			}
+//			if (backButton.mouseClick(msg))
+//			{
+//				//return;不能直接return
+//				menuUI();
+//			}
+//
+//			//表格鼠标滑动与点击
+//			allCrsTable.onMouse(msg);
+//
+//			// 文本框输入
+//			searchInputBox.onMessage(msg);
+//			cnameBox.onMessage(msg);
+//			cnumBox.onMessage(msg);
+//			characterBox.onMessage(msg);
+//			minBox.onMessage(msg);
+//			maxBox.onMessage(msg);
+//		}
+//
+//		showxy(msg);
+//
+//		FlushBatchDraw(); //批量绘图
+//
+//		ULONGLONG end_time = GetTickCount();
+//		if (end_time - start_time < 1)
+//		{
+//			Sleep(1);
+//		}
+//
+//	}
+//
+//}
 
 void CrsUI(Cpnode cphead, Cpnode cplist)
 {
-	cleardevice();
-	Spnode allStuInCrsList = cplist->sphead;
-	vector<vector<std::wstring>>allStuInCrsData;
-	showAllStuInCrs(cplist, allStuInCrsData, L"", 0, 0, 0);
-
-
-	Table allStuInCrsTable(310, 90, 940, 700, allStuInCrsData);
-
-
-	settextstyle(64, 0, L"微软雅黑");
-	int TextWidth = textwidth(cplist->cname);
-	int x = 0 + (276 - TextWidth) / 2;
-	Text titleText(x, 50, cplist->cname, 64);
-
-
-
-	Text GPAText(-500, 370, L"", 32);
-
-	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-
-	TextBox snameBox(-500, 150, 290, L"学生姓名", L"");
-	TextBox snumBox(-500, 220, 290, L"学号", L"");
-	TextBox scoreBox(-500, 290, 290, L"成绩", L"");
-
-
-	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
-
-	Button addStuInCrsBtn(-50, 220, 330, 60, L"   添加", 1);
-	Button modifyStuInCrsBtn(-50, 300, 330, 60, L"   修改", 1);
-	Button deleteStuInCrsBtn(-50, 380, 330, 60, L"   删除", 1);
-	Button sortStuInCrsBtn(-50, 460, 330, 60, L"   排序", 1);
-	Button screenStuInCrsBtn(-50, 540, 330, 60, L"   筛选", 1);
-	Button screenCancelBtn(-500, 540, 330, 60, L"   取消筛选", 1);
-	Button backButton(-50, 620, 330, 60, L"   返回", 0);
-
-	Button upsortBySnumBtn(-500, 220, 290, 60, L"按学号升序", 1);
-	Button downsortBySnumBtn(-500, 300, 290, 60, L"按学号降序", 1);
-	Button upsortByScoreBtn(-500, 380, 290, 60, L"按成绩升序", 1);
-	Button downsortByScoreBtn(-500, 460, 290, 60, L"按成绩降序", 1);
-	Button upsortByGPABtn(-500, 540, 290, 60, L"按GPA升序", 1);
-	Button downsortByGPABtn(-500, 620, 290, 60, L"按GPA降序", 1);
-
-	Button screenByScoreBtn(-500, 220, 290, 60, L"按成绩筛选", 1);
-	Button screenByGPABtn(-500, 300, 290, 60, L"按GPA筛选", 1);
-
-	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
-	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
-	Button screenOKButton(-500, 580, 290, 60, L"确定筛选", 1);
-	Button cancelButton(-500, 660, 290, 60, L"取消", 0);
-
-	// 处理鼠标事件
-	ExMessage msg;
-	int sortOption = 0;//用来排序
-	wchar_t searchTerm[512] = L"";
-	bool IsInScreen = false;
-	int screenOption = 0;
-	double screenMin = 0;
-	double screenMax = 0;
-	while (!_kbhit())
-	{
-		ULONGLONG start_time = GetTickCount();
-		//->
-
-		//必须有
-		searchInputBox.draw();
-		snameBox.draw();
-		snumBox.draw();
-		scoreBox.draw();
-		minBox.draw();
-		maxBox.draw();
-
-		if (peekmessage(&msg, -1, true))
-		{
-			if (cancelButton.mouseClick(msg))
-			{
-				sortOption = 0;
-				if (IsInScreen)
-				{
-					screenOption = 0;
-					IsInScreen = false;
-				}
-
-				// 清除输入框内容
-				snameBox.clear();
-				snumBox.clear();
-				scoreBox.clear();
-				minBox.clear();
-				maxBox.clear();
-
-				// 使表格可变化
-				allStuInCrsTable.canChange = true;
-
-				// 更改标题
-				titleText.setText(cplist->cname);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(cplist->cname);
-				int x = 0 + (276 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-
-				// 隐藏
-				snameBox.move(-500, 0);
-				snumBox.move(-500, 0);
-				scoreBox.move(-500, 0);
-				minBox.move(-500, 0);
-				maxBox.move(-500, 0);
-
-				addOKButton.move(-500, 0);
-				modifyOKButton.move(-500, 0);
-				cancelButton.move(-500, 0);
-
-				upsortBySnumBtn.move(-500, 0);
-				downsortBySnumBtn.move(-500, 0);
-				upsortByScoreBtn.move(-500, 0);
-				downsortByScoreBtn.move(-500, 0);
-				upsortByGPABtn.move(-500, 0);
-				downsortByGPABtn.move(-500, 0);
-
-				screenByScoreBtn.move(-500, 0);
-				screenByGPABtn.move(-500, 0);
-				screenOKButton.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-
-				// 显示
-				addStuInCrsBtn.move(-50, 220);
-				modifyStuInCrsBtn.move(-50, 300);
-				deleteStuInCrsBtn.move(-50, 380);
-				sortStuInCrsBtn.move(-50, 460);
-				if (!screenOption)
-					screenStuInCrsBtn.move(-50, 540);
-				else
-					screenCancelBtn.move(-50, 540);
-				backButton.move(-50, 620);
-
-			}
-
-			if (searchBtn.mouseClick(msg))
-			{
-				wcscpy(searchTerm, searchInputBox.text);
-				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allStuInCrsTable.setData(allStuInCrsData);
-			}
-
-			if (addStuInCrsBtn.mouseClick(msg))
-			{
-
-				// 更改标题
-				titleText.setText(L"添加学生");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"添加学生");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				addStuInCrsBtn.move(-500, 0);
-				modifyStuInCrsBtn.move(-500, 0);
-				deleteStuInCrsBtn.move(-500, 0);
-				sortStuInCrsBtn.move(-500, 0);
-				screenStuInCrsBtn.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 显示
-				snameBox.move(10, 140);
-				snumBox.move(10, 220);
-				scoreBox.move(10, 300);
-
-				addOKButton.move(10, 380);
-				cancelButton.move(10, 460);
-			}
-
-			if (addOKButton.mouseClick(msg))
-			{
-				wchar_t sname[30];
-				int snum;
-				double score;
-
-				// 判断输入格式
-
-				if (
-					getTextInBox(sname, snameBox.text) &&
-					getNumberInBox(99999999, &snum, snumBox.text) &&
-					getDoubleInBox(100, &score, scoreBox.text) &&
-					snum > 9999999 && score >= 0
-					)
-				{
-
-
-					if (!addStuInCrs(cplist, sname, snum, score))
-					{
-						MessageBox(GetHWnd(), L"该学生已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
-					}
-					else
-					{
-						// 保存
-						saveCrs(cphead, CRS_FILE);
-
-						// 刷新表格
-						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
-						allStuInCrsTable.setData(allStuInCrsData);
-
-						// 清除输入框内容
-						snameBox.clear();
-						snumBox.clear();
-						scoreBox.clear();
-
-
-						// 更改标题
-						titleText.setText(cplist->cname);
-						settextstyle(64, 0, L"微软雅黑");
-						int TextWidth = textwidth(cplist->cname);
-						int x = 0 + (276 - TextWidth) / 2;
-						titleText.move(x, 50);
-
-						// 隐藏
-						snameBox.move(-500, 0);
-						snumBox.move(-500, 0);
-						scoreBox.move(-500, 0);
-						addOKButton.move(-500, 0);
-						cancelButton.move(-500, 0);
-
-						// 显示
-						addStuInCrsBtn.move(-50, 220);
-						modifyStuInCrsBtn.move(-50, 300);
-						deleteStuInCrsBtn.move(-50, 380);
-						sortStuInCrsBtn.move(-50, 460);
-						if (!screenOption)
-							screenStuInCrsBtn.move(-50, 540);
-						else
-							screenCancelBtn.move(-50, 540);
-						backButton.move(-50, 620);
-
-					}
-
-
-				}
-				// 输入错误
-				else
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-
-			}
-
-			if (modifyStuInCrsBtn.mouseClick(msg))
-			{
-				if (allStuInCrsTable.getSelectedRow() == 0)
-				{
-					MessageBox(GetHWnd(), L"请选择学生", L"错误!", MB_ICONERROR);
-				}
-				else
-				{
-					// 更改标题
-					titleText.setText(L"修改学生");
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(L"修改学生");
-					int x = 10 + (290 - TextWidth) / 2;
-					titleText.move(x, 50);
-
-					// 隐藏
-					addStuInCrsBtn.move(-500, 0);
-					modifyStuInCrsBtn.move(-500, 0);
-					deleteStuInCrsBtn.move(-500, 0);
-					sortStuInCrsBtn.move(-500, 0);
-					screenStuInCrsBtn.move(-500, 0);
-					screenCancelBtn.move(-500, 0);
-					backButton.move(-500, 0);
-
-					// 使表格不可变化
-					allStuInCrsTable.canChange = false;
-
-					// 获取当前行
-					int selectedRow = allStuInCrsTable.getSelectedRow();
-					vector<std::wstring> selectedData = allStuInCrsData[selectedRow];
-
-					// 文本框默认内容
-					snameBox.setText(selectedData[0].c_str());
-					snumBox.setText(selectedData[1].c_str());
-					scoreBox.setText(selectedData[2].c_str());
-
-					// 显示
-					snameBox.move(10, 220);
-					snumBox.move(10, 300);
-					scoreBox.move(10, 380);
-					modifyOKButton.move(10, 460);
-					cancelButton.move(10, 540);
-				}
-
-			}
-
-			if (modifyOKButton.mouseClick(msg))
-			{
-				wchar_t sname[30];
-				int snum;
-				double score;
-
-				// 精确搜索课程节点
-				wchar_t original_sname[30];
-				int original_snum;
-				int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
-				getTextInBox(original_sname, allStuInCrsData[selectedRow][0].c_str());
-				getNumberInBox(99999999, &original_snum, allStuInCrsData[selectedRow][1].c_str());
-				Spnode modifyingStu = searchStuInCrs(cplist, original_sname, original_snum);
-
-				// 判断输入格式
-				if (
-					getTextInBox(sname, snameBox.text) &&
-					getNumberInBox(99999999, &snum, snumBox.text) &&
-					getDoubleInBox(100, &score, scoreBox.text) &&
-					snum > 9999999 && score >= 0
-					)
-				{
-
-					// 修改
-					modifyStuInCrs(cplist, modifyingStu, sname, snum, score);
-
-					// 保存
-					saveCrs(cphead, CRS_FILE);
-
-					// 使表格可变化
-					allStuInCrsTable.canChange = true;
-
-					// 刷新表格
-					showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-					allStuInCrsTable.setData(allStuInCrsData);
-
-					// 清除输入框内容
-					snameBox.clear();
-					snumBox.clear();
-					scoreBox.clear();
-
-					// 更改标题
-					titleText.setText(cplist->cname);
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(cplist->cname);
-					int x = 0 + (276 - TextWidth) / 2;
-					titleText.move(x, 50);
-
-					// 隐藏
-					snameBox.move(-500, 220);
-					snumBox.move(-500, 300);
-					scoreBox.move(-500, 380);
-					modifyOKButton.move(-500, 460);
-					cancelButton.move(-500, 540);
-
-					// 显示
-					addStuInCrsBtn.move(-50, 220);
-					modifyStuInCrsBtn.move(-50, 300);
-					deleteStuInCrsBtn.move(-50, 380);
-					sortStuInCrsBtn.move(-50, 460);
-					if (!screenOption)
-						screenStuInCrsBtn.move(-50, 540);
-					else
-						screenCancelBtn.move(-50, 540);
-					backButton.move(-50, 620);
-
-				}
-				// 输入错误
-				else
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-
-			}
-
-			if (deleteStuInCrsBtn.mouseClick(msg))
-			{
-				if (allStuInCrsTable.getSelectedRow() == 0)
-				{
-					MessageBox(GetHWnd(), L"请选择学生", L"错误!", MB_ICONERROR);
-				}
-				else
-				{
-					int result = MessageBox(GetHWnd(), L"确定删除这名学生吗?", L"删除学生", MB_YESNO | MB_ICONQUESTION);
-
-					if (result == IDYES)
-					{ // 点击确定
-
-						wchar_t sname[30];
-						int snum;
-						int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
-						getTextInBox(sname, allStuInCrsData[selectedRow][0].c_str());
-						getNumberInBox(99999999, &snum, allStuInCrsData[selectedRow][1].c_str());
-
-						// 删除
-						deleteStuInCrs(cplist, sname, snum);
-
-						// 保存
-						saveCrs(cphead, CRS_FILE);
-
-						// 刷新表格
-						showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-						allStuInCrsTable.setData(allStuInCrsData);
-					}
-				}
-			}
-
-			if (sortStuInCrsBtn.mouseClick(msg))//显示sort界面
-			{
-				// 更改标题
-				titleText.setText(L"排序");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"排序");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				addStuInCrsBtn.move(-500, 0);
-				modifyStuInCrsBtn.move(-500, 0);
-				deleteStuInCrsBtn.move(-500, 0);
-				sortStuInCrsBtn.move(-500, 0);
-				screenStuInCrsBtn.move(-500, 0);
-				screenCancelBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 显示
-				upsortBySnumBtn.move(10, 220);
-				downsortBySnumBtn.move(10, 300);
-				upsortByScoreBtn.move(10, 380);
-				downsortByScoreBtn.move(10, 460);
-				upsortByGPABtn.move(10, 540);
-				downsortByGPABtn.move(10, 620);
-				cancelButton.move(10, 700);
-			}
-
-			if (downsortBySnumBtn.mouseClick(msg))
-				sortOption = 1;
-			if (upsortBySnumBtn.mouseClick(msg))
-				sortOption = 2;
-			if (downsortByScoreBtn.mouseClick(msg))
-				sortOption = 3;
-			if (upsortByScoreBtn.mouseClick(msg))
-				sortOption = 4;
-			if (downsortByGPABtn.mouseClick(msg))
-				sortOption = 5;
-			if (upsortByGPABtn.mouseClick(msg))
-				sortOption = 6;
-
-			if (sortOption)
-			{
-				//链表排序
-				sortStuInCrs(cplist, sortOption);
-
-				// 刷新表格
-				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allStuInCrsTable.setData(allStuInCrsData);
-
-				// 更改标题
-				titleText.setText(cplist->cname);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(cplist->cname);
-				int x = 0 + (276 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				cancelButton.move(-500, 620);
-				upsortBySnumBtn.move(-500, 220);
-				downsortBySnumBtn.move(-500, 300);
-				upsortByScoreBtn.move(-500, 380);
-				downsortByScoreBtn.move(-500, 460);
-				upsortByGPABtn.move(-500, 540);
-				downsortByGPABtn.move(-500, 620);
-
-				// 显示
-				addStuInCrsBtn.move(-50, 220);
-				modifyStuInCrsBtn.move(-50, 300);
-				deleteStuInCrsBtn.move(-50, 380);
-				sortStuInCrsBtn.move(-50, 460);
-				if (!screenOption)
-					screenStuInCrsBtn.move(-50, 540);
-				else
-					screenCancelBtn.move(-50, 540);
-				backButton.move(-50, 620);
-
-				sortOption = 0;
-			}
-
-			if (screenStuInCrsBtn.mouseClick(msg))
-			{
-				// 更改标题
-				titleText.setText(L"筛选");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"筛选");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				addStuInCrsBtn.move(-500, 0);
-				modifyStuInCrsBtn.move(-500, 0);
-				deleteStuInCrsBtn.move(-500, 0);
-				sortStuInCrsBtn.move(-500, 0);
-				screenStuInCrsBtn.move(-500, 0);
-				backButton.move(-500, 0);
-
-				// 显示
-				screenByScoreBtn.move(10, 220);
-				screenByGPABtn.move(10, 300);
-				cancelButton.move(10, 380);
-			}
-
-			if (screenByScoreBtn.mouseClick(msg))
-			{
-				screenOption = 1;
-				IsInScreen = true;
-			}
-			if (screenByGPABtn.mouseClick(msg))
-			{
-				screenOption = 2;
-				IsInScreen = true;
-			}
-
-			if (IsInScreen)
-			{
-				// 更改标题
-				wchar_t titletext[512];
-				switch (screenOption)
-				{
-				case 1:
-					wcscpy(titletext, L"按成绩筛选");
-					break;
-				case 2:
-					wcscpy(titletext, L"按绩点筛选");
-					break;
-				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				screenByScoreBtn.move(-500, 0);
-				screenByGPABtn.move(-500, 0);
-				cancelButton.move(-500, 0);
-
-				// 显示
-				minBox.move(10, 220);
-				maxBox.move(10, 300);
-				screenOKButton.move(10, 380);
-				cancelButton.move(10, 460);
-			}
-
-			if (screenOKButton.mouseClick(msg))
-			{
-				double MAX;
-				switch (screenOption)
-				{
-				case 1://按成绩筛选
-					MAX = 100;
-					break;
-				case -1://按GPA
-					MAX = 4;
-					break;
-				}
-				if (
-					getDoubleInBox(MAX, &screenMin, minBox.text) &&
-					getDoubleInBox(MAX, &screenMax, maxBox.text) &&
-					screenMin >= 0 && screenMax >= 0 && screenMin <= screenMax
-					)
-				{
-					// 刷新表格
-					showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-					allStuInCrsTable.setData(allStuInCrsData);
-
-					// 清除输入框内容
-					minBox.clear();
-					maxBox.clear();
-
-					// 更改标题
-					titleText.setText(cplist->cname);
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(cplist->cname);
-					int x = 0 + (276 - TextWidth) / 2;
-					titleText.move(x, 50);
-
-					// 隐藏
-					minBox.move(-500, 0);
-					maxBox.move(-500, 0);
-					screenOKButton.move(-500, 0);
-					cancelButton.move(-500, 0);
-
-					// 显示
-					addStuInCrsBtn.move(-50, 220);
-					modifyStuInCrsBtn.move(-50, 300);
-					deleteStuInCrsBtn.move(-50, 380);
-					sortStuInCrsBtn.move(-50, 460);
-					screenCancelBtn.move(-50, 540);
-					backButton.move(-50, 620);
-
-					IsInScreen = false;
-				}
-				else// 输入错误
-				{
-					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
-				}
-			}
-
-			if (screenCancelBtn.mouseClick(msg))
-			{
-				screenOption = 0;
-				screenMin = 0;
-				screenMax = 0;
-				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
-				allStuInCrsTable.setData(allStuInCrsData);
-
-				screenCancelBtn.move(-500, 0);
-				screenStuInCrsBtn.move(-50, 540);
-			}
-
-			if (backButton.mouseClick(msg))
-			{
-				//return;不能直接return
-				allCrsUI();
-			}
-
-			//表格鼠标滑动与点击
-			allStuInCrsTable.onMouse(msg);
-
-			// 文本框输入
-			searchInputBox.onMessage(msg);
-			snameBox.onMessage(msg);
-			snumBox.onMessage(msg);
-			scoreBox.onMessage(msg);
-			minBox.onMessage(msg);
-			maxBox.onMessage(msg);
-		}
-
-		showxy(msg);
-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1)
-		{
-			Sleep(1);
-		}
-
-	}
 	return;
 }
+//void CrsUI(Cpnode cphead, Cpnode cplist)
+//{
+//	cleardevice();
+//	Spnode allStuInCrsList = cplist->sphead;
+//	vector<vector<std::wstring>>allStuInCrsData;
+//	showAllStuInCrs(cplist, allStuInCrsData, L"", 0, 0, 0);
+//
+//
+//	Table allStuInCrsTable(310, 90, 940, 700, allStuInCrsData);
+//
+//
+//	settextstyle(64, 0, L"微软雅黑");
+//	int TextWidth = textwidth(cplist->cname);
+//	int x = 0 + (276 - TextWidth) / 2;
+//	Text titleText(x, 50, cplist->cname, 64);
+//
+//
+//
+//	Text GPAText(-500, 370, L"", 32);
+//
+//	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+//
+//	TextBox snameBox(-500, 0, 290, L"学生姓名", L"");
+//	TextBox snumBox(-500, 0, 290, L"学号", L"");
+//	TextBox scoreBox(-500, 0, 290, L"成绩", L"");
+//	TextBox minBox(-500, 0, 290, L"最小值", L"");
+//	TextBox maxBox(-500, 0, 290, L"最大值", L"");
+//
+//
+//	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+//
+//	Button addStuInCrsBtn(-50, 220, 330, 60, L"   添加", 1);
+//	Button modifyStuInCrsBtn(-50, 300, 330, 60, L"   修改", 1);
+//	Button deleteStuInCrsBtn(-50, 380, 330, 60, L"   删除", 1);
+//	Button sortStuInCrsBtn(-50, 460, 330, 60, L"   排序", 1);
+//	Button screenStuInCrsBtn(-50, 540, 330, 60, L"   筛选", 1);
+//	Button screenCancelBtn(-500, 540, 330, 60, L"   取消筛选", 1);
+//	Button backButton(-50, 620, 330, 60, L"   返回", 0);
+//
+//	Button upsortBySnumBtn(-500, 220, 290, 60, L"按学号升序", 1);
+//	Button downsortBySnumBtn(-500, 300, 290, 60, L"按学号降序", 1);
+//	Button upsortByScoreBtn(-500, 380, 290, 60, L"按成绩升序", 1);
+//	Button downsortByScoreBtn(-500, 460, 290, 60, L"按成绩降序", 1);
+//	Button upsortByGPABtn(-500, 540, 290, 60, L"按GPA升序", 1);
+//	Button downsortByGPABtn(-500, 620, 290, 60, L"按GPA降序", 1);
+//
+//	Button screenByScoreBtn(-500, 220, 290, 60, L"按成绩筛选", 1);
+//	Button screenByGPABtn(-500, 300, 290, 60, L"按GPA筛选", 1);
+//
+//	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
+//	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
+//	Button screenOKButton(-500, 580, 290, 60, L"确定筛选", 1);
+//	Button cancelButton(-500, 660, 290, 60, L"取消", 0);
+//
+//	// 处理鼠标事件
+//	ExMessage msg;
+//	int sortOption = 0;//用来排序
+//	wchar_t searchTerm[512] = L"";
+//	bool IsInScreen = false;
+//	int screenOption = 0;
+//	double screenMin = 0;
+//	double screenMax = 0;
+//	while (!_kbhit())
+//	{
+//		ULONGLONG start_time = GetTickCount();
+//		//->
+//
+//		//必须有
+//		searchInputBox.draw();
+//		snameBox.draw();
+//		snumBox.draw();
+//		scoreBox.draw();
+//		minBox.draw();
+//		maxBox.draw();
+//
+//		if (peekmessage(&msg, -1, true))
+//		{
+//			if (cancelButton.mouseClick(msg))
+//			{
+//				sortOption = 0;
+//				if (IsInScreen)
+//				{
+//					screenOption = 0;
+//					IsInScreen = false;
+//				}
+//
+//				// 清除输入框内容
+//				snameBox.clear();
+//				snumBox.clear();
+//				scoreBox.clear();
+//				minBox.clear();
+//				maxBox.clear();
+//
+//				// 使表格可变化
+//				allStuInCrsTable.canChange = true;
+//
+//				// 更改标题
+//				titleText.setText(cplist->cname);
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(cplist->cname);
+//				int x = 0 + (276 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//
+//				// 隐藏
+//				snameBox.move(-500, 0);
+//				snumBox.move(-500, 0);
+//				scoreBox.move(-500, 0);
+//				minBox.move(-500, 0);
+//				maxBox.move(-500, 0);
+//
+//				addOKButton.move(-500, 0);
+//				modifyOKButton.move(-500, 0);
+//				cancelButton.move(-500, 0);
+//
+//				upsortBySnumBtn.move(-500, 0);
+//				downsortBySnumBtn.move(-500, 0);
+//				upsortByScoreBtn.move(-500, 0);
+//				downsortByScoreBtn.move(-500, 0);
+//				upsortByGPABtn.move(-500, 0);
+//				downsortByGPABtn.move(-500, 0);
+//
+//				screenByScoreBtn.move(-500, 0);
+//				screenByGPABtn.move(-500, 0);
+//				screenOKButton.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//
+//				// 显示
+//				addStuInCrsBtn.move(-50, 220);
+//				modifyStuInCrsBtn.move(-50, 300);
+//				deleteStuInCrsBtn.move(-50, 380);
+//				sortStuInCrsBtn.move(-50, 460);
+//				if (!screenOption)
+//					screenStuInCrsBtn.move(-50, 540);
+//				else
+//					screenCancelBtn.move(-50, 540);
+//				backButton.move(-50, 620);
+//
+//			}
+//
+//			if (searchBtn.mouseClick(msg))
+//			{
+//				wcscpy(searchTerm, searchInputBox.text);
+//				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allStuInCrsTable.setData(allStuInCrsData);
+//			}
+//
+//			if (addStuInCrsBtn.mouseClick(msg))
+//			{
+//
+//				// 更改标题
+//				titleText.setText(L"添加学生");
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(L"添加学生");
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				addStuInCrsBtn.move(-500, 0);
+//				modifyStuInCrsBtn.move(-500, 0);
+//				deleteStuInCrsBtn.move(-500, 0);
+//				sortStuInCrsBtn.move(-500, 0);
+//				screenStuInCrsBtn.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 显示
+//				snameBox.move(10, 140);
+//				snumBox.move(10, 220);
+//				scoreBox.move(10, 300);
+//
+//				addOKButton.move(10, 380);
+//				cancelButton.move(10, 460);
+//			}
+//
+//			if (addOKButton.mouseClick(msg))
+//			{
+//				wchar_t sname[30];
+//				int snum;
+//				double score;
+//
+//				// 判断输入格式
+//
+//				if (
+//					getTextInBox(sname, snameBox.text) &&
+//					getNumberInBox(99999999, &snum, snumBox.text) &&
+//					getDoubleInBox(100, &score, scoreBox.text) &&
+//					snum > 9999999 && score >= 0
+//					)
+//				{
+//
+//
+//					if (!addStuInCrs(cplist, sname, snum, score))
+//					{
+//						MessageBox(GetHWnd(), L"该学生已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+//					}
+//					else
+//					{
+//						// 保存
+//						saveCrs(cphead, CRS_FILE);
+//
+//						// 刷新表格
+//						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
+//						allStuInCrsTable.setData(allStuInCrsData);
+//
+//						// 清除输入框内容
+//						snameBox.clear();
+//						snumBox.clear();
+//						scoreBox.clear();
+//
+//
+//						// 更改标题
+//						titleText.setText(cplist->cname);
+//						settextstyle(64, 0, L"微软雅黑");
+//						int TextWidth = textwidth(cplist->cname);
+//						int x = 0 + (276 - TextWidth) / 2;
+//						titleText.move(x, 50);
+//
+//						// 隐藏
+//						snameBox.move(-500, 0);
+//						snumBox.move(-500, 0);
+//						scoreBox.move(-500, 0);
+//						addOKButton.move(-500, 0);
+//						cancelButton.move(-500, 0);
+//
+//						// 显示
+//						addStuInCrsBtn.move(-50, 220);
+//						modifyStuInCrsBtn.move(-50, 300);
+//						deleteStuInCrsBtn.move(-50, 380);
+//						sortStuInCrsBtn.move(-50, 460);
+//						if (!screenOption)
+//							screenStuInCrsBtn.move(-50, 540);
+//						else
+//							screenCancelBtn.move(-50, 540);
+//						backButton.move(-50, 620);
+//
+//					}
+//
+//
+//				}
+//				// 输入错误
+//				else
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//
+//			}
+//
+//			if (modifyStuInCrsBtn.mouseClick(msg))
+//			{
+//				if (allStuInCrsTable.getSelectedRow() == 0)
+//				{
+//					MessageBox(GetHWnd(), L"请选择学生", L"错误!", MB_ICONERROR);
+//				}
+//				else
+//				{
+//					// 更改标题
+//					titleText.setText(L"修改学生");
+//					settextstyle(64, 0, L"微软雅黑");
+//					int TextWidth = textwidth(L"修改学生");
+//					int x = 10 + (290 - TextWidth) / 2;
+//					titleText.move(x, 50);
+//
+//					// 隐藏
+//					addStuInCrsBtn.move(-500, 0);
+//					modifyStuInCrsBtn.move(-500, 0);
+//					deleteStuInCrsBtn.move(-500, 0);
+//					sortStuInCrsBtn.move(-500, 0);
+//					screenStuInCrsBtn.move(-500, 0);
+//					screenCancelBtn.move(-500, 0);
+//					backButton.move(-500, 0);
+//
+//					// 使表格不可变化
+//					allStuInCrsTable.canChange = false;
+//
+//					// 获取当前行
+//					int selectedRow = allStuInCrsTable.getSelectedRow();
+//					vector<std::wstring> selectedData = allStuInCrsData[selectedRow];
+//
+//					// 文本框默认内容
+//					snameBox.setText(selectedData[0].c_str());
+//					snumBox.setText(selectedData[1].c_str());
+//					scoreBox.setText(selectedData[2].c_str());
+//
+//					// 显示
+//					snameBox.move(10, 220);
+//					snumBox.move(10, 300);
+//					scoreBox.move(10, 380);
+//					modifyOKButton.move(10, 460);
+//					cancelButton.move(10, 540);
+//				}
+//
+//			}
+//
+//			if (modifyOKButton.mouseClick(msg))
+//			{
+//				wchar_t sname[30];
+//				int snum;
+//				double score;
+//
+//				// 精确搜索课程节点
+//				wchar_t original_sname[30];
+//				int original_snum;
+//				int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
+//				getTextInBox(original_sname, allStuInCrsData[selectedRow][0].c_str());
+//				getNumberInBox(99999999, &original_snum, allStuInCrsData[selectedRow][1].c_str());
+//				Spnode modifyingStu = searchStuInCrs(cplist, original_sname, original_snum);
+//
+//				// 判断输入格式
+//				if (
+//					getTextInBox(sname, snameBox.text) &&
+//					getNumberInBox(99999999, &snum, snumBox.text) &&
+//					getDoubleInBox(100, &score, scoreBox.text) &&
+//					snum > 9999999 && score >= 0
+//					)
+//				{
+//
+//					// 修改
+//					modifyStuInCrs(cplist, modifyingStu, sname, snum, score);
+//
+//					// 保存
+//					saveCrs(cphead, CRS_FILE);
+//
+//					// 使表格可变化
+//					allStuInCrsTable.canChange = true;
+//
+//					// 刷新表格
+//					showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//					allStuInCrsTable.setData(allStuInCrsData);
+//
+//					// 清除输入框内容
+//					snameBox.clear();
+//					snumBox.clear();
+//					scoreBox.clear();
+//
+//					// 更改标题
+//					titleText.setText(cplist->cname);
+//					settextstyle(64, 0, L"微软雅黑");
+//					int TextWidth = textwidth(cplist->cname);
+//					int x = 0 + (276 - TextWidth) / 2;
+//					titleText.move(x, 50);
+//
+//					// 隐藏
+//					snameBox.move(-500, 220);
+//					snumBox.move(-500, 300);
+//					scoreBox.move(-500, 380);
+//					modifyOKButton.move(-500, 460);
+//					cancelButton.move(-500, 540);
+//
+//					// 显示
+//					addStuInCrsBtn.move(-50, 220);
+//					modifyStuInCrsBtn.move(-50, 300);
+//					deleteStuInCrsBtn.move(-50, 380);
+//					sortStuInCrsBtn.move(-50, 460);
+//					if (!screenOption)
+//						screenStuInCrsBtn.move(-50, 540);
+//					else
+//						screenCancelBtn.move(-50, 540);
+//					backButton.move(-50, 620);
+//
+//				}
+//				// 输入错误
+//				else
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//
+//			}
+//
+//			if (deleteStuInCrsBtn.mouseClick(msg))
+//			{
+//				if (allStuInCrsTable.getSelectedRow() == 0)
+//				{
+//					MessageBox(GetHWnd(), L"请选择学生", L"错误!", MB_ICONERROR);
+//				}
+//				else
+//				{
+//					int result = MessageBox(GetHWnd(), L"确定删除这名学生吗?", L"删除学生", MB_YESNO | MB_ICONQUESTION);
+//
+//					if (result == IDYES)
+//					{ // 点击确定
+//
+//						wchar_t sname[30];
+//						int snum;
+//						int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
+//						getTextInBox(sname, allStuInCrsData[selectedRow][0].c_str());
+//						getNumberInBox(99999999, &snum, allStuInCrsData[selectedRow][1].c_str());
+//
+//						// 删除
+//						deleteStuInCrs(cplist, sname, snum);
+//
+//						// 保存
+//						saveCrs(cphead, CRS_FILE);
+//
+//						// 刷新表格
+//						showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//						allStuInCrsTable.setData(allStuInCrsData);
+//					}
+//				}
+//			}
+//
+//			if (sortStuInCrsBtn.mouseClick(msg))//显示sort界面
+//			{
+//				// 更改标题
+//				titleText.setText(L"排序");
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(L"排序");
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				addStuInCrsBtn.move(-500, 0);
+//				modifyStuInCrsBtn.move(-500, 0);
+//				deleteStuInCrsBtn.move(-500, 0);
+//				sortStuInCrsBtn.move(-500, 0);
+//				screenStuInCrsBtn.move(-500, 0);
+//				screenCancelBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 显示
+//				upsortBySnumBtn.move(10, 220);
+//				downsortBySnumBtn.move(10, 300);
+//				upsortByScoreBtn.move(10, 380);
+//				downsortByScoreBtn.move(10, 460);
+//				upsortByGPABtn.move(10, 540);
+//				downsortByGPABtn.move(10, 620);
+//				cancelButton.move(10, 700);
+//			}
+//
+//			if (downsortBySnumBtn.mouseClick(msg))
+//				sortOption = 1;
+//			if (upsortBySnumBtn.mouseClick(msg))
+//				sortOption = 2;
+//			if (downsortByScoreBtn.mouseClick(msg))
+//				sortOption = 3;
+//			if (upsortByScoreBtn.mouseClick(msg))
+//				sortOption = 4;
+//			if (downsortByGPABtn.mouseClick(msg))
+//				sortOption = 5;
+//			if (upsortByGPABtn.mouseClick(msg))
+//				sortOption = 6;
+//
+//			if (sortOption)
+//			{
+//				//链表排序
+//				sortStuInCrs(cplist, sortOption);
+//
+//				// 刷新表格
+//				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allStuInCrsTable.setData(allStuInCrsData);
+//
+//				// 更改标题
+//				titleText.setText(cplist->cname);
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(cplist->cname);
+//				int x = 0 + (276 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				cancelButton.move(-500, 620);
+//				upsortBySnumBtn.move(-500, 220);
+//				downsortBySnumBtn.move(-500, 300);
+//				upsortByScoreBtn.move(-500, 380);
+//				downsortByScoreBtn.move(-500, 460);
+//				upsortByGPABtn.move(-500, 540);
+//				downsortByGPABtn.move(-500, 620);
+//
+//				// 显示
+//				addStuInCrsBtn.move(-50, 220);
+//				modifyStuInCrsBtn.move(-50, 300);
+//				deleteStuInCrsBtn.move(-50, 380);
+//				sortStuInCrsBtn.move(-50, 460);
+//				if (!screenOption)
+//					screenStuInCrsBtn.move(-50, 540);
+//				else
+//					screenCancelBtn.move(-50, 540);
+//				backButton.move(-50, 620);
+//
+//				sortOption = 0;
+//			}
+//
+//			if (screenStuInCrsBtn.mouseClick(msg))
+//			{
+//				// 更改标题
+//				titleText.setText(L"筛选");
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(L"筛选");
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				addStuInCrsBtn.move(-500, 0);
+//				modifyStuInCrsBtn.move(-500, 0);
+//				deleteStuInCrsBtn.move(-500, 0);
+//				sortStuInCrsBtn.move(-500, 0);
+//				screenStuInCrsBtn.move(-500, 0);
+//				backButton.move(-500, 0);
+//
+//				// 显示
+//				screenByScoreBtn.move(10, 220);
+//				screenByGPABtn.move(10, 300);
+//				cancelButton.move(10, 380);
+//			}
+//
+//			if (screenByScoreBtn.mouseClick(msg))
+//			{
+//				screenOption = 1;
+//				IsInScreen = true;
+//			}
+//			if (screenByGPABtn.mouseClick(msg))
+//			{
+//				screenOption = 2;
+//				IsInScreen = true;
+//			}
+//
+//			if (IsInScreen)
+//			{
+//				// 更改标题
+//				wchar_t titletext[512];
+//				switch (screenOption)
+//				{
+//				case 1:
+//					wcscpy(titletext, L"按成绩筛选");
+//					break;
+//				case 2:
+//					wcscpy(titletext, L"按绩点筛选");
+//					break;
+//				}
+//				titleText.setText(titletext);
+//				settextstyle(64, 0, L"微软雅黑");
+//				int TextWidth = textwidth(titletext);
+//				int x = 10 + (290 - TextWidth) / 2;
+//				titleText.move(x, 50);
+//
+//				// 隐藏
+//				screenByScoreBtn.move(-500, 0);
+//				screenByGPABtn.move(-500, 0);
+//				cancelButton.move(-500, 0);
+//
+//				// 显示
+//				minBox.move(10, 220);
+//				maxBox.move(10, 300);
+//				screenOKButton.move(10, 380);
+//				cancelButton.move(10, 460);
+//			}
+//
+//			if (screenOKButton.mouseClick(msg))
+//			{
+//				double MAX;
+//				switch (screenOption)
+//				{
+//				case 1://按成绩筛选
+//					MAX = 100;
+//					break;
+//				case -1://按GPA
+//					MAX = 4;
+//					break;
+//				}
+//				if (
+//					getDoubleInBox(MAX, &screenMin, minBox.text) &&
+//					getDoubleInBox(MAX, &screenMax, maxBox.text) &&
+//					screenMin >= 0 && screenMax >= 0 && screenMin <= screenMax
+//					)
+//				{
+//					// 刷新表格
+//					showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//					allStuInCrsTable.setData(allStuInCrsData);
+//
+//					// 清除输入框内容
+//					minBox.clear();
+//					maxBox.clear();
+//
+//					// 更改标题
+//					titleText.setText(cplist->cname);
+//					settextstyle(64, 0, L"微软雅黑");
+//					int TextWidth = textwidth(cplist->cname);
+//					int x = 0 + (276 - TextWidth) / 2;
+//					titleText.move(x, 50);
+//
+//					// 隐藏
+//					minBox.move(-500, 0);
+//					maxBox.move(-500, 0);
+//					screenOKButton.move(-500, 0);
+//					cancelButton.move(-500, 0);
+//
+//					// 显示
+//					addStuInCrsBtn.move(-50, 220);
+//					modifyStuInCrsBtn.move(-50, 300);
+//					deleteStuInCrsBtn.move(-50, 380);
+//					sortStuInCrsBtn.move(-50, 460);
+//					screenCancelBtn.move(-50, 540);
+//					backButton.move(-50, 620);
+//
+//					IsInScreen = false;
+//				}
+//				else// 输入错误
+//				{
+//					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
+//				}
+//			}
+//
+//			if (screenCancelBtn.mouseClick(msg))
+//			{
+//				screenOption = 0;
+//				screenMin = 0;
+//				screenMax = 0;
+//				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
+//				allStuInCrsTable.setData(allStuInCrsData);
+//
+//				screenCancelBtn.move(-500, 0);
+//				screenStuInCrsBtn.move(-50, 540);
+//			}
+//
+//			if (backButton.mouseClick(msg))
+//			{
+//				//return;不能直接return
+//				allCrsUI();
+//			}
+//
+//			//表格鼠标滑动与点击
+//			allStuInCrsTable.onMouse(msg);
+//
+//			// 文本框输入
+//			searchInputBox.onMessage(msg);
+//			snameBox.onMessage(msg);
+//			snumBox.onMessage(msg);
+//			scoreBox.onMessage(msg);
+//			minBox.onMessage(msg);
+//			maxBox.onMessage(msg);
+//		}
+//
+//		showxy(msg);
+//
+//		FlushBatchDraw(); //批量绘图
+//
+//		ULONGLONG end_time = GetTickCount();
+//		if (end_time - start_time < 1)
+//		{
+//			Sleep(1);
+//		}
+//
+//	}
+//	return;
+//}
 
 
 
