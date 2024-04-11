@@ -118,10 +118,13 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 
-int AllGrid(Crsnode* crss);
+double AllGrid(Node* crss);
 
-int MustGrid(Crsnode* crss);
+double MustGrid(Node* crss);
 
+double AllScore(Node* Crs);
+
+double MustScore(Node* Crs);
 
 bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor); // 添加学生（不包含课程）
 
