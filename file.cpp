@@ -314,6 +314,7 @@ bool saveStu(List StuList, const char* file_name) {
 	fp = fopen(file_name, "w"); // 打开文件
 	if (fp == NULL) {
 		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
 		exit(EXIT_FAILURE);
 	}//打开失败
 
@@ -328,7 +329,7 @@ bool saveStu(List StuList, const char* file_name) {
 			pStu->item.data.major,
 			pStu->item.data.original_college,
 			pStu->item.data.original_major,
-			pStu->item.data.password, 
+			pStu->item.data.password,
 
 			pStu->item.data.all_avg_score,
 			pStu->item.data.all_avg_grid,
@@ -396,6 +397,7 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 	fp = fopen(file_name, "w"); // 打开文件
 	if (fp == NULL) {
 		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
 		exit(EXIT_FAILURE);
 	}//打开失败
 
@@ -431,6 +433,87 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 		pCrs = pCrs->next; // 移动到下一个节点
 	}
 	fclose(fp);
+	return true;
+}
+
+bool exportStu(List StuList, const char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+
+	//表头
+	fwprintf(fp, L"学号\t\t\t姓名\t\t\t性别\t\t年级\t\t学院\t\t\t专业\t\t\t原学院\t\t\t原专业\t\t\t所有课程平均分\t所有课程平均绩点\t必修课程平均分\t必修课程平均绩点\n\n");
+
+	List pStu = StuList->next; // 从头结点的下一个节点开始
+	while (pStu != NULL) {
+		fwprintf(fp, L"%d\t%s\t\t%s\t\t%d\t\t%s\t\t%s\t%s\t%s\t%.2lf\t%.4lf\t%.2lf\t%.4lf\n\n",
+			pStu->item.data.ID,
+			pStu->item.data.name,
+			(pStu->item.data.gender == 1) ? L"    男" : L"    女",
+			pStu->item.data.grade,
+			pStu->item.data.college,
+			pStu->item.data.major,
+			pStu->item.data.original_college,
+			pStu->item.data.original_major,
+
+			pStu->item.data.all_avg_score,
+			pStu->item.data.all_avg_grid,
+			pStu->item.data.req_avg_score,
+			pStu->item.data.req_avg_grid
+
+		); // 写入
+		pStu = pStu->next; // 移动到下一个节点
+	}
+	fclose(fp);
+	return true;
+
+}
+
+bool exportCrs(Cpnode CrsList, const char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+
+	//表头
+	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
+
+	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
+	while (pCrs != NULL) {
+		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
+			pCrs->cnum,
+			pCrs->cname,
+			pCrs->SchYear,
+			pCrs->character,
+			pCrs->headcount,
+			pCrs->averscore,
+			pCrs->averGPA,
+			pCrs->PassNum,
+			pCrs->PassRate,
+			pCrs->ExcelNum,
+			pCrs->ExcelRate
+		); // 写入
+
+		pCrs = pCrs->next; // 移动到下一个节点
+	}
+	fclose(fp);
+	return true;
+}
+
+bool importStu() {
+	return true;
+}
+
+bool importCrs() {
 	return true;
 }
 

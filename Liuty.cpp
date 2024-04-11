@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLIULIULIU(void) {
+int mainLILILILILIL(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -20,11 +20,13 @@ int mainLIULIULIU(void) {
 	cleardevice();
 
 
-	//Cpnode tmpCrs = readCrs(CRS_FILE);
+	Cpnode tmpCrs = readCrs(CRS_FILE);
+	exportCrs(tmpCrs, ".\\export\\tempCrs.txt");
 	//saveCrs(tmpCrs, CRS_FILE);
 
-	//List tmpStu = readStu(STU_FILE);
+	List tmpStu = readStu(STU_FILE);
 	//saveStu(tmpStu, STU_FILE);
+	exportStu(tmpStu, ".\\export\\tempStu.txt");
 
 
 	testUI();

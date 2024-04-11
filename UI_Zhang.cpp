@@ -29,10 +29,10 @@ int mainZZZZ(void)
 	return 0;
 }
 
-void allCrsUI()
-{
-	return;
-}
+//void allCrsUI()
+//{
+//	return;
+//}
 void allCrsUI()
 {
 	cleardevice();
