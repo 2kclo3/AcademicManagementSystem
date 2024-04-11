@@ -1,12 +1,13 @@
 #pragma warning(disable:4996)
 
 #include "main.h"
-#define STU_FILE ".\\data\\Student - 副本.txt"
+#define STU_FILE ".\\data\\Student.txt"
 #define CRS_FILE ".\\data\\Course.txt"
 
 
 void loginUI();
-void Modify_Password_UI(const wchar_t* account, Node* Stu);
+void Modify_Password_UI(const wchar_t* account, Node* Stu,List StuList);//最后一个参数：学生链表首节点 便于modifyUI中改完密码对文件进行保存
+
 void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
 
@@ -51,13 +52,6 @@ int mainLin() {
 	);
 
 	printStu(Stu);
-	*/
-
-	/*ist StuList = readStu(STU_FILE);
-	wchar_t name[20] = L"李四";
-	Node* Stu = searchStu_InQuality(StuList, name);
-	wstring tmp_account = to_wstring(Stu->item.data.ID);
-	Modify_Password_UI(tmp_account.c_str(), Stu);
 	*/
 
 	loginUI();
@@ -141,13 +135,13 @@ void loginUI() {
 					Stu = Stu->next;
 				}
 
-					if (Stu == NULL) {
-						MessageBox(GetHWnd(), L"不存在这个账号！无法修改密码！", L"错误！", MB_ICONWARNING);
-						accountBox.clear();
-						passwordBox.clear();
-					}
-					else if (wcscmp(tmp_password.c_str(), passwordBox.text) == 0)//把这个学生对应的正确密码和输入的密码进行比较
-						Modify_Password_UI(accountBox.text, Stu);
+				if (Stu == NULL) {
+					MessageBox(GetHWnd(), L"不存在这个账号！无法修改密码！", L"错误！", MB_ICONWARNING);
+					accountBox.clear();
+					passwordBox.clear();
+				}
+				else if (wcscmp(tmp_password.c_str(), passwordBox.text) == 0)//把这个学生对应的正确密码和输入的密码进行比较
+					Modify_Password_UI(accountBox.text, Stu, StuList);
 
 					else {
 						MessageBox(GetHWnd(), L"原密码错误！无法修改密码！", L"错误！", MB_ICONWARNING);
@@ -175,30 +169,28 @@ void loginUI() {
 
 }
 
-void Modify_Password_UI(const wchar_t* account,Node* Stu) {
+void Modify_Password_UI(const wchar_t* account,Node* Stu,List StuList) {
 
 	cleardevice();
 
 
 	//drawLine();
 
-	List StuList = readStu(STU_FILE);//便于修改完密码后对文件进行保存
 
+	Text titleText(130, 100, L"你好，请修改你的密码！", 64);
 
-	Text titleText(200, 100, L"请修改你的密码", 64);
+	TextBox accountBox(300, 300,600, L"账号", L"");
+	TextBox old_passwordBox(300, 380, 600, L"原密码", L"");
+	TextBox new_passwordBox(300, 460, 600, L"请输入新密码", L"");
+	TextBox confirm_passwordBox(300, 540, 600, L"请确认新密码", L"");
+	Button modify_OK_Button(450, 620, 330, 60, L"确认修改", 1);
+	Button backButton(450, 700, 330, 60, L"取消修改", 0);
 
-	TextBox accountBox(450, 300, 200, L"账号", L"");
-	TextBox old_passwordBox(450, 380, 200, L"原密码", L"");
-	TextBox new_passwordBox(450, 460, 200, L"新密码", L"");
-	TextBox confirm_passwordBox(450, 540, 200, L"确认新密码", L"");
-	Button modify_OK_Button(450, 620, 200, 60, L"确认修改", 1);
-	Button backButton(660, 700, 200, 60, L"返回", 0);
-
-	Text IDText(450, 200, L"", 32);
+	Text IDText(300, 200, L"", 32);
 	wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
 	IDText.setText(show_ID.c_str());
 
-	Text nameText(450, 230, L"", 32);
+	Text nameText(300, 230, L"", 32);
 	wstring tmp_name = Stu->item.data.name;
 	wstring show_name = L"姓名：" + tmp_name;
 	nameText.setText(show_name.c_str());
@@ -214,14 +206,19 @@ void Modify_Password_UI(const wchar_t* account,Node* Stu) {
 		confirm_passwordBox.draw();
 		
 		//文本框默认内容
-		accountBox.setText(account);
-		old_passwordBox.setText(Stu->item.data.password);
+		wstring show_account = L"账号：" + (wstring)account;
+		accountBox.setText(show_account.c_str());
+		wstring show_old_password = L"原密码：" + (wstring)Stu->item.data.password;
+		old_passwordBox.setText(show_old_password.c_str());
 
 		if (peekmessage(&msg, -1, true)) {
 
 			if (modify_OK_Button.mouseClick(msg)) {
+
 				if (wcscmp(new_passwordBox.text, confirm_passwordBox.text) == 0) {
+					
 					wcscpy(Stu->item.data.password, new_passwordBox.text);
+					
 					saveStu(StuList, STU_FILE);
 
 					// 清除输入框内容
@@ -236,6 +233,7 @@ void Modify_Password_UI(const wchar_t* account,Node* Stu) {
 				}
 				else {
 					MessageBox(GetHWnd(), L"两次输入的密码不一致！", L"错误!", MB_ICONWARNING);
+					new_passwordBox.clear();
 					confirm_passwordBox.clear();
 				}
 
