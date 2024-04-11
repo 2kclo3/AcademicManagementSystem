@@ -33,11 +33,14 @@ typedef struct Cnode_//课程节点
 	wchar_t cname[30];//课程名
 	int cnum;//课程号，五位数字
 	wchar_t character[5];//课程性质：选修、必修
+	int SchYear;//学年
 	int headcount;//总人数
 	double totscore;//总成绩，没有实际意义，但可以提升代码的效率
 	double averscore;//平均成绩
 	double totGPA;//总GPA，，没有实际意义，但可以提升代码的效率
 	double averGPA;//平均GPA
+	int PassNum;//及格人数，用来算及格率
+	int ExcelNum;//优秀人数，用来算优秀率
 	struct Cnode_ * next;//下一个课程节点
 	Spnode sphead;//某个课程所拥有的学生链表的头节点
 }_Cnode,*Cpnode;
@@ -45,21 +48,47 @@ typedef struct Cnode_//课程节点
 
 void menu();//调试时用，最后删除
 
-void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示所有课程（不包含学生成绩）
+void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max); // 显示所有课程（不包含学生成绩）
 //Cpnode showCrs(Cpnode phead); // 显示单个课程信息（包含该课程所有学生的成绩）
 //Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
-void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm);
+void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
-int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 添加课程（不包含成绩）
-int addStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum, double Score); // 为某课程添加某学生成绩
 
-int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character); // 修改课程信息（不修改成绩）
-int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* Sname, int Snum, double Score); // 修改某个课程的某学生成绩
+//参数列表：课程链表的头节点地址，课程名称，课程号，课程性质,学年
+//如果已存在这门课，添加失败，返回0；否则返回1
+int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, int SchYear); // 添加课程
 
+//参数列表：目标课程的节点地址，学生姓名，学号，成绩
+//如果已存在这名学生，添加失败，返回0；否则返回1
+int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score); // 为某课程添加某学生成绩
+
+//参数列表：目标课程的节点地址，课程名称，课程号，课程性质,学年
+//返回值不用管
+//使用前先用searchCrs函数找到目标课程的节点地址
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character, int SchYear); // 修改课程信息
+
+//参数列表：目标课程的节点地址，目标学生的节点地址,学生姓名，学号，成绩
+//返回值不用管
+//使用前先用searchStuInCrs在目标课程的节点中找到目标学生的节点地址
+int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* sname, int snum, double score); // 修改某个课程的某学生成绩
+
+//参数列表：课程链表的头节点地址，课程名称，课程号
+//正常返回1,没找到返回0
 int deleteCrs(Cpnode cphead, wchar_t* cname,int cnum); // 删除课程
+
+//参数列表：目标课程的节点地址，学生姓名，学号
+//正常返回1,没找到返回0
 int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum); // 删除某个课程的某学生成绩
 
+void sortStuInCrs(Cpnode cplist, int op);//对某个课程节点中的学生链表排序
+void sortCrs(Cpnode cphead, int op);//对课程链表排序
+
+//参数列表：课程链表的头节点地址，课程名称，课程号
+//找到了返回目标课程的节点地址，没找到返回NULL
 Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum); // 在总课程链表中搜索课程
+
+//参数列表：目标课程的节点地址，学生姓名，学号
+//找到了返回目标学生的节点地址，没找到返回NULL
 Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum); // 在单个课程中搜索其下的学生
 
 int look(Cpnode plist);//调试时用来看数据的
