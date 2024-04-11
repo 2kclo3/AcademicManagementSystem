@@ -11,7 +11,7 @@ void Modify_Password_UI(const wchar_t* account, Node* Stu,List StuList);//最后一
 void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
 
-int main() {
+int mainLin() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	
 	// 初始化图形窗口
