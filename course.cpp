@@ -7,9 +7,9 @@
 //°ÑCnameÕâĞ©´óĞ´¿ªÍ·µÄ¸Ä³ÉĞ¡Ğ´¿ªÍ·
 
 //´«¿Î³ÌÁ´±íÍ·½Úµã
-void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm) 
+void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max)
 {
-	Cpnode cplist=cphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
+	Cpnode cplist = cphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
 	data.clear(); // Çå¿ÕÊı×é
 	data.push_back(vector<wstring>(6, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
 
@@ -26,27 +26,35 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 	while (cplist != NULL)//±éÀúÁ´±íw
 	{
 		// ¼ì²âÊÇ·ñÓĞËÑË÷´Ê
-		if(
-			wcsstr(cplist->cname,searchTerm)!=NULL||
-			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm)!=NULL||
-			wcsstr(cplist->character,searchTerm)!=NULL
-		   )
+		if (
+			wcsstr(cplist->cname, searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm) != NULL ||
+			wcsstr(cplist->character, searchTerm) != NULL
+			)
 		{
 
-			data.push_back(vector<std::wstring>(6, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
+			if (
+				op == 0 ||
+				(op == 1 && cplist->headcount >= min && cplist->headcount <= max) ||
+				(op == 2 && cplist->averscore >= min && cplist->averscore <= max) ||
+				(op == 3 && cplist->averGPA >= min && cplist->averGPA <= max)
+				)
+			{
+				data.push_back(vector<std::wstring>(6, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
 
-			//Ã¿ĞĞµÄÄÚÈİ
-			data[row][0] = cplist->cname;
-			data[row][1] = std::to_wstring(cplist->cnum);
-			data[row][2] = cplist->character;
-			data[row][3] = std::to_wstring(cplist->headcount);
-			data[row][4] = std::to_wstring(cplist->averscore);
-			data[row][5] = std::to_wstring(cplist->averGPA);
+				//Ã¿ĞĞµÄÄÚÈİ
+				data[row][0] = cplist->cname;
+				data[row][1] = std::to_wstring(cplist->cnum);
+				data[row][2] = cplist->character;
+				data[row][3] = std::to_wstring(cplist->headcount);
+				data[row][4] = std::to_wstring(cplist->averscore);
+				data[row][5] = std::to_wstring(cplist->averGPA);
 
-			row++; // ĞĞÊı+1
+				row++; // ĞĞÊı+1
+			}
 		}
 
-		cplist=cplist->next; // ÒÆÏòÏÂÒ»¸ö½Úµã
+		cplist = cplist->next; // ÒÆÏòÏÂÒ»¸ö½Úµã
 
 	}
 
@@ -54,7 +62,7 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 }
 
 //´«Ä³¿Î³ÌÏÂÑ§ÉúÁ´±íÍ·½Úµã
-void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm) // ÏÔÊ¾µ¥¸ö¿Î³ÌĞÅÏ¢£¨°üº¬¸Ã¿Î³ÌËùÓĞÑ§ÉúµÄ³É¼¨£©
+void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm,int op,int min,int max) // ÏÔÊ¾µ¥¸ö¿Î³ÌĞÅÏ¢£¨°üº¬¸Ã¿Î³ÌËùÓĞÑ§ÉúµÄ³É¼¨£©
 {
 	Spnode splist = cplist->sphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
 	data.clear(); // Çå¿ÕÊı×é
@@ -76,17 +84,21 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 			wcsstr(std::to_wstring(splist->snum).c_str(), searchTerm) != NULL
 			)
 		{
+			if (
+				op == 0||
+				(op == 1 && splist->score >= min && splist->score <= max) ||
+				(op == 2 && splist->GPA >= min && splist->GPA <= max)
+				)
+			{
+				data.push_back(vector<std::wstring>(4, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
+				//Ã¿ĞĞµÄÄÚÈİ
+				data[row][0] = splist->sname;
+				data[row][1] = std::to_wstring(splist->snum);
+				data[row][2] = std::to_wstring(splist->score);
+				data[row][3] = std::to_wstring(splist->GPA);
 
-			data.push_back(vector<std::wstring>(4, L"")); //Ôö¼ÓÒ»ĞĞ(Ã¿ĞĞ6ÁĞ)
-
-			//Ã¿ĞĞµÄÄÚÈİ
-			data[row][0] = splist->sname;
-			data[row][1] = std::to_wstring(splist->snum);
-			data[row][2] = std::to_wstring(splist->score);
-			data[row][3] = std::to_wstring(splist->GPA);
-
-
-			row++; // ĞĞÊı+1
+				row++; // ĞĞÊı+1
+			}
 		}
 
 		splist = splist->next; // ÒÆÏòÏÂÒ»¸ö½Úµã
@@ -95,31 +107,12 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 
 	return;
 }
-////´«Ö¸¶¨µÄÑ§Éú½Úµã
-//Spnode showStuInCrs(Cpnode phead) // ¾ßÌåÏÔÊ¾µ¥¸ö¿Î³ÌµÄÄ³Ñ§Éú
-//{
-//	Cpnode p = searchCrs(phead);
-//	if (!p)
-//	{
-//		system("pause");
-//		return NULL;
-//	}
-//	Spnode pnode = searchStuInCrs(p->sphead);
-//	if (!pnode)
-//	{
-//		system("pause");
-//		return NULL;
-//	}
-//	return pnode;
-//
-//}
-//ÕâĞ©º¯Êı¶¼¶àÓàÁË£¬ÏÔÊ¾²Ù×÷²»¹éÎÒ¸ºÔğ
 
 void menu()
 {
 	Cpnode cphead = (Cpnode)malloc(sizeof(_Cnode));
 	cphead->next = NULL;
-	while(1)
+	while (1)
 	{
 		fflush(stdin);
 		system("CLS");
@@ -134,11 +127,11 @@ void menu()
 			system("CLS");
 			wchar_t Cname[10];
 			int Cnum;
-			wcout << L"¿Î³ÌÃû³Æ£º";wcin >> Cname;
-			wcout <<endl;
-			wcout << L"¿Î³ÌºÅ£º";wcin >> Cnum;
+			wcout << L"¿Î³ÌÃû³Æ£º"; wcin >> Cname;
 			wcout << endl;
-			Cpnode cplist = searchCrs(cphead,Cname, Cnum);
+			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
+			wcout << endl;
+			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
 			if (!cplist)
 			{
 				wcout << L"²éÎŞ´Ë¿Î³Ì" << endl;
@@ -163,7 +156,7 @@ void menu()
 			wcout << L"¿Î³ÌĞÔÖÊ£º"; wcin >> Character;
 			wcout << endl;
 
-			int flag=addCrs(cphead,Cname,Cnum,Character);
+			int flag = addCrs(cphead, Cname, Cnum, Character);
 			if (flag == -1)
 			{
 				wcout << L"ÒÑÓĞ´Ë¿Î³Ì" << endl;
@@ -192,7 +185,7 @@ void menu()
 			wcout << endl;
 			wcout << L"¿Î³ÌºÅ£º"; wcin >> Cnum;
 			wcout << endl;
-			Cpnode cplist = searchCrs(cphead, Cname, Cnum);        
+			Cpnode cplist = searchCrs(cphead, Cname, Cnum);
 			if (!cplist)
 			{
 				wcout << L"²éÎŞ´Ë¿Î³Ì" << endl;
@@ -204,13 +197,13 @@ void menu()
 			int Snum;
 			double Score;
 			wcout << L"Ñ§ÉúĞÕÃû£º"; wcin >> Sname;
-			wcout <<endl;
+			wcout << endl;
 			wcout << L"Ñ§ºÅ£º"; wcin >> Snum;
 			wcout << endl;
 			wcout << L"³É¼¨£º"; wcin >> Score;
 			wcout << endl;
 
-			int flag=addStuInCrs(cplist,Sname,Snum,Score);
+			int flag = addStuInCrs(cplist, Sname, Snum, Score);
 			if (flag == -1)
 			{
 				wcout << L"ÒÑÓĞ´ËÈË" << endl;
@@ -250,7 +243,7 @@ void menu()
 			wchar_t Cname[10];
 			int Cnum;
 			wchar_t Character[10];
-			wcout <<L"Ô­¿Î³ÌÃû³Æ£º"<< cplist->cname;
+			wcout << L"Ô­¿Î³ÌÃû³Æ£º" << cplist->cname;
 			wcout << endl;
 			wcout << L"ĞÂ¿Î³ÌÃû³Æ£º"; wcin >> Cname;
 			wcout << endl;
@@ -263,7 +256,7 @@ void menu()
 			wcout << L"ĞÂ¿Î³ÌĞÔÖÊ£º"; wcin >> Character;
 			wcout << endl;
 
-			modifyCrs(cplist,Cname,Cnum,Character);
+			modifyCrs(cplist, Cname, Cnum, Character);
 
 			wcout << L"ĞŞ¸Ä³É¹¦" << endl;
 			system("pause");
@@ -316,7 +309,7 @@ void menu()
 			wcout << L"ĞÂ³É¼¨£º"; wcin >> Score;
 			wcout << endl;
 
-			modifyStuInCrs(cplist,splist,Sname,Snum,Score);
+			modifyStuInCrs(cplist, splist, Sname, Snum, Score);
 
 			wcout << L"ĞŞ¸Ä³É¹¦" << endl;
 			system("pause");
@@ -339,7 +332,7 @@ void menu()
 				break;
 			}
 
-			deleteCrs(cphead,Cname,Cnum);
+			deleteCrs(cphead, Cname, Cnum);
 
 			wcout << L"É¾³ı³É¹¦" << endl;
 			system("pause");
@@ -368,7 +361,7 @@ void menu()
 			wcout << endl;
 			wcout << L"Ñ§ºÅ£º"; wcin >> snum;
 			wcout << endl;
-			Spnode splist = searchStuInCrs(cplist, sname,snum);
+			Spnode splist = searchStuInCrs(cplist, sname, snum);
 			if (!splist)
 			{
 				wcout << L"²éÎŞ´ËÈË" << endl;
@@ -376,7 +369,7 @@ void menu()
 				break;
 			}
 
-			deleteStuInCrs(cplist,sname,snum);
+			deleteStuInCrs(cplist, sname, snum);
 
 			wcout << L"É¾³ı³É¹¦" << endl;
 			system("pause");
@@ -404,17 +397,17 @@ int look(Cpnode cplist)
 
 
 //²ÎÊıÁĞ±í£º¿Î³ÌÁ´±íµÄÍ·½ÚµãµØÖ·£¬¿Î³ÌÃû³Æ£¬¿Î³ÌºÅ£¬¿Î³ÌĞÔÖÊ
-int addCrs(Cpnode cphead,const wchar_t * Cname,int Cnum,const wchar_t*Character) // Ìí¼Ó¿Î³Ì
+int addCrs(Cpnode cphead, const wchar_t* Cname, int Cnum, const wchar_t* Character) // Ìí¼Ó¿Î³Ì
 {
 	if (searchCrs(cphead, Cname, Cnum))
-		return 0; 
+		return 0;
 	Cpnode cplist = (Cpnode)malloc(sizeof(_Cnode));
-	if (cplist == NULL) 
+	if (cplist == NULL)
 	{
 		return -1;
 	}
 	cplist->sphead = (Spnode)malloc(sizeof(Snode));
-	if (cplist->sphead == NULL) 
+	if (cplist->sphead == NULL)
 	{
 		return -1;
 	}
@@ -439,7 +432,7 @@ int addCrs(Cpnode cphead,const wchar_t * Cname,int Cnum,const wchar_t*Character)
 
 
 //²ÎÊıÁĞ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ñ§ÉúĞÕÃû£¬Ñ§ºÅ£¬³É¼¨
-int addStuInCrs(Cpnode cplist,const wchar_t* Sname,int Snum,double Score)// ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
+int addStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum, double Score)// ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
 {
 	if (searchStuInCrs(cplist, Sname, Snum))
 		return 0;
@@ -482,7 +475,7 @@ int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Char
 
 //²ÎÊıÁĞ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ä¿±êÑ§ÉúµÄ½ÚµãµØÖ·,Ñ§ÉúĞÕÃû£¬Ñ§ºÅ£¬³É¼¨
 //Õı³£·µ»Ø1
-int modifyStuInCrs(Cpnode cplist,Spnode splist, const wchar_t *Sname,int Snum, double Score) // ĞŞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§ÉúĞÅÏ¢
+int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* Sname, int Snum, double Score) // ĞŞ¸ÄÄ³¸ö¿Î³ÌµÄÄ³Ñ§ÉúĞÅÏ¢
 {
 	cplist->totscore -= splist->score;
 	cplist->totGPA -= splist->GPA;
@@ -503,15 +496,15 @@ int modifyStuInCrs(Cpnode cplist,Spnode splist, const wchar_t *Sname,int Snum, d
 
 //²ÎÊıÁĞ±í£º¿Î³ÌÁ´±íµÄÍ·½ÚµãµØÖ·£¬Ä¿±ê¿Î³ÌµÄ½ÚµãµØÖ·
 //Õı³£·µ»Ø1,Ã»ÕÒµ½·µ»Ø0
-int deleteCrs(Cpnode cphead,wchar_t *cname,int cnum) // É¾³ı¿Î³Ì
+int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // É¾³ı¿Î³Ì
 {
 	Cpnode pre_cplist = cphead;
 	Cpnode cplist = pre_cplist->next;
 
 	while (cplist)
 	{
-		if (wcscmp(cplist->cname,cname)==0)
-			if(cplist->cnum==cnum)
+		if (wcscmp(cplist->cname, cname) == 0)
+			if (cplist->cnum == cnum)
 				break;
 		pre_cplist = pre_cplist->next;
 		cplist = cplist->next;
@@ -520,7 +513,7 @@ int deleteCrs(Cpnode cphead,wchar_t *cname,int cnum) // É¾³ı¿Î³Ì
 		return 0;
 
 	Spnode sphead = cplist->sphead;
-	Spnode splist=sphead->next;
+	Spnode splist = sphead->next;
 	while (splist)
 	{
 		sphead->next = splist->next;
@@ -538,14 +531,14 @@ int deleteCrs(Cpnode cphead,wchar_t *cname,int cnum) // É¾³ı¿Î³Ì
 
 //²ÎÊıÁĞ±í£ºÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ä¿±êÑ§ÉúµÄ½ÚµãµØÖ·
 //Õı³£·µ»Ø1
-int deleteStuInCrs(Cpnode cplist,wchar_t* sname,int snum) // É¾³ıÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
+int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ıÄ³¸ö¿Î³ÌµÄÄ³Ñ§Éú³É¼¨
 {
 	Spnode pre_splist = cplist->sphead;
 	Spnode splist = pre_splist->next;
 	while (splist)
 	{
-		if (wcscmp(splist->sname,sname)==0)
-			if(splist->snum==snum)
+		if (wcscmp(splist->sname, sname) == 0)
+			if (splist->snum == snum)
 				break;
 		pre_splist = pre_splist->next;
 		splist = splist->next;
@@ -554,7 +547,7 @@ int deleteStuInCrs(Cpnode cplist,wchar_t* sname,int snum) // É¾³ıÄ³¸ö¿Î³ÌµÄÄ³Ñ§É
 	cplist->headcount--;
 	cplist->totscore -= splist->score;
 	cplist->totGPA -= splist->GPA;
-	if(cplist->headcount)
+	if (cplist->headcount)
 	{
 		cplist->averscore = cplist->totscore / cplist->headcount;
 		cplist->averGPA = cplist->totGPA / cplist->headcount;
@@ -572,15 +565,115 @@ int deleteStuInCrs(Cpnode cplist,wchar_t* sname,int snum) // É¾³ıÄ³¸ö¿Î³ÌµÄÄ³Ñ§É
 }
 
 
+//¸¨Öúº¯Êı£¬¾Í²»°üº¬µ½Í·ÎÄ¼şÀïÁË
+bool cmp_sortStuInCrs(Spnode splist, int op)
+{
+	switch (op)
+	{
+	case 1://°´Ñ§ºÅ½µĞò
+		return splist->snum > splist->next->snum;
+	case 2://°´Ñ§ºÅÉıĞò
+		return splist->snum < splist->next->snum;
+	case 3://°´³É¼¨½µĞò
+		return splist->score > splist->next->score;
+	case 4://°´³É¼¨ÉıĞò
+		return splist->score < splist->next->score;
+	case 5://°´GPA½µĞò
+		return splist->GPA > splist->next->GPA;
+	case 6://°´GPAÉıĞò
+		return splist->GPA < splist->next->GPA;
+	}
+}
+void sortStuInCrs(Cpnode cplist, int op)
+{
+	bool flag = true;
+	while (flag)
+	{
+		flag = false;
+		Spnode pre_splist = cplist->sphead;
+		Spnode splist = cplist->sphead->next;
+		if (!splist)
+			return;
+		while (splist->next)
+		{
+			if (cmp_sortStuInCrs(splist,op))
+			{
+				Spnode tmp = splist->next;
+				splist->next = splist->next->next;
+				tmp->next = splist;
+				pre_splist->next = tmp;
+				pre_splist = pre_splist->next;//µôÁË
+				flag = true;
+				continue;
+			}
+			pre_splist = pre_splist->next;
+			splist = splist->next;
+		}
+	}
+	return;
+}
+
+bool cmp_sortCrs(Cpnode cplist, int op)
+{
+	switch (op)
+	{
+	case 1://°´¿Î³ÌºÅÉıĞò
+		return cplist->cnum < cplist->next->cnum;
+	case 2://°´¿Î³ÌºÅ½µĞò
+		return cplist->cnum > cplist->next->cnum;
+	case 3://°´×ÜÈËÊıÉıĞò
+		return cplist->headcount < cplist->next->headcount;
+	case 4://°´×ÜÈËÊı½µĞò
+		return cplist->headcount > cplist->next->headcount;
+	case 5://°´Æ½¾ù³É¼¨ÉıĞò
+		return cplist->averscore < cplist->next->averscore;
+	case 6://°´Æ½¾ù³É¼¨½µĞò
+		return cplist->averscore > cplist->next->averscore;
+	case 7://°´Æ½¾ù¼¨µãÉıĞò
+		return cplist->averGPA < cplist->next->averGPA;
+	case 8://°´Æ½¾ù¼¨µã½µĞò
+		return cplist->averGPA > cplist->next->averGPA;
+	}
+}
+void sortCrs(Cpnode cphead, int op)
+{
+	bool flag = true;
+	while (flag)
+	{
+		flag = false;
+		Cpnode pre_cplist = cphead;
+		Cpnode cplist = cphead->next;
+		if (!cplist)
+			return;
+		while (cplist->next)
+		{
+			if (cmp_sortCrs(cplist, op))
+			{
+				Cpnode tmp = cplist->next;
+				cplist->next = cplist->next->next;
+				tmp->next = cplist;
+				pre_cplist->next = tmp;
+				pre_cplist = pre_cplist->next;//µôÁË
+				flag = true;
+				continue;
+			}
+			pre_cplist = pre_cplist->next;
+			cplist = cplist->next;
+		}
+	}
+	return;
+	return;
+}
+
 //²ÎÊıÁĞ±í£º¿Î³ÌÁ´±íµÄÍ·½ÚµãµØÖ·£¬¿Î³ÌÃû³Æ£¬¿Î³ÌºÅ
 //ÕÒµ½ÁË·µ»ØÄ¿±ê¿Î³ÌµÄ½ÚµãµØÖ·£¬Ã»ÕÒµ½·µ»ØNULL
-Cpnode searchCrs(Cpnode cphead,const wchar_t *Cname,int Cnum)// ÔÚ¿Î³ÌÁ´±íÖĞËÑË÷¿Î³Ì
+Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖĞËÑË÷¿Î³Ì
 {
 	Cpnode cplist = cphead->next;
 	while (cplist)
 	{
 		if (wcscmp(Cname, cplist->cname) == 0)
-			if(Cnum==cplist->cnum)
+			if (Cnum == cplist->cnum)
 				break;
 		cplist = cplist->next;
 	}
@@ -609,3 +702,5 @@ Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum) // ÔÚµ¥¸ö¿Î
 	}
 	return splist;
 }
+
+
