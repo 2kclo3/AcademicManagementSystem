@@ -27,7 +27,6 @@ int mainji(void) {
 	return 0;
 }
 
-
 void allStuUI() {
 	cleardevice();
 
@@ -550,10 +549,7 @@ void allStuUI() {
 	}
 }
 
-
-
 void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
-
 
 
 		cleardevice();
