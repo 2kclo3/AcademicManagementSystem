@@ -5,13 +5,12 @@
 #define TCH_FILE ".\\data\\Teacher.txt"
 #define CRS_FILE ".\\data\\Course.txt"
 
-List readTch(const char* file_name);
 void loginUI();
 void Modify_Password_UI(const wchar_t* account, Node* Stu,int judge,List StuList);//最后一个参数：学生链表首节点 便于modifyUI中改完密码对文件进行保存
 void QualityUI(Node* Stu, List allStuList);
 void allQualityUI();
 
-int mainLin() {
+int main() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	
 	// 初始化图形窗口
@@ -54,7 +53,7 @@ int mainLin() {
 	printStu(Stu);
 	*/
 
-	loginUI();
+	allQualityUI();
 
 
 	EndBatchDraw(); //结束批量绘图
@@ -426,6 +425,8 @@ void QualityUI(Node* Stu, List allStuList) {
 
 	
 	//进入单个学生的素质类界面后 一开始显示的
+	Button sort_Btn(50, 120, 100, 60, L"<按绩点高低排序>", 1);
+
 	Button add_Research_Btn(-50, 200, 330, 60, L"   科研成果添加", 1);
 	Button modify_Research_Btn(-50, 280, 330, 60, L"   科研成果修改", 1);
 	Button delete_Research_Btn(-50, 360, 330, 60, L"   科研成果删除", 1);
@@ -471,6 +472,64 @@ void QualityUI(Node* Stu, List allStuList) {
 
 
 		if (peekmessage(&msg, -1, true)) {
+
+			if (sort_Btn.mouseClick(msg)) {
+				
+				vector<vector<wstring>> Rank_RData;
+				vector<vector<wstring>> Rank_CData;
+
+				ShowStu_Research(Stu, Rank_RData);
+				ShowStu_Competition(Stu, Rank_CData);
+
+				
+
+				int R_number = Rank_RData.size();
+				int C_number = Rank_CData.size();
+				
+				int R1 = R_number - 1;
+				int L1 = 1;
+
+				int R2 = C_number - 1;
+				int L2 = 1;
+
+				while (L1 < R1) {
+					for (int i = L1; i < R1; i++) {
+						if (stof(Rank_RData[i][7]) < stof(Rank_RData[i + 1][7])) {
+							swap(Rank_RData[i], Rank_RData[i + 1]);
+						}
+
+					}
+					R1--;
+					for (int i = R1; i > L1; i--) {
+						if (stof(Rank_RData[i][7]) > stof(Rank_RData[i - 1][7])) {
+							swap(Rank_RData[i], Rank_RData[i - 1]);
+						}
+					}
+
+					L1++;
+				}
+
+				while (L2 < R2) {
+					for (int i = L2; i < R2; i++) {
+						if (stof(Rank_CData[i][4]) < stof(Rank_CData[i + 1][4])) {
+							swap(Rank_CData[i], Rank_CData[i + 1]);
+						}
+
+					}
+					R2--;
+					for (int i = R2; i > L2; i--) {
+						if (stof(Rank_CData[i][4]) > stof(Rank_CData[i - 1][4])) {
+							swap(Rank_CData[i], Rank_CData[i - 1]);
+						}
+					}
+
+					L2++;
+				}
+
+				Stu_Rtable.setData(Rank_RData);
+				Stu_Ctable.setData(Rank_CData);
+
+			}
 
 			if (add_Research_Btn.mouseClick(msg)) {
 
@@ -1205,6 +1264,16 @@ void QualityUI(Node* Stu, List allStuList) {
 			}
 	}
 }
+
+/*void swap(vector<wstring>* a, vector<wstring>* b) {
+	vector<wstring> c;
+	c.push_back(L"");
+	c = *a;
+	*a = *b;
+	*b = c;
+}
+*/
+
 
 
 
