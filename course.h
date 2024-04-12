@@ -75,7 +75,7 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum); // 删除某个课程的某
 void sortStuInCrs(Cpnode cplist, int op);//对某个课程节点中的学生链表排序
 void sortCrs(Cpnode cphead, int op);//对课程链表排序
 
-Cpnode searchCrs(Cpnode cphead,int Cnum); // 在总课程链表中搜索课程
+Cpnode searchCrs(Cpnode cphead,int Cnum,int SchYear); // 在总课程链表中搜索课程
 
 Spnode searchStuInCrs(Cpnode cplist,int Snum); // 在单个课程中搜索其下的学生
 

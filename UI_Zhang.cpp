@@ -11,24 +11,25 @@
 //学年有区间吗
 //必修选修输入要判断
 //修改课程也需要联动
+//修改学生信息，只修改成绩
 
-//int main(void) 
-//{
-//
-//	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-//
-//	// 初始化图形窗口
-//	initgraph(1500, 810);
-//	BeginBatchDraw(); //开始批量绘图
-//	setbkcolor(RGB(55, 61, 53)); //背景颜色
-//	cleardevice();
-//
-//	menuUI();
-//
-//	EndBatchDraw(); //结束批量绘图
-//	closegraph(); // 关闭图形窗口
-//	return 0;
-//}
+int main(void) 
+{
+
+	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+
+	// 初始化图形窗口
+	initgraph(1500, 810);
+	BeginBatchDraw(); //开始批量绘图
+	setbkcolor(RGB(55, 61, 53)); //背景颜色
+	cleardevice();
+
+	menuUI();
+
+	EndBatchDraw(); //结束批量绘图
+	closegraph(); // 关闭图形窗口
+	return 0;
+}
 
 void allCrsUI()
 {
@@ -201,9 +202,11 @@ void allCrsUI()
 				{
 					// 获取课程节点信息
 					int cnum;
+					int SchYear;
 					int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
 					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
-					Cpnode cplist = searchCrs(allCrsList,cnum);
+					getNumberInBox(99999, &SchYear, allCrsData[selectedRow][4].c_str());
+					Cpnode cplist = searchCrs(allCrsList,cnum,SchYear);
 					CrsUI(allCrsList, cplist);
 
 				}
@@ -376,9 +379,11 @@ void allCrsUI()
 
 				// 精确搜索课程节点
 				int original_cnum;
+				int original_SchYear;
 				int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
 				getNumberInBox(99999, &original_cnum, allCrsData[selectedRow][1].c_str());
-				Cpnode modifyingCrs = searchCrs(allCrsList, original_cnum);				
+				getNumberInBox(99999, &original_SchYear, allCrsData[selectedRow][4].c_str());
+				Cpnode modifyingCrs = searchCrs(allCrsList, original_cnum, original_SchYear);
 
 				// 判断输入格式
 				if (
@@ -1166,7 +1171,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 
 				// 精确搜索课程节点
 				int original_snum;
+				wchar_t original_sname[30];
 				int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
+				getTextInBox(original_sname, allStuInCrsData[selectedRow][1].c_str());
 				getNumberInBox(99999999, &original_snum, allStuInCrsData[selectedRow][1].c_str());
 				Spnode modifyingStu = searchStuInCrs(cplist, original_snum);
 
