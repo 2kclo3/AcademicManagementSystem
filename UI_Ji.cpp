@@ -29,7 +29,6 @@ int mainjjj(void) {
 	return 0;
 }
 
-
 void allStuUI() {
 	cleardevice();
 
@@ -530,10 +529,10 @@ void allStuUI() {
 	}
 }
 
-
-
 void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
-	cleardevice();
+
+
+		cleardevice();
 
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 	vector<vector<std::wstring>>allCrsINStuData;
