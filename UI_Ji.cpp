@@ -554,7 +554,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 	TextBox scoreBox(-500, 220, 290, L"成绩", L"");
 	TextBox course_natureBox(-500, 250, 290, L"课程性质", L"");
 	TextBox creditBox(-500, 300, 290, L"学分", L"");
-	TextBox gridBox(-500, 350, 290, L"绩点", L"");
+	TextBox gridBox(-500, 350, 290, L"绩点(自动转化)", L"");
 	TextBox semesterBox(-500, 400, 290, L"学期", L"");
 
 	TextBox allButton(-500, 330, 290, L"   所有", L"");
@@ -676,10 +676,21 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					getNumberInBox(8, &semester, semesterBox.text) &&
 					getNumberInBox(1, &course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
-					getDoubleInBox(4, &grid, gridBox.text) &&
-					grid >= 0 && credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
 					) {
+
+					grid = CalculGPA(score);
+
+;
+
 					addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
+					if (searchCrs(allCrsList, stoi(course_id)) == NULL) {
+						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
+					}
+					else {
+						addStuInCrs(searchCrs(allCrsList, stoi(course_id)), pname, *pid, score);
+					}
+
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
@@ -1041,7 +1052,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 			scoreBox.onMessage(msg);
 			course_natureBox.onMessage(msg);
 			creditBox.onMessage(msg);
-			gridBox.onMessage(msg);
+			//gridBox.onMessage(msg);
 			semesterBox.onMessage(msg);
 		}
 
