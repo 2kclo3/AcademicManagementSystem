@@ -529,11 +529,14 @@ void allStuUI() {
 	}
 }
 
+
+
 void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 
-		cleardevice();
+	cleardevice();
 
+	Cpnode allCrsList = readCrs(CRS_FILE);
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
@@ -551,7 +554,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 	TextBox scoreBox(-500, 220, 290, L"成绩", L"");
 	TextBox course_natureBox(-500, 250, 290, L"课程性质", L"");
 	TextBox creditBox(-500, 300, 290, L"学分", L"");
-	TextBox gridBox(-500, 350, 290, L"绩点", L"");
+	TextBox gridBox(-500, 350, 290, L"绩点(自动转化)", L"");
 	TextBox semesterBox(-500, 400, 290, L"学期", L"");
 
 	TextBox allButton(-500, 330, 290, L"   所有", L"");
@@ -673,20 +676,34 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					getNumberInBox(8, &semester, semesterBox.text) &&
 					getNumberInBox(1, &course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
-					getDoubleInBox(4, &grid, gridBox.text) &&
-					grid >= 0 && credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
 					) {
+
+					grid = CalculGPA(score);
+
+;
+
 					addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
+					if (searchCrs(allCrsList, stoi(course_id)) == NULL) {
+						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
+					}
+					else {
+						addStuInCrs(searchCrs(allCrsList, stoi(course_id)), pname, *pid, score);
+					}
+
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
+					saveCrs(allCrsList, CRS_FILE);
 
 
 					allCrsINStuTable.canChange = true;
 
 					// 刷新表格
 					showStu(Crs, allCrsINStuData, L"");
+
 					allCrsINStuTable.setData(allCrsINStuData);
+
 
 					//清除
 					course_idBox.clear();
@@ -1035,7 +1052,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 			scoreBox.onMessage(msg);
 			course_natureBox.onMessage(msg);
 			creditBox.onMessage(msg);
-			gridBox.onMessage(msg);
+			//gridBox.onMessage(msg);
 			semesterBox.onMessage(msg);
 		}
 
@@ -1061,14 +1078,15 @@ void RankUI(List StuList) {
 
 	vector<vector<std::wstring>> RankData;
 	int number;
-	Rank(StuList, RankData, L"",&number);
+	Rank(StuList, RankData, L"",L"", & number);
 
 	Table RankTable(340, 90, 1100, 700, RankData);
 
 	Text titleText(40, 50, L"学生排名", 64);
 	Text tipText(80, 170, L"排名方式", 32);
 
-	TextBox searchInputBox(340, 20, 970, L"搜索", L"");
+	TextBox searchInputBox(340, 20, 420, L"专业搜索", L"");
+	TextBox searchInput2Box(820, 20, 420, L"年级搜索", L"");
 
 	Button searchBtn(1350, 20, 100, 50, L"搜索", 1);
 
@@ -1084,11 +1102,12 @@ void RankUI(List StuList) {
 		ULONGLONG start_time = GetTickCount();
 
 		searchInputBox.draw();
+		searchInput2Box.draw();
 
 		if (peekmessage(&msg, -1, true)) {
 
 			if (searchBtn.mouseClick(msg)) {
-				Rank(StuList, RankData, searchInputBox.text, &number);
+				Rank(StuList, RankData, searchInputBox.text, searchInput2Box.text,&number);
 				RankTable.setData(RankData);
 			}
 			
@@ -1220,6 +1239,7 @@ void RankUI(List StuList) {
 
 			// 文本框输入
 			searchInputBox.onMessage(msg);
+			searchInput2Box.onMessage(msg);
 		}
 
 
