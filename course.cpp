@@ -4,24 +4,25 @@
 //É¸Ñ¡¡¢ÅÅĞò¡¢ÌØÊâµÄ²éÕÒ£¨×î¸ß³É¼¨¡¢×îµÍ³É¼¨£©£¬ÕâĞ©¹¦ÄÜ¿ÉÒÔ¼ÓÉÏ
 //¿ÉÒÔ°Ñint¸Ä³Ébool
 //Ò»°ãÀ´Ëµ£¬»á³öÏÖÁ½¸öÏàÍ¬Ğ¡Êı²»ÏàµÈµÄÇé¿ö£¬µ«³ÌĞòÖĞÈ´Ã»ÓĞ£¬²»ÖªµÀÎªÊ²Ã´£¬±£³Ö¾¯Ìè
-
+//É¸Ñ¡ºÍÅÅĞòÒ²Òª°´Ñ§·Ö£¬Ö®ºó¼ÓÉÏ
 
 void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max)
 {
 	Cpnode cplist = cphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
 	data.clear(); // Çå¿ÕÊı×é
-	data.push_back(vector<wstring>(9, L""));
+	data.push_back(vector<wstring>(10, L""));
 
 	//³õÊ¼»¯±íÍ·
 	data[0][0] = L"¿Î³ÌÃû³Æ";
 	data[0][1] = L"¿Î³ÌºÅ";
 	data[0][2] = L"¿Î³ÌĞÔÖÊ";
-	data[0][3] = L"Ñ§Äê";
-	data[0][4] = L"×ÜÈËÊı";
-	data[0][5] = L"Æ½¾ù³É¼¨";
-	data[0][6] = L"Æ½¾ù¼¨µã";
-	data[0][7] = L"¼°¸ñÂÊ";
-	data[0][8] = L"ÓÅĞãÂÊ";
+	data[0][3] = L"Ñ§·Ö";
+	data[0][4] = L"Ñ§Äê";
+	data[0][5] = L"×ÜÈËÊı";
+	data[0][6] = L"Æ½¾ù³É¼¨";
+	data[0][7] = L"Æ½¾ù¼¨µã";
+	data[0][8] = L"¼°¸ñÂÊ";
+	data[0][9] = L"ÓÅĞãÂÊ";
 
 
 	int row = 1;
@@ -31,8 +32,9 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 		if (
 			wcsstr(cplist->cname, searchTerm) != NULL ||
 			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm) != NULL ||
-			wcsstr(cplist->character, searchTerm) != NULL||
-			wcsstr(std::to_wstring(cplist->SchYear).c_str(), searchTerm) != NULL||
+			wcsstr(cplist->character, searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->credit).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->SchYear).c_str(), searchTerm) != NULL ||
 			wcsstr(std::to_wstring(cplist->headcount).c_str(), searchTerm) != NULL ||
 			wcsstr(std::to_wstring(cplist->averscore).c_str(), searchTerm) != NULL ||
 			wcsstr(std::to_wstring(cplist->averGPA).c_str(), searchTerm) != NULL ||
@@ -43,26 +45,27 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 
 			if (
 				op == 0 ||
-				(op == 1 && cplist->headcount >= min && cplist->headcount <= max) ||
-				(op == 2 && cplist->averscore >= min && cplist->averscore <= max) ||
-				(op == 3 && cplist->averGPA >= min && cplist->averGPA <= max)||
-				(op == 4 && cplist->SchYear >= min && cplist->SchYear <= max)||
-				(op == 5 && cplist->PassRate >= min && cplist->PassRate <= max)||
+				(op == 1 && cplist->SchYear >= min && cplist->SchYear <= max) ||
+				(op == 2 && cplist->headcount >= min && cplist->headcount <= max) ||
+				(op == 3 && cplist->averscore >= min && cplist->averscore <= max) ||
+				(op == 4 && cplist->averGPA >= min && cplist->averGPA <= max) ||
+				(op == 5 && cplist->PassRate >= min && cplist->PassRate <= max) ||
 				(op == 6 && cplist->ExcelRate >= min && cplist->ExcelRate <= max)
 				)
 			{
-				data.push_back(vector<std::wstring>(9, L""));
+				data.push_back(vector<std::wstring>(10, L""));
 
 				//Ã¿ĞĞµÄÄÚÈİ
 				data[row][0] = cplist->cname;
 				data[row][1] = std::to_wstring(cplist->cnum);
 				data[row][2] = cplist->character;
-				data[row][3] = std::to_wstring(cplist->SchYear);
-				data[row][4] = std::to_wstring(cplist->headcount);
-				data[row][5] = std::to_wstring(cplist->averscore);
-				data[row][6] = std::to_wstring(cplist->averGPA);
-				data[row][7] = std::to_wstring(cplist->PassRate);
-				data[row][8] = std::to_wstring(cplist->ExcelRate);
+				data[row][3] = std::to_wstring(cplist->credit);
+				data[row][4] = std::to_wstring(cplist->SchYear);
+				data[row][5] = std::to_wstring(cplist->headcount);
+				data[row][6] = std::to_wstring(cplist->averscore);
+				data[row][7] = std::to_wstring(cplist->averGPA);
+				data[row][8] = std::to_wstring(cplist->PassRate);
+				data[row][9] = std::to_wstring(cplist->ExcelRate);
 				row++; // ĞĞÊı+1
 			}
 		}
@@ -72,7 +75,7 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 	return;
 }
 
-void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm,int op,int min,int max) // ÏÔÊ¾µ¥¸ö¿Î³ÌĞÅÏ¢£¨°üº¬¸Ã¿Î³ÌËùÓĞÑ§ÉúµÄ³É¼¨£©
+void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max) // ÏÔÊ¾µ¥¸ö¿Î³ÌĞÅÏ¢£¨°üº¬¸Ã¿Î³ÌËùÓĞÑ§ÉúµÄ³É¼¨£©
 {
 	Spnode splist = cplist->sphead->next; //´ÓµÚÒ»¸öÓĞÊı¾İ½Úµã¿ªÊ¼
 	data.clear(); // Çå¿ÕÊı×é
@@ -95,7 +98,7 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 			)
 		{
 			if (
-				op == 0||
+				op == 0 ||
 				(op == 1 && splist->score >= min && splist->score <= max) ||
 				(op == 2 && splist->GPA >= min && splist->GPA <= max)
 				)
@@ -426,12 +429,12 @@ double CalculGPA(double score)
 		return 1.0;
 	else
 		return 0;
-	
+
 }
 
-int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, int SchYear) // Ìí¼Ó¿Î³Ì
+int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character,double credit, int SchYear) // Ìí¼Ó¿Î³Ì
 {
-	if (searchCrs(cphead, cname, cnum))
+	if (searchCrs(cphead,cnum))
 		return 0;
 	Cpnode cplist = (Cpnode)malloc(sizeof(_Cnode));
 	if (cplist == NULL)
@@ -463,13 +466,14 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	wcscpy(cplist->cname, cname);
 	cplist->cnum = cnum;
 	wcscpy(cplist->character, character);
+	cplist->credit = credit;
 	cplist->SchYear = SchYear;
 	return 1;
 }
 
 int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
 {
-	if (searchStuInCrs(cplist, sname, snum))
+	if (searchStuInCrs(cplist,snum))
 		return 0;
 	Spnode splist = (Spnode)malloc(sizeof(Snode));
 	if (!splist)
@@ -491,24 +495,25 @@ int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// Î
 	if (splist->score >= 90)
 	{
 		cplist->ExcelNum++;
-		cplist->ExcelRate = round(double(cplist->ExcelNum) / cplist->headcount * 10000)/10000;
+		cplist->ExcelRate = round(double(cplist->ExcelNum) / cplist->headcount * 10000) / 10000;
 	}
 	if (splist->score >= 60)
 	{
 		cplist->PassNum++;
 		cplist->PassRate = round(double(cplist->PassNum) / cplist->headcount * 10000) / 10000;
 	}
-	cplist->averscore = round(cplist->totscore / cplist->headcount*1000)/1000;
-	cplist->averGPA = round(cplist->totGPA / cplist->headcount*1000)/1000;
+	cplist->averscore = round(cplist->totscore / cplist->headcount * 1000) / 1000;
+	cplist->averGPA = round(cplist->totGPA / cplist->headcount * 1000) / 1000;
 
 	return 1;
 }
 
-int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character,int SchYear) // ĞŞ¸Ä¿Î³ÌĞÅÏ¢
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character,double credit, int SchYear) // ĞŞ¸Ä¿Î³ÌĞÅÏ¢
 {
 	wcscpy(cplist->cname, Cname);
 	cplist->cnum = Cnum;
 	wcscpy(cplist->character, Character);
+	cplist->credit = credit;
 	cplist->SchYear = SchYear;
 	return 1;
 }
@@ -649,7 +654,7 @@ void sortStuInCrs(Cpnode cplist, int op)
 			return;
 		while (splist->next)
 		{
-			if (cmp_sortStuInCrs(splist,op))
+			if (cmp_sortStuInCrs(splist, op))
 			{
 				Spnode tmp = splist->next;
 				splist->next = splist->next->next;
@@ -730,14 +735,13 @@ void sortCrs(Cpnode cphead, int op)
 	return;
 }
 
-Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖĞËÑË÷¿Î³Ì
+Cpnode searchCrs(Cpnode cphead, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖĞËÑË÷¿Î³Ì
 {
 	Cpnode cplist = cphead->next;
 	while (cplist)
 	{
-		if (wcscmp(Cname, cplist->cname) == 0)
-			if (Cnum == cplist->cnum)
-				break;
+		if (Cnum == cplist->cnum)
+			break;
 		cplist = cplist->next;
 	}
 	if (!cplist)
@@ -747,7 +751,7 @@ Cpnode searchCrs(Cpnode cphead, const wchar_t* Cname, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖĞËÑ
 	return cplist;
 }
 
-Spnode searchStuInCrs(Cpnode cplist, const wchar_t* Sname, int Snum) // ÔÚµ¥¸ö¿Î³ÌÖĞËÑË÷ÆäÏÂµÄÑ§Éú
+Spnode searchStuInCrs(Cpnode cplist,int Snum) // ÔÚµ¥¸ö¿Î³ÌÖĞËÑË÷ÆäÏÂµÄÑ§Éú
 {
 	Spnode splist = cplist->sphead->next;
 	while (splist)

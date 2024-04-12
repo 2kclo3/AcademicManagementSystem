@@ -12,23 +12,23 @@
 //必修选修输入要判断
 //修改课程也需要联动
 
-//int main(void) 
-//{
-//
-//	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-//
-//	// 初始化图形窗口
-//	initgraph(1500, 810);
-//	BeginBatchDraw(); //开始批量绘图
-//	setbkcolor(RGB(55, 61, 53)); //背景颜色
-//	cleardevice();
-//
-//	menuUI();
-//
-//	EndBatchDraw(); //结束批量绘图
-//	closegraph(); // 关闭图形窗口
-//	return 0;
-//}
+int main(void) 
+{
+
+	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+
+	// 初始化图形窗口
+	initgraph(1500, 810);
+	BeginBatchDraw(); //开始批量绘图
+	setbkcolor(RGB(55, 61, 53)); //背景颜色
+	cleardevice();
+
+	menuUI();
+
+	EndBatchDraw(); //结束批量绘图
+	closegraph(); // 关闭图形窗口
+	return 0;
+}
 
 void allCrsUI()
 {

@@ -204,6 +204,60 @@ List readStu(const char* file_name) {
 
 }
 
+
+List readTch(const char* file_name) {
+	FILE* fp;
+	List TchList = (List)malloc(sizeof(Node));//构建教师链表
+	TchList->next = NULL;
+
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	Node* Tchnode = (Node*)malloc(sizeof(Node));//哨兵节点
+	Tchnode->next = NULL;
+
+
+	if (Tchnode == NULL) {
+		wprintf(L"error!");
+		exit(EXIT_FAILURE);
+	}// 分配失败
+
+	wchar_t line[512];
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (line[0] == '\n') {//跳过空行
+			continue;
+		}
+
+		if (swscanf(line, L"%d %s %s",
+			&Tchnode->item.data.ID,
+			&Tchnode->item.data.name,
+			&Tchnode->item.data.password) == 3) { //读取教师信息
+
+			// 添加到链表
+			List Tmpnode = (List)malloc(sizeof(Node));
+			if (Tmpnode == NULL) {
+				wprintf(L"error!");
+				exit(EXIT_FAILURE);
+			}// 分配失败
+			memcpy(Tmpnode, Tchnode, sizeof(Node));//把Tchnode内的全部内容都拷贝一份到Tmpnode,包括next
+			List ptmp = TchList;
+			while (ptmp->next != NULL) {
+				ptmp = ptmp->next;
+			}
+			ptmp->next = Tmpnode;
+
+		}
+	}
+	free(Tchnode);
+	fclose(fp);
+	return TchList;
+
+}
+
+
 Cpnode readCrs(const char* file_name) {
 	FILE* fp;
 	Cpnode CrsList = (Cpnode)malloc(sizeof(_Cnode));
@@ -232,10 +286,11 @@ Cpnode readCrs(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf %d %d %lf %d %lf",
+		if (swscanf(line, L"%d %s %s %lf %d %lf %lf %lf %lf %d %d %lf %d %lf",
 			&tcnode->cnum,
 			&tcnode->cname,
 			&tcnode->character,
+			&tcnode->credit,
 			&tcnode->headcount,
 			&tcnode->totscore,
 			&tcnode->averscore,
@@ -246,7 +301,7 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->PassRate,
 			&tcnode->ExcelNum,
 			&tcnode->ExcelRate
-		) == 13) { // 读取课程信息
+		) == 14) { // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
 			if (tcnode->sphead == NULL) {
@@ -392,6 +447,29 @@ bool saveStu(List StuList, const char* file_name) {
 	return true;
 }
 
+bool saveTch(List TchList, const char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+	List pTch = TchList->next; // 从头结点的下一个节点开始
+	
+	while (pTch != NULL) {
+		fwprintf(fp, L"%d %s %s\n",
+			pTch->item.data.ID,
+			pTch->item.data.name,
+			pTch->item.data.password);
+
+		pTch = pTch->next;
+	}
+	fclose(fp);
+	return true;
+}
+
 bool saveCrs(Cpnode CrsList, const char* file_name) {
 	FILE* fp;
 	fp = fopen(file_name, "w"); // 打开文件
@@ -403,10 +481,11 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
+		fwprintf(fp, L"%d %s %s % .1lf %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,
+			pCrs->credit,
 			pCrs->headcount,
 			pCrs->totscore,
 			pCrs->averscore,
@@ -485,15 +564,16 @@ bool exportCrs(Cpnode CrsList, const char* file_name) {
 
 
 	//表头
-	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
+	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t学分\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
+		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%.1lf\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->SchYear,
 			pCrs->character,
+			pCrs->credit,
 			pCrs->headcount,
 			pCrs->averscore,
 			pCrs->averGPA,

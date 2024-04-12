@@ -29,7 +29,6 @@ int mainjjj(void) {
 	return 0;
 }
 
-
 void allStuUI() {
 	cleardevice();
 

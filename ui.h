@@ -629,6 +629,7 @@ void allQualityUI();
 void changeMajorUI();
 void settingsUI();
 void chartUI(vector<vector<wstring>> data);
+void stuAccountUI(int stuID);
 
 
 
