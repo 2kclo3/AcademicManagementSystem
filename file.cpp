@@ -232,10 +232,11 @@ Cpnode readCrs(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %s %d %lf %lf %lf %lf %d %d %lf %d %lf",
+		if (swscanf(line, L"%d %s %s %lf %d %lf %lf %lf %lf %d %d %lf %d %lf",
 			&tcnode->cnum,
 			&tcnode->cname,
 			&tcnode->character,
+			&tcnode->credit,
 			&tcnode->headcount,
 			&tcnode->totscore,
 			&tcnode->averscore,
@@ -246,7 +247,7 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->PassRate,
 			&tcnode->ExcelNum,
 			&tcnode->ExcelRate
-		) == 13) { // 读取课程信息
+		) == 14) { // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
 			if (tcnode->sphead == NULL) {
@@ -403,10 +404,11 @@ bool saveCrs(Cpnode CrsList, const char* file_name) {
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d %s %s %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
+		fwprintf(fp, L"%d %s %s % .1lf %d %.1lf %.2lf %.1lf %.2lf %d %d %.2lf %d %.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,
+			pCrs->credit,
 			pCrs->headcount,
 			pCrs->totscore,
 			pCrs->averscore,
@@ -485,15 +487,16 @@ bool exportCrs(Cpnode CrsList, const char* file_name) {
 
 
 	//表头
-	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
+	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t学分\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
+		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%.1lf\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->SchYear,
 			pCrs->character,
+			pCrs->credit,
 			pCrs->headcount,
 			pCrs->averscore,
 			pCrs->averGPA,

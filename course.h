@@ -35,6 +35,7 @@ typedef struct Cnode_//课程节点
 	wchar_t cname[30];//课程名
 	int cnum;//课程号，五位数字
 	wchar_t character[5];//课程性质：选修、必修
+	double credit;//学分
 	int SchYear;//学年
 	int headcount;//总人数
 	double totscore;//总成绩

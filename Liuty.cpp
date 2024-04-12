@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLILILILILIL(void) {
+int mainLLLLLLLLLLLLLLL(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -22,14 +22,15 @@ int mainLILILILILIL(void) {
 
 	Cpnode tmpCrs = readCrs(CRS_FILE);
 	exportCrs(tmpCrs, ".\\export\\tempCrs.txt");
-	//saveCrs(tmpCrs, CRS_FILE);
+	saveCrs(tmpCrs, CRS_FILE);
 
 	List tmpStu = readStu(STU_FILE);
 	//saveStu(tmpStu, STU_FILE);
 	exportStu(tmpStu, ".\\export\\tempStu.txt");
 
 
-	testUI();
+	//testUI();
+	stuAccountUI(55230001);
 
 
 	//allStuUI();
@@ -382,4 +383,104 @@ void changeMajorUI() {
 	}
 }
 
+
+
+void stuAccountUI(int stuID) {
+	cleardevice();
+
+	List StuList = readStu(STU_FILE);
+	Node* pstu = StuList->next;
+	while (pstu != NULL) {
+		if (stuID == pstu->item.data.ID) {
+			break;
+		}
+		pstu = pstu->next;
+	}
+
+	Crsnode* allCrsInStuList = pstu->item.crslist->crs_next;
+	vector<vector<std::wstring>>allCrsINStuData;
+	showStu(pstu, allCrsINStuData, L"");
+
+	Table allCrsINStuTable(430, 90, 940, 700, allCrsINStuData);
+
+	//输入框
+	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+
+
+	//按钮
+	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+
+
+	Text idBtn(40, 100, (wstring(L"学号：") + to_wstring(stuID)).c_str(), 32);
+	Text nameBtn(40, 150, (wstring(L"姓名：") + pstu->item.data.name).c_str(), 32);
+	Text titleText(30, 20, (wstring(L"欢迎您  ") + pstu->item.data.name).c_str(), 56);
+
+
+	//计算绩点
+	double all, must, alls, musts;
+
+	all = AllGrid(pstu);
+	must = MustGrid(pstu);
+	alls = AllScore(pstu);
+	musts = MustScore(pstu);
+	Text allCrsGridText(40, 250, (wstring(L"所有课程平均绩点: ") + to_wstring(all)).c_str(), 32);
+	Text allCrsScoreText(40, 300, (wstring(L"所有课程平均分: ") + to_wstring(alls)).c_str(), 32);
+	Text reqCrsGridText(40, 350, (wstring(L"必修课程平均绩点: ") + to_wstring(must)).c_str(), 32);
+	Text reqCrsScoreText(40, 400, (wstring(L"必修课程平均分: ") + to_wstring(musts)).c_str(), 32);
+
+
+	Button backButton(-50, 500, 330, 60, L"   退出登录", 0);
+
+
+
+
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+		//-------------------------------------------------
+
+		searchInputBox.draw();
+
+
+
+		if (peekmessage(&msg, -1, true)) {
+			//鼠标点击事件
+
+			//搜索
+			if (searchBtn.mouseClick(msg)) {
+				showStu(pstu, allCrsINStuData, searchInputBox.text);
+				allCrsINStuTable.setData(allCrsINStuData);
+			}
+
+			if (backButton.mouseClick(msg))
+			{
+				loginUI();
+			}
+
+
+
+			//表格鼠标滑动与点击
+			allCrsINStuTable.onMouse(msg);
+
+
+			// 文本框输入
+			searchInputBox.onMessage(msg);
+		}
+
+
+		//-------------------------------------------------
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+
+	}
+
+
+
+}
 

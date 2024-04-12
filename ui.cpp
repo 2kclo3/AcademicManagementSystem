@@ -81,10 +81,11 @@ void printStu(const List StuList) {
 void printCrs(const Cpnode CrsList) {
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		wprintf(L"课程信息:\n%d\t%s\t%s\t%d\t%.1lf\t%.2lf\t%.1lf\t%.2lf\t%d\t%d\t%.2lf\t%d\t%.2lf\n\n学生：\n",
+		wprintf(L"课程信息:\n%d\t%s\t%s\t%.1lf\t%d\t%.1lf\t%.2lf\t%.1lf\t%.2lf\t%d\t%d\t%.2lf\t%d\t%.2lf\n\n学生：\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->character,
+			pCrs->credit,
 			pCrs->headcount,
 			pCrs->totscore,
 			pCrs->averscore,
