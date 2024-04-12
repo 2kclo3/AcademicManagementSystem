@@ -432,9 +432,9 @@ double CalculGPA(double score)
 
 }
 
-int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character,double credit, int SchYear) // Ìí¼Ó¿Î³Ì
+int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear) // Ìí¼Ó¿Î³Ì
 {
-	if (searchCrs(cphead,cnum))
+	if (searchCrs(cphead, cnum, SchYear))
 		return 0;
 	Cpnode cplist = (Cpnode)malloc(sizeof(_Cnode));
 	if (cplist == NULL)
@@ -473,7 +473,7 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 
 int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// ÎªÄ³¿Î³ÌÌí¼ÓÄ³Ñ§Éú³É¼¨
 {
-	if (searchStuInCrs(cplist,snum))
+	if (searchStuInCrs(cplist, snum))
 		return 0;
 	Spnode splist = (Spnode)malloc(sizeof(Snode));
 	if (!splist)
@@ -508,7 +508,7 @@ int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score)// Î
 	return 1;
 }
 
-int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character,double credit, int SchYear) // ÐÞ¸Ä¿Î³ÌÐÅÏ¢
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character, double credit, int SchYear) // ÐÞ¸Ä¿Î³ÌÐÅÏ¢
 {
 	wcscpy(cplist->cname, Cname);
 	cplist->cnum = Cnum;
@@ -735,12 +735,12 @@ void sortCrs(Cpnode cphead, int op)
 	return;
 }
 
-Cpnode searchCrs(Cpnode cphead, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖÐËÑË÷¿Î³Ì
+Cpnode searchCrs(Cpnode cphead, int Cnum, int SchYear)// ÔÚ¿Î³ÌÁ´±íÖÐËÑË÷¿Î³Ì
 {
 	Cpnode cplist = cphead->next;
 	while (cplist)
 	{
-		if (Cnum == cplist->cnum)
+		if (Cnum == cplist->cnum && SchYear == cplist->SchYear)
 			break;
 		cplist = cplist->next;
 	}
@@ -751,7 +751,7 @@ Cpnode searchCrs(Cpnode cphead, int Cnum)// ÔÚ¿Î³ÌÁ´±íÖÐËÑË÷¿Î³Ì
 	return cplist;
 }
 
-Spnode searchStuInCrs(Cpnode cplist,int Snum) // ÔÚµ¥¸ö¿Î³ÌÖÐËÑË÷ÆäÏÂµÄÑ§Éú
+Spnode searchStuInCrs(Cpnode cplist, int Snum) // ÔÚµ¥¸ö¿Î³ÌÖÐËÑË÷ÆäÏÂµÄÑ§Éú
 {
 	Spnode splist = cplist->sphead->next;
 	while (splist)
