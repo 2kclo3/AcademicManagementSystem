@@ -30,7 +30,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
 			) {
 
-			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行7列)
+			data.push_back(vector<std::wstring>(6, L"")); //增加一行(每行6列)
 
 			//每行的内容
 			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
@@ -95,6 +95,60 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 }
 
+//排序界面！
+void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm,int* number) {
+
+	List pCurrent = StuList->next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(8, L"")); //增加一行(每行8列)
+
+	//初始化表头
+	data[0][0] = L"学号";
+	data[0][1] = L"姓名";///
+	data[0][2] = L"年级";///
+	data[0][3] = L"专业";///
+	data[0][4] = L"全部科目成绩";
+	data[0][5] = L"全部科目绩点";
+	data[0][6] = L"必修科目成绩";
+	data[0][7] = L"必修科目绩点";
+
+
+	int row = 1;
+	while (pCurrent != NULL) { //遍历链表
+
+		// 检测是否有搜索词
+		if ( wcsstr(std::to_wstring(pCurrent->item.data.grade).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
+			) {
+
+			data.push_back(vector<std::wstring>(8, L"")); //增加一行(每行8列)
+
+			//成绩计算
+			pCurrent->item.data.all_avg_score = AllScore(pCurrent);
+			pCurrent->item.data.all_avg_grid = MustGrid(pCurrent);
+			pCurrent->item.data.req_avg_score = AllScore(pCurrent);
+			pCurrent->item.data.req_avg_grid = MustGrid(pCurrent);
+
+			//每行的内容
+			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
+			data[row][1] = pCurrent->item.data.name;
+			data[row][2] = std::to_wstring(pCurrent->item.data.grade); //数字转为字符串
+			data[row][3] = pCurrent->item.data.major;
+			data[row][4] = std::to_wstring(pCurrent->item.data.all_avg_score); //数字转为字符串
+			data[row][5] = std::to_wstring(pCurrent->item.data.all_avg_grid); //数字转为字符串
+			data[row][6] = std::to_wstring(pCurrent->item.data.req_avg_score); //数字转为字符串
+			data[row][7] = std::to_wstring(pCurrent->item.data.req_avg_grid); //数字转为字符串
+
+			row++; // 行数+1
+		}
+
+		*number = row;
+		pCurrent = pCurrent->next; // 移向下一个节点
+
+	}
+}
+
+
 
 //平均绩点(所有）
 double AllGrid(Node* Crs){
@@ -108,7 +162,7 @@ double AllGrid(Node* Crs){
 
 	//防止课程不够
 	if (allcredit == 0) {
-		return -1;
+		return 0;
 	}
 
 
@@ -142,7 +196,7 @@ double MustGrid(Node* Crs) {
 		
 		//防止课程不够
 	if (allcredit == 0) {
-			return -1;
+			return 0;
 	}
 
 
@@ -172,7 +226,7 @@ double AllScore(Node* Crs) {
 
 	//防止课程不够
 	if (allcredit == 0) {
-		return -1;
+		return 0;
 	}
 
 
@@ -206,7 +260,7 @@ double MustScore(Node* Crs) {
 
 	//防止课程不够
 	if (allcredit == 0) {
-		return -1;
+		return 0;
 	}
 
 
