@@ -10,24 +10,25 @@
 //感觉，修改课程可以放到查看后的界面里
 //学年有区间吗
 //必修选修输入要判断
+//修改课程也需要联动
 
-int main(void) 
-{
-
-	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-
-	// 初始化图形窗口
-	initgraph(1500, 810);
-	BeginBatchDraw(); //开始批量绘图
-	setbkcolor(RGB(55, 61, 53)); //背景颜色
-	cleardevice();
-
-	menuUI();
-
-	EndBatchDraw(); //结束批量绘图
-	closegraph(); // 关闭图形窗口
-	return 0;
-}
+//int main(void) 
+//{
+//
+//	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+//
+//	// 初始化图形窗口
+//	initgraph(1500, 810);
+//	BeginBatchDraw(); //开始批量绘图
+//	setbkcolor(RGB(55, 61, 53)); //背景颜色
+//	cleardevice();
+//
+//	menuUI();
+//
+//	EndBatchDraw(); //结束批量绘图
+//	closegraph(); // 关闭图形窗口
+//	return 0;
+//}
 
 void allCrsUI()
 {
@@ -230,6 +231,7 @@ void allCrsUI()
 				cnameBox.move(10, y += dy);
 				cnumBox.move(10, y += dy);
 				characterBox.move(10, y += dy);
+				creditBox.move(10, y += dy);
 				SchYearBox.move(10, y += dy);
 				addOKButton.move(10, y += dy);
 				cancelButton.move(10, y += dy);
@@ -240,6 +242,7 @@ void allCrsUI()
 				wchar_t cname[30];
 				int cnum;
 				wchar_t character[5];
+				double credit;
 				int SchYear;
 
 				// 判断输入格式
@@ -247,13 +250,14 @@ void allCrsUI()
 					getTextInBox(cname, cnameBox.text) &&
 					getNumberInBox(99999, &cnum, cnumBox.text) &&
 					getTextInBox(character, characterBox.text) &&
+					getDoubleInBox(10, &credit, creditBox.text) &&
 					getNumberInBox(99999, &SchYear, SchYearBox.text)&&
-					cnum > 9999
+					cnum > 9999&&credit>0
 					)
 				{
 
 					// 课程相同的情况,报错提醒
-					if (!addCrs(allCrsList, cname, cnum, character,SchYear))
+					if (!addCrs(allCrsList, cname, cnum, character,credit,SchYear))
 					{
 						MessageBox(GetHWnd(), L"该课程号已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 					}
@@ -345,7 +349,8 @@ void allCrsUI()
 					cnameBox.setText(selectedData[0].c_str());
 					cnumBox.setText(selectedData[1].c_str());
 					characterBox.setText(selectedData[2].c_str());
-					SchYearBox.setText(selectedData[3].c_str());
+					creditBox.setText(selectedData[3].c_str());
+					SchYearBox.setText(selectedData[4].c_str());
 
 
 					// 显示
@@ -353,6 +358,7 @@ void allCrsUI()
 					cnameBox.move(10, y += dy);
 					cnumBox.move(10, y += dy);
 					characterBox.move(10, y += dy);
+					creditBox.move(10, y += dy);
 					SchYearBox.move(10, y += dy);
 					modifyOKButton.move(10, y += dy);
 					cancelButton.move(10, y += dy);
@@ -365,6 +371,7 @@ void allCrsUI()
 				wchar_t cname[30];
 				int cnum;
 				wchar_t character[5];
+				double credit;
 				int SchYear;
 
 				// 精确搜索课程节点
@@ -378,13 +385,13 @@ void allCrsUI()
 					getTextInBox(cname, cnameBox.text) &&
 					getNumberInBox(99999, &cnum, cnumBox.text) &&
 					getTextInBox(character, characterBox.text) &&
+					getDoubleInBox(10, &credit, creditBox.text) &&
 					getNumberInBox(99999, &SchYear, SchYearBox.text) &&
-					cnum > 9999
+					cnum > 9999&&credit>0
 					)
 				{
-
 					// 修改
-					modifyCrs(modifyingCrs, cname, cnum, character,SchYear);
+					modifyCrs(modifyingCrs, cname, cnum, character, credit,SchYear);
 
 					// 保存
 					saveCrs(allCrsList, CRS_FILE);
@@ -401,7 +408,6 @@ void allCrsUI()
 					cnumBox.clear();
 					characterBox.clear();
 					SchYearBox.clear();
-
 
 					// 更改标题
 					titleText.setText(L"所有课程");
@@ -828,6 +834,7 @@ void allCrsUI()
 			cnameBox.onMessage(msg);
 			cnumBox.onMessage(msg);
 			characterBox.onMessage(msg);
+			creditBox.onMessage(msg);
 			SchYearBox.onMessage(msg);
 			minBox.onMessage(msg);
 			maxBox.onMessage(msg);
@@ -1045,11 +1052,17 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					}
 					else
 					{
-						/*Node* StuNode = searchStu(&allStuList, sname, snum);*/
+						Node* StuNode = searchStu(&allStuList, sname, snum);
+						wchar_t wch_cnum[10];
+						swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+						double GPA = CalculGPA(score);
+						int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
 
+						addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
 
 						// 保存
 						saveCrs(cphead, CRS_FILE);
+						saveStu(allStuList, STU_FILE);
 
 						// 刷新表格
 						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
@@ -1169,8 +1182,17 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					// 修改
 					modifyStuInCrs(cplist, modifyingStu, sname, snum, score);
 
+					//Node* StuNode = searchStu(&allStuList, sname, snum);
+					//wchar_t wch_cnum[10];
+					//swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+					//double GPA = CalculGPA(score);
+					//int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
+					//modifyCrsInStu(Crsnode* chacrs, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid);
+					//addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
+
 					// 保存
 					saveCrs(cphead, CRS_FILE);
+					saveStu(allStuList, STU_FILE);
 
 					// 使表格可变化
 					allStuInCrsTable.canChange = true;

@@ -10,7 +10,7 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 {
 	Cpnode cplist = cphead->next; //从第一个有数据节点开始
 	data.clear(); // 清空数组
-	data.push_back(vector<wstring>(9, L""));
+	data.push_back(vector<wstring>(10, L""));
 
 	//初始化表头
 	data[0][0] = L"课程名称";
@@ -53,7 +53,7 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 				(op == 6 && cplist->ExcelRate >= min && cplist->ExcelRate <= max)
 				)
 			{
-				data.push_back(vector<std::wstring>(9, L""));
+				data.push_back(vector<std::wstring>(10, L""));
 
 				//每行的内容
 				data[row][0] = cplist->cname;

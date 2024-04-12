@@ -58,6 +58,7 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 //Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
+double CalculGPA(double score);
 
 int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear); // 添加课程
 
