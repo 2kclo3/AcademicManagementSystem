@@ -13,7 +13,7 @@
 //修改课程也需要联动
 //修改学生信息，只修改成绩
 
-int main(void) 
+int mainZZZ(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出

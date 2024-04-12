@@ -684,11 +684,11 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 ;
 
 					addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
-					if (searchCrs(allCrsList, stoi(course_id)) == NULL) {
+					if (searchCrs(allCrsList, stoi(course_id),1) == NULL) {
 						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
 					}
 					else {
-						addStuInCrs(searchCrs(allCrsList, stoi(course_id)), pname, *pid, score);
+						addStuInCrs(searchCrs(allCrsList, stoi(course_id),1), pname, *pid, score);
 					}
 
 
