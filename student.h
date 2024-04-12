@@ -121,7 +121,7 @@ bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t
 
 void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示单个学生信息（包含其课程成绩）
 
-void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm, int* number);
+void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm, const wchar_t* searchTerm2, int* number);
 
 //bool Initialize_Stu_Crslist(List);//初始化每个学生的课程链表
 

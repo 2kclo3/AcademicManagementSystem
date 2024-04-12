@@ -533,8 +533,11 @@ void allStuUI() {
 
 
 void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
+
+
 	cleardevice();
 
+	Cpnode allCrsList = readCrs(CRS_FILE);
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
@@ -681,13 +684,16 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
+					saveCrs(allCrsList, CRS_FILE);
 
 
 					allCrsINStuTable.canChange = true;
 
 					// 刷新表格
 					showStu(Crs, allCrsINStuData, L"");
+
 					allCrsINStuTable.setData(allCrsINStuData);
+
 
 					//清除
 					course_idBox.clear();
@@ -1062,14 +1068,15 @@ void RankUI(List StuList) {
 
 	vector<vector<std::wstring>> RankData;
 	int number;
-	Rank(StuList, RankData, L"",&number);
+	Rank(StuList, RankData, L"",L"", & number);
 
 	Table RankTable(340, 90, 1100, 700, RankData);
 
 	Text titleText(40, 50, L"学生排名", 64);
 	Text tipText(80, 170, L"排名方式", 32);
 
-	TextBox searchInputBox(340, 20, 970, L"搜索", L"");
+	TextBox searchInputBox(340, 20, 420, L"专业搜索", L"");
+	TextBox searchInput2Box(820, 20, 420, L"年级搜索", L"");
 
 	Button searchBtn(1350, 20, 100, 50, L"搜索", 1);
 
@@ -1085,11 +1092,12 @@ void RankUI(List StuList) {
 		ULONGLONG start_time = GetTickCount();
 
 		searchInputBox.draw();
+		searchInput2Box.draw();
 
 		if (peekmessage(&msg, -1, true)) {
 
 			if (searchBtn.mouseClick(msg)) {
-				Rank(StuList, RankData, searchInputBox.text, &number);
+				Rank(StuList, RankData, searchInputBox.text, searchInput2Box.text,&number);
 				RankTable.setData(RankData);
 			}
 			
@@ -1221,6 +1229,7 @@ void RankUI(List StuList) {
 
 			// 文本框输入
 			searchInputBox.onMessage(msg);
+			searchInput2Box.onMessage(msg);
 		}
 
 
