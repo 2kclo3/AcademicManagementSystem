@@ -35,6 +35,7 @@ typedef struct Cnode_//课程节点
 	wchar_t cname[30];//课程名
 	int cnum;//课程号，五位数字
 	wchar_t character[5];//课程性质：选修、必修
+	double credit;//学分
 	int SchYear;//学年
 	int headcount;//总人数
 	double totscore;//总成绩
@@ -58,11 +59,11 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
 
-int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, int SchYear); // 添加课程
+int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear); // 添加课程
 
 int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score); // 为某课程添加某学生成绩
 
-int modifyCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, int SchYear); // 修改课程信息
+int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character, double credit, int SchYear); // 修改课程信息
 
 int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* sname, int snum, double score); // 修改某个课程的某学生成绩
 

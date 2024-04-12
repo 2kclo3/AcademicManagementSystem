@@ -6,7 +6,6 @@
 
 //修改完后也要查重,避免出现把连个人的学号改重了或者课程改重了
 //geDoubleInBox函数对80.000不行，导致修改时，如果没有任何操作，也会报错
-//有的地方先隐藏了cancelButton，后显示了cancelButton，重来，之后小优化一下
 //有的标题太长，显示不出来，以后小优化一下，先解决主要矛盾
 //感觉，修改课程可以放到查看后的界面里
 //学年有区间吗
@@ -44,6 +43,7 @@ void allCrsUI()
 	TextBox searchInputBox(310, 20, 820+220, L"搜索", L"");
 	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
 	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
+	TextBox creditBox(-500, 0, 290, L"学分", L"");
 	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
 	TextBox SchYearBox(-500, 0, 290, L"学年", L"");
 	TextBox minBox(-500, 0, 290, L"最小值", L"");
@@ -103,6 +103,7 @@ void allCrsUI()
 		cnameBox.draw();
 		cnumBox.draw();
 		characterBox.draw();
+		creditBox.draw();
 		SchYearBox.draw();
 		minBox.draw();
 		maxBox.draw();
@@ -137,6 +138,7 @@ void allCrsUI()
 				cnameBox.move(-500, 0);
 				cnumBox.move(-500, 0);
 				characterBox.move(-500, 0);
+				creditBox.move(-500, 0);
 				SchYearBox.move(-500, 0);
 				minBox.move(-500, 0);
 				maxBox.move(-500, 0);
@@ -845,14 +847,14 @@ void allCrsUI()
 
 }
 
-
 void CrsUI(Cpnode cphead, Cpnode cplist)
 {
+	List allStuList = readStu(STU_FILE);
+
 	cleardevice();
 	Spnode allStuInCrsList = cplist->sphead;
 	vector<vector<std::wstring>>allStuInCrsData;
 	showAllStuInCrs(cplist, allStuInCrsData, L"", 0, 0, 0);
-
 
 	Table allStuInCrsTable(310, 90, 940+220, 700, allStuInCrsData);
 
@@ -861,8 +863,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 	int TextWidth = textwidth(cplist->cname);
 	int x = 0 + (276 - TextWidth) / 2;
 	Text titleText(x, 50, cplist->cname, 64);
-
-
 
 	Text GPAText(-500, 370, L"", 32);
 
@@ -1045,6 +1045,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					}
 					else
 					{
+						/*Node* StuNode = searchStu(&allStuList, sname, snum);*/
+
+
 						// 保存
 						saveCrs(cphead, CRS_FILE);
 
