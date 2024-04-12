@@ -5,7 +5,6 @@
 #define TCH_FILE ".\\data\\Teacher.txt"
 #define CRS_FILE ".\\data\\Course.txt"
 
-List readTch(const char* file_name);
 void loginUI();
 void Modify_Password_UI(const wchar_t* account, Node* Stu,int judge,List StuList);//最后一个参数：学生链表首节点 便于modifyUI中改完密码对文件进行保存
 void QualityUI(Node* Stu, List allStuList);
@@ -54,7 +53,7 @@ int mainLin() {
 	printStu(Stu);
 	*/
 
-	loginUI();
+	allQualityUI();
 
 
 	EndBatchDraw(); //结束批量绘图
@@ -426,6 +425,9 @@ void QualityUI(Node* Stu, List allStuList) {
 
 	
 	//进入单个学生的素质类界面后 一开始显示的
+
+	Button sort_Btn(30, 120, 200, 60, L"<按绩点加分排序>", 1);
+
 	Button add_Research_Btn(-50, 200, 330, 60, L"   科研成果添加", 1);
 	Button modify_Research_Btn(-50, 280, 330, 60, L"   科研成果修改", 1);
 	Button delete_Research_Btn(-50, 360, 330, 60, L"   科研成果删除", 1);
@@ -472,11 +474,63 @@ void QualityUI(Node* Stu, List allStuList) {
 
 		if (peekmessage(&msg, -1, true)) {
 
+			if (sort_Btn.mouseClick(msg)) {
+				
+
+				int R_number = ResearchData.size();
+				int C_number = CompetitionData.size();
+				
+				int R1 = R_number - 1;
+				int L1 = 1;
+
+				int R2 = C_number - 1;
+				int L2 = 1;
+
+				while (L1 < R1) {
+					for (int i = L1; i < R1; i++) {
+						if (stof(ResearchData[i][7]) < stof(ResearchData[i + 1][7])) {
+							swap(ResearchData[i], ResearchData[i + 1]);
+						}
+
+					}
+					R1--;
+					for (int i = R1; i > L1; i--) {
+						if (stof(ResearchData[i][7]) > stof(ResearchData[i - 1][7])) {
+							swap(ResearchData[i], ResearchData[i - 1]);
+						}
+					}
+
+					L1++;
+				}
+
+				while (L2 < R2) {
+					for (int i = L2; i < R2; i++) {
+						if (stof(CompetitionData[i][4]) < stof(CompetitionData[i + 1][4])) {
+							swap(CompetitionData[i], CompetitionData[i + 1]);
+						}
+
+					}
+					R2--;
+					for (int i = R2; i > L2; i--) {
+						if (stof(CompetitionData[i][4]) > stof(CompetitionData[i - 1][4])) {
+							swap(CompetitionData[i], CompetitionData[i - 1]);
+						}
+					}
+
+					L2++;
+				}
+
+				Stu_Rtable.setData(ResearchData);
+				Stu_Ctable.setData(CompetitionData);
+
+			}
+
 			if (add_Research_Btn.mouseClick(msg)) {
 
 				titleText.setText(L"  科研成果添加");
 				titleText.move(10, 3);
 				//隐藏
+				sort_Btn.move(-500, 120);
 				add_Research_Btn.move(-500, 200);
 				modify_Research_Btn.move(-500, 280);
 				delete_Research_Btn.move(-500, 360);
@@ -577,6 +631,7 @@ void QualityUI(Node* Stu, List allStuList) {
 						cancel_addResearch_Btn.move(-500, 720);
 
 						//显示
+						sort_Btn.move(30, 120);
 						add_Research_Btn.move(-50, 200);
 						modify_Research_Btn.move(-50, 280);
 						delete_Research_Btn.move(-50, 360);
@@ -622,6 +677,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				cancel_addResearch_Btn.move(-500, 720);
 
 				//显示
+				sort_Btn.move(30, 120);
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
@@ -637,9 +693,9 @@ void QualityUI(Node* Stu, List allStuList) {
 			if (add_Competition_Btn.mouseClick(msg)) {
 
 				titleText.setText(L" 竞赛获奖添加");
-				titleText.move(10,100);
 				
 				//隐藏
+				sort_Btn.move(-500, 120);
 				add_Research_Btn.move(-500, 200);
 				modify_Research_Btn.move(-500, 280);
 				delete_Research_Btn.move(-500, 360);
@@ -657,6 +713,8 @@ void QualityUI(Node* Stu, List allStuList) {
 				categoryBox.move(10, 340);
 				C_dateBox.move(10, 410);
 				C_GPA_bonusBox.move(10, 480);
+				titleText.move(10, 100);
+
 
 			}
 			
@@ -720,6 +778,7 @@ void QualityUI(Node* Stu, List allStuList) {
 						cancel_addCompetition_Btn.move(-500, 720);
 
 						//显示
+						sort_Btn.move(30, 120);
 						add_Research_Btn.move(-50, 200);
 						modify_Research_Btn.move(-50, 280);
 						delete_Research_Btn.move(-50, 360);
@@ -759,6 +818,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				cancel_addCompetition_Btn.move(-500, 720);
 
 				//显示
+				sort_Btn.move(30, 120);
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
@@ -781,6 +841,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					titleText.setText(L"修改此科研成果");
 
 					//隐藏
+					sort_Btn.move(-500, 120);
 					add_Research_Btn.move(-500, 200);
 					modify_Research_Btn.move(-500, 280);
 					delete_Research_Btn.move(-500, 360);
@@ -893,6 +954,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					cancel_modifyResearch_Btn.move(-500, 720);
 
 					//显示
+					sort_Btn.move(30, 120);
 					add_Research_Btn.move(-50, 200);
 					modify_Research_Btn.move(-50, 280);
 					delete_Research_Btn.move(-50, 360);
@@ -939,6 +1001,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				cancel_modifyResearch_Btn.move(-500, 720);
 
 				//显示
+				sort_Btn.move(30, 120);
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
@@ -962,6 +1025,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					titleText.setText(L"修改此竞赛获奖");
 
 					//隐藏
+					sort_Btn.move(-500, 120);
 					add_Research_Btn.move(-500, 200);
 					modify_Research_Btn.move(-500, 280);
 					delete_Research_Btn.move(-500, 360);
@@ -1055,6 +1119,7 @@ void QualityUI(Node* Stu, List allStuList) {
 					cancel_modifyCompetition_Btn.move(-500, 720);
 
 					//显示
+					sort_Btn.move(30, 120);
 					add_Research_Btn.move(-50, 200);
 					modify_Research_Btn.move(-50, 280);
 					delete_Research_Btn.move(-50, 360);
@@ -1094,6 +1159,7 @@ void QualityUI(Node* Stu, List allStuList) {
 				cancel_modifyCompetition_Btn.move(-500, 720);
 
 				//显示
+				sort_Btn.move(30, 120);
 				add_Research_Btn.move(-50, 200);
 				modify_Research_Btn.move(-50, 280);
 				delete_Research_Btn.move(-50, 360);
@@ -1205,6 +1271,16 @@ void QualityUI(Node* Stu, List allStuList) {
 			}
 	}
 }
+
+/*void swap(vector<wstring>* a, vector<wstring>* b) {
+	vector<wstring> c;
+	c.push_back(L"");
+	c = *a;
+	*a = *b;
+	*b = c;
+}
+*/
+
 
 
 
