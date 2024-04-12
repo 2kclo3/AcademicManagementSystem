@@ -114,10 +114,7 @@ typedef Node* List; //链表
 
 
 
-
-
 bool showAllStu(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示所有学生信息（不包含课程）
-
 
 void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* searchTerm); // 显示单个学生信息（包含其课程成绩）
 

@@ -5,6 +5,7 @@
 //©ирт╟яint╦дЁиbool
 //р╩╟Цю╢к╣ё╛╩АЁЖожа╫╦ЖоЮм╛п║йЩ╡╩оЮ╣х╣дгИ©Жё╛╣╚ЁлпРжпх╢ц╩спё╛╡╩ж╙╣юн╙й╡ц╢ё╛╠ёЁж╬╞лХ
 //и╦я║╨меепРр╡р╙╟╢я╖╥жё╛ж╝╨С╪сио
+//р╙йг╩╧спй╠╪Дё╛╩╩Ёи╧И╡╒еепР
 
 void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max)
 {
@@ -559,8 +560,10 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // и╬ЁЩ©нЁл
 		pre_cplist = pre_cplist->next;
 		cplist = cplist->next;
 	}
-	if (!cplist)
-		return 0;
+
+	//фДй╣уБюО©ирт╡╩сцак
+	//if (!cplist)
+	//	return 0;
 
 	Spnode sphead = cplist->sphead;
 	Spnode splist = sphead->next;
@@ -590,8 +593,9 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // и╬ЁЩдЁ╦Ж©нЁл╣ддЁя
 		pre_splist = pre_splist->next;
 		splist = splist->next;
 	}
-	if (!splist)
-		return 0;
+	//фДй╣уБюО©ирт╡╩сцак
+	//if (!splist)
+	//	return 0;
 
 	cplist->headcount--;
 	cplist->totscore -= splist->score;

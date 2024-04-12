@@ -58,25 +58,45 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 //Spnode showStuInCrs(Cpnode phead); // 具体显示单个课程的某学生
 void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const wchar_t* searchTerm, int op, int min, int max);
 
+//计算绩点
 double CalculGPA(double score);
 
+//参数列表：课程链表的头节点地址，课程名称，课程号，课程性质，学分，学年
+//正常返回1；已存在返回0；内存分配失败返回-1
 int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear); // 添加课程
 
+//参数列表：课程节点的地址，学生姓名，学号，成绩
+//正常返回1；已存在返回0；内存分配失败返回-1
 int addStuInCrs(Cpnode cplist, const wchar_t* sname, int snum, double score); // 为某课程添加某学生成绩
 
+//参数列表：课程节点的地址，课程名称，课程号，课程性质，学分，学年
+//正常返回1；无其它返回值
+//需要先用searchCrs函数找到cplist
 int modifyCrs(Cpnode cplist, const wchar_t* Cname, int Cnum, const wchar_t* Character, double credit, int SchYear); // 修改课程信息
 
+//参数列表：课程节点的地址，学生节点的地址，学生姓名，学号，成绩
+//正常返回1；无其它返回值
+//需要先用searchStuInCrs函数在cplist中找到splist
 int modifyStuInCrs(Cpnode cplist, Spnode splist, const wchar_t* sname, int snum, double score); // 修改某个课程的某学生成绩
 
+//参数列表：课程链表的头节点地址，课程名称，课程号
+//正常返回1；无其它返回值
 int deleteCrs(Cpnode cphead, wchar_t* cname,int cnum); // 删除课程
 
+//参数列表：课程节点的地址，学生姓名，学号
+//正常返回1；无其它返回值
 int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum); // 删除某个课程的某学生成绩
 
+//先这么用，后头换成归并排序
 void sortStuInCrs(Cpnode cplist, int op);//对某个课程节点中的学生链表排序
 void sortCrs(Cpnode cphead, int op);//对课程链表排序
 
+//参数列表：课程链表的头节点地址，课程号，学年
+//正常返回目标节点地址；找不到返回NULL
 Cpnode searchCrs(Cpnode cphead,int Cnum,int SchYear); // 在总课程链表中搜索课程
 
+//参数列表：课程节点的地址，学号
+//正常返回目标节点地址；找不到返回NULL
 Spnode searchStuInCrs(Cpnode cplist,int Snum); // 在单个课程中搜索其下的学生
 
 int look(Cpnode plist);//调试时用来看数据的

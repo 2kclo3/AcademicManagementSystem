@@ -528,7 +528,8 @@ bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
 
 
 // 在总学生链表中通过学号和名字搜索学生 
-Node* searchStu(List* plist, wchar_t* pname, int pID) {
+Node* searchStu(List* plist, wchar_t* pname, int pID) 
+{
 	Node* ptmp = *plist;
 	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0)//通过姓名或学号来检索
 		ptmp = ptmp->next;
@@ -538,7 +539,8 @@ Node* searchStu(List* plist, wchar_t* pname, int pID) {
 // 在单个学生中搜索的课程
 Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
-	while (_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0)//通过课程编号he课程名来检索
+	//首先要判断是否空，合并时别搞没了
+	while (crstmp&&(_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0))//通过课程编号和课程名来检索
 		crstmp = crstmp->crs_next;
 	return crstmp;
 }
