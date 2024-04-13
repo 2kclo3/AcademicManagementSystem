@@ -61,6 +61,9 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 //计算绩点
 double CalculGPA(double score);
 
+//计算课程数
+int CalculNumOfCrs(int op);
+
 //参数列表：课程链表的头节点地址，课程名称，课程号，课程性质，学分，学年
 //正常返回1；已存在返回0；内存分配失败返回-1
 int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear); // 添加课程
