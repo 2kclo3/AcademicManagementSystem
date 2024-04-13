@@ -20,13 +20,13 @@ int mainLIUTY(void) {
 	cleardevice();
 
 
-	Cpnode tmpCrs = readCrs(CRS_FILE);
-	exportCrs(tmpCrs, ".\\export\\tempCrs.csv");
-	saveCrs(tmpCrs, CRS_FILE);
+	//Cpnode tmpCrs = readCrs(CRS_FILE);
+	//exportCrs(tmpCrs, ".\\export\\tempCrs.csv");
+	//saveCrs(tmpCrs, CRS_FILE);
 
-	List tmpStu = readStu(STU_FILE);
-	//saveStu(tmpStu, STU_FILE);
-	exportStu(tmpStu, ".\\export\\tempStu.csv");
+	//List tmpStu = readStu(STU_FILE);
+	////saveStu(tmpStu, STU_FILE);
+	//exportStu(tmpStu, ".\\export\\tempStu.csv");
 
 
 	//testUI();
