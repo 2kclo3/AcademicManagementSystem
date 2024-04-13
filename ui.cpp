@@ -188,7 +188,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 				chartUI({
 			{L"学科1", L"学科2", L"学科3喵", L"学科4", L"学科5", L"666", L"喵喵喵"},
 			{L"10", L"60", L"55", L"70", L"60", L"89", L"35"}
-		}, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+		}, 0, 1, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
 
 			}
 			if (exitButton.mouseClick(msg)) {
