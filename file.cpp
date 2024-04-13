@@ -4,7 +4,6 @@
 
 
 
-
 List readStu(const char* file_name) {
 	FILE* fp;
 	List StuList = (List)malloc(sizeof(Node));
@@ -248,7 +247,6 @@ List readTch(const char* file_name) {
 				ptmp = ptmp->next;
 			}
 			ptmp->next = Tmpnode;
-
 		}
 	}
 	free(Tchnode);
@@ -281,8 +279,10 @@ Cpnode readCrs(const char* file_name) {
 	}// 分配失败
 
 	wchar_t line[512];
-	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
-		if (line[0] == '\n') { // 跳过空行
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) 
+	{
+		if (line[0] == '\n') 
+		{ // 跳过空行
 			continue;
 		}
 
@@ -301,7 +301,8 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->PassRate,
 			&tcnode->ExcelNum,
 			&tcnode->ExcelRate
-		) == 14) { // 读取课程信息
+		) == 14) 
+		{ // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
 			if (tcnode->sphead == NULL) {
@@ -310,7 +311,8 @@ Cpnode readCrs(const char* file_name) {
 			}// 分配失败
 			tcnode->sphead->next = NULL;
 
-			while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+			while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) 
+			{
 				if (line[0] == '\n') { // 跳过空行
 					break;
 				}
@@ -341,18 +343,20 @@ Cpnode readCrs(const char* file_name) {
 
 			// 添加到链表
 			Cpnode cnode = (Cpnode)malloc(sizeof(_Cnode)); //为cnode申请内存(添加到链表中的cnode)
-			if (cnode == NULL) {
+			if (cnode == NULL) 
+			{
 				wprintf(L"error!");
 				exit(EXIT_FAILURE);
 			}// 分配失败
 			memcpy(cnode, tcnode, sizeof(_Cnode));
 			Cpnode ptmp = CrsList;
-			while (ptmp->next != NULL) {
+			while (ptmp->next != NULL) 
+			{
 				ptmp = ptmp->next;
 			}
 			ptmp->next = cnode;
 
-
+			CalculNumOfCrs(1);//修改，别删;计算一共有多少课程
 		}
 	}
 	free(tcnode);

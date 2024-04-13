@@ -433,6 +433,22 @@ double CalculGPA(double score)
 
 }
 
+int CalculNumOfCrs(int op)//¼ÆËã¿Î³ÌÊý
+{
+	static int NumOfCrs;
+	switch (op)
+	{
+	case 1://Ìí¼Ó
+		NumOfCrs++;
+		break;
+	case 2://É¾³ý
+		NumOfCrs--;
+		break;
+	case 3://²é¿´¿Î³ÌÊý
+		return NumOfCrs;
+	}
+}
+
 int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear) // Ìí¼Ó¿Î³Ì
 {
 	if (searchCrs(cphead, cnum, SchYear))
@@ -448,6 +464,7 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 		return -1;
 	}
 
+	//³õÊ¼»¯
 	cplist->sphead->next = NULL;
 	cplist->headcount = 0;
 	cplist->totGPA = 0;
@@ -458,10 +475,10 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	cplist->PassRate = 0;
 	cplist->ExcelNum = 0;
 	cplist->ExcelRate = 0;
-	//³õÊ¼»¯
 
+	//Í·²å
 	cplist->next = cphead->next;
-	cphead->next = cplist;//Í·²å
+	cphead->next = cplist;
 
 
 	wcscpy(cplist->cname, cname);
@@ -469,6 +486,7 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	wcscpy(cplist->character, character);
 	cplist->credit = credit;
 	cplist->SchYear = SchYear;
+	CalculNumOfCrs(1);
 	return 1;
 }
 
@@ -578,6 +596,7 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // É¾³ý¿Î³Ì
 	pre_cplist->next = cplist->next;
 	free(cplist);
 
+	CalculNumOfCrs(2);
 	return 1;
 }
 
@@ -627,117 +646,258 @@ int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // É¾³ýÄ³¸ö¿Î³ÌµÄÄ³Ñ
 	return 1;
 }
 
+//bool cmp_sortStuInCrs(Spnode splist, int op)
+//{
+//	switch (op)
+//	{
+//	case 1://°´Ñ§ºÅ½µÐò
+//		return splist->snum > splist->next->snum;
+//	case 2://°´Ñ§ºÅÉýÐò
+//		return splist->snum < splist->next->snum;
+//	case 3://°´³É¼¨½µÐò
+//		return splist->score > splist->next->score;
+//	case 4://°´³É¼¨ÉýÐò
+//		return splist->score < splist->next->score;
+//	case 5://°´GPA½µÐò
+//		return splist->GPA > splist->next->GPA;
+//	case 6://°´GPAÉýÐò
+//		return splist->GPA < splist->next->GPA;
+//	}
+//}
+//void sortStuInCrs(Cpnode cplist, int op)
+//{
+//	bool flag = true;
+//	while (flag)
+//	{
+//		flag = false;
+//		Spnode pre_splist = cplist->sphead;
+//		Spnode splist = cplist->sphead->next;
+//		if (!splist)
+//			return;
+//		while (splist->next)
+//		{
+//			if (cmp_sortStuInCrs(splist, op))
+//			{
+//				Spnode tmp = splist->next;
+//				splist->next = splist->next->next;
+//				tmp->next = splist;
+//				pre_splist->next = tmp;
+//				pre_splist = pre_splist->next;//µôÁË
+//				flag = true;
+//				continue;
+//			}
+//			pre_splist = pre_splist->next;
+//			splist = splist->next;
+//		}
+//	}
+//	return;
+//}
+
+
 //¸¨Öúº¯Êý£¬¾Í²»°üº¬µ½Í·ÎÄ¼þÀïÁË
-bool cmp_sortStuInCrs(Spnode splist, int op)
+bool cmp_sortStuInCrs(Spnode splist1, Spnode splist2, int op)
 {
 	switch (op)
 	{
 	case 1://°´Ñ§ºÅ½µÐò
-		return splist->snum > splist->next->snum;
+		return splist1->snum > splist2->snum;
 	case 2://°´Ñ§ºÅÉýÐò
-		return splist->snum < splist->next->snum;
+		return splist1->snum < splist2->snum;
 	case 3://°´³É¼¨½µÐò
-		return splist->score > splist->next->score;
+		return splist1->score > splist2->score;
 	case 4://°´³É¼¨ÉýÐò
-		return splist->score < splist->next->score;
+		return splist1->score < splist2->score;
 	case 5://°´GPA½µÐò
-		return splist->GPA > splist->next->GPA;
+		return splist1->GPA > splist2->GPA;
 	case 6://°´GPAÉýÐò
-		return splist->GPA < splist->next->GPA;
+		return splist1->GPA < splist2->GPA;
 	}
 }
-void sortStuInCrs(Cpnode cplist, int op)
+// ·Ö¸îÁ´±íº¯Êý£¬·µ»ØµÚ¶þ²¿·ÖÁ´±íµÄÍ·Ö¸Õë
+Spnode split_sortStuInCrs(Spnode splist, int size)
 {
-	bool flag = true;
-	while (flag)
+	Spnode pre_mid = NULL;//ÖÐ¼ä½ÚµãµÄÇ°Çý½Úµã£¬ÓÃÀ´¶Ï¿ª
+	while (splist && size--)
 	{
-		flag = false;
-		Spnode pre_splist = cplist->sphead;
-		Spnode splist = cplist->sphead->next;
-		if (!splist)
-			return;
-		while (splist->next)
+		pre_mid = splist;
+		splist = splist->next;
+	}
+	if (pre_mid)
+		pre_mid->next = NULL;//¶Ï¿ª
+	return splist;
+}
+// ºÏ²¢Á½¸öÁ´±í²¢·µ»ØºÏ²¢ºóµÄÁ´±íµÄÎ²²¿
+Spnode merge_sortStuInCrs(Spnode splist1, Spnode splist2, Spnode ptail,int op)
+{
+	Spnode cur = ptail;
+	while (splist1 && splist2)
+	{
+		if (cmp_sortStuInCrs(splist1,splist2,op))
 		{
-			if (cmp_sortStuInCrs(splist, op))
-			{
-				Spnode tmp = splist->next;
-				splist->next = splist->next->next;
-				tmp->next = splist;
-				pre_splist->next = tmp;
-				pre_splist = pre_splist->next;//µôÁË
-				flag = true;
-				continue;
-			}
-			pre_splist = pre_splist->next;
-			splist = splist->next;
+			cur->next = splist1;
+			splist1 = splist1->next;
+		}
+		else
+		{
+			cur->next = splist2;
+			splist2 = splist2->next;
+		}
+		cur = cur->next;
+	}
+	cur->next = (splist1) ? splist1 : splist2;
+	while (cur->next) cur = cur->next;
+	return cur;
+}
+// Ê¹ÓÃµü´úµÄ·½Ê½ÊµÏÖ¹é²¢ÅÅÐò
+void sortStuInCrs(Cpnode cplist,int op)
+{
+	if (!cplist->sphead || !cplist->sphead->next)
+		return;
+	Spnode left;
+	Spnode right;
+	Spnode splist;
+	Spnode sptail;
+	for (int size = 1; size < cplist->headcount; size *= 2)
+	{
+		splist = cplist->sphead->next;
+		sptail = cplist->sphead;
+		while (splist)
+		{
+			left = splist;
+			right = split_sortStuInCrs(left, size);  // ·Ö¸î left
+			splist = split_sortStuInCrs(right, size);  // ·Ö¸î right
+			sptail = merge_sortStuInCrs(left, right, sptail,op); // ºÏ²¢ left ºÍ right
 		}
 	}
-	return;
 }
 
-bool cmp_sortCrs(Cpnode cplist, int op)
+
+//void sortCrs(Cpnode cphead, int op)
+//{
+//	bool flag = true;
+//	while (flag)
+//	{
+//		flag = false;
+//		Cpnode pre_cplist = cphead;
+//		Cpnode cplist = cphead->next;
+//		if (!cplist)
+//			return;
+//		while (cplist->next)
+//		{
+//			if (cmp_sortCrs(cplist, op))
+//			{
+//				Cpnode tmp = cplist->next;
+//				cplist->next = cplist->next->next;
+//				tmp->next = cplist;
+//				pre_cplist->next = tmp;
+//				pre_cplist = pre_cplist->next;//µôÁË
+//				flag = true;
+//				continue;
+//			}
+//			pre_cplist = pre_cplist->next;
+//			cplist = cplist->next;
+//		}
+//	}
+//	return;
+//	return;
+//}
+
+//¸¨Öúº¯Êý£¬¾Í²»°üº¬µ½Í·ÎÄ¼þÀïÁË
+bool cmp_sortCrs(Cpnode cplist1, Cpnode cplist2, int op)
 {
 	switch (op)
 	{
 	case 1://°´¿Î³ÌºÅÉýÐò
-		return cplist->cnum < cplist->next->cnum;
+		return cplist1->cnum < cplist2->cnum;
 	case 2://°´¿Î³ÌºÅ½µÐò
-		return cplist->cnum > cplist->next->cnum;
+		return cplist1->cnum > cplist2->cnum;
 	case 3://°´Ñ§ÄêÉýÐò
-		return cplist->SchYear < cplist->next->SchYear;
+		return cplist1->SchYear < cplist2->SchYear;
 	case 4://°´Ñ§Äê½µÐò
-		return cplist->SchYear > cplist->next->SchYear;
+		return cplist1->SchYear > cplist2->SchYear;
 	case 5://°´×ÜÈËÊýÉýÐò
-		return cplist->headcount < cplist->next->headcount;
+		return cplist1->headcount < cplist2->headcount;
 	case 6://°´×ÜÈËÊý½µÐò
-		return cplist->headcount > cplist->next->headcount;
+		return cplist1->headcount > cplist2->headcount;
 	case 7://°´Æ½¾ù³É¼¨ÉýÐò
-		return cplist->averscore < cplist->next->averscore;
+		return cplist1->averscore < cplist2->averscore;
 	case 8://°´Æ½¾ù³É¼¨½µÐò
-		return cplist->averscore > cplist->next->averscore;
+		return cplist1->averscore > cplist2->averscore;
 	case 9://°´Æ½¾ù¼¨µãÉýÐò
-		return cplist->averGPA < cplist->next->averGPA;
+		return cplist1->averGPA < cplist2->averGPA;
 	case 10://°´Æ½¾ù¼¨µã½µÐò
-		return cplist->averGPA > cplist->next->averGPA;
+		return cplist1->averGPA > cplist2->averGPA;
 	case 11://°´¼°¸ñÂÊÉýÐò
-		return cplist->PassRate < cplist->next->PassRate;
+		return cplist1->PassRate < cplist2->PassRate;
 	case 12://°´¼°¸ñÂÊ½µÐò
-		return cplist->PassRate > cplist->next->PassRate;
+		return cplist1->PassRate > cplist2->PassRate;
 	case 13://°´ÓÅÐãÂÊÉýÐò
-		return cplist->ExcelRate < cplist->next->ExcelRate;
+		return cplist1->ExcelRate < cplist2->ExcelRate;
 	case 14://°´ÓÅÐãÂÊ½µÐò
-		return cplist->ExcelRate > cplist->next->ExcelRate;
+		return cplist1->ExcelRate > cplist2->ExcelRate;
 	}
 }
+// ·Ö¸îÁ´±íº¯Êý£¬·µ»ØµÚ¶þ²¿·ÖÁ´±íµÄÍ·Ö¸Õë
+Cpnode split_sortCrs(Cpnode cplist, int size)
+{
+	Cpnode pre_mid = NULL;//ÖÐ¼ä½ÚµãµÄÇ°Çý½Úµã£¬ÓÃÀ´¶Ï¿ª
+	while (cplist && size--)
+	{
+		pre_mid = cplist;
+		cplist = cplist->next;
+	}
+	if (pre_mid)
+		pre_mid->next = NULL;//¶Ï¿ª
+	return cplist;
+}
+// ºÏ²¢Á½¸öÁ´±í²¢·µ»ØºÏ²¢ºóµÄÁ´±íµÄÎ²²¿
+Cpnode merge_sortCrs(Cpnode cplist1, Cpnode cplist2, Cpnode ptail, int op)
+{
+	Cpnode cur = ptail;
+	while (cplist1 && cplist2)
+	{
+		if (cmp_sortCrs(cplist1, cplist2, op))
+		{
+			cur->next = cplist1;
+			cplist1 = cplist1->next;
+		}
+		else
+		{
+			cur->next = cplist2;
+			cplist2 = cplist2->next;
+		}
+		cur = cur->next;
+	}
+	cur->next = (cplist1) ? cplist1 : cplist2;
+	while (cur->next) cur = cur->next;
+	return cur;
+}
+// Ê¹ÓÃµü´úµÄ·½Ê½ÊµÏÖ¹é²¢ÅÅÐò
 void sortCrs(Cpnode cphead, int op)
 {
-	bool flag = true;
-	while (flag)
+	if (!cphead || !cphead->next)
+		return;
+	Cpnode left;
+	Cpnode right;
+	Cpnode cplist;
+	Cpnode cptail;
+	int NumOfCrs = CalculNumOfCrs(3);
+	for (int size = 1; size < NumOfCrs; size *= 2)
 	{
-		flag = false;
-		Cpnode pre_cplist = cphead;
-		Cpnode cplist = cphead->next;
-		if (!cplist)
-			return;
-		while (cplist->next)
+		cplist = cphead->next;
+		cptail = cphead;
+		while (cplist)
 		{
-			if (cmp_sortCrs(cplist, op))
-			{
-				Cpnode tmp = cplist->next;
-				cplist->next = cplist->next->next;
-				tmp->next = cplist;
-				pre_cplist->next = tmp;
-				pre_cplist = pre_cplist->next;//µôÁË
-				flag = true;
-				continue;
-			}
-			pre_cplist = pre_cplist->next;
-			cplist = cplist->next;
+			left = cplist;
+			right = split_sortCrs(left, size);  // ·Ö¸î left
+			cplist = split_sortCrs(right, size);  // ·Ö¸î right
+			cptail = merge_sortCrs(left, right, cptail, op); // ºÏ²¢ left ºÍ right
 		}
 	}
-	return;
-	return;
 }
+
+
+
 
 Cpnode searchCrs(Cpnode cphead, int Cnum, int SchYear)// ÔÚ¿Î³ÌÁ´±íÖÐËÑË÷¿Î³Ì
 {
