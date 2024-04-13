@@ -36,6 +36,7 @@ void allStuUI() {
 
 
 	List allStuList = readStu(STU_FILE);
+	Cpnode allCrsList = readCrs(CRS_FILE);
 
 	vector<vector<std::wstring>> allStuData;
 	showAllStu(allStuList, allStuData, L"");
@@ -377,11 +378,21 @@ void allStuUI() {
 					(grade > 1970 && grade <= Current_year)
 					) {
 
+					Cpnode CrsNode = allCrsList->next;
+					while (CrsNode) {
+						Spnode StuInCrsNode = searchStuInCrs(CrsNode, tempID);
+						if (StuInCrsNode) {
+							modifyStuInCrs(allCrsList, StuInCrsNode, name, tempID, StuInCrsNode->score);
+						}
+						CrsNode = CrsNode->next;
+					}
+
 					// 修改
 					modifyStu(&allStuList, modifyingStu, name, tempID, gender, grade, college, major);
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
+					saveCrs(allCrsList, CRS_FILE);
 
 					// 使表格可变化
 					allStuTable.canChange = true;
@@ -492,7 +503,16 @@ void allStuUI() {
 			}
 
 			if (inportBtn.mouseClick(msg)) {
-				//TODO
+				importStu(allStuList, ".\\import\\Stu.csv");
+
+				//// 保存
+				//saveStu(allStuList, STU_FILE);
+				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				// 刷新表格
+				showAllStu(allStuList, allStuData, L"");
+				allStuTable.setData(allStuData);
+
 			}
 
 			if (backButton.mouseClick(msg)) {

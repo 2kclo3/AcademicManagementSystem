@@ -121,7 +121,8 @@ void loginUI() {
 				}
 				else if (wcscmp(tmp_password.c_str(), (const wchar_t*)passwordBox.text) == 0) {//把这个学生对应的正确密码和输入的密码进行比较
 					if (Stu != NULL)//说明登录的是学生的账号
-						;//StuUI();//
+						stuAccountUI(Stu->item.data.ID);
+						//StuUI();//
 					else
 						menuUI();
 				}

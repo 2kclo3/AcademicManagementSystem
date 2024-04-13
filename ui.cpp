@@ -219,7 +219,7 @@ void testUI() {
 
 void chartUI(vector<vector<wstring>> data) {
 	cleardevice();
-	Button backButton(1270, 30, 200, 60, L"返回", 1);
+	Button backButton(1270, 30, 200, 60, L"返回主菜单", 1);
 
 	Chart testChart(100, 100, 1300, 580, data);
 

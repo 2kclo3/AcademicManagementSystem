@@ -420,7 +420,7 @@ void sortStuaccyear(List* plist) {
 bool addStu(List* plist, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL) {
-		if (ptmp->item.data.ID == pID)
+		if (ptmp->next->item.data.ID == pID)
 			return false;
 		ptmp = ptmp->next;
 	}

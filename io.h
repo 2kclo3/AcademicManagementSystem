@@ -21,7 +21,7 @@ void getText(wchar_t* str); //ÊäÈëÎÄ×Ö
 
 
 bool getNumberInBox(int max, int* target, const wchar_t* line);
-bool getDoubleInBox(double max, double* target, const wchar_t* line);
+bool getDoubleInBox(double max, double* target,  wchar_t* line);
 bool getTextInBox(wchar_t* target, const wchar_t* line);
 
 /*
