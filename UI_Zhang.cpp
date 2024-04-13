@@ -14,7 +14,7 @@
 //修改学生信息，只修改成绩
 //在联动时，如果对方不存在，该怎么办；有时间的话，解决这个问题
 
-int mainZZZ(void) 
+int main(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
@@ -858,9 +858,30 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (exportBtn.mouseClick(msg)) 
 			{
+				if (exportCrs(allCrsList, ".\\export\\Crs.csv"))
+				{
+					MessageBox(GetHWnd(), L"导出成功", L"Success",0);
+				}
+
+				////// 保存
+				////saveCrs(allCrsList, CRS_FILE);
+				////先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				////刷新表格
+				//showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+				//allCrsTable.setData(allCrsData);
 			}
 			if (inportBtn.mouseClick(msg)) 
 			{
+				importCrs(allCrsList, ".\\import\\Crs.csv");
+
+				//// 保存
+				//saveCrs(allCrsList, CRS_FILE);
+				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				// 刷新表格
+				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+				allCrsTable.setData(allCrsData);
 			}
 			if (backButton.mouseClick(msg))
 			{

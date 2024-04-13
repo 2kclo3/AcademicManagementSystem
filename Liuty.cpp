@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLLLLLLLLLLLLLLL(void) {
+int mainLIUTY(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -20,13 +20,13 @@ int mainLLLLLLLLLLLLLLL(void) {
 	cleardevice();
 
 
-	Cpnode tmpCrs = readCrs(CRS_FILE);
-	exportCrs(tmpCrs, ".\\export\\tempCrs.txt");
-	saveCrs(tmpCrs, CRS_FILE);
+	//Cpnode tmpCrs = readCrs(CRS_FILE);
+	//exportCrs(tmpCrs, ".\\export\\tempCrs.csv");
+	//saveCrs(tmpCrs, CRS_FILE);
 
-	List tmpStu = readStu(STU_FILE);
-	//saveStu(tmpStu, STU_FILE);
-	exportStu(tmpStu, ".\\export\\tempStu.txt");
+	//List tmpStu = readStu(STU_FILE);
+	////saveStu(tmpStu, STU_FILE);
+	//exportStu(tmpStu, ".\\export\\tempStu.csv");
 
 
 	//testUI();
@@ -35,7 +35,7 @@ int mainLLLLLLLLLLLLLLL(void) {
 
 	//allStuUI();
 	//loginUI();
-	//menuUI();
+	menuUI();
 
 
 
@@ -111,6 +111,9 @@ bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar
 }
 
 
+void testShowChart(vector<vector<wstring>> _data, vector<vector<wstring>> _chart) {
+	chartUI(_chart, 1, 2);
+}
 
 void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
@@ -123,7 +126,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	vector<vector<std::wstring>> allStuData;
 	showAllMajor(allStuList, allStuData, L"");
 
-	Table allStuTable(310, 90, 940, 700, allStuData);
+	Table allStuTable(310, 90, 1100, 700, allStuData);
 
 	Text titleText(25, 50, L"转专业管理", 64);
 	Text IDText(-500, 150, L"", 32);

@@ -420,7 +420,7 @@ void sortStuaccyear(List* plist) {
 bool addStu(List* plist, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL) {
-		if (ptmp->item.data.ID == pID)
+		if (ptmp->next->item.data.ID == pID)
 			return false;
 		ptmp = ptmp->next;
 	}
@@ -537,7 +537,7 @@ Node* searchStu(List* plist, wchar_t* pname, int pID)
 }
 
 // 在单个学生中搜索的课程
-Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
+Crsnode* searchCrsInStu(Node* stu,const wchar_t* pcourse_id,const wchar_t* pcourse_name) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
 	//首先要判断是否空，合并时别搞没了
 	while (crstmp&&(_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0))//通过课程编号和课程名来检索

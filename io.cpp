@@ -49,7 +49,7 @@ int getNumber(int max) { //0¿ªÍ·´¦Àí TODO
 		}//´íÎó´¦Àí
 	}
 
-	if (is_all_space == 1) 
+	if (is_all_space == 1)
 	{
 		return getNumber(max);
 	}//Èç¹ûÊäÈëµÄÈ«ÊÇ¿Õ¸ñ
@@ -152,7 +152,7 @@ double getDouble(double max) //Õâº¯ÊıÓĞµãbug£¬ÎÒÖ®ºó¸Ä¸Ä
 
 }
 
-void getText(wchar_t* str) 
+void getText(wchar_t* str)
 {
 	fflush(stdin);
 	wprintf(L">>> ");//ÌáÊ¾ÊäÈë
@@ -229,7 +229,7 @@ bool getNumberInBox(int max, int* target, const wchar_t* line) {
 		}//´íÎó´¦Àí
 	}
 
-	if (is_all_space == 1) 
+	if (is_all_space == 1)
 	{
 		return false;
 	}//Èç¹ûÊäÈëµÄÈ«ÊÇ¿Õ¸ñ
@@ -245,12 +245,16 @@ bool getNumberInBox(int max, int* target, const wchar_t* line) {
 }
 
 
-bool getDoubleInBox(double max, double* target, const wchar_t* line) //Õâº¯ÊıÓĞµãbug£¬ÎÒÖ®ºó¸Ä¸Ä
+bool getDoubleInBox(double max, double* target,  wchar_t* line) //Õâº¯ÊıÓĞµãbug£¬ÎÒÖ®ºó¸Ä¸Ä
 {
 
 	if (!_tcscmp(line, L"\0")) {
 		return false;
 	}//Ã»ÊäÈë
+
+	if (line[wcslen(line) - 1] == L'\n') {
+		line[wcslen(line) - 1] = L'\0';
+	}
 
 	int command = 0;
 	int err = 1;
@@ -322,7 +326,7 @@ bool getDoubleInBox(double max, double* target, const wchar_t* line) //Õâº¯ÊıÓĞµ
 	}
 }
 
-bool getTextInBox(wchar_t* target, const wchar_t* line) 
+bool getTextInBox(wchar_t* target, const wchar_t* line)
 {
 
 	if (!_tcscmp(line, L"\0")) {
@@ -352,7 +356,7 @@ bool getTextInBox(wchar_t* target, const wchar_t* line)
 
 
 
-int showMenu(const wchar_t* title, int optNum, ...){
+int showMenu(const wchar_t* title, int optNum, ...) {
 	wprintf(L"%s\n\n", title);
 
 	va_list args;

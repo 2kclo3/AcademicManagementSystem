@@ -160,6 +160,10 @@ public:
 		y = _y;
 		draw();
 	}
+	void setTextSize(int _size) {
+		size = _size;
+		draw();
+	}
 };
 
 
@@ -561,17 +565,23 @@ public:
 		drawYandLine();
 		drawCol();
 
-		for (int i = 0; i < data[1].size() - 1; i++) {
-			line(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight,
-				x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight
+		if (data[0].size() != 0) {
+			if (data[0].size() == 1) {
+				solidroundrect(x + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][0]) / 10.0 * rowHeight - 5,
+					x + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][0]) / 10.0 * rowHeight + 5,
+					10, 10);
+			}
+			for (int i = 0; i < data[1].size() - 1; i++) {
+				line(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight,
+					x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight
 				);
-			solidroundrect(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i]) / 10.0 * rowHeight - 5,
-				x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i]) / 10.0 * rowHeight + 5,
-				10, 10);
-			solidroundrect(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 5,
-				x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight + 5,
-				10, 10);
-
+				solidroundrect(x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i]) / 10.0 * rowHeight - 5,
+					x + i * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i]) / 10.0 * rowHeight + 5,
+					10, 10);
+				solidroundrect(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 - 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 5,
+					x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"²â") / 2 + 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight + 5,
+					10, 10);
+			}
 		}
 
 
@@ -582,7 +592,7 @@ public:
 		}
 	}
 	void drawCol() { //»­Ã¿ÁÐ
-		int cnt = data[0].size();
+		int cnt = (data[0].size()) ? (data[0].size()) : 1;
 		colWidth = width / cnt;
 		//width = colWidth * cnt;
 		line(x, y + height, x + width, y + height);
