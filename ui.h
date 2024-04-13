@@ -16,6 +16,7 @@
 #include <tchar.h>
 #include <math.h>
 #include <time.h>
+#include"quality.h"
 #include "student.h"
 #include "course.h"
 #include "file.h"
@@ -616,20 +617,29 @@ public:
 
 
 void showxy(ExMessage& msg);
-void testUI();
+void testUI(Node*, List, int, Node* admin, List Admin_List);
 void loginUI();
-void menuUI();
-void allStuUI();
-void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid);
-void RankUI(List StuList);
-void allCrsUI();
-void CrsUI(Cpnode cphead, Cpnode cplist);
-void allQualityUI();
-void allQualityUI();
-void changeMajorUI();
-void settingsUI();
-void chartUI(vector<vector<wstring>> data);
-void stuAccountUI(int stuID);
+
+void menuUI_Tch(Node*, List, Node* admin, List Admin_List);
+void menuUI_Administrator(Node*, List);
+
+void allStuUI(Node*, List, int, Node* admin, List Admin_List);
+void allTchUI(Node*, List);
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node*, List, int, Node* admin, List Admin_List);
+void RankUI(List StuList, Node*, List, int, Node* admin, List Admin_List);
+
+void allCrsUI(Node*, List, int, Node* admin, List Admin_List);
+void CrsUI(Cpnode cphead, Cpnode cplist, Node*, List, int, Node* admin, List Admin_List);
+
+void allQualityUI(Node*, List,int, Node* admin, List Admin_List);
+void QualityUI(Node* Stu, List allStuList, Node*, List, int, Node* admin, List Admin_List);
+void changeMajorUI(Node*, List, int, Node* admin, List Admin_List);
+
+void manageUI(Node* admin, List Admin_List);//管理员端改密码
+
+void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList,Node* admin, List Admin_List);//学生教师改密码
+void chartUI(vector<vector<wstring>> data, Node*, List, int, Node* admin, List Admin_List);
+void stuAccountUI(int stuID, Node* admin, List Admin_List);
 
 
 

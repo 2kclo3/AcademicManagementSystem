@@ -257,6 +257,58 @@ List readTch(const char* file_name) {
 
 }
 
+List readAdmin(const char* file_name) {
+	FILE* fp;
+	List admin_List = (List)malloc(sizeof(Node));//构建管理员链表
+	admin_List->next = NULL;
+
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	Node* admin_node = (Node*)malloc(sizeof(Node));//哨兵节点
+	admin_node->next = NULL;
+
+
+	if (admin_node == NULL) {
+		wprintf(L"error!");
+		exit(EXIT_FAILURE);
+	}// 分配失败
+
+	wchar_t line[512];
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (line[0] == '\n') {//跳过空行
+			continue;
+		}
+
+		if (swscanf(line, L"%d %s %s",
+			&admin_node->item.data.ID,
+			&admin_node->item.data.name,
+			&admin_node->item.data.password) == 3) { //读取管理员信息
+
+			// 添加到链表
+			List Tmpnode = (List)malloc(sizeof(Node));
+			if (Tmpnode == NULL) {
+				wprintf(L"error!");
+				exit(EXIT_FAILURE);
+			}// 分配失败
+			memcpy(Tmpnode, admin_node, sizeof(Node));//把admin_node内的全部内容都拷贝一份到Tmpnode,包括next
+			List ptmp = admin_List;
+			while (ptmp->next != NULL) {
+				ptmp = ptmp->next;
+			}
+			ptmp->next = Tmpnode;
+
+		}
+	}
+	free(admin_node);
+	fclose(fp);
+	return admin_List;
+
+}
+
 
 Cpnode readCrs(const char* file_name) {
 	FILE* fp;

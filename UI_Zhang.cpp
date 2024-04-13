@@ -25,14 +25,14 @@ int mainZZZ(void)
 	setbkcolor(RGB(55, 61, 53)); //背景颜色
 	cleardevice();
 
-	menuUI();
+	//menuUI();
 
 	EndBatchDraw(); //结束批量绘图
 	closegraph(); // 关闭图形窗口
 	return 0;
 }
 
-void allCrsUI()
+void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List)
 {
 	cleardevice();
 	Cpnode allCrsList = readCrs(CRS_FILE);
@@ -210,7 +210,7 @@ void allCrsUI()
 					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
 					getNumberInBox(99999, &SchYear, allCrsData[selectedRow][4].c_str());
 					Cpnode cplist = searchCrs(allCrsList,cnum,SchYear);
-					CrsUI(allCrsList, cplist);
+					CrsUI(allCrsList, cplist, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 
 				}
 			}
@@ -864,8 +864,10 @@ void allCrsUI()
 			}
 			if (backButton.mouseClick(msg))
 			{
-				//return;不能直接return
-				menuUI();
+				if (judge == 1)
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+				else
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
 			}
 
 			//表格鼠标滑动与点击
@@ -896,7 +898,7 @@ void allCrsUI()
 
 }
 
-void CrsUI(Cpnode cphead, Cpnode cplist)
+void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List)
 {
 	List allStuList = readStu(STU_FILE);
 
@@ -1541,7 +1543,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 			if (backButton.mouseClick(msg))
 			{
 				//return;不能直接return
-				allCrsUI();
+				allCrsUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 			}
 
 			//表格鼠标滑动与点击

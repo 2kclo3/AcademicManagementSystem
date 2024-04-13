@@ -141,7 +141,7 @@ void showxy(ExMessage& msg) {
 }
 
 
-void testUI() {
+void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
 	//drawLine();
 
@@ -188,7 +188,7 @@ void testUI() {
 				chartUI({
 			{L"学科1", L"学科2", L"学科3喵", L"学科4", L"学科5", L"666", L"喵喵喵"},
 			{L"10", L"60", L"55", L"70", L"60", L"89", L"35"}
-		});
+		}, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
 
 			}
 			if (exitButton.mouseClick(msg)) {
@@ -217,7 +217,7 @@ void testUI() {
 }
 
 
-void chartUI(vector<vector<wstring>> data) {
+void chartUI(vector<vector<wstring>> data, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
 	Button backButton(1270, 30, 200, 60, L"返回", 1);
 
@@ -231,7 +231,10 @@ void chartUI(vector<vector<wstring>> data) {
 		ULONGLONG start_time = GetTickCount();
 		if (peekmessage(&msg, -1, true)) {
 			if (backButton.mouseClick(msg)) {
-				menuUI(); // 暂时回到菜单页面
+				if (judge == 1)
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin,  Admin_List);
+				else
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
 				return;
 			}
 		}
@@ -256,18 +259,76 @@ void chartUI(vector<vector<wstring>> data) {
 }
 
 
-void menuUI() {
+void menuUI_Administrator(Node* admin, List adminList) {//管理员端界面
 	cleardevice();
-
 
 	//drawLine();
 
 	Text titleText(90, 50, L"欢迎", 64);
+
+	Button allStuButton(-50, 170, 350, 60, L"  查看学生", 1);
+	Button allTchButton(-50, 250, 350, 60, L"  查看教师", 1);
+	Button allCrsButton(-50, 330, 350, 60, L"  查看课程", 1);
+	Button allQualityButton(-50, 410, 350, 60, L"  素质类项目管理", 1);
+	Button changeMajorButton(-50, 490, 350, 60, L"  转专业管理", 1);
+	Button settingsButton(-50, 570, 350, 60, L"  密码管理", 1);
+	Button exitButton(-50, 670, 350, 60, L"  退出登录", 0);
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+
+		if (peekmessage(&msg, -1, true)) {
+			if (allStuButton.mouseClick(msg)) {
+				allStuUI(admin, adminList, 2, admin, adminList);
+			}
+			if (allTchButton.mouseClick(msg)) {
+				allTchUI(admin, adminList);
+			}
+			if (allCrsButton.mouseClick(msg)) {
+				allCrsUI(admin, adminList, 2, admin, adminList);
+			}
+			if (allQualityButton.mouseClick(msg)) {
+				allQualityUI(admin, adminList, 2, admin, adminList);
+			}
+			if (changeMajorButton.mouseClick(msg)) {
+				changeMajorUI(admin, adminList, 2, admin, adminList);
+			}
+			if (settingsButton.mouseClick(msg)) {
+				manageUI(admin, adminList);
+			}
+			if (exitButton.mouseClick(msg)) {
+				loginUI();
+			}
+		}
+
+		showxy(msg);
+
+
+
+
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+	}
+}
+
+void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//教师端界面
+	cleardevice();
+
+	//drawLine();
+
+	Text titleText(90, 50, L"欢迎", 64);
+
 	Button allStuButton(-50, 170, 350, 60, L"  查看学生", 1);
 	Button allCrsButton(-50, 250, 350, 60, L"  查看课程", 1);
 	Button allQualityButton(-50, 330, 350, 60, L"  素质类项目管理", 1);
 	Button changeMajorButton(-50, 410, 350, 60, L"  转专业管理", 1);
-	Button settingsButton(-50, 490, 350, 60, L"  设置", 1);
+	Button settingsButton(-50, 490, 350, 60, L"  修改密码", 1);
 	Button exitButton(-50, 580, 350, 60, L"  退出登录", 0);
 
 	// 处理鼠标事件
@@ -277,19 +338,19 @@ void menuUI() {
 
 		if (peekmessage(&msg, -1, true)) {
 			if (allStuButton.mouseClick(msg)) {
-				allStuUI();
+				allStuUI(Tch,TchList,1, admin, Admin_List);
 			}
 			if (allCrsButton.mouseClick(msg)) {
-				allCrsUI();
+				allCrsUI(Tch, TchList,1, admin, Admin_List);
 			}
 			if (allQualityButton.mouseClick(msg)) {
-				allQualityUI();
+				allQualityUI(Tch, TchList,1, admin, Admin_List);
 			}
 			if (changeMajorButton.mouseClick(msg)) {
-				changeMajorUI();
+				changeMajorUI( Tch, TchList,1, admin, Admin_List);
 			}
 			if (settingsButton.mouseClick(msg)) {
-				settingsUI();
+				Modify_Stu_or_Tch_Password_UI(to_wstring(Tch->item.data.ID).c_str(), Tch, 1, TchList, admin, Admin_List);
 			}
 			if (exitButton.mouseClick(msg)) {
 				loginUI();
@@ -318,70 +379,6 @@ void menuUI() {
 }
 
 
-
-
-
-
-void settingsUI() {
-
-	cleardevice();
-
-	drawLine();
-
-
-	Text titleText(90, 50, L"设置", 64);
-	Button searchBtn(-50, 140, 330, 60, L"   查询课程", 1);
-	Button addBtn(-50, 220, 330, 60, L"   添加课程", 1);
-	Button modifyBtn(-50, 300, 330, 60, L"   修改", 1);
-	Button deleteBtn(-50, 380, 330, 60, L"   删除", 1);
-	Button statisticBtn(-50, 460, 330, 60, L"   统计", 1);
-	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
-	Button backButton(-50, 700, 330, 60, L"   返回", 0);
-
-
-	// 处理鼠标事件
-	ExMessage msg;
-	while (!_kbhit()) {
-		ULONGLONG start_time = GetTickCount();
-		//->
-
-		if (peekmessage(&msg, -1, true)) {
-			if (searchBtn.mouseClick(msg)) {
-			}
-			if (addBtn.mouseClick(msg)) {
-			}
-			if (modifyBtn.mouseClick(msg)) {
-			}
-			if (deleteBtn.mouseClick(msg)) {
-			}
-			if (statisticBtn.mouseClick(msg)) {
-			}
-			if (exportBtn.mouseClick(msg)) {
-			}
-			if (inportBtn.mouseClick(msg)) {
-			}
-			if (backButton.mouseClick(msg)) {
-				menuUI();
-			}
-		}
-
-		showxy(msg);
-
-
-
-		//<-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1) {
-			Sleep(1);
-		}
-
-	}
-
-
-}
 
 
 

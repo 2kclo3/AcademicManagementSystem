@@ -22,6 +22,12 @@
 
 using namespace std;
 
+bool showAllTch(const List TchList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
+
+bool ShowStu_Password(const List Sp_List, vector<vector<wstring>>& data, const wchar_t* searchTerm);
+
+bool ShowTch_Password(const List Tp_List, vector<vector<wstring>>& data, const wchar_t* searchTerm);
+
 bool ShowAllStu_with_quality(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
 bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data);

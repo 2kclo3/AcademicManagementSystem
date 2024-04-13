@@ -19,7 +19,7 @@ int mainjjj(void) {
 	//testUI();
 
 	//------------
-	allStuUI();
+	//allStuUI();
 	//------------
 
 
@@ -29,7 +29,7 @@ int mainjjj(void) {
 	return 0;
 }
 
-void allStuUI() {
+void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {//judge:1是老师 2是管理员
 	cleardevice();
 
 	//drawLine();
@@ -138,7 +138,7 @@ void allStuUI() {
 					Node* Crs = searchStu(&allStuList, cname, cid);
 
 
-					StuUI(Crs, allStuList,cname,&cid);
+					StuUI(Crs, allStuList, cname, &cid, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -483,7 +483,7 @@ void allStuUI() {
 	
 			if (sortyearBtn.mouseClick(msg)) {
 
-				RankUI(allStuList);
+				RankUI(allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 
 			}
 
@@ -497,7 +497,10 @@ void allStuUI() {
 
 			if (backButton.mouseClick(msg)) {
 				//freeAllStu(allStuList); //TODO
-				menuUI();
+				if (judge == 1)
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+				else
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
 			}
 
 
@@ -531,7 +534,7 @@ void allStuUI() {
 
 
 
-void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
+void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {
 
 
 	cleardevice();
@@ -1036,7 +1039,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 			if (backButton.mouseClick(msg))
 			{
-				allStuUI();
+				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 			}
 
 
@@ -1073,7 +1076,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 
 
-void RankUI(List StuList) {
+void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {
 	cleardevice();
 
 	vector<vector<std::wstring>> RankData;
@@ -1231,7 +1234,7 @@ void RankUI(List StuList) {
 			}
 
 			if (backButton.mouseClick(msg)) {
-				allStuUI();
+				allStuUI(tch_or_admin, Tch_or_Admin_List, judge,  admin,  Admin_List);
 			}
 
 			//表格鼠标滑动与点击
