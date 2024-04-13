@@ -71,13 +71,13 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 
 		// 检测是否有搜索词
 		if (wcsstr(crstmp->score.course_id, searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
-			|| wcsstr(crstmp->score.course_name,searchTerm) != NULL
+			|| wcsstr(crstmp->score.course_name, searchTerm) != NULL
 			|| wcsstr(std::to_wstring(crstmp->score.score).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
 			|| wcsstr(std::to_wstring(crstmp->score.semester).c_str(), searchTerm) != NULL
 			|| wcsstr(std::to_wstring(crstmp->score.credit).c_str(), searchTerm) != NULL
 			|| wcsstr(std::to_wstring(crstmp->score.grid).c_str(), searchTerm) != NULL
 			|| wcsstr(std::to_wstring(crstmp->score.course_nature).c_str(), searchTerm) != NULL
-			){
+			) {
 			//每行的内容
 			data[row][0] = crstmp->score.course_id;
 			data[row][1] = crstmp->score.course_name;
@@ -96,7 +96,7 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 }
 
 //排序界面！
-void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm,int* number) {
+void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm, const wchar_t* searchTerm2, int* number) {
 
 	List pCurrent = StuList->next; //从第一个有数据节点开始
 	data.clear(); // 清空数组
@@ -117,8 +117,10 @@ void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* sear
 	while (pCurrent != NULL) { //遍历链表
 
 		// 检测是否有搜索词
-		if ( wcsstr(std::to_wstring(pCurrent->item.data.grade).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
-			|| wcsstr(pCurrent->item.data.major, searchTerm) != NULL
+		if ( //wcsstr(std::to_wstring(pCurrent->item.data.grade).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			wcsstr(pCurrent->item.data.major, searchTerm) != NULL
+			&& wcsstr(std::to_wstring(pCurrent->item.data.grade).c_str(), searchTerm2) != NULL // 数字转为字符串再转为wchar_t来进行比较
+			// wcsstr(pCurrent->item.data.major, searchTerm2) != NULL
 			) {
 
 			data.push_back(vector<std::wstring>(8, L"")); //增加一行(每行8列)
@@ -151,132 +153,205 @@ void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* sear
 
 
 //平均绩点(所有）
-double AllGrid(Node* Crs){
+double AllGrid(Node* Crs) {
 	double allcredit = 0;
-	Crsnode* tmp1 = Crs->item.crslist->crs_next;
-	Crsnode* tmp2 = Crs->item.crslist->crs_next;
-	for (; tmp1 != NULL; ) {
-		allcredit += tmp1->score.credit;
-		tmp1 = tmp1->crs_next;
-	}
-
-	//防止课程不够
-	if (allcredit == 0) {
-		return 0;
-	}
-
-
 	double result = 0;
-	for (; tmp2 != NULL; ) {
-		result += tmp2->score.grid * (tmp2->score.credit);
-		tmp2 = tmp2->crs_next;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+
+
+	char judge[99999] = { 0 };
+	int maxhhh = 0;
+
+
+	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
+			if (judge[stoi(tmp1->score.course_id)] == 0) {
+
+				judge[stoi(tmp1->score.course_id)] = 1;
+				maxhhh = tmp1->score.grid;
+
+				for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
+					if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
+						maxhhh = max(tmp2->score.grid, maxhhh);
+					}
+				}
+
+				result += maxhhh * tmp1->score.credit;
+				allcredit += tmp1->score.credit;
+			}
 	}
-	return result/allcredit;
+
+
+	double maxm = 0;
+	double maxn = 0;
+	Rnode* tmp3 = Crs->item.rlist->rnext;
+	while (tmp3 != NULL) {
+		maxn = max(Crs->item.rlist->research.GPA_bonus, maxn);
+		tmp3 = tmp3->rnext;
+	}
+
+	Rnode* tmp4 = Crs->item.rlist->rnext;
+	while (tmp4 != NULL) {
+		maxm = max(Crs->item.clist->competition.GPA_bonus, maxm);
+		tmp4 = tmp4->rnext;
+	}
+
+	if (allcredit == 0) {
+		return maxn + maxm;
+	}
+	else {
+		return result / allcredit + maxn + maxm;
+	}
 }
 
 double MustGrid(Node* Crs) {
-	double number = 0;
 	double allcredit = 0;
-	Crsnode* tmp1 = Crs->item.crslist->crs_next;
-	Crsnode* tmp2 = Crs->item.crslist->crs_next;
-
-
-	for (; tmp1 != NULL; ) {
-
-		if (tmp1->score.course_nature == 1) {
-			allcredit += tmp1->score.credit;
-			tmp1 = tmp1->crs_next;
-		}
-		else {
-			tmp1 = tmp1->crs_next;
-			continue;
-		}
-
-	}
-		
-		//防止课程不够
-	if (allcredit == 0) {
-			return 0;
-	}
-
-
 	double result = 0;
-	for (; tmp2 != NULL; ) {
-		if (tmp2->score.course_nature == 1) {
-			result += tmp2->score.grid * (tmp2->score.credit);
-			tmp2 = tmp2->crs_next;
-		}
-		else {
-			tmp2 = tmp2->crs_next;
-			continue;
-		}
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
 
+
+	char judge[99999] = { 0 };
+	int maxhhh = 0;
+
+
+	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1) {
+
+			judge[stoi(tmp1->score.course_id)] = 1;
+			maxhhh = tmp1->score.grid;
+
+			for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
+				if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
+					maxhhh = max(tmp2->score.grid, maxhhh);
+				}
+			}
+
+			result += maxhhh * tmp1->score.credit;
+			allcredit += tmp1->score.credit;
+		}
 	}
-	return result / allcredit;
+
+
+	double maxm = 0;
+	double maxn = 0;
+	Rnode* tmp3 = Crs->item.rlist->rnext;
+	while (tmp3 != NULL) {
+		maxn = max(Crs->item.rlist->research.GPA_bonus, maxn);
+		tmp3 = tmp3->rnext;
+	}
+
+	Rnode* tmp4 = Crs->item.rlist->rnext;
+	while (tmp4 != NULL) {
+		maxm = max(Crs->item.clist->competition.GPA_bonus, maxm);
+		tmp4 = tmp4->rnext;
+	}
+
+	if (allcredit == 0) {
+		return maxn + maxm;
+	}
+	else {
+		return result / allcredit + maxn + maxm;
+	}
 }
 
 double AllScore(Node* Crs) {
 	double allcredit = 0;
-	Crsnode* tmp1 = Crs->item.crslist->crs_next;
-	Crsnode* tmp2 = Crs->item.crslist->crs_next;
-	for (; tmp1 != NULL; ) {
-		allcredit += tmp1->score.credit;
-		tmp1 = tmp1->crs_next;
-	}
-
-	//防止课程不够
-	if (allcredit == 0) {
-		return 0;
-	}
-
-
 	double result = 0;
-	for (; tmp2 != NULL; ) {
-		result += tmp2->score.score * (tmp2->score.credit);
-		tmp2 = tmp2->crs_next;
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
+
+
+	char judge[99999] = { 0 };
+	int maxhhh = 0;
+
+
+	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
+		if (judge[stoi(tmp1->score.course_id)] == 0) {
+
+			judge[stoi(tmp1->score.course_id)] = 1;
+			maxhhh = tmp1->score.score;
+
+			for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
+				if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
+					maxhhh = max(tmp2->score.score, maxhhh);
+				}
+			}
+
+			result += maxhhh * tmp1->score.credit;
+			allcredit += tmp1->score.credit;
+		}
 	}
-	return result / allcredit;
+
+
+	double maxm = 0;
+	double maxn = 0;
+	Rnode* tmp3 = Crs->item.rlist->rnext;
+	while (tmp3 != NULL) {
+		maxn = max(Crs->item.rlist->research.GPA_bonus, maxn);
+		tmp3 = tmp3->rnext;
+	}
+
+	Rnode* tmp4 = Crs->item.rlist->rnext;
+	while (tmp4 != NULL) {
+		maxm = max(Crs->item.clist->competition.GPA_bonus, maxm);
+		tmp4 = tmp4->rnext;
+	}
+
+	if (allcredit == 0) {
+		return maxn + maxm;
+	}
+	else {
+		return result / allcredit + maxn + maxm;
+	}
+
 }
 
 double MustScore(Node* Crs) {
-	double number = 0;
 	double allcredit = 0;
-	Crsnode* tmp1 = Crs->item.crslist->crs_next;
-	Crsnode* tmp2 = Crs->item.crslist->crs_next;
-
-
-	for (; tmp1 != NULL; ) {
-
-		if (tmp1->score.course_nature == 1) {
-			allcredit += tmp1->score.credit;
-			tmp1 = tmp1->crs_next;
-		}
-		else {
-			tmp1 = tmp1->crs_next;
-			continue;
-		}
-
-	}
-
-	//防止课程不够
-	if (allcredit == 0) {
-		return 0;
-	}
-
-
 	double result = 0;
-	for (; tmp2 != NULL; ) {
-		if (tmp2->score.course_nature == 1) {
-			result += tmp2->score.score * (tmp2->score.credit);
-			tmp2 = tmp2->crs_next;
-		}
-		else {
-			tmp2 = tmp2->crs_next;
-			continue;
-		}
+	Crsnode* tmp1 = Crs->item.crslist->crs_next;
 
+
+	char judge[99999] = { 0 };
+	int maxhhh = 0;
+
+
+	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1) {
+
+			judge[stoi(tmp1->score.course_id)] = 1;
+			maxhhh = tmp1->score.score;
+
+			for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
+				if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
+					maxhhh = max(tmp2->score.score, maxhhh);
+				}
+			}
+
+			result += maxhhh * tmp1->score.credit;
+			allcredit += tmp1->score.credit;
+		}
 	}
-	return result / allcredit;
+
+
+	double maxm = 0;
+	double maxn = 0;
+	Rnode* tmp3 = Crs->item.rlist->rnext;
+	while (tmp3 != NULL) {
+		maxn = max(Crs->item.rlist->research.GPA_bonus, maxn);
+		tmp3 = tmp3->rnext;
+	}
+
+	Rnode* tmp4 = Crs->item.rlist->rnext;
+	while (tmp4 != NULL) {
+		maxm = max(Crs->item.clist->competition.GPA_bonus, maxm);
+		tmp4 = tmp4->rnext;
+	}
+
+	if (allcredit == 0) {
+		return maxn + maxm;
+	}
+	else {
+		return result / allcredit + maxn + maxm;
+	}
 }
 
 // 排序总学生链表(按照学号来排序）
@@ -342,7 +417,7 @@ void sortStuaccyear(List* plist) {
 
 
 // 添加学生（不包含课程）
-bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
+bool addStu(List* plist, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
 	Node* ptmp = *plist;
 	while (ptmp->next != NULL) {
 		if (ptmp->next->item.data.ID == pID)
@@ -354,7 +429,7 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	pnew->next = NULL;
 	pnew->item.crslist = (Crsnode*)malloc(sizeof(Crsnode));
 	pnew->item.crslist->crs_next = NULL;
-	pnew->item.rlist= (Rnode*)malloc(sizeof(Rnode));
+	pnew->item.rlist = (Rnode*)malloc(sizeof(Rnode));
 	pnew->item.rlist->rnext = NULL;
 	pnew->item.clist = (Cnode*)malloc(sizeof(Cnode));
 	pnew->item.clist->cnext = NULL;
@@ -378,7 +453,7 @@ bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_
 	return true;
 }
 
- //为某个学生添加某课程及成绩
+//为某个学生添加某课程及成绩
 bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
 	Crsnode* crs_tmp = chastu->item.crslist;//课程链表头节点
 	while (crs_tmp->crs_next != NULL)
@@ -401,23 +476,23 @@ bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, doubl
 }
 
 
- //修改学生信息（不修改课程）
-bool modifyStu(List* plist , Node* chastu ,wchar_t* pname ,int pID ,int pgender,int pgrade,wchar_t* pcollege,wchar_t* pmajor) {
+//修改学生信息（不修改课程）
+bool modifyStu(List* plist, Node* chastu, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor) {
 	Node* ptmp = *plist;
 	while (ptmp != chastu)
 		ptmp = ptmp->next;
 
-	wcscpy(ptmp->item.data.name,pname);
+	wcscpy(ptmp->item.data.name, pname);
 	ptmp->item.data.ID = pID;
 	ptmp->item.data.gender = pgender;
 	ptmp->item.data.grade = pgrade;
-	wcscpy(ptmp->item.data.college,pcollege);
+	wcscpy(ptmp->item.data.college, pcollege);
 	wcscpy(ptmp->item.data.major, pmajor);
 	return true;
 }
 
 // 修改某个学生的某课程及成绩
-bool modifyCrsInStu(Crsnode* chacrs, wchar_t* pcourse_id,wchar_t* pcourse_name,double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
+bool modifyCrsInStu(Crsnode* chacrs, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
 	wcscpy(chacrs->score.course_id, pcourse_id);
 	wcscpy(chacrs->score.course_name, pcourse_name);
 	chacrs->score.score = pscore;
@@ -443,7 +518,7 @@ bool deleteStu(List* plist, Node* delstu) {
 bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
 	Node* ptmp = delstu;//学生节点
 	Crsnode* crs_tmp = ptmp->item.crslist;//课程头节点
-	while (crs_tmp!=NULL && crs_tmp->crs_next != delcrs) {//寻找被删除课程节点的前节点
+	while (crs_tmp != NULL && crs_tmp->crs_next != delcrs) {//寻找被删除课程节点的前节点
 		crs_tmp = crs_tmp->crs_next;
 	}
 	crs_tmp->crs_next = delcrs->crs_next;
@@ -453,17 +528,19 @@ bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
 
 
 // 在总学生链表中通过学号和名字搜索学生 
-Node* searchStu(List* plist, wchar_t* pname, int pID) {
+Node* searchStu(List* plist, wchar_t* pname, int pID) 
+{
 	Node* ptmp = *plist;
-	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0 )//通过姓名或学号来检索
+	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0)//通过姓名或学号来检索
 		ptmp = ptmp->next;
 	return (ptmp);//返回这个学生信息的节点地址
 }
-	
+
 // 在单个学生中搜索的课程
 Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
-	while (_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0)//通过课程编号he课程名来检索
+	//首先要判断是否空，合并时别搞没了
+	while (crstmp&&(_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0))//通过课程编号和课程名来检索
 		crstmp = crstmp->crs_next;
 	return crstmp;
 }
@@ -483,3 +560,20 @@ Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
 }
 */
 
+//Crsnode* tmp2 = Crs->item.crslist->crs_next;
+//for (; tmp1 != NULL; ) {
+//	allcredit += tmp1->score.credit;
+//	tmp1 = tmp1->crs_next;
+//}
+
+////防止课程不够
+//if (allcredit == 0) {
+//	return 0;
+//}
+
+
+//double result = 0;
+//for (; tmp2 != NULL; ) {
+//	result += tmp2->score.grid * (tmp2->score.credit);
+//	tmp2 = tmp2->crs_next;
+//}

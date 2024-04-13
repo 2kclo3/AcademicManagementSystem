@@ -14,11 +14,14 @@
 
 List readStu(const char* file_name); //读取学生文件
 
+List readTch(const char* file_name); //读取教师文件
 
 Cpnode readCrs(const char* file_name); //读取课程文件
 
 
 bool saveStu(List StuList, const char* file_name); //保存学生文件
+
+bool saveTch(List TchList, const char* file_name);//保存教师文件
 
 
 bool saveCrs(Cpnode CrsList, const char* file_name); //保存课程文件

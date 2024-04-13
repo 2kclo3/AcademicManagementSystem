@@ -6,13 +6,15 @@
 
 //修改完后也要查重,避免出现把连个人的学号改重了或者课程改重了
 //geDoubleInBox函数对80.000不行，导致修改时，如果没有任何操作，也会报错
-//有的地方先隐藏了cancelButton，后显示了cancelButton，重来，之后小优化一下
 //有的标题太长，显示不出来，以后小优化一下，先解决主要矛盾
 //感觉，修改课程可以放到查看后的界面里
 //学年有区间吗
 //必修选修输入要判断
+//修改课程也需要联动
+//修改学生信息，只修改成绩
+//在联动时，如果对方不存在，该怎么办；有时间的话，解决这个问题
 
-int mainZHANG(void) 
+int mainZZZ(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
@@ -37,6 +39,8 @@ void allCrsUI()
 	vector<vector<std::wstring>> allCrsData;
 	showAllCrs(allCrsList, allCrsData, L"",0,0,0);
 
+	List allStuList = readStu(STU_FILE);
+
 	Table allCrsTable(310, 90, 940+220, 700, allCrsData);
 
 	Text titleText(40, 10, L"所有课程", 64);
@@ -45,6 +49,7 @@ void allCrsUI()
 	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
 	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
 	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
+	TextBox creditBox(-500, 0, 290, L"学分", L"");
 	TextBox SchYearBox(-500, 0, 290, L"学年", L"");
 	TextBox minBox(-500, 0, 290, L"最小值", L"");
 	TextBox maxBox(-500, 0, 290, L"最大值", L"");
@@ -103,6 +108,7 @@ void allCrsUI()
 		cnameBox.draw();
 		cnumBox.draw();
 		characterBox.draw();
+		creditBox.draw();
 		SchYearBox.draw();
 		minBox.draw();
 		maxBox.draw();
@@ -137,6 +143,7 @@ void allCrsUI()
 				cnameBox.move(-500, 0);
 				cnumBox.move(-500, 0);
 				characterBox.move(-500, 0);
+				creditBox.move(-500, 0);
 				SchYearBox.move(-500, 0);
 				minBox.move(-500, 0);
 				maxBox.move(-500, 0);
@@ -198,9 +205,11 @@ void allCrsUI()
 				{
 					// 获取课程节点信息
 					int cnum;
+					int SchYear;
 					int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
 					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
-					Cpnode cplist = searchCrs(allCrsList,cnum);
+					getNumberInBox(99999, &SchYear, allCrsData[selectedRow][4].c_str());
+					Cpnode cplist = searchCrs(allCrsList,cnum,SchYear);
 					CrsUI(allCrsList, cplist);
 
 				}
@@ -228,6 +237,7 @@ void allCrsUI()
 				cnameBox.move(10, y += dy);
 				cnumBox.move(10, y += dy);
 				characterBox.move(10, y += dy);
+				creditBox.move(10, y += dy);
 				SchYearBox.move(10, y += dy);
 				addOKButton.move(10, y += dy);
 				cancelButton.move(10, y += dy);
@@ -238,6 +248,7 @@ void allCrsUI()
 				wchar_t cname[30];
 				int cnum;
 				wchar_t character[5];
+				double credit;
 				int SchYear;
 
 				// 判断输入格式
@@ -245,13 +256,14 @@ void allCrsUI()
 					getTextInBox(cname, cnameBox.text) &&
 					getNumberInBox(99999, &cnum, cnumBox.text) &&
 					getTextInBox(character, characterBox.text) &&
+					getDoubleInBox(10, &credit, creditBox.text) &&
 					getNumberInBox(99999, &SchYear, SchYearBox.text)&&
-					cnum > 9999
+					cnum > 9999&&credit>0
 					)
 				{
 
 					// 课程相同的情况,报错提醒
-					if (!addCrs(allCrsList, cname, cnum, character,SchYear))
+					if (!addCrs(allCrsList, cname, cnum, character,credit,SchYear))
 					{
 						MessageBox(GetHWnd(), L"该课程号已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 					}
@@ -268,6 +280,7 @@ void allCrsUI()
 						cnameBox.clear();
 						cnumBox.clear();
 						characterBox.clear();
+						creditBox.clear();
 						SchYearBox.clear();
 
 
@@ -278,6 +291,7 @@ void allCrsUI()
 						cnameBox.move(-500, 0);
 						cnumBox.move(-500, 0);
 						characterBox.move(-500, 0);
+						creditBox.move(-500, 0);
 						SchYearBox.move(-500, 0);
 						addOKButton.move(-500, 0);
 						cancelButton.move(-500, 0);
@@ -343,7 +357,8 @@ void allCrsUI()
 					cnameBox.setText(selectedData[0].c_str());
 					cnumBox.setText(selectedData[1].c_str());
 					characterBox.setText(selectedData[2].c_str());
-					SchYearBox.setText(selectedData[3].c_str());
+					creditBox.setText(selectedData[3].c_str());
+					SchYearBox.setText(selectedData[4].c_str());
 
 
 					// 显示
@@ -351,6 +366,7 @@ void allCrsUI()
 					cnameBox.move(10, y += dy);
 					cnumBox.move(10, y += dy);
 					characterBox.move(10, y += dy);
+					creditBox.move(10, y += dy);
 					SchYearBox.move(10, y += dy);
 					modifyOKButton.move(10, y += dy);
 					cancelButton.move(10, y += dy);
@@ -358,34 +374,54 @@ void allCrsUI()
 
 			}
 
+			//有这门课的学生信息都要修改
 			if (modifyOKButton.mouseClick(msg))
 			{
 				wchar_t cname[30];
 				int cnum;
 				wchar_t character[5];
+				double credit;
 				int SchYear;
 
 				// 精确搜索课程节点
 				int original_cnum;
+				int original_SchYear;
 				int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
 				getNumberInBox(99999, &original_cnum, allCrsData[selectedRow][1].c_str());
-				Cpnode modifyingCrs = searchCrs(allCrsList, original_cnum);				
+				getNumberInBox(99999, &original_SchYear, allCrsData[selectedRow][4].c_str());
+				Cpnode modifyingCrs = searchCrs(allCrsList, original_cnum, original_SchYear);
 
 				// 判断输入格式
 				if (
 					getTextInBox(cname, cnameBox.text) &&
 					getNumberInBox(99999, &cnum, cnumBox.text) &&
 					getTextInBox(character, characterBox.text) &&
+					getDoubleInBox(10, &credit, creditBox.text) &&
 					getNumberInBox(99999, &SchYear, SchYearBox.text) &&
-					cnum > 9999
+					cnum > 9999&&credit>0&& SchYear>0
 					)
 				{
+					Node* StuNode = allStuList->next;
+					while (StuNode)
+					{
+						wchar_t wch_cnum[10];
+						swprintf(wch_cnum, 10, L"%d", modifyingCrs->cnum);
+						Crsnode* CrsNode = searchCrsInStu(StuNode, wch_cnum, modifyingCrs->cname);
+						if (CrsNode)
+						{
+							swprintf(wch_cnum, 10, L"%d", cnum);
+							int digit_character = wcscmp(character, L"必修") ? 0 : 1;//必修是1
+							modifyCrsInStu(CrsNode, wch_cnum, cname, CrsNode->score.score, SchYear, digit_character, credit, CrsNode->score.grid);
+						}
+						StuNode = StuNode->next;
+					}
 
 					// 修改
-					modifyCrs(modifyingCrs, cname, cnum, character,SchYear);
+					modifyCrs(modifyingCrs, cname, cnum, character, credit,SchYear);
 
 					// 保存
 					saveCrs(allCrsList, CRS_FILE);
+					saveStu(allStuList, STU_FILE);
 
 					// 使表格可变化
 					allCrsTable.canChange = true;
@@ -398,8 +434,8 @@ void allCrsUI()
 					cnameBox.clear();
 					cnumBox.clear();
 					characterBox.clear();
+					creditBox.clear();
 					SchYearBox.clear();
-
 
 					// 更改标题
 					titleText.setText(L"所有课程");
@@ -408,6 +444,7 @@ void allCrsUI()
 					cnameBox.move(-500, 0);
 					cnumBox.move(-500, 0);
 					characterBox.move(-500, 0);
+					creditBox.move(-500, 0);
 					SchYearBox.move(-500, 0);
 					modifyOKButton.move(-500, 0);
 					cancelButton.move(-500, 0);
@@ -436,6 +473,7 @@ void allCrsUI()
 
 			}
 
+			//有这门课的学生信息都要修改
 			if (deleteCrsBtn.mouseClick(msg))
 			{
 				if (allCrsTable.getSelectedRow() == 0)
@@ -456,11 +494,23 @@ void allCrsUI()
 						getTextInBox(cname, allCrsData[selectedRow][0].c_str());
 						getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
 
+						Node* StuNode = allStuList->next;
+						while (StuNode)
+						{
+							wchar_t wch_cnum[10];
+							swprintf(wch_cnum, 10, L"%d", cnum);
+							Crsnode* CrsNode = searchCrsInStu(StuNode, wch_cnum, cname);
+							if (CrsNode)
+								deleteCrsInStu(StuNode, CrsNode);
+							StuNode = StuNode->next;
+						}
+
 						// 删除
 						deleteCrs(allCrsList, cname, cnum);
 
 						// 保存
 						saveCrs(allCrsList, CRS_FILE);
+						saveStu(allStuList, STU_FILE);
 
 
 						// 刷新表格
@@ -826,6 +876,7 @@ void allCrsUI()
 			cnameBox.onMessage(msg);
 			cnumBox.onMessage(msg);
 			characterBox.onMessage(msg);
+			creditBox.onMessage(msg);
 			SchYearBox.onMessage(msg);
 			minBox.onMessage(msg);
 			maxBox.onMessage(msg);
@@ -845,14 +896,14 @@ void allCrsUI()
 
 }
 
-
 void CrsUI(Cpnode cphead, Cpnode cplist)
 {
+	List allStuList = readStu(STU_FILE);
+
 	cleardevice();
 	Spnode allStuInCrsList = cplist->sphead;
 	vector<vector<std::wstring>>allStuInCrsData;
 	showAllStuInCrs(cplist, allStuInCrsData, L"", 0, 0, 0);
-
 
 	Table allStuInCrsTable(310, 90, 940+220, 700, allStuInCrsData);
 
@@ -861,8 +912,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 	int TextWidth = textwidth(cplist->cname);
 	int x = 0 + (276 - TextWidth) / 2;
 	Text titleText(x, 50, cplist->cname, 64);
-
-
 
 	Text GPAText(-500, 370, L"", 32);
 
@@ -933,8 +982,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 				}
 
 				// 清除输入框内容
-				snameBox.clear();
-				snumBox.clear();
+				//snameBox.clear();
+				//snumBox.clear();
 				scoreBox.clear();
 				minBox.clear();
 				maxBox.clear();
@@ -1045,8 +1094,17 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					}
 					else
 					{
+						Node* StuNode = searchStu(&allStuList, sname, snum);
+						wchar_t wch_cnum[10];
+						swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+						double GPA = CalculGPA(score);
+						int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
+
+						addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
+
 						// 保存
 						saveCrs(cphead, CRS_FILE);
+						saveStu(allStuList, STU_FILE);
 
 						// 刷新表格
 						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
@@ -1132,8 +1190,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					scoreBox.setText(selectedData[2].c_str());
 
 					// 显示
-					snameBox.move(10, 220);
-					snumBox.move(10, 300);
+					//snameBox.move(10, 220);
+					//snumBox.move(10, 300);
 					scoreBox.move(10, 380);
 					modifyOKButton.move(10, 460);
 					cancelButton.move(10, 540);
@@ -1144,30 +1202,42 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 			//在对应学生的课程页修改对应课程的信息
 			if (modifyOKButton.mouseClick(msg))
 			{
-				wchar_t sname[30];
-				int snum;
+				//wchar_t sname[30];
+				//int snum;
 				double score;
 
 				// 精确搜索课程节点
 				int original_snum;
+				wchar_t original_sname[30];
 				int selectedRow = allStuInCrsTable.getSelectedRow(); // 获取当前行
+				getTextInBox(original_sname, allStuInCrsData[selectedRow][0].c_str());
 				getNumberInBox(99999999, &original_snum, allStuInCrsData[selectedRow][1].c_str());
 				Spnode modifyingStu = searchStuInCrs(cplist, original_snum);
 
 				// 判断输入格式
 				if (
-					getTextInBox(sname, snameBox.text) &&
-					getNumberInBox(99999999, &snum, snumBox.text) &&
+					//getTextInBox(sname, snameBox.text) &&
+					//getNumberInBox(99999999, &snum, snumBox.text) &&
 					getDoubleInBox(100, &score, scoreBox.text) &&
-					snum > 9999999 && score >= 0
+					//snum > 9999999 && score >= 0
+					score >= 0
 					)
 				{
 
 					// 修改
-					modifyStuInCrs(cplist, modifyingStu, sname, snum, score);
+					modifyStuInCrs(cplist, modifyingStu, original_sname, original_snum, score);
+
+
+					Node* StuNode = searchStu(&allStuList, original_sname, original_snum);
+					wchar_t wch_cnum[10];
+					swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+					int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
+					Crsnode* CrsNode = searchCrsInStu(StuNode, wch_cnum, cplist->cname);
+					modifyCrsInStu(CrsNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, modifyingStu->GPA);
 
 					// 保存
 					saveCrs(cphead, CRS_FILE);
+					saveStu(allStuList, STU_FILE);
 
 					// 使表格可变化
 					allStuInCrsTable.canChange = true;
@@ -1177,8 +1247,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					allStuInCrsTable.setData(allStuInCrsData);
 
 					// 清除输入框内容
-					snameBox.clear();
-					snumBox.clear();
+					//snameBox.clear();
+					//snumBox.clear();
 					scoreBox.clear();
 
 					// 更改标题
@@ -1189,8 +1259,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 					titleText.move(x, 50);
 
 					// 隐藏
-					snameBox.move(-500, 220);
-					snumBox.move(-500, 300);
+					//snameBox.move(-500, 220);
+					//snumBox.move(-500, 300);
 					scoreBox.move(-500, 380);
 					modifyOKButton.move(-500, 460);
 					cancelButton.move(-500, 540);
@@ -1238,8 +1308,16 @@ void CrsUI(Cpnode cphead, Cpnode cplist)
 						// 删除
 						deleteStuInCrs(cplist, sname, snum);
 
+						Node* StuNode = searchStu(&allStuList, sname, snum);
+						wchar_t wch_cnum[10];
+						swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+						int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
+						Crsnode* CrsNode = searchCrsInStu(StuNode, wch_cnum, cplist->cname);
+						deleteCrsInStu(StuNode, CrsNode);
+
 						// 保存
 						saveCrs(cphead, CRS_FILE);
+						saveStu(allStuList, STU_FILE);
 
 						// 刷新表格
 						showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
