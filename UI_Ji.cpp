@@ -8,7 +8,7 @@
 
 
 
-int mainjjj(void) {
+int main(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	// 初始化图形窗口
 	initgraph(1500, 810);
@@ -546,6 +546,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 	cleardevice();
 
 	Cpnode allCrsList = readCrs(CRS_FILE);
+
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
@@ -682,7 +683,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					getTextInBox(course_id, course_idBox.text) &&
 					getTextInBox(course_name, course_nameBox.text) &&
 					getDoubleInBox(100, &score, scoreBox.text) &&
-					getNumberInBox(8, &semester, semesterBox.text) &&
+					getNumberInBox(2024, &semester, semesterBox.text) &&
 					getNumberInBox(1, &course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
 					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
@@ -692,12 +693,14 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 ;
 
-					addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
-					if (searchCrs(allCrsList, stoi(course_id),1) == NULL) {
+					
+
+					if (searchCrs(allCrsList, stoi(course_id), semester) == NULL) {
 						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
 					}
 					else {
-						addStuInCrs(searchCrs(allCrsList, stoi(course_id),1), pname, *pid, score);
+						addStuInCrs(searchCrs(allCrsList, stoi(course_id),semester), pname, *pid, score);
+						addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
 					}
 
 
@@ -884,11 +887,20 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					getNumberInBox(8, &semester, semesterBox.text) &&
 					getNumberInBox(1, &course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
-					getDoubleInBox(4, &grid, gridBox.text) &&
-					grid >= 0 && credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
 					) {
 
-					modifyCrsInStu(tmp, course_id, course_name, score, semester, course_nature, credit, grid);
+					grid = CalculGPA(score);
+
+
+					if (searchCrs(allCrsList, stoi(course_id), semester) == NULL) {
+						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
+					}
+					else {
+						//modifyStuInCrs()
+						//modifyCrsInStu(tmp, course_id, course_name, score, semester, course_nature, credit, grid);
+					}
+
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
