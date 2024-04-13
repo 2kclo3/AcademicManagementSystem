@@ -581,7 +581,7 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // 删除课程
 	return 1;
 }
 
-int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum) // 删除某个课程的某学生成绩
+int deleteStuInCrs(Cpnode cplist,const wchar_t* sname, int snum) // 删除某个课程的某学生成绩
 {
 	Spnode pre_splist = cplist->sphead;
 	Spnode splist = pre_splist->next;

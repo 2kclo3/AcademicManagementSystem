@@ -40,7 +40,7 @@ void allStuUI() {
 
 	vector<vector<std::wstring>> allStuData;
 	showAllStu(allStuList, allStuData, L"");
-	int i=0;
+	int i = 0;
 
 
 	Table allStuTable(430, 90, 940, 700, allStuData);
@@ -134,12 +134,12 @@ void allStuUI() {
 					wchar_t cname[30];
 					int cid;
 					int selectedRow = allStuTable.getSelectedRow();
-					getNumberInBox(99999999,&cid, allStuData[selectedRow][0].c_str());
+					getNumberInBox(99999999, &cid, allStuData[selectedRow][0].c_str());
 					getTextInBox(cname, allStuData[selectedRow][1].c_str());
 					Node* Crs = searchStu(&allStuList, cname, cid);
 
 
-					StuUI(Crs, allStuList,cname,&cid);
+					StuUI(Crs, allStuList, cname, &cid);
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -177,7 +177,6 @@ void allStuUI() {
 				}
 
 			}
-
 
 			if (cancelButton.mouseClick(msg)) {
 				// 更改标题
@@ -462,8 +461,27 @@ void allStuUI() {
 						// 删除
 						deleteStu(&allStuList, deletingStu);
 
+
+						Cpnode CrsNode = allCrsList;
+
+						while (CrsNode) {
+							Spnode stunode = CrsNode->sphead->next;
+							while (stunode) {
+								if (stunode->snum == tempID) {
+									deleteStuInCrs(CrsNode, (wchar_t*)allStuData[selectedRow][1].c_str(), tempID);
+									break;
+								}
+								stunode = stunode->next;
+							}
+
+							CrsNode = CrsNode->next;
+						}
+
+
+
 						// 保存
 						saveStu(allStuList, STU_FILE);
+						saveCrs(allCrsList, CRS_FILE);
 
 
 						// 刷新表格
@@ -491,7 +509,7 @@ void allStuUI() {
 				showAllStu(allStuList, allStuData, L"");
 				allStuTable.setData(allStuData);
 			}
-	
+
 			if (sortyearBtn.mouseClick(msg)) {
 
 				RankUI(allStuList);
@@ -551,7 +569,7 @@ void allStuUI() {
 
 
 
-void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid) {
 
 
 	cleardevice();
@@ -702,15 +720,15 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 					grid = CalculGPA(score);
 
-;
+					;
 
-					
+
 
 					if (searchCrs(allCrsList, stoi(course_id), semester) == NULL) {
 						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
 					}
 					else {
-						addStuInCrs(searchCrs(allCrsList, stoi(course_id),semester), pname, *pid, score);
+						addStuInCrs(searchCrs(allCrsList, stoi(course_id), semester), pname, *pid, score);
 						addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
 					}
 
@@ -895,7 +913,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					getTextInBox(course_id, course_idBox.text) &&
 					getTextInBox(course_name, course_nameBox.text) &&
 					getDoubleInBox(100, &score, scoreBox.text) &&
-					getNumberInBox(8, &semester, semesterBox.text) &&
+					getNumberInBox(2024, &semester, semesterBox.text) &&
 					getNumberInBox(1, &course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
 					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
@@ -904,16 +922,39 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 					grid = CalculGPA(score);
 
 
-					if (searchCrs(allCrsList, stoi(course_id), semester) == NULL) {
-						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
+					//改动课程
+					Cpnode StuInCrsNode = searchCrs(allCrsList, stoi(allCrsINStuData[selectedRow][0].c_str()), semester);///////
+					if (StuInCrsNode) {
+						modifyCrs(StuInCrsNode, course_name, stoi(course_id), (course_nature == 1) ? (L"必修") : (L"选修"), credit, semester);
 					}
 					else {
-						//modifyStuInCrs()
-						//modifyCrsInStu(tmp, course_id, course_name, score, semester, course_nature, credit, grid);
+						MessageBox(GetHWnd(), L"课程错误", L"错误!", MB_ICONERROR);
 					}
+
+					//改动所有学生课程
+					Node* everystu = allStuList->next;
+					while (everystu) {
+
+						Crsnode* everyStuCrs = everystu->item.crslist->crs_next;
+						while (everyStuCrs) {
+							if (wcscmp(everyStuCrs->score.course_id, allCrsINStuData[selectedRow][0].c_str()) == 0)
+							{
+								modifyCrsInStu(everyStuCrs, course_id, course_name, everyStuCrs->score.score, semester, course_nature, credit, CalculGPA(everyStuCrs->score.score));
+							}
+							everyStuCrs = everyStuCrs->crs_next;
+						}
+						everystu = everystu->next;
+					}
+
+
+
+
+
+
 
 
 					// 保存
+					saveCrs(allCrsList, CRS_FILE);
 					saveStu(allStuList, STU_FILE);
 
 
@@ -982,8 +1023,23 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 
 						deleteCrsInStu(Crs, ttmp);
 
+
+
+						Cpnode CrsNode = searchCrs(allCrsList, stoi(pcourse_id), stoi(allCrsINStuData[selectedRow][3].c_str()));
+						Spnode stunode = CrsNode->sphead->next;
+
+						while (stunode) {
+							if (stunode->snum == *pid) {
+								deleteStuInCrs(CrsNode,pname,*pid);
+								break;
+							}
+							stunode = stunode->next;
+						}
+
+
 						// 保存
 						saveStu(allStuList, STU_FILE);
+						saveCrs(allCrsList, CRS_FILE);
 
 						// 刷新表格
 						showStu(Crs, allCrsINStuData, L"");
@@ -1100,7 +1156,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid) {
 	}
 
 
-		
+
 }
 
 
@@ -1110,7 +1166,7 @@ void RankUI(List StuList) {
 
 	vector<vector<std::wstring>> RankData;
 	int number;
-	Rank(StuList, RankData, L"",L"", & number);
+	Rank(StuList, RankData, L"", L"", &number);
 
 	Table RankTable(340, 90, 1100, 700, RankData);
 
@@ -1139,10 +1195,10 @@ void RankUI(List StuList) {
 		if (peekmessage(&msg, -1, true)) {
 
 			if (searchBtn.mouseClick(msg)) {
-				Rank(StuList, RankData, searchInputBox.text, searchInput2Box.text,&number);
+				Rank(StuList, RankData, searchInputBox.text, searchInput2Box.text, &number);
 				RankTable.setData(RankData);
 			}
-			
+
 			if (allscoreBtn.mouseClick(msg)) {
 				//for (vector<std::wstring>& a : RankData)
 					//	//std::cout << stold(a[4]) << std::endl;
@@ -1162,7 +1218,7 @@ void RankUI(List StuList) {
 
 				while (L < R) {
 					for (int i = L; i < R; i++) {
-						if (stof(RankData[i][4])< stof(RankData[i+1][4])) {
+						if (stof(RankData[i][4]) < stof(RankData[i + 1][4])) {
 							swap(RankData[i], RankData[i + 1]);
 						}
 
@@ -1170,7 +1226,7 @@ void RankUI(List StuList) {
 
 					R--;
 					for (int i = R; i > L; i--) {
-						if (stof(RankData[i][4]) > stof(RankData[i-1][4])) {
+						if (stof(RankData[i][4]) > stof(RankData[i - 1][4])) {
 							swap(RankData[i], RankData[i - 1]);
 						}
 					}

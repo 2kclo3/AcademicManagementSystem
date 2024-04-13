@@ -85,7 +85,7 @@ int deleteCrs(Cpnode cphead, wchar_t* cname,int cnum); // 删除课程
 
 //参数列表：课程节点的地址，学生姓名，学号
 //正常返回1；无其它返回值
-int deleteStuInCrs(Cpnode cplist, wchar_t* sname, int snum); // 删除某个课程的某学生成绩
+int deleteStuInCrs(Cpnode cplist,const wchar_t* sname, int snum); // 删除某个课程的某学生成绩
 
 //先这么用，后头换成归并排序
 void sortStuInCrs(Cpnode cplist, int op);//对某个课程节点中的学生链表排序
