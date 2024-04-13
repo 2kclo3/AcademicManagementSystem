@@ -449,14 +449,14 @@ bool exportStu(List StuList, const char* file_name) {
 
 
 	//表头
-	fwprintf(fp, L"学号\t\t\t姓名\t\t\t性别\t\t年级\t\t学院\t\t\t专业\t\t\t原学院\t\t\t原专业\t\t\t所有课程平均分\t所有课程平均绩点\t必修课程平均分\t必修课程平均绩点\n\n");
+	fwprintf(fp, L"学号,姓名,性别,年级,学院,专业,原学院,原专业,所有课程平均分,所有课程平均绩点,必修课程平均分,必修课程平均绩点\n");
 
 	List pStu = StuList->next; // 从头结点的下一个节点开始
 	while (pStu != NULL) {
-		fwprintf(fp, L"%d\t%s\t\t%s\t\t%d\t\t%s\t\t%s\t%s\t%s\t%.2lf\t%.4lf\t%.2lf\t%.4lf\n\n",
+		fwprintf(fp, L"%d,%s,%s,%d,%s,%s,%s,%s,%.2lf,%.4lf,%.2lf,%.4lf\n",
 			pStu->item.data.ID,
 			pStu->item.data.name,
-			(pStu->item.data.gender == 1) ? L"    男" : L"    女",
+			(pStu->item.data.gender == 1) ? L"男" : L"女",
 			pStu->item.data.grade,
 			pStu->item.data.college,
 			pStu->item.data.major,
@@ -487,11 +487,11 @@ bool exportCrs(Cpnode CrsList, const char* file_name) {
 
 
 	//表头
-	fwprintf(fp, L"课程号\t\t课程名\t\t学年\t\t课程性质\t\t学分\t\t总人数\t\t平均成绩\t\t平均绩点\t\t及格人数\t\t及格率\t\t优秀人数\t\t优秀率\n\n");
+	fwprintf(fp, L"课程号,课程名,学年,课程性质,学分,总人数,平均成绩,平均绩点,及格人数,及格率,优秀人数,优秀率\n");
 
 	Cpnode pCrs = CrsList->next; // 从头结点的下一个节点开始
 	while (pCrs != NULL) {
-		fwprintf(fp, L"%d\t\t%s\t\t%d\t\t%s\t\t%.1lf\t\t%d\t\t%.2lf\t\t%.2lf\t\t%d\t\t%.2lf\t\t%d\t\t%.2lf\n\n",
+		fwprintf(fp, L"%d,%s,%d,%s,%.1lf,%d,%.2lf,%.2lf,%d,%.2lf,%d,%.2lf\n",
 			pCrs->cnum,
 			pCrs->cname,
 			pCrs->SchYear,
@@ -512,12 +512,181 @@ bool exportCrs(Cpnode CrsList, const char* file_name) {
 	return true;
 }
 
-bool importStu() {
-	return true;
+void importStu(List StuList, const char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	int successCnt = 0; //成功次数
+	int failCnt = 0; //失败次数
+	int failSameIDCnt = 0; //学号相同错误计数
+	int failFormatCnt = 0; //格式错误错误计数
+	int failDataCnt = 0; //数据错误错误计数
+
+	wchar_t TMPid[100];
+	wchar_t TMPname[100];
+	wchar_t TMPgender[100];
+	wchar_t TMPgrade[100];
+	wchar_t TMPcollege[100];
+	wchar_t TMPmajor[100];
+
+	int id;
+	wchar_t name[30];
+	wchar_t gender[10];
+	int grade;
+	wchar_t college[100];
+	wchar_t major[100];
+
+	// 获取当前年份(判断年级要用)
+	time_t Current_time = time(NULL);
+	int Current_year = localtime(&Current_time)->tm_year + 1900;
+
+	wchar_t line[512];
+	fgetws(line, sizeof(line) / sizeof(line[0]), fp); // 跳过表头
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (swscanf(line, L"%[^,],%[^,],%[^,],%[^,],%[^,],%[^,]",
+			&TMPid,
+			&TMPname,
+			&TMPgender,
+			&TMPgrade,
+			&TMPcollege,
+			&TMPmajor
+
+		) == 6) { // 读取学生信息
+
+			if (
+				getNumberInBox(99999999, &id, TMPid) &&
+				getTextInBox(name, TMPname) &&
+				getTextInBox(gender, TMPgender) &&
+				getNumberInBox(9999, &grade, TMPgrade) &&
+				getTextInBox(college, TMPcollege) &&
+				getTextInBox(major, TMPmajor) &&
+				(id > 9999999 && id < 100000000) &&
+				(grade > 1970 && grade <= Current_year) &&
+				(!wcscmp(gender, L"男") || (!wcscmp(gender, L"女")))
+				) {
+
+				// 学号相同的情况,错误+1
+				if (!addStu(&StuList, name, id, wcscmp(gender, L"男") ? 0 : 1, grade, college, major)) {
+					failSameIDCnt++;
+					failCnt++;
+				}
+				else {
+					successCnt++;
+				}
+			}
+			else {
+				failFormatCnt++;
+				failCnt++;
+			}
+		}
+		else {
+			failDataCnt++;
+			failCnt++;
+		}
+	}
+	fclose(fp);
+	MessageBox(GetHWnd(), (wstring(L"导入成功")
+		+ to_wstring(successCnt) + L"条信息，失败"
+		+ to_wstring(failCnt) + L"条信息。\n\n错误详情：\n已有相同学生"
+		+ to_wstring(failSameIDCnt) + L"条；\n格式错误"
+		+ to_wstring(failFormatCnt) + L"条；\n数据错误"
+		+ to_wstring(failDataCnt) + L"条。"
+		).c_str(), L"导入文件", MB_SYSTEMMODAL);
 }
 
-bool importCrs() {
-	return true;
+void importCrs(Cpnode CrsList, const char* file_name) {
+	FILE* fp;
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	int successCnt = 0; //成功次数
+	int failCnt = 0; //失败次数
+	int failSameIDCnt = 0; //课程号相同错误计数
+	int failFormatCnt = 0; //格式错误错误计数
+	int failDataCnt = 0; //数据错误错误计数
+
+	wchar_t TMPid[100];
+	wchar_t TMPname[100];
+	wchar_t TMPschYear[100];
+	wchar_t TMPcharacter[100];
+	wchar_t TMPcredit[100];
+
+	int id;
+	wchar_t name[30];
+	int SchYear;
+	wchar_t character[5];
+	double credit;
+
+	// 获取当前年份(判断年级要用)
+	time_t Current_time = time(NULL);
+	int Current_year = localtime(&Current_time)->tm_year + 1900;
+
+	wchar_t line[512];
+	fgetws(line, sizeof(line) / sizeof(line[0]), fp); // 跳过表头
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (swscanf(line, L"%[^,],%[^,],%[^,],%[^,],%[^,]",
+			&TMPid,
+			&TMPname,
+			&TMPschYear,
+			&TMPcharacter,
+			&TMPcredit
+		) == 5) { // 读取学生信息
+
+			if (
+				getNumberInBox(99999, &id, TMPid) &&
+				getTextInBox(name, TMPname) &&
+				getTextInBox(character, TMPcharacter) &&
+				getNumberInBox(9999, &SchYear, TMPschYear) &&
+				getDoubleInBox(10, &credit, TMPcredit) &&
+				(id > 9999 && id < 100000) &&
+				(SchYear > 1970 && SchYear <= Current_year)
+				) {
+
+				// 学号相同的情况,错误+1
+				//if (!addCrs(CrsList, name, id, character, SchYear, credit)) { //添加学分后再改
+				if (!addCrs(CrsList, name, id, character, SchYear)) {
+					failSameIDCnt++;
+					failCnt++;
+				}
+				else {
+					successCnt++;
+				}
+			}
+			else {
+				failFormatCnt++;
+				failCnt++;
+			}
+		}
+		else {
+			failDataCnt++;
+			failCnt++;
+		}
+	}
+	fclose(fp);
+	MessageBox(GetHWnd(), (wstring(L"导入成功")
+		+ to_wstring(successCnt) + L"条信息，失败"
+		+ to_wstring(failCnt) + L"条信息。\n\n错误详情：\n已有相同课程"
+		+ to_wstring(failSameIDCnt) + L"条；\n格式错误"
+		+ to_wstring(failFormatCnt) + L"条；\n数据错误"
+		+ to_wstring(failDataCnt) + L"条。"
+		).c_str(), L"导入文件", MB_SYSTEMMODAL);
 }
 
+
+//importCrs(allCrsList, ".\\import\\Crs.csv");
+
+////// 保存
+////saveCrs(allCrsList, CRS_FILE);
+////先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+//// 刷新表格
+//showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+//allCrsTable.setData(allCrsData);
 

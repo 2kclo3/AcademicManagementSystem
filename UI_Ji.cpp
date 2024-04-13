@@ -492,7 +492,16 @@ void allStuUI() {
 			}
 
 			if (inportBtn.mouseClick(msg)) {
-				//TODO
+				importStu(allStuList, ".\\import\\Stu.csv");
+
+				//// 保存
+				//saveStu(allStuList, STU_FILE);
+				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				// 刷新表格
+				showAllStu(allStuList, allStuData, L"");
+				allStuTable.setData(allStuData);
+
 			}
 
 			if (backButton.mouseClick(msg)) {

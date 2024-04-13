@@ -12,7 +12,7 @@
 //学年有区间吗
 //必修选修输入要判断
 
-int main(void) 
+int mainZHANG(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出

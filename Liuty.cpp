@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLLLLLLLLLLLLLLL(void) {
+int mainLIUTY(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -21,21 +21,21 @@ int mainLLLLLLLLLLLLLLL(void) {
 
 
 	Cpnode tmpCrs = readCrs(CRS_FILE);
-	exportCrs(tmpCrs, ".\\export\\tempCrs.txt");
+	exportCrs(tmpCrs, ".\\export\\tempCrs.csv");
 	saveCrs(tmpCrs, CRS_FILE);
 
 	List tmpStu = readStu(STU_FILE);
 	//saveStu(tmpStu, STU_FILE);
-	exportStu(tmpStu, ".\\export\\tempStu.txt");
+	exportStu(tmpStu, ".\\export\\tempStu.csv");
 
 
 	//testUI();
-	stuAccountUI(55230001);
+	//stuAccountUI(55230001);
 
 
 	//allStuUI();
 	//loginUI();
-	//menuUI();
+	menuUI();
 
 
 
@@ -123,7 +123,7 @@ void changeMajorUI() {
 	vector<vector<std::wstring>> allStuData;
 	showAllMajor(allStuList, allStuData, L"");
 
-	Table allStuTable(310, 90, 940, 700, allStuData);
+	Table allStuTable(310, 90, 1100, 700, allStuData);
 
 	Text titleText(25, 50, L"转专业管理", 64);
 	Text IDText(-500, 150, L"", 32);
@@ -423,13 +423,13 @@ void stuAccountUI(int stuID) {
 	must = MustGrid(pstu);
 	alls = AllScore(pstu);
 	musts = MustScore(pstu);
-	Text allCrsGridText(40, 250, (wstring(L"所有课程平均绩点: ") + to_wstring(all)).c_str(), 32);
-	Text allCrsScoreText(40, 300, (wstring(L"所有课程平均分: ") + to_wstring(alls)).c_str(), 32);
-	Text reqCrsGridText(40, 350, (wstring(L"必修课程平均绩点: ") + to_wstring(must)).c_str(), 32);
-	Text reqCrsScoreText(40, 400, (wstring(L"必修课程平均分: ") + to_wstring(musts)).c_str(), 32);
+	Text allCrsGridText(40, 200, (wstring(L"所有课程平均绩点: ") + to_wstring(all)).c_str(), 32);
+	Text allCrsScoreText(40, 250, (wstring(L"所有课程平均分: ") + to_wstring(alls)).c_str(), 32);
+	Text reqCrsGridText(40, 300, (wstring(L"必修课程平均绩点: ") + to_wstring(must)).c_str(), 32);
+	Text reqCrsScoreText(40, 350, (wstring(L"必修课程平均分: ") + to_wstring(musts)).c_str(), 32);
 
 
-	Button backButton(-50, 500, 330, 60, L"   退出登录", 0);
+	Button backButton(-50, 700, 450, 60, L"   退出登录", 0);
 
 
 
