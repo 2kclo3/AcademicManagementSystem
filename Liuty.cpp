@@ -111,6 +111,12 @@ bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar
 }
 
 
+void testShowChart(vector<vector<wstring>> _data, vector<vector<wstring>> _chart) {
+	chartUI(_chart, 1, 2);
+}
+
+
+
 
 void changeMajorUI() {
 	cleardevice();

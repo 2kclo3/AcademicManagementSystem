@@ -433,6 +433,22 @@ double CalculGPA(double score)
 
 }
 
+int CalculNumOfCrs(int op)//计算课程数
+{
+	static int NumOfCrs;
+	switch (op)
+	{
+	case 1://添加
+		NumOfCrs++;
+		break;
+	case 2://删除
+		NumOfCrs--;
+		break;
+	case 3://查看课程数
+		return NumOfCrs;
+	}
+}
+
 int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* character, double credit, int SchYear) // 添加课程
 {
 	if (searchCrs(cphead, cnum, SchYear))
@@ -448,6 +464,7 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 		return -1;
 	}
 
+	//初始化
 	cplist->sphead->next = NULL;
 	cplist->headcount = 0;
 	cplist->totGPA = 0;
@@ -458,10 +475,10 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	cplist->PassRate = 0;
 	cplist->ExcelNum = 0;
 	cplist->ExcelRate = 0;
-	//初始化
 
+	//头插
 	cplist->next = cphead->next;
-	cphead->next = cplist;//头插
+	cphead->next = cplist;
 
 
 	wcscpy(cplist->cname, cname);
@@ -469,6 +486,7 @@ int addCrs(Cpnode cphead, const wchar_t* cname, int cnum, const wchar_t* charact
 	wcscpy(cplist->character, character);
 	cplist->credit = credit;
 	cplist->SchYear = SchYear;
+	CalculNumOfCrs(1);
 	return 1;
 }
 
@@ -578,6 +596,7 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // 删除课程
 	pre_cplist->next = cplist->next;
 	free(cplist);
 
+	CalculNumOfCrs(2);
 	return 1;
 }
 
@@ -627,117 +646,258 @@ int deleteStuInCrs(Cpnode cplist,const wchar_t* sname, int snum) // 删除某个课程
 	return 1;
 }
 
+//bool cmp_sortStuInCrs(Spnode splist, int op)
+//{
+//	switch (op)
+//	{
+//	case 1://按学号降序
+//		return splist->snum > splist->next->snum;
+//	case 2://按学号升序
+//		return splist->snum < splist->next->snum;
+//	case 3://按成绩降序
+//		return splist->score > splist->next->score;
+//	case 4://按成绩升序
+//		return splist->score < splist->next->score;
+//	case 5://按GPA降序
+//		return splist->GPA > splist->next->GPA;
+//	case 6://按GPA升序
+//		return splist->GPA < splist->next->GPA;
+//	}
+//}
+//void sortStuInCrs(Cpnode cplist, int op)
+//{
+//	bool flag = true;
+//	while (flag)
+//	{
+//		flag = false;
+//		Spnode pre_splist = cplist->sphead;
+//		Spnode splist = cplist->sphead->next;
+//		if (!splist)
+//			return;
+//		while (splist->next)
+//		{
+//			if (cmp_sortStuInCrs(splist, op))
+//			{
+//				Spnode tmp = splist->next;
+//				splist->next = splist->next->next;
+//				tmp->next = splist;
+//				pre_splist->next = tmp;
+//				pre_splist = pre_splist->next;//掉了
+//				flag = true;
+//				continue;
+//			}
+//			pre_splist = pre_splist->next;
+//			splist = splist->next;
+//		}
+//	}
+//	return;
+//}
+
+
 //辅助函数，就不包含到头文件里了
-bool cmp_sortStuInCrs(Spnode splist, int op)
+bool cmp_sortStuInCrs(Spnode splist1, Spnode splist2, int op)
 {
 	switch (op)
 	{
 	case 1://按学号降序
-		return splist->snum > splist->next->snum;
+		return splist1->snum > splist2->snum;
 	case 2://按学号升序
-		return splist->snum < splist->next->snum;
+		return splist1->snum < splist2->snum;
 	case 3://按成绩降序
-		return splist->score > splist->next->score;
+		return splist1->score > splist2->score;
 	case 4://按成绩升序
-		return splist->score < splist->next->score;
+		return splist1->score < splist2->score;
 	case 5://按GPA降序
-		return splist->GPA > splist->next->GPA;
+		return splist1->GPA > splist2->GPA;
 	case 6://按GPA升序
-		return splist->GPA < splist->next->GPA;
+		return splist1->GPA < splist2->GPA;
 	}
 }
-void sortStuInCrs(Cpnode cplist, int op)
+// 分割链表函数，返回第二部分链表的头指针
+Spnode split_sortStuInCrs(Spnode splist, int size)
 {
-	bool flag = true;
-	while (flag)
+	Spnode pre_mid = NULL;//中间节点的前驱节点，用来断开
+	while (splist && size--)
 	{
-		flag = false;
-		Spnode pre_splist = cplist->sphead;
-		Spnode splist = cplist->sphead->next;
-		if (!splist)
-			return;
-		while (splist->next)
+		pre_mid = splist;
+		splist = splist->next;
+	}
+	if (pre_mid)
+		pre_mid->next = NULL;//断开
+	return splist;
+}
+// 合并两个链表并返回合并后的链表的尾部
+Spnode merge_sortStuInCrs(Spnode splist1, Spnode splist2, Spnode ptail,int op)
+{
+	Spnode cur = ptail;
+	while (splist1 && splist2)
+	{
+		if (cmp_sortStuInCrs(splist1,splist2,op))
 		{
-			if (cmp_sortStuInCrs(splist, op))
-			{
-				Spnode tmp = splist->next;
-				splist->next = splist->next->next;
-				tmp->next = splist;
-				pre_splist->next = tmp;
-				pre_splist = pre_splist->next;//掉了
-				flag = true;
-				continue;
-			}
-			pre_splist = pre_splist->next;
-			splist = splist->next;
+			cur->next = splist1;
+			splist1 = splist1->next;
+		}
+		else
+		{
+			cur->next = splist2;
+			splist2 = splist2->next;
+		}
+		cur = cur->next;
+	}
+	cur->next = (splist1) ? splist1 : splist2;
+	while (cur->next) cur = cur->next;
+	return cur;
+}
+// 使用迭代的方式实现归并排序
+void sortStuInCrs(Cpnode cplist,int op)
+{
+	if (!cplist->sphead || !cplist->sphead->next)
+		return;
+	Spnode left;
+	Spnode right;
+	Spnode splist;
+	Spnode sptail;
+	for (int size = 1; size < cplist->headcount; size *= 2)
+	{
+		splist = cplist->sphead->next;
+		sptail = cplist->sphead;
+		while (splist)
+		{
+			left = splist;
+			right = split_sortStuInCrs(left, size);  // 分割 left
+			splist = split_sortStuInCrs(right, size);  // 分割 right
+			sptail = merge_sortStuInCrs(left, right, sptail,op); // 合并 left 和 right
 		}
 	}
-	return;
 }
 
-bool cmp_sortCrs(Cpnode cplist, int op)
+
+//void sortCrs(Cpnode cphead, int op)
+//{
+//	bool flag = true;
+//	while (flag)
+//	{
+//		flag = false;
+//		Cpnode pre_cplist = cphead;
+//		Cpnode cplist = cphead->next;
+//		if (!cplist)
+//			return;
+//		while (cplist->next)
+//		{
+//			if (cmp_sortCrs(cplist, op))
+//			{
+//				Cpnode tmp = cplist->next;
+//				cplist->next = cplist->next->next;
+//				tmp->next = cplist;
+//				pre_cplist->next = tmp;
+//				pre_cplist = pre_cplist->next;//掉了
+//				flag = true;
+//				continue;
+//			}
+//			pre_cplist = pre_cplist->next;
+//			cplist = cplist->next;
+//		}
+//	}
+//	return;
+//	return;
+//}
+
+//辅助函数，就不包含到头文件里了
+bool cmp_sortCrs(Cpnode cplist1, Cpnode cplist2, int op)
 {
 	switch (op)
 	{
 	case 1://按课程号升序
-		return cplist->cnum < cplist->next->cnum;
+		return cplist1->cnum < cplist2->cnum;
 	case 2://按课程号降序
-		return cplist->cnum > cplist->next->cnum;
+		return cplist1->cnum > cplist2->cnum;
 	case 3://按学年升序
-		return cplist->SchYear < cplist->next->SchYear;
+		return cplist1->SchYear < cplist2->SchYear;
 	case 4://按学年降序
-		return cplist->SchYear > cplist->next->SchYear;
+		return cplist1->SchYear > cplist2->SchYear;
 	case 5://按总人数升序
-		return cplist->headcount < cplist->next->headcount;
+		return cplist1->headcount < cplist2->headcount;
 	case 6://按总人数降序
-		return cplist->headcount > cplist->next->headcount;
+		return cplist1->headcount > cplist2->headcount;
 	case 7://按平均成绩升序
-		return cplist->averscore < cplist->next->averscore;
+		return cplist1->averscore < cplist2->averscore;
 	case 8://按平均成绩降序
-		return cplist->averscore > cplist->next->averscore;
+		return cplist1->averscore > cplist2->averscore;
 	case 9://按平均绩点升序
-		return cplist->averGPA < cplist->next->averGPA;
+		return cplist1->averGPA < cplist2->averGPA;
 	case 10://按平均绩点降序
-		return cplist->averGPA > cplist->next->averGPA;
+		return cplist1->averGPA > cplist2->averGPA;
 	case 11://按及格率升序
-		return cplist->PassRate < cplist->next->PassRate;
+		return cplist1->PassRate < cplist2->PassRate;
 	case 12://按及格率降序
-		return cplist->PassRate > cplist->next->PassRate;
+		return cplist1->PassRate > cplist2->PassRate;
 	case 13://按优秀率升序
-		return cplist->ExcelRate < cplist->next->ExcelRate;
+		return cplist1->ExcelRate < cplist2->ExcelRate;
 	case 14://按优秀率降序
-		return cplist->ExcelRate > cplist->next->ExcelRate;
+		return cplist1->ExcelRate > cplist2->ExcelRate;
 	}
 }
+// 分割链表函数，返回第二部分链表的头指针
+Cpnode split_sortCrs(Cpnode cplist, int size)
+{
+	Cpnode pre_mid = NULL;//中间节点的前驱节点，用来断开
+	while (cplist && size--)
+	{
+		pre_mid = cplist;
+		cplist = cplist->next;
+	}
+	if (pre_mid)
+		pre_mid->next = NULL;//断开
+	return cplist;
+}
+// 合并两个链表并返回合并后的链表的尾部
+Cpnode merge_sortCrs(Cpnode cplist1, Cpnode cplist2, Cpnode ptail, int op)
+{
+	Cpnode cur = ptail;
+	while (cplist1 && cplist2)
+	{
+		if (cmp_sortCrs(cplist1, cplist2, op))
+		{
+			cur->next = cplist1;
+			cplist1 = cplist1->next;
+		}
+		else
+		{
+			cur->next = cplist2;
+			cplist2 = cplist2->next;
+		}
+		cur = cur->next;
+	}
+	cur->next = (cplist1) ? cplist1 : cplist2;
+	while (cur->next) cur = cur->next;
+	return cur;
+}
+// 使用迭代的方式实现归并排序
 void sortCrs(Cpnode cphead, int op)
 {
-	bool flag = true;
-	while (flag)
+	if (!cphead || !cphead->next)
+		return;
+	Cpnode left;
+	Cpnode right;
+	Cpnode cplist;
+	Cpnode cptail;
+	int NumOfCrs = CalculNumOfCrs(3);
+	for (int size = 1; size < NumOfCrs; size *= 2)
 	{
-		flag = false;
-		Cpnode pre_cplist = cphead;
-		Cpnode cplist = cphead->next;
-		if (!cplist)
-			return;
-		while (cplist->next)
+		cplist = cphead->next;
+		cptail = cphead;
+		while (cplist)
 		{
-			if (cmp_sortCrs(cplist, op))
-			{
-				Cpnode tmp = cplist->next;
-				cplist->next = cplist->next->next;
-				tmp->next = cplist;
-				pre_cplist->next = tmp;
-				pre_cplist = pre_cplist->next;//掉了
-				flag = true;
-				continue;
-			}
-			pre_cplist = pre_cplist->next;
-			cplist = cplist->next;
+			left = cplist;
+			right = split_sortCrs(left, size);  // 分割 left
+			cplist = split_sortCrs(right, size);  // 分割 right
+			cptail = merge_sortCrs(left, right, cptail, op); // 合并 left 和 right
 		}
 	}
-	return;
-	return;
 }
+
+
+
 
 Cpnode searchCrs(Cpnode cphead, int Cnum, int SchYear)// 在课程链表中搜索课程
 {
