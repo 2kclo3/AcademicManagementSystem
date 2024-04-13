@@ -82,13 +82,13 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
 
 
-	Text titleText(130, 100, L"全部学生及教师密码管理", 64);
-	TextBox searchStuInputBox(310, 20, 820, L"搜索学生", L"");
-	TextBox searchTchInputBox(310, 20, 820, L"搜索教师", L"");
+	Text titleText(10, 100, L"全部密码管理", 63);
+	TextBox searchStuInputBox(310, 20, 300, L"搜索学生", L"");
+	TextBox searchTchInputBox(820, 20, 300, L"搜索教师", L"");
 
 
-	Button searchStuBtn(1150, 20, 100, 50, L"搜索", 1);
-	Button searchTchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
+	Button searchTchBtn(1200, 20, 100, 50, L"搜索", 1);
 	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
 	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
 	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
@@ -128,7 +128,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 					int selectedRow = Stu_ptable.getSelectedRow(); // 获取当前列
 					getNumberInBox(99999999, &tempID, Stu_Password_Data[selectedRow][0].c_str());
 					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)Stu_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 0, allStuList, admin, Admin_List);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 3, allStuList, admin, Admin_List);
 					//返回 manageUI时 自动保存自动刷新				
 				}
 			}
@@ -144,7 +144,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 					int selectedRow = Tch_ptable.getSelectedRow(); // 获取当前列
 					getNumberInBox(99999999, &tempID, Tch_Password_Data[selectedRow][0].c_str());
 					Node* modifyingTch = searchStu(&allTchList, (wchar_t*)Tch_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 0, allTchList, admin, Admin_List);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 4, allTchList, admin, Admin_List);
 					//返回 manageUI时 自动保存自动刷新				
 				}
 
@@ -330,7 +330,7 @@ void loginUI() {
 
 }
 
-void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List) {//judge： 0为学生 1为教师 2为管理员
+void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List) {//judge： 0为从学生端进入改密码 1为从教师端进入改密码 3为从管理员端进入修改学生 4为从管理员端进入修改老师
 
 	cleardevice();
 
@@ -387,9 +387,9 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 					wcscpy(Stu->item.data.password, new_passwordBox.text);
 
-					if (judge == 0)
+					if (judge == 0 || judge == 3)
 						saveStu(StuList, STU_FILE);
-					if (judge == 1)
+					if (judge == 1 || judge == 4)
 						saveTch(StuList, TCH_FILE);
 
 					// 清除输入框内容
