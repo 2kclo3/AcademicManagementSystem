@@ -188,7 +188,7 @@ void testUI() {
 				chartUI({
 			{L"学科1", L"学科2", L"学科3喵", L"学科4", L"学科5", L"666", L"喵喵喵"},
 			{L"10", L"60", L"55", L"70", L"60", L"89", L"35"}
-		});
+		}, 0, 1);
 
 			}
 			if (exitButton.mouseClick(msg)) {
@@ -217,11 +217,19 @@ void testUI() {
 }
 
 
-void chartUI(vector<vector<wstring>> data) {
+void chartUI(vector<vector<wstring>> _data, int row1, int row2) {
 	cleardevice();
 	Button backButton(1270, 30, 200, 60, L"返回主菜单", 1);
 
-	Chart testChart(100, 100, 1300, 580, data);
+	vector<vector<wstring>> _chart;
+	_data.erase(_data.begin()); //删除表头
+	_chart.push_back(vector<wstring>(_data.size(), L""));
+	_chart.push_back(vector<wstring>(_data.size(), L""));
+	for (int i = 0; i < _data.size(); i++) {
+		_chart[0][i] = _data[i][row1];
+		_chart[1][i] = _data[i][row2];
+	}
+	Chart testChart(100, 100, 1300, 580, _chart);
 
 
 
