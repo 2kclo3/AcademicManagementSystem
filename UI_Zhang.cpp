@@ -14,23 +14,23 @@
 //修改学生信息，只修改成绩
 //在联动时，如果对方不存在，该怎么办；有时间的话，解决这个问题
 
-//int main(void) 
-//{
-//
-//	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-//
-//	// 初始化图形窗口
-//	initgraph(1500, 810);
-//	BeginBatchDraw(); //开始批量绘图
-//	setbkcolor(RGB(55, 61, 53)); //背景颜色
-//	cleardevice();
-//
-//	menuUI();
-//
-//	EndBatchDraw(); //结束批量绘图
-//	closegraph(); // 关闭图形窗口
-//	return 0;
-//}
+int main(void) 
+{
+
+	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
+
+	// 初始化图形窗口
+	initgraph(1500, 810);
+	BeginBatchDraw(); //开始批量绘图
+	setbkcolor(RGB(55, 61, 53)); //背景颜色
+	cleardevice();
+
+	menuUI();
+
+	EndBatchDraw(); //结束批量绘图
+	closegraph(); // 关闭图形窗口
+	return 0;
+}
 
 void allCrsUI()
 {
@@ -858,9 +858,30 @@ void allCrsUI()
 
 			if (exportBtn.mouseClick(msg)) 
 			{
+				if (exportCrs(allCrsList, ".\\export\\Crs.csv"))
+				{
+					MessageBox(GetHWnd(), L"导出成功", L"Success",0);
+				}
+
+				////// 保存
+				////saveCrs(allCrsList, CRS_FILE);
+				////先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				////刷新表格
+				//showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+				//allCrsTable.setData(allCrsData);
 			}
 			if (inportBtn.mouseClick(msg)) 
 			{
+				importCrs(allCrsList, ".\\import\\Crs.csv");
+
+				//// 保存
+				//saveCrs(allCrsList, CRS_FILE);
+				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
+
+				// 刷新表格
+				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
+				allCrsTable.setData(allCrsData);
 			}
 			if (backButton.mouseClick(msg))
 			{
