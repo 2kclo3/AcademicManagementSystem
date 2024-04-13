@@ -64,134 +64,6 @@ int mainLin() {
 	return 0;
 }
 
-
-void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
-
-	cleardevice();
-
-	List allStuList = readStu(STU_FILE);
-	List allTchList = readTch(TCH_FILE);
-
-	vector<vector<std::wstring>>Stu_Password_Data;
-	vector<vector<std::wstring>>Tch_Password_Data;
-
-	ShowStu_Password(allStuList, Stu_Password_Data, L"");
-	ShowTch_Password(allTchList, Tch_Password_Data, L"");
-
-	Table Stu_ptable(310, 90, 470, 700, Stu_Password_Data);
-	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
-
-
-	Text titleText(10, 100, L"全部密码管理", 63);
-	TextBox searchStuInputBox(310, 20, 300, L"搜索学生", L"");
-	TextBox searchTchInputBox(820, 20, 300, L"搜索教师", L"");
-
-
-	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
-	Button searchTchBtn(1200, 20, 100, 50, L"搜索", 1);
-	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
-	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
-	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
-	Button backButton(-50, 700, 330, 60, L"   返回", 0);
-
-
-	// 处理鼠标事件
-	ExMessage msg;
-	while (!_kbhit()) {
-		ULONGLONG start_time = GetTickCount();
-		//->
-		// 输入框绘制(必须)
-		searchStuInputBox.draw();
-		searchTchInputBox.draw();
-
-
-		if (peekmessage(&msg, -1, true)) {
-			if (searchStuBtn.mouseClick(msg)) {
-				ShowStu_Password(allStuList, Stu_Password_Data, searchStuInputBox.text);
-				Stu_ptable.setData(Stu_Password_Data);
-			}
-
-			if (searchTchBtn.mouseClick(msg)) {
-				ShowTch_Password(allTchList, Tch_Password_Data, searchTchInputBox.text);
-				Tch_ptable.setData(Tch_Password_Data);
-			}
-
-			if (modify_Stu_Btn.mouseClick(msg)) {
-				// 未选择学生
-				if (Stu_ptable.getSelectedRow() == 0) {
-					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
-				}
-				else {
-					// 精确搜索学生节点
-					int tempID;
-					int selectedRow = Stu_ptable.getSelectedRow(); // 获取当前列
-					getNumberInBox(99999999, &tempID, Stu_Password_Data[selectedRow][0].c_str());
-					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)Stu_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 3, allStuList, admin, Admin_List);
-					//返回 manageUI时 自动保存自动刷新				
-				}
-			}
-			
-			if (modify_Tch_Btn.mouseClick(msg)) {
-				// 未选择教师
-				if (Tch_ptable.getSelectedRow() == 0) {
-					MessageBox(GetHWnd(), L"请选择一个教师", L"错误!", MB_ICONERROR);
-				}
-				else {
-					// 精确搜索教师节点
-					int tempID;
-					int selectedRow = Tch_ptable.getSelectedRow(); // 获取当前列
-					getNumberInBox(99999999, &tempID, Tch_Password_Data[selectedRow][0].c_str());
-					Node* modifyingTch = searchStu(&allTchList, (wchar_t*)Tch_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 4, allTchList, admin, Admin_List);
-					//返回 manageUI时 自动保存自动刷新				
-				}
-
-			}
-			
-			if (exportBtn.mouseClick(msg)) {
-			}
-			
-			if (inportBtn.mouseClick(msg)) {
-			}
-			
-			if (backButton.mouseClick(msg)) {
-				menuUI_Administrator(admin, Admin_List);
-			}
-		
-
-			//表格鼠标滑动与点击
-			Stu_ptable.onMouse(msg);
-			Tch_ptable.onMouse(msg);
-
-
-			// 文本框输入
-			searchStuInputBox.onMessage(msg);
-			searchTchInputBox.onMessage(msg);
-
-
-		
-		}
-
-		showxy(msg);
-
-
-
-		//<-
-		FlushBatchDraw(); //批量绘图
-
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1) {
-			Sleep(1);
-		}
-
-	}
-
-
-}
-
-
 void loginUI() {
 	cleardevice();
 
@@ -327,6 +199,132 @@ void loginUI() {
 			Sleep(1);
 		}
 	}
+
+}
+
+void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
+
+	cleardevice();
+
+	List allStuList = readStu(STU_FILE);
+	List allTchList = readTch(TCH_FILE);
+
+	vector<vector<std::wstring>>Stu_Password_Data;
+	vector<vector<std::wstring>>Tch_Password_Data;
+
+	ShowStu_Password(allStuList, Stu_Password_Data, L"");
+	ShowTch_Password(allTchList, Tch_Password_Data, L"");
+
+	Table Stu_ptable(310, 90, 470, 700, Stu_Password_Data);
+	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
+
+
+	Text titleText(10, 100, L"全部密码管理", 63);
+	TextBox searchStuInputBox(310, 20, 300, L"搜索学生", L"");
+	TextBox searchTchInputBox(820, 20, 300, L"搜索教师", L"");
+
+
+	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
+	Button searchTchBtn(1200, 20, 100, 50, L"搜索", 1);
+	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
+	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
+	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
+	Button backButton(-50, 700, 330, 60, L"   返回", 0);
+
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+		//->
+		// 输入框绘制(必须)
+		searchStuInputBox.draw();
+		searchTchInputBox.draw();
+
+
+		if (peekmessage(&msg, -1, true)) {
+			if (searchStuBtn.mouseClick(msg)) {
+				ShowStu_Password(allStuList, Stu_Password_Data, searchStuInputBox.text);
+				Stu_ptable.setData(Stu_Password_Data);
+			}
+
+			if (searchTchBtn.mouseClick(msg)) {
+				ShowTch_Password(allTchList, Tch_Password_Data, searchTchInputBox.text);
+				Tch_ptable.setData(Tch_Password_Data);
+			}
+
+			if (modify_Stu_Btn.mouseClick(msg)) {
+				// 未选择学生
+				if (Stu_ptable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个学生", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 精确搜索学生节点
+					int tempID;
+					int selectedRow = Stu_ptable.getSelectedRow(); // 获取当前列
+					getNumberInBox(99999999, &tempID, Stu_Password_Data[selectedRow][0].c_str());
+					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)Stu_Password_Data[selectedRow][1].c_str(), tempID);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 3, allStuList, admin, Admin_List);
+					//返回 manageUI时 自动保存自动刷新				
+				}
+			}
+			
+			if (modify_Tch_Btn.mouseClick(msg)) {
+				// 未选择教师
+				if (Tch_ptable.getSelectedRow() == 0) {
+					MessageBox(GetHWnd(), L"请选择一个教师", L"错误!", MB_ICONERROR);
+				}
+				else {
+					// 精确搜索教师节点
+					int tempID;
+					int selectedRow = Tch_ptable.getSelectedRow(); // 获取当前列
+					getNumberInBox(99999999, &tempID, Tch_Password_Data[selectedRow][0].c_str());
+					Node* modifyingTch = searchStu(&allTchList, (wchar_t*)Tch_Password_Data[selectedRow][1].c_str(), tempID);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 4, allTchList, admin, Admin_List);
+					//返回 manageUI时 自动保存自动刷新				
+				}
+
+			}
+			
+			if (exportBtn.mouseClick(msg)) {
+			}
+			
+			if (inportBtn.mouseClick(msg)) {
+			}
+			
+			if (backButton.mouseClick(msg)) {
+				menuUI_Administrator(admin, Admin_List);
+			}
+		
+
+			//表格鼠标滑动与点击
+			Stu_ptable.onMouse(msg);
+			Tch_ptable.onMouse(msg);
+
+
+			// 文本框输入
+			searchStuInputBox.onMessage(msg);
+			searchTchInputBox.onMessage(msg);
+
+
+		
+		}
+
+		showxy(msg);
+
+
+
+		//<-
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+
+	}
+
 
 }
 
@@ -533,7 +531,6 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 	}
 
 }
-
 
 void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 

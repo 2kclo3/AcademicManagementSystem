@@ -35,7 +35,7 @@ int mainLIUTY(void) {
 
 	//allStuUI();
 	//loginUI();
-	menuUI();
+	//menuUI();
 
 
 
@@ -111,9 +111,9 @@ bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar
 }
 
 
-void testShowChart(vector<vector<wstring>> _data, vector<vector<wstring>> _chart) {
+/*void testShowChart(vector<vector<wstring>> _data, vector<vector<wstring>> _chart) {
 	chartUI(_chart, 1, 2);
-}
+}*/
 
 void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
