@@ -14,7 +14,7 @@
 //修改学生信息，只修改成绩
 //在联动时，如果对方不存在，该怎么办；有时间的话，解决这个问题
 
-int mainZhang(void) 
+int mainZZ(void) 
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出

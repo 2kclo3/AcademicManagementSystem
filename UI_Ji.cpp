@@ -8,7 +8,7 @@
 
 
 
-int mainJI(void) {
+int mainJi(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	// 初始化图形窗口
 	initgraph(1500, 810);
