@@ -647,6 +647,7 @@ void allTchUI(Node*, List);
 void manageUI(Node* admin, List Admin_List);//管理员端改密码
 void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List);//学生教师改密码
 
+void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
 
 void chartUI(vector<vector<wstring>> _data, int row1, int row2, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
 void stuAccountUI(int stuID, Node* admin, List Admin_List);
