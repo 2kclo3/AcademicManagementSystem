@@ -727,8 +727,7 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 				) {
 
 				// 学号相同的情况,错误+1
-				//if (!addCrs(CrsList, name, id, character, SchYear, credit)) { //添加学分后再改
-				if (!addCrs(CrsList, name, id, character, SchYear)) {
+				if (!addCrs(CrsList, name, id, character, credit, SchYear)) { 
 					failSameIDCnt++;
 					failCnt++;
 				}
