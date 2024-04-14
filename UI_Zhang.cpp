@@ -5,16 +5,37 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 //修改完后也要查重,避免出现把连个人的学号改重了或者课程改重了
-//geDoubleInBox函数对80.000不行，导致修改时，如果没有任何操作，也会报错
-//有的标题太长，显示不出来，以后小优化一下，先解决主要矛盾
 //感觉，修改课程可以放到查看后的界面里
 //学年有区间吗
 //必修选修输入要判断
-//修改课程也需要联动
 //修改学生信息，只修改成绩
 //在联动时，如果对方不存在，该怎么办；有时间的话，解决这个问题
 
-int main(void) 
+
+
+//问题1：为什么没有titleText->move(-500, 50);就不行
+//问题2：为什么有时候要在隐藏后更改标题才行（比如allCrsUI中的if (screenCrsBtn.mouseClick(msg))之后）
+void modifyTitleText(Text* titleText, const wchar_t* text, int y)
+{
+	titleText->move(-500, 50);
+	int areaWidth = 280;
+	int size = 64;
+	settextstyle(size, 0, L"微软雅黑");
+	int textWidth = textwidth(text);
+	while (textWidth > areaWidth)
+	{
+		size -= 2;
+		settextstyle(size, 0, L"微软雅黑");
+		textWidth = textwidth(text);
+	}
+	int x = 10 + (290 - textWidth) / 2;
+	titleText->setTextSize(size);
+	titleText->setText(text);
+	titleText->move(x, y);
+	return;
+}
+
+int mainZ(void)
 {
 
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
@@ -37,15 +58,15 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	cleardevice();
 	Cpnode allCrsList = readCrs(CRS_FILE);
 	vector<vector<std::wstring>> allCrsData;
-	showAllCrs(allCrsList, allCrsData, L"",0,0,0);
+	showAllCrs(allCrsList, allCrsData, L"", 0, 0, 0);
 
 	List allStuList = readStu(STU_FILE);
 
-	Table allCrsTable(310, 90, 940+220, 700, allCrsData);
+	Table allCrsTable(310, 90, 940 + 220, 700, allCrsData);
 
 	Text titleText(40, 10, L"所有课程", 64);
 
-	TextBox searchInputBox(310, 20, 820+220-120, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 820 + 220 - 120, L"搜索", L"");
 	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
 	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
 	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
@@ -57,9 +78,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	Button searchBtn(1150 + 220 - 120, 20, 100, 50, L"搜索", 1);
 	Button drawBtn(1150 + 220, 20, 100, 50, L"绘图", 1);
 
-	int y = 90-80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
+	int y = 90 - 80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
 	Button viewCrsBtn(-50, y += dy, 330, 60, L"   查看", 1);
-	Button addCrsBtn(-50, y+=dy, 330, 60, L"   添加", 1);
+	Button addCrsBtn(-50, y += dy, 330, 60, L"   添加", 1);
 	Button modifyCrsBtn(-50, y += dy, 330, 60, L"   修改", 1);
 	Button deleteCrsBtn(-50, y += dy, 330, 60, L"   删除", 1);
 	Button sortCrsBtn(-50, y += dy, 330, 60, L"   排序", 1);
@@ -117,8 +138,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 		if (peekmessage(&msg, -1, true))
 		{
 
-			if (drawBtn.mouseClick(msg)) {
-				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+			if (drawBtn.mouseClick(msg))
+			{
+				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 			}
 			if (cancelButton.mouseClick(msg)) {
 
@@ -128,10 +150,6 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					screenOption = 0;
 					IsInScreen = false;
 				}
-
-				// 更改标题
-				titleText.setText(L"所有课程");
-				titleText.move(40, 10);
 
 				// 清除输入框内容
 				cnameBox.clear();
@@ -176,6 +194,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				screenOKButton.move(-500, 0);
 				cancelButton.move(-500, 0);
 
+				// 更改标题
+				modifyTitleText(&titleText, L"所有课程", 10);
+
 				// 显示
 				y = 90 - 80, dy = 80;
 				viewCrsBtn.move(-50, y += dy);
@@ -214,7 +235,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					int selectedRow = allCrsTable.getSelectedRow(); // 获取当前行
 					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
 					getNumberInBox(99999, &SchYear, allCrsData[selectedRow][4].c_str());
-					Cpnode cplist = searchCrs(allCrsList,cnum,SchYear);
+					Cpnode cplist = searchCrs(allCrsList, cnum, SchYear);
 					CrsUI(allCrsList, cplist, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 
 				}
@@ -222,9 +243,6 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (addCrsBtn.mouseClick(msg))
 			{
-				// 更改标题
-				titleText.setText(L"添加课程");
-
 				// 隐藏
 				viewCrsBtn.move(-500, 0);
 				addCrsBtn.move(-500, 0);
@@ -236,6 +254,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				exportBtn.move(-500, 0);
 				inportBtn.move(-500, 0);
 				backButton.move(-500, 0);
+
+				// 更改标题
+				modifyTitleText(&titleText, L"添加课程", 10);
 
 				// 显示
 				y = 150 - 80, dy = 80;
@@ -262,13 +283,13 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					getNumberInBox(99999, &cnum, cnumBox.text) &&
 					getTextInBox(character, characterBox.text) &&
 					getDoubleInBox(10, &credit, creditBox.text) &&
-					getNumberInBox(99999, &SchYear, SchYearBox.text)&&
-					cnum > 9999&&credit>0
+					getNumberInBox(99999, &SchYear, SchYearBox.text) &&
+					cnum > 9999 && credit > 0
 					)
 				{
 
 					// 课程相同的情况,报错提醒
-					if (!addCrs(allCrsList, cname, cnum, character,credit,SchYear))
+					if (!addCrs(allCrsList, cname, cnum, character, credit, SchYear))
 					{
 						MessageBox(GetHWnd(), L"该课程号已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 					}
@@ -288,10 +309,6 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						creditBox.clear();
 						SchYearBox.clear();
 
-
-						// 更改标题
-						titleText.setText(L"所有课程");
-
 						// 隐藏
 						cnameBox.move(-500, 0);
 						cnumBox.move(-500, 0);
@@ -301,8 +318,11 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						addOKButton.move(-500, 0);
 						cancelButton.move(-500, 0);
 
+						// 更改标题
+						modifyTitleText(&titleText, L"所有课程", 10);
+
 						// 显示
-						y = 90-80, dy = 80;
+						y = 90 - 80, dy = 80;
 						viewCrsBtn.move(-50, y += dy);
 						addCrsBtn.move(-50, y += dy);
 						modifyCrsBtn.move(-50, y += dy);
@@ -348,8 +368,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					backButton.move(-500, 0);
 
 					// 更改标题
-					titleText.setText(L"修改课程");
-					titleText.move(40, 10);
+					modifyTitleText(&titleText, L"修改课程", 10);
 
 					// 使表格不可变化
 					allCrsTable.canChange = false;
@@ -403,7 +422,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					getTextInBox(character, characterBox.text) &&
 					getDoubleInBox(10, &credit, creditBox.text) &&
 					getNumberInBox(99999, &SchYear, SchYearBox.text) &&
-					cnum > 9999&&credit>0&& SchYear>0
+					cnum > 9999 && credit > 0 && SchYear > 0
 					)
 				{
 					Node* StuNode = allStuList->next;
@@ -422,7 +441,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					}
 
 					// 修改
-					modifyCrs(modifyingCrs, cname, cnum, character, credit,SchYear);
+					modifyCrs(modifyingCrs, cname, cnum, character, credit, SchYear);
 
 					// 保存
 					saveCrs(allCrsList, CRS_FILE);
@@ -442,9 +461,6 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					creditBox.clear();
 					SchYearBox.clear();
 
-					// 更改标题
-					titleText.setText(L"所有课程");
-
 					// 隐藏
 					cnameBox.move(-500, 0);
 					cnumBox.move(-500, 0);
@@ -453,6 +469,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					SchYearBox.move(-500, 0);
 					modifyOKButton.move(-500, 0);
 					cancelButton.move(-500, 0);
+
+					// 更改标题
+					modifyTitleText(&titleText, L"所有课程", 10);
 
 					// 显示
 					y = 90, dy = 80;
@@ -524,11 +543,11 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					}
 				}
 			}
-		
+
 			if (sortCrsBtn.mouseClick(msg))
 			{
 				//要先隐藏后更改标题，否侧会出bug，不知道为啥
-				
+
 				// 隐藏
 				viewCrsBtn.move(-500, 0);
 				addCrsBtn.move(-500, 0);
@@ -542,22 +561,18 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				backButton.move(-500, 0);
 
 				// 更改标题
-				titleText.setText(L"排序");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"排序");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
+				modifyTitleText(&titleText, L"排序", 50);
 
 				// 显示
-				y = 150-80, dy = 80;
+				y = 150 - 80, dy = 80;
 				sortByCnumBtn.move(10, y += dy);
 				sortBySchYearBtn.move(10, y += dy);
 				sortByHeadcountBtn.move(10, y += dy);
 				sortByAverscoreBtn.move(10, y += dy);
-				sortByAverGPABtn.move(10, y +=dy);
+				sortByAverGPABtn.move(10, y += dy);
 				sortByPassRateBtn.move(10, y += dy);
 				sortByExcelRateGPABtn.move(10, y += dy);
-				cancelButton.move(10, y +=dy);
+				cancelButton.move(10, y += dy);
 			}
 
 			if (sortByCnumBtn.mouseClick(msg))
@@ -578,7 +593,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			if (sortOption)
 			{
 				// 隐藏
-				sortByCnumBtn.move(-500,0);
+				sortByCnumBtn.move(-500, 0);
 				sortBySchYearBtn.move(-500, 0);
 				sortByHeadcountBtn.move(-500, 0);
 				sortByAverscoreBtn.move(-500, 0);
@@ -613,14 +628,10 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					wcscpy(titletext, L"按优秀率排序");
 					break;
 				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
+				modifyTitleText(&titleText, titletext, 50);
 
 				// 显示
-				y = 150-80, dy = 80;
+				y = 150 - 80, dy = 80;
 				AscendingOrderBtn.move(10, y += dy);
 				DescendingOrderBtn.move(10, y += dy);
 				cancelButton.move(10, y += dy);
@@ -640,17 +651,16 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
 				allCrsTable.setData(allCrsData);
 
-				// 更改标题
-				titleText.setText(L"所有课程");
-				titleText.move(40, 10);
-
 				// 隐藏
 				AscendingOrderBtn.move(-500, 0);
 				DescendingOrderBtn.move(-500, 0);
 				cancelButton.move(-500, 0);
 
+				// 更改标题
+				modifyTitleText(&titleText, L"所有课程", 10);
+
 				// 显示
-				y = 90-80, dy = 80;
+				y = 90 - 80, dy = 80;
 				viewCrsBtn.move(-50, y += dy);
 				addCrsBtn.move(-50, y += dy);
 				modifyCrsBtn.move(-50, y += dy);
@@ -682,11 +692,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				backButton.move(-500, 0);
 
 				// 更改标题
-				titleText.setText(L"筛选");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"筛选");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
+				modifyTitleText(&titleText, L"筛选", 50);
 
 				// 显示
 				y = 150 - 80, dy = 80;
@@ -732,6 +738,14 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (IsInScreen)
 			{
+				// 隐藏
+				screenBySchYearBtn.move(-500, 0);
+				screenByHeadcountBtn.move(-500, 0);
+				screenByAverscoreBtn.move(-500, 0);
+				screenByAverGPABtn.move(-500, 0);
+				screenByPassRateBtn.move(-500, 0);
+				screenByExcelRateBtn.move(-500, 0);
+
 				// 更改标题
 				wchar_t titletext[512];
 				switch (screenOption)
@@ -755,23 +769,11 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					wcscpy(titletext, L"按优秀率筛选");
 					break;
 				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
+				modifyTitleText(&titleText, titletext, 50);
 
-				// 隐藏
-				screenBySchYearBtn.move(-500, 0);
-				screenByHeadcountBtn.move(-500, 0);
-				screenByAverscoreBtn.move(-500, 0);
-				screenByAverGPABtn.move(-500, 0);
-				screenByPassRateBtn.move(-500, 0);
-				screenByExcelRateBtn.move(-500, 0);
-
-				// 显示
+				//显示
 				y = 150 - 80, dy = 80;
-				minBox.move(10, y+=dy);
+				minBox.move(10, y += dy);
 				maxBox.move(10, y += dy);
 				screenOKButton.move(10, y += dy);
 				cancelButton.move(10, y += dy);
@@ -812,15 +814,14 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					minBox.clear();
 					maxBox.clear();
 
-					// 更改标题
-					titleText.setText(L"所有课程");
-					titleText.move(40, 10);
-
 					// 隐藏
 					minBox.move(-500, 0);
 					maxBox.move(-500, 0);
 					screenOKButton.move(-500, 0);
 					cancelButton.move(-500, 0);
+
+					// 更改标题
+					modifyTitleText(&titleText, L"所有课程", 10);
 
 					// 显示
 					y = 90 - 80, dy = 80;
@@ -861,11 +862,11 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 
 
-			if (exportBtn.mouseClick(msg)) 
+			if (exportBtn.mouseClick(msg))
 			{
 				if (exportCrs(allCrsList, ".\\export\\Crs.csv"))
 				{
-					MessageBox(GetHWnd(), L"导出成功", L"导出课程",0);
+					MessageBox(GetHWnd(), L"导出成功", L"导出课程", 0);
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出课程", MB_ICONERROR);
@@ -879,7 +880,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				//showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
 				//allCrsTable.setData(allCrsData);
 			}
-			if (inportBtn.mouseClick(msg)) 
+			if (inportBtn.mouseClick(msg))
 			{
 				importCrs(allCrsList, ".\\import\\Crs.csv");
 
@@ -927,7 +928,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 }
 
-void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List)
+void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List)
 {
 	List allStuList = readStu(STU_FILE);
 
@@ -936,7 +937,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 	vector<vector<std::wstring>>allStuInCrsData;
 	showAllStuInCrs(cplist, allStuInCrsData, L"", 0, 0, 0);
 
-	Table allStuInCrsTable(310, 90, 940+220, 700, allStuInCrsData);
+	Table allStuInCrsTable(310, 90, 940 + 220, 700, allStuInCrsData);
 
 
 	settextstyle(64, 0, L"微软雅黑");
@@ -946,7 +947,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 
 	Text GPAText(-500, 370, L"", 32);
 
-	TextBox searchInputBox(310, 20, 820+220, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 820 + 220, L"搜索", L"");
 
 	TextBox snameBox(-500, 0, 290, L"学生姓名", L"");
 	TextBox snumBox(-500, 0, 290, L"学号", L"");
@@ -955,7 +956,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 	TextBox maxBox(-500, 0, 290, L"最大值", L"");
 
 
-	Button searchBtn(1150+220, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1150 + 220, 20, 100, 50, L"搜索", 1);
 
 	Button addStuInCrsBtn(-50, 220, 330, 60, L"   添加", 1);
 	Button modifyStuInCrsBtn(-50, 300, 330, 60, L"   修改", 1);
@@ -1022,12 +1023,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				// 使表格可变化
 				allStuInCrsTable.canChange = true;
 
-				// 更改标题
-				titleText.setText(cplist->cname);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(cplist->cname);
-				int x = 0 + (276 - TextWidth) / 2;
-				titleText.move(x, 50);
 
 
 				// 隐藏
@@ -1053,6 +1048,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				screenOKButton.move(-500, 0);
 				screenCancelBtn.move(-500, 0);
 
+				// 更改标题
+				modifyTitleText(&titleText, cplist->cname, 50);
+
 				// 显示
 				addStuInCrsBtn.move(-50, 220);
 				modifyStuInCrsBtn.move(-50, 300);
@@ -1075,14 +1073,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 
 			if (addStuInCrsBtn.mouseClick(msg))
 			{
-
-				// 更改标题
-				titleText.setText(L"添加学生");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"添加学生");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
 				// 隐藏
 				addStuInCrsBtn.move(-500, 0);
 				modifyStuInCrsBtn.move(-500, 0);
@@ -1091,6 +1081,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				screenStuInCrsBtn.move(-500, 0);
 				screenCancelBtn.move(-500, 0);
 				backButton.move(-500, 0);
+
+				// 更改标题
+				modifyTitleText(&titleText, L"添加学生", 50);
 
 				// 显示
 				snameBox.move(10, 140);
@@ -1130,7 +1123,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 						swprintf(wch_cnum, 10, L"%d", cplist->cnum);
 						double GPA = CalculGPA(score);
 						int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
-
 						addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
 
 						// 保存
@@ -1147,12 +1139,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 						scoreBox.clear();
 
 
-						// 更改标题
-						titleText.setText(cplist->cname);
-						settextstyle(64, 0, L"微软雅黑");
-						int TextWidth = textwidth(cplist->cname);
-						int x = 0 + (276 - TextWidth) / 2;
-						titleText.move(x, 50);
+
 
 						// 隐藏
 						snameBox.move(-500, 0);
@@ -1160,6 +1147,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 						scoreBox.move(-500, 0);
 						addOKButton.move(-500, 0);
 						cancelButton.move(-500, 0);
+
+						// 更改标题
+						modifyTitleText(&titleText, cplist->cname, 50);
 
 						// 显示
 						addStuInCrsBtn.move(-50, 220);
@@ -1192,12 +1182,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				}
 				else
 				{
-					// 更改标题
-					titleText.setText(L"修改学生");
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(L"修改学生");
-					int x = 10 + (290 - TextWidth) / 2;
-					titleText.move(x, 50);
+
 
 					// 隐藏
 					addStuInCrsBtn.move(-500, 0);
@@ -1207,6 +1192,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					screenStuInCrsBtn.move(-500, 0);
 					screenCancelBtn.move(-500, 0);
 					backButton.move(-500, 0);
+
+					// 更改标题
+					modifyTitleText(&titleText, L"修改学生", 50);
 
 					// 使表格不可变化
 					allStuInCrsTable.canChange = false;
@@ -1282,12 +1270,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					//snumBox.clear();
 					scoreBox.clear();
 
-					// 更改标题
-					titleText.setText(cplist->cname);
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(cplist->cname);
-					int x = 0 + (276 - TextWidth) / 2;
-					titleText.move(x, 50);
 
 					// 隐藏
 					//snameBox.move(-500, 220);
@@ -1295,6 +1277,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					scoreBox.move(-500, 380);
 					modifyOKButton.move(-500, 460);
 					cancelButton.move(-500, 540);
+
+					// 更改标题
+					modifyTitleText(&titleText, cplist->cname, 50);
 
 					// 显示
 					addStuInCrsBtn.move(-50, 220);
@@ -1359,12 +1344,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 
 			if (sortStuInCrsBtn.mouseClick(msg))//显示sort界面
 			{
-				// 更改标题
-				titleText.setText(L"排序");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"排序");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
 
 				// 隐藏
 				addStuInCrsBtn.move(-500, 0);
@@ -1374,6 +1353,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				screenStuInCrsBtn.move(-500, 0);
 				screenCancelBtn.move(-500, 0);
 				backButton.move(-500, 0);
+
+				// 更改标题
+				modifyTitleText(&titleText, L"排序", 50);
 
 				// 显示
 				upsortBySnumBtn.move(10, 220);
@@ -1407,12 +1389,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);
 				allStuInCrsTable.setData(allStuInCrsData);
 
-				// 更改标题
-				titleText.setText(cplist->cname);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(cplist->cname);
-				int x = 0 + (276 - TextWidth) / 2;
-				titleText.move(x, 50);
 
 				// 隐藏
 				cancelButton.move(-500, 620);
@@ -1422,6 +1398,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				downsortByScoreBtn.move(-500, 460);
 				upsortByGPABtn.move(-500, 540);
 				downsortByGPABtn.move(-500, 620);
+
+				// 更改标题
+				modifyTitleText(&titleText, cplist->cname, 50);
 
 				// 显示
 				addStuInCrsBtn.move(-50, 220);
@@ -1439,12 +1418,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 
 			if (screenStuInCrsBtn.mouseClick(msg))
 			{
-				// 更改标题
-				titleText.setText(L"筛选");
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(L"筛选");
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
 
 				// 隐藏
 				addStuInCrsBtn.move(-500, 0);
@@ -1453,6 +1426,9 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				sortStuInCrsBtn.move(-500, 0);
 				screenStuInCrsBtn.move(-500, 0);
 				backButton.move(-500, 0);
+
+				// 更改标题
+				modifyTitleText(&titleText, L"筛选", 50);
 
 				// 显示
 				screenByScoreBtn.move(10, 220);
@@ -1473,6 +1449,11 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 
 			if (IsInScreen)
 			{
+				// 隐藏
+				screenByScoreBtn.move(-500, 0);
+				screenByGPABtn.move(-500, 0);
+				cancelButton.move(-500, 0);
+
 				// 更改标题
 				wchar_t titletext[512];
 				switch (screenOption)
@@ -1484,16 +1465,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					wcscpy(titletext, L"按绩点筛选");
 					break;
 				}
-				titleText.setText(titletext);
-				settextstyle(64, 0, L"微软雅黑");
-				int TextWidth = textwidth(titletext);
-				int x = 10 + (290 - TextWidth) / 2;
-				titleText.move(x, 50);
-
-				// 隐藏
-				screenByScoreBtn.move(-500, 0);
-				screenByGPABtn.move(-500, 0);
-				cancelButton.move(-500, 0);
+				modifyTitleText(&titleText, titletext, 50);
 
 				// 显示
 				minBox.move(10, 220);
@@ -1528,18 +1500,15 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					minBox.clear();
 					maxBox.clear();
 
-					// 更改标题
-					titleText.setText(cplist->cname);
-					settextstyle(64, 0, L"微软雅黑");
-					int TextWidth = textwidth(cplist->cname);
-					int x = 0 + (276 - TextWidth) / 2;
-					titleText.move(x, 50);
 
 					// 隐藏
 					minBox.move(-500, 0);
 					maxBox.move(-500, 0);
 					screenOKButton.move(-500, 0);
 					cancelButton.move(-500, 0);
+
+					// 更改标题
+					modifyTitleText(&titleText, cplist->cname, 50);
 
 					// 显示
 					addStuInCrsBtn.move(-50, 220);
