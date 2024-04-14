@@ -224,14 +224,34 @@ public:
 		fillroundrect(x, y, x + width, y + height, height - 3, height - 3); //»æÖÆ
 
 		// ÎÄ±¾
-		settextcolor(textColor);
-		settextstyle((int)(height / 2.2), 0, L"Î¢ÈíÑÅºÚ");
-		setbkmode(TRANSPARENT);
-		if (!_tcscmp(text, L"")) {
-			outtextxy(x + 20, y + (height - textHeight) / 2, hintText);
+		wchar_t pwdText[100] = { 0 };
+		for (int i = 0; i < wcslen(text); i++) {
+			pwdText[i] = L'¡ñ';
 		}
-		else {
-			outtextxy(x + 15, y + (height - textHeight) / 2, text);
+		if (wcscmp(hintText, L"ÃÜÂë") == 0) {
+			settextcolor(textColor);
+			settextstyle(24, 0, L"Î¢ÈíÑÅºÚ");
+			setbkmode(TRANSPARENT);
+			if (!_tcscmp(text, L"")) {
+				settextstyle((int)(height / 2.2), 0, L"Î¢ÈíÑÅºÚ");
+				outtextxy(x + 20, y + (height - textHeight) / 2, hintText);
+			}
+			else {
+				outtextxy(x + 15, y + (height - textHeight) / 2, pwdText);
+			}
+
+		}
+		else
+		{
+			settextcolor(textColor);
+			settextstyle((int)(height / 2.2), 0, L"Î¢ÈíÑÅºÚ");
+			setbkmode(TRANSPARENT);
+			if (!_tcscmp(text, L"")) {
+				outtextxy(x + 20, y + (height - textHeight) / 2, hintText);
+			}
+			else {
+				outtextxy(x + 15, y + (height - textHeight) / 2, text);
+			}
 		}
 
 		// ¹â±ê
@@ -239,7 +259,12 @@ public:
 			DWORD clock = GetTickCount();
 			if (clock % 1000 < 500) {
 				setlinecolor(WHITE); //¹â±êÑÕÉ«
-				line(x + 16 + textwidth(text), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(text), y + 2 + height - (height - textHeight) / 2);
+				if (wcscmp(hintText, L"ÃÜÂë") == 0) {
+					line(x + 16 + textwidth(pwdText), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(pwdText), y + 2 + height - (height - textHeight) / 2);
+				}
+				else {
+					line(x + 16 + textwidth(text), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(text), y + 2 + height - (height - textHeight) / 2);
+				}
 			}
 			else {
 				setlinecolor(inputColor);
@@ -641,7 +666,7 @@ void RankUI(List StuList, Node*, List, int, Node* admin, List Admin_List);
 void allCrsUI(Node*, List, int, Node* admin, List Admin_List);
 void CrsUI(Cpnode cphead, Cpnode cplist, Node*, List, int, Node* admin, List Admin_List);
 
-void allQualityUI(Node*, List,int, Node* admin, List Admin_List);
+void allQualityUI(Node*, List, int, Node* admin, List Admin_List);
 void QualityUI(Node* Stu, List allStuList, Node*, List, int, Node* admin, List Admin_List);
 void allTchUI(Node*, List);
 void manageUI(Node* admin, List Admin_List);//¹ÜÀíÔ±¶Ë¸ÄÃÜÂë
