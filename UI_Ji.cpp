@@ -680,7 +680,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 				allCrsINStuTable.setData(allCrsINStuData);
 			}
 			if (chartBtn.mouseClick(msg)) {
-				chartUI(allCrsINStuData, 1, 2, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
 			}
 
 			if (addCrsBtn.mouseClick(msg)) {

@@ -293,7 +293,7 @@ bool getDoubleInBox(double max, double* target,  wchar_t* line) //Õâº¯ÊıÓĞµãbug£
 		if (is_continue == 1) {
 			if (is_dot == 1) {
 				dot++;
-				if (dot > 2) {
+				if (dot > 4) {
 					err = 1; // Ğ¡ÊıÎ»ÊıÌ«¶à
 					is_all_space = 0;
 					break;

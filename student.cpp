@@ -147,7 +147,7 @@ void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* sear
 			data[row][6] = std::to_wstring(pCurrent->item.data.req_avg_score); //数字转为字符串
 			data[row][7] = std::to_wstring(pCurrent->item.data.req_avg_grid); //数字转为字符串
 
-			//保留2位小数
+			//保留小数
 			data[row][4] = data[row][4].substr(0, data[row][4].find('.') + 3);
 			data[row][5] = data[row][5].substr(0, data[row][5].find('.') + 5);
 			data[row][6] = data[row][6].substr(0, data[row][6].find('.') + 3);

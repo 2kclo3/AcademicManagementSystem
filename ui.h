@@ -649,7 +649,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
 
-void chartUI(vector<vector<wstring>> _data, int row1, int row2, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
+void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
 void stuAccountUI(int stuID, Node* admin, List Admin_List);
 
 

@@ -116,6 +116,10 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 		if (peekmessage(&msg, -1, true))
 		{
+
+			if (drawBtn.mouseClick(msg)) {
+				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+			}
 			if (cancelButton.mouseClick(msg)) {
 
 				sortOption = 0;
@@ -861,7 +865,10 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			{
 				if (exportCrs(allCrsList, ".\\export\\Crs.csv"))
 				{
-					MessageBox(GetHWnd(), L"导出成功", L"Success",0);
+					MessageBox(GetHWnd(), L"导出成功", L"导出课程",0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出课程", MB_ICONERROR);
 				}
 
 				////// 保存
@@ -876,13 +883,13 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			{
 				importCrs(allCrsList, ".\\import\\Crs.csv");
 
-				//// 保存
-				//saveCrs(allCrsList, CRS_FILE);
-				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
 
 				// 刷新表格
 				showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
 				allCrsTable.setData(allCrsData);
+
+				// 保存
+				saveCrs(allCrsList, CRS_FILE);
 			}
 			if (backButton.mouseClick(msg))
 			{

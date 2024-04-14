@@ -789,7 +789,7 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 				(SchYear > 1970 && SchYear <= Current_year)
 				) {
 
-				// 学号相同的情况,错误+1
+				// 课程号相同的情况,错误+1
 				if (!addCrs(CrsList, name, id, character, credit, SchYear)) {
 					failSameIDCnt++;
 					failCnt++;
