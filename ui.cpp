@@ -274,9 +274,9 @@ void menuUI_Administrator(Node* admin, List adminList) {//管理员端界面
 
 	Text titleText(90, 50, L"欢迎", 64);
 
-	Button allStuButton(-50, 170, 350, 60, L"  查看学生", 1);
-	Button allTchButton(-50, 250, 350, 60, L"  查看教师", 1);
-	Button allCrsButton(-50, 330, 350, 60, L"  查看课程", 1);
+	Button allStuButton(-50, 170, 350, 60, L"  学生管理", 1);
+	Button allTchButton(-50, 250, 350, 60, L"  教师管理", 1);
+	Button allCrsButton(-50, 330, 350, 60, L"  课程管理", 1);
 	Button allQualityButton(-50, 410, 350, 60, L"  素质类项目管理", 1);
 	Button changeMajorButton(-50, 490, 350, 60, L"  转专业管理", 1);
 	Button settingsButton(-50, 570, 350, 60, L"  密码管理", 1);

@@ -230,10 +230,12 @@ List readTch(const char* file_name) {
 			continue;
 		}
 
-		if (swscanf(line, L"%d %s %s",
+		if (swscanf(line, L"%d %s %d %s %s",
 			&Tchnode->item.data.ID,
 			&Tchnode->item.data.name,
-			&Tchnode->item.data.password) == 3) { //读取教师信息
+			&Tchnode->item.data.gender,
+			&Tchnode->item.data.college,
+			&Tchnode->item.data.password) == 5) { //读取教师信息
 
 			// 添加到链表
 			List Tmpnode = (List)malloc(sizeof(Node));
@@ -515,9 +517,11 @@ bool saveTch(List TchList, const char* file_name) {
 	List pTch = TchList->next; // 从头结点的下一个节点开始
 	
 	while (pTch != NULL) {
-		fwprintf(fp, L"%d %s %s\n",
+		fwprintf(fp, L"%d %s %d %s %s\n",
 			pTch->item.data.ID,
 			pTch->item.data.name,
+			pTch->item.data.gender,
+			pTch->item.data.college,
 			pTch->item.data.password);
 
 		pTch = pTch->next;

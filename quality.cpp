@@ -6,11 +6,13 @@
 bool showAllTch(const List TchList, vector<vector<wstring>>& data, const wchar_t* searchTerm) {
 	List pCurrent = TchList->next; //从第一个有数据节点开始
 	data.clear(); // 清空数组
-	data.push_back(vector<wstring>(2, L"")); //增加一行(每行2列)
+	data.push_back(vector<wstring>(4, L"")); //增加一行(每行4列)
 
 	//初始化表头
 	data[0][0] = L"工号";
 	data[0][1] = L"姓名";
+	data[0][2] = L"性别";
+	data[0][3] = L"学院";
 	
 	int row = 1;
 	while (pCurrent != NULL) { //遍历链表
@@ -18,13 +20,17 @@ bool showAllTch(const List TchList, vector<vector<wstring>>& data, const wchar_t
 		// 检测是否有搜索词
 		if (wcsstr(std::to_wstring(pCurrent->item.data.ID).c_str(), searchTerm) != NULL // 数字转为字符串再转为wchar_t来进行比较
 			|| wcsstr(pCurrent->item.data.name, searchTerm) != NULL
+			|| wcsstr(pCurrent->item.data.college, searchTerm) != NULL
 			) {
 
-			data.push_back(vector<std::wstring>(2, L"")); //增加一行(每行2列)
+			data.push_back(vector<std::wstring>(4, L"")); //增加一行(每行4列)
 
 			//每行的内容
 			data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
 			data[row][1] = pCurrent->item.data.name;
+			data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
+			data[row][3] = pCurrent->item.data.college;
+
 
 			row++; // 行数+1
 		}

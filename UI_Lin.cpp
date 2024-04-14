@@ -7,7 +7,7 @@
 #define CRS_FILE ".\\data\\Course.txt"
 
 
-int mainLin() {
+int main() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 	
 	// 初始化图形窗口
@@ -50,10 +50,13 @@ int mainLin() {
 	printStu(Stu);
 	*/
 	
-	List admin_List = readAdmin(ADMIN_FILE);
-	Node* admin = admin_List->next;
+	//List admin_List = readAdmin(ADMIN_FILE);
+	//Node* admin = admin_List->next;
+	//
+	//manageUI(admin, admin_List);
+	loginUI();
 	
-	manageUI(admin, admin_List);
+
 	
 
 	EndBatchDraw(); //结束批量绘图
@@ -73,9 +76,9 @@ void loginUI() {
 	List TchList = readTch(TCH_FILE);
 	List AdminList = readAdmin(ADMIN_FILE);
 	
-	Node* Stu = StuList->next;
+	/*Node* Stu = StuList->next;
 	Node* Tch = TchList->next;
-	Node* Admin = AdminList->next;
+	Node* Admin = AdminList->next;*/
 
 	Text titleText(200, 100, L"你好，请登录!", 64);
 	TextBox accountBox(200, 300, 880, L"账号", L"");
@@ -97,6 +100,10 @@ void loginUI() {
 			if (loginButton.mouseClick(msg)) {
 
 				wstring tmp_password;
+				
+				Node* Stu = StuList->next;
+				Node* Tch = TchList->next;
+				Node* Admin = AdminList->next;
 
 				while (Stu != NULL) {
 					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), (const wchar_t*)accountBox.text) == 0) {
@@ -219,18 +226,19 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
 
 
-	Text titleText(10, 100, L"全部密码管理", 63);
-	TextBox searchStuInputBox(310, 20, 300, L"搜索学生", L"");
-	TextBox searchTchInputBox(820, 20, 300, L"搜索教师", L"");
+	Text titleText(10, 90, L"全部密码管理", 63);
+	TextBox searchStuInputBox(310, 20, 350, L"搜索学生", L"");
+	TextBox searchTchInputBox(810, 20, 350, L"搜索教师", L"");
 
 
 	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
-	Button searchTchBtn(1200, 20, 100, 50, L"搜索", 1);
+	Button searchTchBtn(1170, 20, 100, 50, L"搜索", 1);
+	Button sortBtn(30, 210, 200, 60, L"<按学号/工号排序>", 1);
 	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
 	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
-	Button exportBtn(-50, 540, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 620, 330, 60, L"   导入", 1);
-	Button backButton(-50, 700, 330, 60, L"   返回", 0);
+	Button exportBtn(-50, 460, 330, 60, L"   导出", 1);
+	Button inportBtn(-50, 540, 330, 60, L"   导入", 1);
+	Button backButton(-50, 620, 330, 60, L"   返回", 0);
 
 
 	// 处理鼠标事件
@@ -252,6 +260,20 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 			if (searchTchBtn.mouseClick(msg)) {
 				ShowTch_Password(allTchList, Tch_Password_Data, searchTchInputBox.text);
 				Tch_ptable.setData(Tch_Password_Data);
+			}
+
+			if (sortBtn.mouseClick(msg)) {
+				
+				sortStuaccID(&allStuList);
+				sortStuaccID(&allTchList);
+
+				// 刷新表格
+				ShowStu_Password(allStuList, Stu_Password_Data, L"");
+				Stu_ptable.setData(Stu_Password_Data);
+
+				ShowTch_Password(allTchList, Tch_Password_Data, L"");
+				Tch_ptable.setData(Tch_Password_Data);
+
 			}
 
 			if (modify_Stu_Btn.mouseClick(msg)) {
@@ -456,6 +478,7 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 	showAllStu(allStuList, allQuality_Data, L"");
 
 	Table allQuality_Table(310, 90, 940, 700, allQuality_Data);
+	bool click = false;
 
 	Text titleText(10, 100, L"素质类项目管理", 50);
 	//Text IDText(-500, 200, L"", 32);
@@ -463,6 +486,7 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
 
 	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button sortBtn(30, 270, 200, 60, L"<按学号/年级排序>", 1);
 	Button search_for_quality_Btn(-50, 360, 330, 60, L"   查询", 1);
 	Button exportBtn(-50, 440, 330, 60, L"   导出", 1);
 	Button inportBtn(-50, 520, 330, 60, L"   导入", 1);
@@ -482,6 +506,25 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 			if (searchBtn.mouseClick(msg)) {
 				showAllStu(allStuList, allQuality_Data, searchInputBox.text);
 				allQuality_Table.setData(allQuality_Data);
+			}
+
+			if (sortBtn.mouseClick(msg)) {
+				if (click) {
+					sortStuaccID(&allStuList);
+					click = false;
+				}
+				else {
+					sortStuaccyear(&allStuList);
+					click = true;
+				}
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
+				// 刷新表格
+				showAllStu(allStuList, allQuality_Data, L"");
+				allQuality_Table.setData(allQuality_Data);
+
 			}
 
 			if (search_for_quality_Btn.mouseClick(msg)) {
@@ -586,7 +629,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	Button delete_Competition_Btn(-50, 620, 330, 60, L"   竞赛获奖删除", 1);
 
 
-	Button backButton(-50, 700, 290, 60, L"返回", 0);
+	Button backButton(-50, 700, 330, 60, L"返回", 0);
 
 	
 	Button modify_ResearchOK_Btn(-500, 580, 290, 60, L"确定修改", 1);
@@ -1542,9 +1585,10 @@ void allTchUI(Node* admin,List adminList) {
 	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
 
 	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
-	Button inportBtn(-50, 630, 330, 60, L"   导入", 1);
-	Button exportBtn(-50, 550, 330, 60, L"   导出", 1);
-	Button backButton(-50, 730, 330, 60, L"   返回", 0);
+	Button sortBtn(30, 210, 200, 60, L"<按工号排序>", 1);
+	Button inportBtn(-50, 300, 330, 60, L"   导入", 1);
+	Button exportBtn(-50, 380, 330, 60, L"   导出", 1);
+	Button backButton(-50, 460, 330, 60, L"   返回", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -1558,6 +1602,16 @@ void allTchUI(Node* admin,List adminList) {
 			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
 				showAllTch(TchList, allTchData, searchInputBox.text);
+				allTchTable.setData(allTchData);
+			}
+
+			if (sortBtn.mouseClick(msg)) {
+
+				sortStuaccID(&TchList);
+
+				// 刷新表格
+
+				showAllTch(TchList, allTchData, L"");
 				allTchTable.setData(allTchData);
 			}
 
