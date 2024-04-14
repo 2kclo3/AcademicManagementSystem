@@ -44,6 +44,14 @@ void importCrs(Cpnode CrsList, const char* file_name); //导入课程信息
 
 
 
+bool exportTch(List TchList, const char* file_name); //导出教师信息
+
+
+void importTch(List TchList, const char* file_name); //导入教师信息
+
+
+
+
 
 
 

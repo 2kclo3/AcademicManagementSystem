@@ -333,9 +333,9 @@ Cpnode readCrs(const char* file_name) {
 	}// 分配失败
 
 	wchar_t line[512];
-	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) 
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL)
 	{
-		if (line[0] == '\n') 
+		if (line[0] == '\n')
 		{ // 跳过空行
 			continue;
 		}
@@ -355,7 +355,7 @@ Cpnode readCrs(const char* file_name) {
 			&tcnode->PassRate,
 			&tcnode->ExcelNum,
 			&tcnode->ExcelRate
-		) == 14) 
+		) == 14)
 		{ // 读取课程信息
 
 			tcnode->sphead = (Spnode)malloc(sizeof(Snode));//为一个sphead申请内存(添加到链表中的sphead)
@@ -365,7 +365,7 @@ Cpnode readCrs(const char* file_name) {
 			}// 分配失败
 			tcnode->sphead->next = NULL;
 
-			while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) 
+			while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL)
 			{
 				if (line[0] == '\n') { // 跳过空行
 					break;
@@ -397,14 +397,14 @@ Cpnode readCrs(const char* file_name) {
 
 			// 添加到链表
 			Cpnode cnode = (Cpnode)malloc(sizeof(_Cnode)); //为cnode申请内存(添加到链表中的cnode)
-			if (cnode == NULL) 
+			if (cnode == NULL)
 			{
 				wprintf(L"error!");
 				exit(EXIT_FAILURE);
 			}// 分配失败
 			memcpy(cnode, tcnode, sizeof(_Cnode));
 			Cpnode ptmp = CrsList;
-			while (ptmp->next != NULL) 
+			while (ptmp->next != NULL)
 			{
 				ptmp = ptmp->next;
 			}
@@ -515,7 +515,7 @@ bool saveTch(List TchList, const char* file_name) {
 	}//打开失败
 
 	List pTch = TchList->next; // 从头结点的下一个节点开始
-	
+
 	while (pTch != NULL) {
 		fwprintf(fp, L"%d %s %d %s %s\n",
 			pTch->item.data.ID,
@@ -597,8 +597,8 @@ bool exportStu(List StuList, const char* file_name) {
 			pStu->item.data.grade,
 			pStu->item.data.college,
 			pStu->item.data.major,
-			pStu->item.data.original_college,
-			pStu->item.data.original_major,
+			(wcscmp(pStu->item.data.original_college, pStu->item.data.college) == 0 && wcscmp(pStu->item.data.original_major, pStu->item.data.major) == 0) ? L"" : pStu->item.data.original_college,
+			(wcscmp(pStu->item.data.original_college, pStu->item.data.college) == 0 && wcscmp(pStu->item.data.original_major, pStu->item.data.major) == 0) ? L"" : pStu->item.data.original_major,
 
 			pStu->item.data.all_avg_score,
 			pStu->item.data.all_avg_grid,
@@ -654,7 +654,7 @@ void importStu(List StuList, const char* file_name) {
 	fp = fopen(file_name, "r");//读取文件
 	if (fp == NULL) {
 		printf("Read \"%s\" error, please check and reboot the system!", file_name);
-		exit(EXIT_FAILURE);
+		MessageBox(GetHWnd(), L"导入失败, 没有文件或文件被其他程序占用!", L"导入", MB_ICONERROR);
 	}//读取失败退出
 
 	int successCnt = 0; //成功次数
@@ -741,7 +741,7 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 	fp = fopen(file_name, "r");//读取文件
 	if (fp == NULL) {
 		printf("Read \"%s\" error, please check and reboot the system!", file_name);
-		exit(EXIT_FAILURE);
+		MessageBox(GetHWnd(), L"导入失败, 没有文件或文件被其他程序占用!", L"导入", MB_ICONERROR);
 	}//读取失败退出
 
 	int successCnt = 0; //成功次数
@@ -790,7 +790,7 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 				) {
 
 				// 学号相同的情况,错误+1
-				if (!addCrs(CrsList, name, id, character, credit, SchYear)) { 
+				if (!addCrs(CrsList, name, id, character, credit, SchYear)) {
 					failSameIDCnt++;
 					failCnt++;
 				}
@@ -818,6 +818,112 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 		).c_str(), L"导入文件", MB_SYSTEMMODAL);
 }
 
+
+
+bool exportTch(List TchList, const char* file_name) { //导出教师信息
+	FILE* fp;
+	fp = fopen(file_name, "w"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		return false;
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+
+	//表头
+	fwprintf(fp, L"工号,姓名,性别,学院\n");
+
+	List pTch = TchList->next; // 从头结点的下一个节点开始
+	while (pTch != NULL) {
+		fwprintf(fp, L"%d,%s,%s,%s\n",
+			pTch->item.data.ID,
+			pTch->item.data.name,
+			(pTch->item.data.gender == 1) ? L"男" : L"女",
+			pTch->item.data.college
+		); // 写入
+		pTch = pTch->next; // 移动到下一个节点
+	}
+	fclose(fp);
+	return true;
+
+}
+
+
+void importTch(List TchList, const char* file_name) { //导入教师信息
+	FILE* fp;
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		MessageBox(GetHWnd(), L"导入失败, 没有文件或文件被其他程序占用!", L"导入", MB_ICONERROR);
+		return;
+	}//读取失败退出
+
+	int successCnt = 0; //成功次数
+	int failCnt = 0; //失败次数
+	int failSameIDCnt = 0; //学号相同错误计数
+	int failFormatCnt = 0; //格式错误错误计数
+	int failDataCnt = 0; //数据错误错误计数
+
+	wchar_t TMPid[100];
+	wchar_t TMPname[100];
+	wchar_t TMPgender[100];
+	wchar_t TMPcollege[100];
+
+	int id;
+	wchar_t name[30];
+	wchar_t gender[10];
+	wchar_t college[100];
+
+	wchar_t line[512];
+	fgetws(line, sizeof(line) / sizeof(line[0]), fp); // 跳过表头
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (swscanf(line, L"%[^,],%[^,],%[^,],%[^,]",
+			&TMPid,
+			&TMPname,
+			&TMPgender,
+			&TMPcollege
+
+		) == 4) { // 读取学生信息
+			TMPcollege[wcslen(TMPcollege) - 1] = L'\0';
+
+			if (
+				getNumberInBox(99999999, &id, TMPid) &&
+				getTextInBox(name, TMPname) &&
+				getTextInBox(gender, TMPgender) &&
+				getTextInBox(college, TMPcollege) &&
+				(id > 9999999 && id < 100000000) &&
+				(!wcscmp(gender, L"男") || (!wcscmp(gender, L"女")))
+				) {
+
+				// 工号相同的情况,错误+1
+				wchar_t noMajor[10] = L"无";
+				if (!addStu(&TchList, name, id, wcscmp(gender, L"男") ? 0 : 1, 2024, college, noMajor)) {
+					failSameIDCnt++;
+					failCnt++;
+				}
+				else {
+					successCnt++;
+				}
+			}
+			else {
+				failFormatCnt++;
+				failCnt++;
+			}
+		}
+		else {
+			failDataCnt++;
+			failCnt++;
+		}
+	}
+	fclose(fp);
+	MessageBox(GetHWnd(), (wstring(L"导入成功")
+		+ to_wstring(successCnt) + L"条信息，失败"
+		+ to_wstring(failCnt) + L"条信息。\n\n错误详情：\n已有相同教师"
+		+ to_wstring(failSameIDCnt) + L"条；\n格式错误"
+		+ to_wstring(failFormatCnt) + L"条；\n数据错误"
+		+ to_wstring(failDataCnt) + L"条。"
+		).c_str(), L"导入文件", MB_SYSTEMMODAL);
+}
 
 //importCrs(allCrsList, ".\\import\\Crs.csv");
 

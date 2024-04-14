@@ -222,22 +222,20 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 	ShowStu_Password(allStuList, Stu_Password_Data, L"");
 	ShowTch_Password(allTchList, Tch_Password_Data, L"");
 
-	Table Stu_ptable(310, 90, 470, 700, Stu_Password_Data);
-	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
+	Table Stu_ptable(310, 90, 580 - 15, 700, Stu_Password_Data);
+	Table Tch_ptable(905, 90, 580 - 15, 700, Tch_Password_Data);
 
 
 	Text titleText(10, 90, L"全部密码管理", 63);
-	TextBox searchStuInputBox(310, 20, 350, L"搜索学生", L"");
-	TextBox searchTchInputBox(810, 20, 350, L"搜索教师", L"");
+	TextBox searchStuInputBox(310, 20, 450, L"搜索学生", L"");
+	TextBox searchTchInputBox(905, 20, 450, L"搜索教师", L"");
 
 
-	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
-	Button searchTchBtn(1170, 20, 100, 50, L"搜索", 1);
+	Button searchStuBtn(775, 20, 100, 50, L"搜索", 1);
+	Button searchTchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 210, 200, 60, L"<按学号/工号排序>", 1);
 	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
 	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
-	Button exportBtn(-50, 460, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 540, 330, 60, L"   导入", 1);
 	Button backButton(-50, 620, 330, 60, L"   返回", 0);
 
 
@@ -309,11 +307,6 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 
 			}
 			
-			if (exportBtn.mouseClick(msg)) {
-			}
-			
-			if (inportBtn.mouseClick(msg)) {
-			}
 			
 			if (backButton.mouseClick(msg)) {
 				menuUI_Administrator(admin, Admin_List);
@@ -358,14 +351,14 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 	//drawLine();
 
 
-	Text titleText(130, 100, L"你好，请修改你的密码！", 64);
+	Text titleText(300, 100, L"你好，请修改你的密码！", 64);
 
-	TextBox accountBox(300, 300, 600, L"账号", L"");
-	TextBox old_passwordBox(300, 380, 600, L"原密码", L"");
-	TextBox new_passwordBox(300, 460, 600, L"请输入新密码", L"");
-	TextBox confirm_passwordBox(300, 540, 600, L"请确认新密码", L"");
-	Button modify_OK_Button(450, 620, 330, 60, L"确认修改", 1);
-	Button backButton(450, 700, 330, 60, L"取消修改", 0);
+	TextBox accountBox(300, 300, 900, L"账号", L"");
+	TextBox old_passwordBox(300, 380, 900, L"原密码", L"");
+	TextBox new_passwordBox(300, 460, 900, L"请输入新密码", L"");
+	TextBox confirm_passwordBox(300, 540, 900, L"请确认新密码", L"");
+	Button modify_OK_Button(585, 620, 330, 60, L"确认修改", 1);
+	Button backButton(585, 700, 330, 60, L"取消修改", 0);
 
 	if (judge == 0) {
 		Text IDText(300, 200, L"", 32);
@@ -477,15 +470,15 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 
 	showAllStu(allStuList, allQuality_Data, L"");
 
-	Table allQuality_Table(310, 90, 940, 700, allQuality_Data);
+	Table allQuality_Table(310, 90, 1160, 700, allQuality_Data);
 	bool click = false;
 
 	Text titleText(10, 100, L"素质类项目管理", 50);
 	//Text IDText(-500, 200, L"", 32);
 
-	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 
-	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 270, 200, 60, L"<按学号/年级排序>", 1);
 	Button search_for_quality_Btn(-50, 360, 330, 60, L"   查询", 1);
 	Button exportBtn(-50, 440, 330, 60, L"   导出", 1);
@@ -542,6 +535,28 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 
 			}
 
+			if (exportBtn.mouseClick(msg)) {
+				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
+				}
+			}
+
+			if (inportBtn.mouseClick(msg)) {
+				importStu(allStuList, ".\\import\\Stu.csv");
+
+
+				// 刷新表格
+				showAllStu(allStuList, allQuality_Data, L"");
+				allQuality_Table.setData(allQuality_Data);
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
+			}
+
 			if (backButton.mouseClick(msg)) {
 				if (judge == 1)
 					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
@@ -585,8 +600,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	ShowStu_Research(Stu, ResearchData);
 	ShowStu_Competition(Stu, CompetitionData);
 
-	Table Stu_Rtable(310, 90, 940, 350, ResearchData);
-	Table Stu_Ctable(310, 450, 940, 350, CompetitionData);
+	Table Stu_Rtable(310, 90, 1160, 350, ResearchData);
+	Table Stu_Ctable(310, 450, 1160, 350, CompetitionData);
 
 
 	//TextBox searchInputBox(310, 20, 820, L"搜索", L"");
@@ -1578,13 +1593,13 @@ void allTchUI(Node* admin,List adminList) {
 	
 	showAllTch(TchList, allTchData, L"");
 
-	Table allTchTable(430, 90, 940, 700, allTchData);
+	Table allTchTable(310, 90, 1160, 700, allTchData);
 
 	Text titleText(40, 50, L"所有教师", 64);
 
-	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 
-	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 210, 200, 60, L"<按工号排序>", 1);
 	Button inportBtn(-50, 300, 330, 60, L"   导入", 1);
 	Button exportBtn(-50, 380, 330, 60, L"   导出", 1);
@@ -1616,11 +1631,24 @@ void allTchUI(Node* admin,List adminList) {
 			}
 
 			if (exportBtn.mouseClick(msg)) {
-				//TODO
+				if (exportTch(TchList, ".\\export\\Tch.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出教师", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出教师", MB_ICONERROR);
+				}
 			}
 
 			if (inportBtn.mouseClick(msg)) {
-				//TODO
+				importTch(TchList, ".\\import\\Tch.csv");
+
+
+				// 刷新表格
+				showAllTch(TchList, allTchData, L"");
+				allTchTable.setData(allTchData);
+
+				// 保存
+				saveTch(TchList, TCH_FILE);
 			}
 
 			if (backButton.mouseClick(msg)) {

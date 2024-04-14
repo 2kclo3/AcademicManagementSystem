@@ -8,7 +8,7 @@
 
 bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar_t* searchTerm);
 
-int mainLiuTY(void) {
+int mainLIUTY(void) {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
 
 
@@ -126,7 +126,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	vector<vector<std::wstring>> allStuData;
 	showAllMajor(allStuList, allStuData, L"");
 
-	Table allStuTable(310, 90, 1100, 700, allStuData);
+	Table allStuTable(310, 90, 1160, 700, allStuData);
 
 	Text titleText(25, 50, L"转专业管理", 64);
 	Text IDText(-500, 150, L"", 32);
@@ -136,12 +136,12 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	Text collegeText(-500, 430, L"", 32);
 	Text majorText(-500, 500, L"", 32);
 
-	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 	TextBox gradeBox(-500, 360, 290, L"年级", L"");
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
 
-	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button modifyBtn(-50, 190, 330, 60, L"   转专业", 1);
 	Button sortBtn(-50, 280, 330, 60, L"   排序", 1);
 	Button exportBtn(-50, 370, 330, 60, L"   导出", 1);
@@ -348,11 +348,25 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 			}
 
 			if (exportBtn.mouseClick(msg)) {
-				//TODO
+				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
+				}
 			}
 
 			if (inportBtn.mouseClick(msg)) {
-				//TODO
+				importStu(allStuList, ".\\import\\Stu.csv");
+
+
+				// 刷新表格
+				showAllStu(allStuList, allStuData, L"");
+				allStuTable.setData(allStuData);
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
 			}
 
 			if (backButton.mouseClick(msg)) {
