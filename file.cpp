@@ -693,6 +693,7 @@ void importStu(List StuList, const char* file_name) {
 			&TMPmajor
 
 		) == 6) { // 读取学生信息
+			TMPmajor[wcslen(TMPmajor) - 1] = L'\0';
 
 			if (
 				getNumberInBox(99999999, &id, TMPid) &&
@@ -775,6 +776,8 @@ void importCrs(Cpnode CrsList, const char* file_name) {
 			&TMPcharacter,
 			&TMPcredit
 		) == 5) { // 读取学生信息
+
+			TMPcredit[wcslen(TMPcredit) - 1] = L'\0';
 
 			if (
 				getNumberInBox(99999, &id, TMPid) &&

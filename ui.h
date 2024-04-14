@@ -172,8 +172,6 @@ private:
 	int x, y;
 	int width, height;
 	wchar_t hintText[512];
-	bool isInput;
-	bool hovered;
 	COLORREF defaultColor;
 	COLORREF inputColor;
 	COLORREF hoveredColor;
@@ -182,6 +180,8 @@ private:
 
 public:
 	wchar_t text[512];
+	bool isInput;
+	bool hovered;
 	TextBox(int _x, int _y, int _width, const wchar_t* _hintText, const wchar_t* _text) {
 		x = _x;
 		y = _y;

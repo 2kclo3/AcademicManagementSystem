@@ -30,7 +30,7 @@ int mainJi(void) {
 	return 0;
 }
 
-void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {//judge:1是老师 2是管理员
+void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {//judge:1是老师 2是管理员
 	cleardevice();
 
 	//drawLine();
@@ -44,7 +44,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 	int i = 0;
 
 
-	Table allStuTable(430, 90, 940, 700, allStuData);
+	Table allStuTable(310, 90, 1160, 700, allStuData);
 
 	Text titleText(40, 50, L"所有学生", 64);
 	Text IDText(-500, 150, L"", 32);
@@ -54,7 +54,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 	Text collegeText(-500, 430, L"", 32);
 	Text majorText(-500, 500, L"", 32);
 
-	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 	TextBox IDBox(-500, 150, 290, L"学号 ( 添加后不可更改！)", L"");
 	TextBox nameBox(-500, 220, 290, L"姓名", L"");
 	TextBox genderBox(-500, 290, 290, L"性别 ( 女:0, 男:1 )", L"");
@@ -62,7 +62,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
 
-	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button lookBtn(-50, 150, 330, 60, L"   学生课程", 1);//
 	Button addBtn(-50, 230, 330, 60, L"   添加", 1);//
 	Button modifyBtn(-50, 310, 330, 60, L"   修改", 1);
@@ -518,19 +518,24 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 			}
 
 			if (exportBtn.mouseClick(msg)) {
-				//TODO
+				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
+				}
 			}
 
 			if (inportBtn.mouseClick(msg)) {
 				importStu(allStuList, ".\\import\\Stu.csv");
 
-				//// 保存
-				//saveStu(allStuList, STU_FILE);
-				//先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
 
 				// 刷新表格
 				showAllStu(allStuList, allStuData, L"");
 				allStuTable.setData(allStuData);
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
 
 			}
 
@@ -556,7 +561,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 			majorBox.onMessage(msg);
 		}
 
-		showxy(msg); // 显示坐标
+		//showxy(msg); // 显示坐标
 
 
 
@@ -573,7 +578,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin,
 
 
 
-void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 
 
 	cleardevice();
@@ -584,21 +589,23 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
 
-	Table allCrsINStuTable(430, 90, 940, 700, allCrsINStuData);
+	Table allCrsINStuTable(310, 90, 1160, 700, allCrsINStuData);
 
 	Text titleText(40, 20, L"所有课程", 64);
 	//输入框
 	//TextBox searchInputBox(310, 20, 820, L"搜索", L"");
-	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 
+	int tmp_course_id = 0;
+	int tmp_semester = 0;
 
 	TextBox course_idBox(-500, 100, 290, L"课程编号", L"");
-	TextBox course_nameBox(-500, 150, 290, L"课程名字", L"");
+	TextBox course_nameBox(-500, 150, 290, L"课程名字(自动匹配)", L"");
 	TextBox scoreBox(-500, 220, 290, L"成绩", L"");
-	TextBox course_natureBox(-500, 250, 290, L"课程性质", L"");
-	TextBox creditBox(-500, 300, 290, L"学分", L"");
+	TextBox course_natureBox(-500, 250, 290, L"课程性质(自动匹配)", L"");
+	TextBox creditBox(-500, 300, 290, L"学分(自动匹配)", L"");
 	TextBox gridBox(-500, 350, 290, L"绩点(自动转化)", L"");
-	TextBox semesterBox(-500, 400, 290, L"学期", L"");
+	TextBox semesterBox(-500, 400, 290, L"学年", L"");
 
 	TextBox allButton(-500, 330, 290, L"   所有", L"");
 	TextBox mustButton(-500, 380, 290, L"   必修", L"");
@@ -608,7 +615,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 
 	//按钮
 	//Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
-	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 
 	wchar_t aa[100];
 	wchar_t bb[100];
@@ -689,15 +696,39 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 
 				//显示
 				course_idBox.move(10, 100);
-				course_nameBox.move(10, 180);
-				scoreBox.move(10, 260);
+				course_nameBox.move(10, 260);
+				scoreBox.move(10, 500);
 				course_natureBox.move(10, 340);
 				creditBox.move(10, 420);
-				gridBox.move(10, 500);
-				semesterBox.move(10, 580);
+				gridBox.move(10, 580);
+				semesterBox.move(10, 180);
 
 				addOKButton.move(10, 650);
 				cancelButton.move(10, 730);
+
+			}
+
+			// 自动匹配函数
+			if (semesterBox.isInput == false && course_idBox.text
+				&& semesterBox.hovered == true
+				&& getNumberInBox(100000, &tmp_course_id, course_idBox.text)
+				&& tmp_course_id > 10000 && tmp_course_id < 100000
+				&& getNumberInBox(2024, &tmp_semester, semesterBox.text)
+				&& tmp_semester >= 2000 && tmp_semester <= 2024
+
+				) {
+				Cpnode tmpcpnode = searchCrs(allCrsList, tmp_course_id, tmp_semester);
+				if (tmpcpnode != NULL) {
+					course_nameBox.setText(tmpcpnode->cname);
+					course_natureBox.setText(tmpcpnode->character);
+					creditBox.setText(to_wstring(tmpcpnode->credit).substr(0, to_wstring(tmpcpnode->credit).find('.') + 2).c_str());
+
+				}
+				else {
+					course_nameBox.setText(L"");
+					course_natureBox.setText(L"");
+					creditBox.setText(L"");
+				}
 
 			}
 
@@ -706,7 +737,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 				wchar_t course_name[100];//课程名
 				double score;//课程成绩
 				int semester;//学年学期
-				int course_nature;//课程性质
+				wchar_t course_nature[5];//课程性质
 				double credit;//学分
 				double grid;//绩点
 
@@ -717,14 +748,14 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 					getTextInBox(course_name, course_nameBox.text) &&
 					getDoubleInBox(100, &score, scoreBox.text) &&
 					getNumberInBox(2024, &semester, semesterBox.text) &&
-					getNumberInBox(1, &course_nature, course_natureBox.text) &&
+					getTextInBox(course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
-					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+					credit >= 0 && score >= 0 && semester >= 0
 					) {
 
 					grid = CalculGPA(score);
 
-					;
+
 
 
 
@@ -733,7 +764,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 					}
 					else {
 						addStuInCrs(searchCrs(allCrsList, stoi(course_id), semester), pname, *pid, score);
-						addCrsToStu(Crs, course_id, course_name, score, semester, course_nature, credit, grid);
+						addCrsToStu(Crs, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, grid);
 					}
 
 
@@ -868,12 +899,13 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 
 					//显示
 					course_idBox.move(10, 100);
-					course_nameBox.move(10, 180);
-					scoreBox.move(10, 260);
+					course_nameBox.move(10, 260);
+					scoreBox.move(10, 500);
 					course_natureBox.move(10, 340);
 					creditBox.move(10, 420);
-					gridBox.move(10, 500);
-					semesterBox.move(10, 580);
+					gridBox.move(10, 580);
+					semesterBox.move(10, 180);
+
 
 					modifyOKButton.move(10, 650);
 					cancelButton.move(10, 730);
@@ -1034,7 +1066,7 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 
 						while (stunode) {
 							if (stunode->snum == *pid) {
-								deleteStuInCrs(CrsNode,pname,*pid);
+								deleteStuInCrs(CrsNode, pname, *pid);
 								break;
 							}
 							stunode = stunode->next;
@@ -1140,10 +1172,10 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 			// 文本框输入
 			searchInputBox.onMessage(msg);
 			course_idBox.onMessage(msg);
-			course_nameBox.onMessage(msg);
+			//course_nameBox.onMessage(msg);
 			scoreBox.onMessage(msg);
-			course_natureBox.onMessage(msg);
-			creditBox.onMessage(msg);
+			//course_natureBox.onMessage(msg);
+			//creditBox.onMessage(msg);
 			//gridBox.onMessage(msg);
 			semesterBox.onMessage(msg);
 		}
@@ -1165,12 +1197,13 @@ void StuUI(Node* Crs,List allStuList, wchar_t* pname,int* pid, Node* tch_or_admi
 
 
 
-void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List,int judge, Node* admin, List Admin_List) {
+void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
 
 	vector<vector<std::wstring>> RankData;
 	int number;
 	Rank(StuList, RankData, L"", L"", &number);
+	saveStu(StuList, STU_FILE);
 
 	Table RankTable(340, 90, 1100, 700, RankData);
 
@@ -1323,7 +1356,7 @@ void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List,int judge, 
 			}
 
 			if (backButton.mouseClick(msg)) {
-				allStuUI(tch_or_admin, Tch_or_Admin_List, judge,  admin,  Admin_List);
+				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 			}
 
 			//表格鼠标滑动与点击

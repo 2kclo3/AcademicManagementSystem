@@ -81,10 +81,10 @@ void loginUI() {
 	Node* Admin = AdminList->next;*/
 
 	Text titleText(200, 100, L"你好，请登录!", 64);
-	TextBox accountBox(200, 300, 880, L"账号", L"");
-	TextBox passwordBox(200, 400, 880, L"密码", L"");
-	Button loginButton(200, 500, 420, 60, L"登录", 1);
-	Button exitButton(660, 500, 420, 60, L"退出", 0);
+	TextBox accountBox(200, 300, 1100, L"账号", L"");
+	TextBox passwordBox(200, 400, 1100, L"密码", L"");
+	Button loginButton(200, 500, 530, 60, L"登录", 1);
+	Button exitButton(770, 500, 530, 60, L"退出", 0);
 	//Button modify_password_Button(860, 600, 220, 50, L"修改密码", 1);
 
 	// 处理鼠标事件
