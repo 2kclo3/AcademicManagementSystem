@@ -45,7 +45,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 	Text titleText(40, 10, L"所有课程", 64);
 
-	TextBox searchInputBox(310, 20, 820+220, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 820+220-120, L"搜索", L"");
 	TextBox cnameBox(-500, 0, 290, L"课程名称", L"");
 	TextBox cnumBox(-500, 0, 290, L"课程号", L"");
 	TextBox characterBox(-500, 0, 290, L"课程性质", L"");
@@ -54,7 +54,8 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	TextBox minBox(-500, 0, 290, L"最小值", L"");
 	TextBox maxBox(-500, 0, 290, L"最大值", L"");
 
-	Button searchBtn(1150+220, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1150 + 220 - 120, 20, 100, 50, L"搜索", 1);
+	Button drawBtn(1150 + 220, 20, 100, 50, L"绘图", 1);
 
 	int y = 90-80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
 	Button viewCrsBtn(-50, y += dy, 330, 60, L"   查看", 1);
