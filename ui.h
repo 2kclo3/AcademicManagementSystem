@@ -16,6 +16,7 @@
 #include <tchar.h>
 #include <math.h>
 #include <time.h>
+#include"quality.h"
 #include "student.h"
 #include "course.h"
 #include "file.h"
@@ -171,8 +172,6 @@ private:
 	int x, y;
 	int width, height;
 	wchar_t hintText[512];
-	bool isInput;
-	bool hovered;
 	COLORREF defaultColor;
 	COLORREF inputColor;
 	COLORREF hoveredColor;
@@ -181,6 +180,8 @@ private:
 
 public:
 	wchar_t text[512];
+	bool isInput;
+	bool hovered;
 	TextBox(int _x, int _y, int _width, const wchar_t* _hintText, const wchar_t* _text) {
 		x = _x;
 		y = _y;
@@ -626,21 +627,30 @@ public:
 
 
 void showxy(ExMessage& msg);
-void testUI();
+void testUI(Node*, List, int, Node* admin, List Admin_List);
+
 void loginUI();
-void menuUI();
-void allStuUI();
-void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid);
-void RankUI(List StuList);
-void allCrsUI();
-void CrsUI(Cpnode cphead, Cpnode cplist);
-void allQualityUI();
-void allQualityUI();
-void changeMajorUI();
-void settingsUI();
-void chartUI(vector<vector<wstring>> data, int row1, int row2);
-void stuAccountUI(int stuID);
-void testShowChart(vector<vector<wstring>> _data, vector<vector<wstring>> _chart);
+
+void menuUI_Tch(Node*, List, Node* admin, List Admin_List);
+void menuUI_Administrator(Node*, List);
+
+void allStuUI(Node*, List, int, Node* admin, List Admin_List);
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node*, List, int, Node* admin, List Admin_List);
+void RankUI(List StuList, Node*, List, int, Node* admin, List Admin_List);
+
+void allCrsUI(Node*, List, int, Node* admin, List Admin_List);
+void CrsUI(Cpnode cphead, Cpnode cplist, Node*, List, int, Node* admin, List Admin_List);
+
+void allQualityUI(Node*, List,int, Node* admin, List Admin_List);
+void QualityUI(Node* Stu, List allStuList, Node*, List, int, Node* admin, List Admin_List);
+void allTchUI(Node*, List);
+void manageUI(Node* admin, List Admin_List);//管理员端改密码
+void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List);//学生教师改密码
+
+void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
+
+void chartUI(vector<vector<wstring>> _data, int row1, int row2, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
+void stuAccountUI(int stuID, Node* admin, List Admin_List);
 
 
 

@@ -87,6 +87,11 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 			data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
 			data[row][6] = std::to_wstring(crstmp->score.course_nature); //数字转为字符串
 
+
+			data[row][2] = data[row][2].substr(0, data[row][2].find('.') + 2);
+			data[row][4] = data[row][4].substr(0, data[row][4].find('.') + 2);
+			data[row][5] = data[row][5].substr(0, data[row][5].find('.') + 2);
+
 			row++; // 行数+1
 		}
 		crstmp = crstmp->crs_next;
@@ -107,10 +112,10 @@ void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* sear
 	data[0][1] = L"姓名";///
 	data[0][2] = L"年级";///
 	data[0][3] = L"专业";///
-	data[0][4] = L"全部科目成绩";
-	data[0][5] = L"全部科目绩点";
-	data[0][6] = L"必修科目成绩";
-	data[0][7] = L"必修科目绩点";
+	data[0][4] = L"平均成绩";
+	data[0][5] = L"平均绩点";
+	data[0][6] = L"平均成绩(必修)";
+	data[0][7] = L"平均绩点(必修)";
 
 
 	int row = 1;
@@ -136,10 +141,17 @@ void Rank(const List StuList, vector<vector<wstring>>& data, const wchar_t* sear
 			data[row][1] = pCurrent->item.data.name;
 			data[row][2] = std::to_wstring(pCurrent->item.data.grade); //数字转为字符串
 			data[row][3] = pCurrent->item.data.major;
+
 			data[row][4] = std::to_wstring(pCurrent->item.data.all_avg_score); //数字转为字符串
 			data[row][5] = std::to_wstring(pCurrent->item.data.all_avg_grid); //数字转为字符串
 			data[row][6] = std::to_wstring(pCurrent->item.data.req_avg_score); //数字转为字符串
 			data[row][7] = std::to_wstring(pCurrent->item.data.req_avg_grid); //数字转为字符串
+
+			//保留2位小数
+			data[row][4] = data[row][4].substr(0, data[row][4].find('.') + 3);
+			data[row][5] = data[row][5].substr(0, data[row][5].find('.') + 5);
+			data[row][6] = data[row][6].substr(0, data[row][6].find('.') + 3);
+			data[row][7] = data[row][7].substr(0, data[row][7].find('.') + 5);
 
 			row++; // 行数+1
 		}
@@ -164,20 +176,20 @@ double AllGrid(Node* Crs) {
 
 
 	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
-			if (judge[stoi(tmp1->score.course_id)] == 0) {
+		if (judge[stoi(tmp1->score.course_id)] == 0) {
 
-				judge[stoi(tmp1->score.course_id)] = 1;
-				maxhhh = tmp1->score.grid;
+			judge[stoi(tmp1->score.course_id)] = 1;
+			maxhhh = tmp1->score.grid;
 
-				for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
-					if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
-						maxhhh = max(tmp2->score.grid, maxhhh);
-					}
+			for (Crsnode* tmp2 = tmp1; tmp2 != NULL; tmp2 = tmp2->crs_next) {
+				if (wcscmp(tmp1->score.course_id, tmp2->score.course_id) == 0) {
+					maxhhh = max(tmp2->score.grid, maxhhh);
 				}
-
-				result += maxhhh * tmp1->score.credit;
-				allcredit += tmp1->score.credit;
 			}
+
+			result += maxhhh * tmp1->score.credit;
+			allcredit += tmp1->score.credit;
+		}
 	}
 
 
@@ -528,7 +540,7 @@ bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
 
 
 // 在总学生链表中通过学号和名字搜索学生 
-Node* searchStu(List* plist, wchar_t* pname, int pID) 
+Node* searchStu(List* plist, wchar_t* pname, int pID)
 {
 	Node* ptmp = *plist;
 	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0)//通过姓名或学号来检索
@@ -537,10 +549,10 @@ Node* searchStu(List* plist, wchar_t* pname, int pID)
 }
 
 // 在单个学生中搜索的课程
-Crsnode* searchCrsInStu(Node* stu, wchar_t* pcourse_id, wchar_t* pcourse_name) {
+Crsnode* searchCrsInStu(Node* stu, const wchar_t* pcourse_id, const wchar_t* pcourse_name) {
 	Crsnode* crstmp = stu->item.crslist->crs_next;
 	//首先要判断是否空，合并时别搞没了
-	while (crstmp&&(_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0))//通过课程编号和课程名来检索
+	while (crstmp && (_tcscmp(crstmp->score.course_id, pcourse_id) != 0 || _tcscmp(crstmp->score.course_name, pcourse_name) != 0))//通过课程编号和课程名来检索
 		crstmp = crstmp->crs_next;
 	return crstmp;
 }

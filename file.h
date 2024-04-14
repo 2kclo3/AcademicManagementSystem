@@ -16,6 +16,8 @@ List readStu(const char* file_name); //读取学生文件
 
 List readTch(const char* file_name); //读取教师文件
 
+List readAdmin(const char* file_name);//读取管理员端文件
+
 Cpnode readCrs(const char* file_name); //读取课程文件
 
 

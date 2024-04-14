@@ -184,16 +184,6 @@ paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
-paper6 jorc6 author6 date6 volume6 issue6 10-11 1.10
 
 Test 吉林大学 国家级 2222 0.01
 蓝桥杯 吉林省计算机协会 省级 4.9 2.00
