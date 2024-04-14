@@ -388,7 +388,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 			majorBox.onMessage(msg);
 		}
 
-		showxy(msg); // 显示坐标
+		//showxy(msg); // 显示坐标
 
 
 

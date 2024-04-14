@@ -229,7 +229,7 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 		_chart[0][i] = _data[i][row1];
 		_chart[1][i] = _data[i][row2];
 	}
-	Chart testChart(100, 100, 1300, 580, _chart);
+	Chart testChart(100, 100, 1300, 540, _chart);
 
 
 
@@ -250,7 +250,7 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 			}
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 
 		FlushBatchDraw(); //ÅúÁ¿»æÍ¼

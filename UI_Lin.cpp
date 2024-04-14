@@ -326,7 +326,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 
 
@@ -445,7 +445,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 
 
@@ -1679,7 +1679,7 @@ void allTchUI(Node* admin, List adminList) {
 			searchInputBox.onMessage(msg);
 		}
 
-		showxy(msg); // 显示坐标
+		//showxy(msg); // 显示坐标
 
 
 

@@ -21,6 +21,52 @@
 #include "course.h"
 #include "file.h"
 #include "io.h"
+//#define backgroundColor RGB(55, 61, 53)
+//#define defaulteColoe WHITE
+//#define tableSelectedColor RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30)
+//
+//
+//#define buttonType1BkColor RGB(191, 202, 185)
+//#define buttonType1HovColor RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30)
+//#define buttonType1PressColor RGB(GetRValue(bkColor) + 50, GetGValue(bkColor) + 50, GetBValue(bkColor) + 50)
+//#define buttonType1TxtColor RGB(42, 51, 40)
+//
+//#define buttonType2BkColor RGB(73, 78, 70)
+//#define buttonType2HovColor RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30)
+//#define buttonType2PressColor RGB(GetRValue(bkColor) + 50, GetGValue(bkColor) + 50, GetBValue(bkColor) + 50)
+//#define buttonType2TxtColor RGB(200, 198, 195)
+//
+//#define textTxtColor RGB(228, 226, 223)
+//
+//#define BoxdefaultColor RGB(33, 39, 32);
+//#define BoxinputColor RGB(55, 61, 53);
+//#define BoxhoveredColor RGB(69, 73, 67);
+//#define BoxborderColor RGB(191, 202, 185);
+
+#define backgroundColor RGB(255, 255, 255)
+#define defaulteColoe RGB(31, 31, 31)
+#define tableSelectedColor RGB(216, 216, 217)
+
+
+#define buttonType1BkColor RGB(211, 227, 253)
+#define buttonType1HovColor RGB(201, 216, 240)
+#define buttonType1PressColor RGB(178, 202, 242)
+#define buttonType1TxtColor RGB(4, 30, 73)
+
+#define buttonType2BkColor RGB(220, 220, 221)
+#define buttonType2HovColor RGB(232, 232, 232)
+#define buttonType2PressColor RGB(204, 204, 204)
+#define buttonType2TxtColor RGB(30, 30, 30)
+
+#define textTxtColor RGB(31, 31, 31)
+
+#define BoxdefaultColor RGB(236, 239, 247);
+#define BoxinputColor RGB(255, 255, 255);
+#define BoxhoveredColor RGB(224, 227, 234);
+#define BoxborderColor RGB(11, 87, 208);
+
+
+
 
 using namespace std;
 
@@ -33,6 +79,8 @@ private:
 	const wchar_t* text;
 	COLORREF bkColor;
 	COLORREF textColor;
+	COLORREF hovColor;
+	COLORREF pressColor;
 	bool hovered;
 	bool pressed;
 
@@ -44,12 +92,16 @@ public:
 		height = _height;
 		text = _text;
 		if (style == 1) {
-			bkColor = RGB(191, 202, 185);
-			textColor = RGB(42, 51, 40);
+			bkColor = buttonType1BkColor;
+			hovColor = buttonType1HovColor;
+			pressColor = buttonType1PressColor;
+			textColor = buttonType1TxtColor;
 		}
 		else if (style == 0) {
-			bkColor = RGB(73, 78, 70);
-			textColor = RGB(200, 198, 195);
+			bkColor = buttonType2BkColor;
+			hovColor = buttonType2HovColor;
+			pressColor = buttonType2PressColor;
+			textColor = buttonType2TxtColor;
 		}
 		hovered = false;
 		pressed = false;
@@ -61,9 +113,9 @@ public:
 		settextstyle(height / 2, 0, L"微软雅黑");
 		setfillcolor(bkColor); //设置按钮背景
 		if (hovered) {
-			setfillcolor(RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30)); //按钮悬停背景
+			setfillcolor(hovColor); //按钮悬停背景
 			if (pressed) {
-				setfillcolor(RGB(GetRValue(bkColor) + 50, GetGValue(bkColor) + 50, GetBValue(bkColor) + 50)); //按钮按下背景
+				setfillcolor(pressColor); //按钮按下背景
 			}
 		}
 		solidroundrect(x, y, x + width, y + height, height, height); //绘制按钮
@@ -133,7 +185,7 @@ public:
 		y = _y;
 		_tcscpy(text, _text);
 		size = _size;
-		color = RGB(228, 226, 223);
+		color = textTxtColor;
 		settextstyle(size, 0, L"微软雅黑");
 		draw();
 	}
@@ -191,11 +243,11 @@ public:
 		_tcscpy(hintText, _hintText);
 		isInput = false;
 		hovered = false;
-		defaultColor = RGB(33, 39, 32);
-		inputColor = RGB(55, 61, 53);
-		hoveredColor = RGB(69, 73, 67);
-		borderColor = RGB(191, 202, 185);
-		textColor = WHITE;
+		defaultColor = BoxdefaultColor;
+		inputColor = BoxinputColor;
+		hoveredColor = BoxhoveredColor;
+		borderColor = BoxborderColor;
+		textColor = defaulteColoe;
 		if (wcscmp(_text, L"") == NULL) {
 			settextstyle(22, 0, L"微软雅黑");
 		}
@@ -258,7 +310,7 @@ public:
 		if (isInput) {
 			DWORD clock = GetTickCount();
 			if (clock % 1000 < 500) {
-				setlinecolor(WHITE); //光标颜色
+				setlinecolor(defaulteColoe); //光标颜色
 				if (wcscmp(hintText, L"密码") == 0) {
 					line(x + 16 + textwidth(pwdText), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(pwdText), y + 2 + height - (height - textHeight) / 2);
 				}
@@ -359,6 +411,7 @@ private:
 	vector<vector<wstring>> data;
 	COLORREF bkColor;
 	COLORREF textColor;
+	COLORREF borderColor;
 	int scollBarHeight;
 
 public:
@@ -370,8 +423,9 @@ public:
 		height = _height;
 		canChange = true;
 		data = _data;
-		bkColor = RGB(55, 61, 53);
-		textColor = WHITE;
+		bkColor = backgroundColor;
+		textColor = defaulteColoe;
+		borderColor = BoxborderColor;
 		offset = 0;
 		selectedRow = 0;
 		maxRow = 0;
@@ -385,12 +439,13 @@ public:
 	void draw() {
 
 		setfillcolor(bkColor);
-		setlinecolor(WHITE);
+		setlinecolor(defaulteColoe);
 		if (scollBarHeight != height) {
+			setlinecolor(borderColor);
 			fillroundrect(x + width + 5, y, x + width + 15, y + height, 10, 10); // 滚动条外框
 
 			// 滚动条
-			setfillcolor(WHITE);
+			setfillcolor(defaulteColoe);
 			fillroundrect(x + width + 8,
 				3 + y + 1.0 * offset / data.size() * height,
 				x + width + 12,
@@ -400,6 +455,7 @@ public:
 		else {
 			solidrectangle(x + width + 5, y, x + width + 15, y + height); // 清除滚动条
 		}
+		setlinecolor(borderColor);
 		setfillcolor(bkColor);
 		fillroundrect(x, y, x + width, y + height, 10, 10); // 表格外框
 
@@ -409,14 +465,15 @@ public:
 
 		// 选中行高亮
 		if (offset < selectedRow && offset + maxRow > selectedRow) {
-			setfillcolor(RGB(GetRValue(bkColor) + 30, GetGValue(bkColor) + 30, GetBValue(bkColor) + 30));
+			setfillcolor(tableSelectedColor);
 			fillrectangle(x + 1, 1 + y + (selectedRow - offset) * textHeight, x + width - 1, -1 + y + (selectedRow - offset + 1) * textHeight);
 		}
 
-		setlinecolor(WHITE);
+		setlinecolor(defaulteColoe);
 
 		// 行
 		int ry = y;
+		setlinecolor(borderColor);
 		for (int r = 0; r < min(maxRow, (int)data.size() - offset); r++) {
 
 			ry += textHeight;
@@ -579,11 +636,11 @@ public:
 	}
 	void draw() {
 		setfillcolor(bkColor);
-		setlinecolor(WHITE);
-		setfillcolor(WHITE);
+		setlinecolor(defaulteColoe);
+		setfillcolor(defaulteColoe);
 
 		setbkmode(TRANSPARENT);
-		settextcolor(WHITE);
+		settextcolor(defaulteColoe);
 		settextstyle(24, 0, L"微软雅黑");
 		//fillroundrect(x, y, x + width, y + height, 10, 10); // 图表外框
 

@@ -68,8 +68,8 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	Button modifyBtn(-50, 310, 330, 60, L"   修改", 1);
 	Button deleteBtn(-50, 390, 330, 60, L"   删除", 1);
 
-	Button sortBtn(0, 470, 120, 60, L"排序", 1);//////////////
-	Button sortyearBtn(140, 470, 120, 60, L"成绩排名", 1);////////////////////
+	Button sortBtn(0, 470, 135, 60, L"排序", 1);//////////////
+	Button sortyearBtn(145, 470, 135, 60, L"成绩排名", 1);////////////////////
 	Button exportBtn(-50, 550, 330, 60, L"   导出", 1);
 
 	Button inportBtn(-50, 630, 330, 60, L"   导入", 1);
@@ -217,7 +217,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				modifyBtn.move(-50, 310);
 				deleteBtn.move(-50, 390);
 				sortBtn.move(0, 470);/////////
-				sortyearBtn.move(140, 470);
+				sortyearBtn.move(145, 470);
 				exportBtn.move(-50, 550);
 				inportBtn.move(-50, 630);
 				backButton.move(-50, 730);
@@ -289,7 +289,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						modifyBtn.move(-50, 310);
 						deleteBtn.move(-50, 390);
 						sortBtn.move(0, 470);
-						sortyearBtn.move(140, 470);
+						sortyearBtn.move(145, 470);
 						exportBtn.move(-50, 550);
 						inportBtn.move(-50, 630);
 						backButton.move(-50, 730);
@@ -434,7 +434,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					modifyBtn.move(-50, 310);
 					deleteBtn.move(-50, 390);
 					sortBtn.move(0, 470);
-					sortyearBtn.move(140, 470);
+					sortyearBtn.move(145, 470);
 					exportBtn.move(-50, 550);
 					inportBtn.move(-50, 630);
 					backButton.move(-50, 730);
@@ -1380,7 +1380,7 @@ void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge,
 
 
 
-		showxy(msg); // 显示坐标
+		//showxy(msg); // 显示坐标
 
 		//-------------------------------------------------
 		FlushBatchDraw(); //批量绘图

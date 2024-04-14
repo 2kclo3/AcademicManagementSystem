@@ -913,7 +913,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			maxBox.onMessage(msg);
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 		FlushBatchDraw(); //批量绘图
 
@@ -1587,7 +1587,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 			maxBox.onMessage(msg);
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 		FlushBatchDraw(); //批量绘图
 
