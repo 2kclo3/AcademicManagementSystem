@@ -92,12 +92,17 @@ void allStuUI() {
 		collegeBox.draw();
 		majorBox.draw();
 
-		if (peekmessage(&msg, -1, true)) {
+		if (peekmessage(&msg, -1, true)) 
+		{
 
 			// 鼠标点击事件
-			if (searchBtn.mouseClick(msg)) {
-				showAllStu(allStuList, allStuData, searchInputBox.text);
-				allStuTable.setData(allStuData);
+			if (searchBtn.mouseClick(msg)) 
+			{
+				if(allStuTable.canChange)
+				{
+					showAllStu(allStuList, allStuData, searchInputBox.text);
+					allStuTable.setData(allStuData);
+				}
 			}
 
 			if (addBtn.mouseClick(msg)) {
