@@ -9,7 +9,7 @@
 
 int mainLin() {
 	setlocale(LC_ALL, ""); //使控制台支持宽字符输出
-	
+
 	// 初始化图形窗口
 	initgraph(1500, 810);
 	BeginBatchDraw(); //开始批量绘图
@@ -49,15 +49,15 @@ int mainLin() {
 
 	printStu(Stu);
 	*/
-	
+
 	//List admin_List = readAdmin(ADMIN_FILE);
 	//Node* admin = admin_List->next;
 	//
 	//manageUI(admin, admin_List);
 	loginUI();
-	
 
-	
+
+
 
 	EndBatchDraw(); //结束批量绘图
 	closegraph(); // 关闭图形窗口
@@ -75,7 +75,7 @@ void loginUI() {
 	List StuList = readStu(STU_FILE);
 	List TchList = readTch(TCH_FILE);
 	List AdminList = readAdmin(ADMIN_FILE);
-	
+
 	/*Node* Stu = StuList->next;
 	Node* Tch = TchList->next;
 	Node* Admin = AdminList->next;*/
@@ -91,16 +91,16 @@ void loginUI() {
 	ExMessage msg;
 	while (!_kbhit()) {
 		ULONGLONG start_time = GetTickCount();
-		
+
 		accountBox.draw();
 		passwordBox.draw();
 
 		if (peekmessage(&msg, -1, true)) {
-			
+
 			if (loginButton.mouseClick(msg)) {
 
 				wstring tmp_password;
-				
+
 				Node* Stu = StuList->next;
 				Node* Tch = TchList->next;
 				Node* Admin = AdminList->next;
@@ -109,7 +109,7 @@ void loginUI() {
 					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), (const wchar_t*)accountBox.text) == 0) {
 						tmp_password = wstring(Stu->item.data.password);
 						break;
-					}				
+					}
 					Stu = Stu->next;
 				}
 
@@ -121,7 +121,7 @@ void loginUI() {
 					Tch = Tch->next;
 				}
 
-				while ( Admin!= NULL) {
+				while (Admin != NULL) {
 					if (wcscmp((to_wstring(Admin->item.data.ID)).c_str(), (const wchar_t*)accountBox.text) == 0) {
 						tmp_password = wstring(Admin->item.data.password);
 						break;
@@ -147,13 +147,13 @@ void loginUI() {
 					passwordBox.clear();
 				}
 			}
-			
+
 			if (exitButton.mouseClick(msg)) {
 				exit(0);
 			}
 
 			/*if (modify_password_Button.mouseClick(msg)) {
-				
+
 				wstring tmp_password;
 
 				while (Stu != NULL) {
@@ -188,11 +188,11 @@ void loginUI() {
 						passwordBox.clear();
 					}
 				}*/
-			
-			// 文本框输入
+
+				// 文本框输入
 			accountBox.onMessage(msg);
 			passwordBox.onMessage(msg);
-		
+
 		}
 
 		//showxy(msg);
@@ -222,22 +222,20 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 	ShowStu_Password(allStuList, Stu_Password_Data, L"");
 	ShowTch_Password(allTchList, Tch_Password_Data, L"");
 
-	Table Stu_ptable(310, 90, 470, 700, Stu_Password_Data);
-	Table Tch_ptable(810, 90, 470, 700, Tch_Password_Data);
+	Table Stu_ptable(310, 90, 580 - 15, 700, Stu_Password_Data);
+	Table Tch_ptable(905, 90, 580 - 15, 700, Tch_Password_Data);
 
 
 	Text titleText(10, 90, L"全部密码管理", 63);
-	TextBox searchStuInputBox(310, 20, 350, L"搜索学生", L"");
-	TextBox searchTchInputBox(810, 20, 350, L"搜索教师", L"");
+	TextBox searchStuInputBox(310, 20, 450, L"搜索学生", L"");
+	TextBox searchTchInputBox(905, 20, 450, L"搜索教师", L"");
 
 
-	Button searchStuBtn(670, 20, 100, 50, L"搜索", 1);
-	Button searchTchBtn(1170, 20, 100, 50, L"搜索", 1);
+	Button searchStuBtn(775, 20, 100, 50, L"搜索", 1);
+	Button searchTchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 210, 200, 60, L"<按学号/工号排序>", 1);
 	Button modify_Stu_Btn(-50, 300, 330, 60, L"   修改学生密码", 1);
 	Button modify_Tch_Btn(-50, 380, 330, 60, L"   修改教师密码", 1);
-	Button exportBtn(-50, 460, 330, 60, L"   导出", 1);
-	Button inportBtn(-50, 540, 330, 60, L"   导入", 1);
 	Button backButton(-50, 620, 330, 60, L"   返回", 0);
 
 
@@ -263,7 +261,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 			}
 
 			if (sortBtn.mouseClick(msg)) {
-				
+
 				sortStuaccID(&allStuList);
 				sortStuaccID(&allTchList);
 
@@ -291,7 +289,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 					//返回 manageUI时 自动保存自动刷新				
 				}
 			}
-			
+
 			if (modify_Tch_Btn.mouseClick(msg)) {
 				// 未选择教师
 				if (Tch_ptable.getSelectedRow() == 0) {
@@ -308,17 +306,12 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 				}
 
 			}
-			
-			if (exportBtn.mouseClick(msg)) {
-			}
-			
-			if (inportBtn.mouseClick(msg)) {
-			}
-			
+
+
 			if (backButton.mouseClick(msg)) {
 				menuUI_Administrator(admin, Admin_List);
 			}
-		
+
 
 			//表格鼠标滑动与点击
 			Stu_ptable.onMouse(msg);
@@ -330,7 +323,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 			searchTchInputBox.onMessage(msg);
 
 
-		
+
 		}
 
 		showxy(msg);
@@ -358,14 +351,14 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 	//drawLine();
 
 
-	Text titleText(130, 100, L"你好，请修改你的密码！", 64);
+	Text titleText(300, 100, L"你好，请修改你的密码！", 64);
 
-	TextBox accountBox(300, 300, 600, L"账号", L"");
-	TextBox old_passwordBox(300, 380, 600, L"原密码", L"");
-	TextBox new_passwordBox(300, 460, 600, L"请输入新密码", L"");
-	TextBox confirm_passwordBox(300, 540, 600, L"请确认新密码", L"");
-	Button modify_OK_Button(450, 620, 330, 60, L"确认修改", 1);
-	Button backButton(450, 700, 330, 60, L"取消修改", 0);
+	TextBox accountBox(300, 300, 900, L"账号", L"");
+	TextBox old_passwordBox(300, 380, 900, L"原密码", L"");
+	TextBox new_passwordBox(300, 460, 900, L"请输入新密码", L"");
+	TextBox confirm_passwordBox(300, 540, 900, L"请确认新密码", L"");
+	Button modify_OK_Button(585, 620, 330, 60, L"确认修改", 1);
+	Button backButton(585, 700, 330, 60, L"取消修改", 0);
 
 	if (judge == 0) {
 		Text IDText(300, 200, L"", 32);
@@ -373,9 +366,9 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 		IDText.setText(show_ID.c_str());
 	}
 	if (judge == 1) {
-			Text IDText(300, 200, L"", 32);
-			wstring show_ID = L"工号：" + to_wstring(Stu->item.data.ID);
-			IDText.setText(show_ID.c_str());
+		Text IDText(300, 200, L"", 32);
+		wstring show_ID = L"工号：" + to_wstring(Stu->item.data.ID);
+		IDText.setText(show_ID.c_str());
 	}
 
 	Text nameText(300, 230, L"", 32);
@@ -392,7 +385,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 		old_passwordBox.draw();
 		new_passwordBox.draw();
 		confirm_passwordBox.draw();
-		
+
 		//文本框默认内容
 		wstring show_account = L"账号：" + (wstring)account;
 		accountBox.setText(show_account.c_str());
@@ -421,7 +414,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 					//自动返回
 					if (judge == 0)
 						stuAccountUI(Stu->item.data.ID, admin, Admin_List);
-					else if(judge == 1)
+					else if (judge == 1)
 						menuUI_Tch(Stu, StuList, admin, Admin_List);
 					else
 						manageUI(admin, Admin_List);
@@ -434,7 +427,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 				}
 
 			}
-		
+
 			if (backButton.mouseClick(msg)) {
 				if (judge == 0)
 					stuAccountUI(Stu->item.data.ID, admin, Admin_List);
@@ -442,7 +435,7 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 					menuUI_Tch(Stu, StuList, admin, Admin_List);
 				else
 					manageUI(admin, Admin_List);
-			
+
 			}
 
 
@@ -467,25 +460,25 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 }
 
 void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
-	
+
 	cleardevice();
 
 	List allStuList = readStu(STU_FILE);
-	
+
 	vector<vector<std::wstring>> allQuality_Data;
 	//vector<vector<std::wstring>> Stu_Research_Data;
 
 	showAllStu(allStuList, allQuality_Data, L"");
 
-	Table allQuality_Table(310, 90, 940, 700, allQuality_Data);
+	Table allQuality_Table(310, 90, 1160, 700, allQuality_Data);
 	bool click = false;
 
 	Text titleText(10, 100, L"素质类项目管理", 50);
 	//Text IDText(-500, 200, L"", 32);
 
-	TextBox searchInputBox(310, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 
-	Button searchBtn(1150, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 270, 200, 60, L"<按学号/年级排序>", 1);
 	Button search_for_quality_Btn(-50, 360, 330, 60, L"   查询", 1);
 	Button exportBtn(-50, 440, 330, 60, L"   导出", 1);
@@ -542,6 +535,28 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 
 			}
 
+			if (exportBtn.mouseClick(msg)) {
+				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
+				}
+			}
+
+			if (inportBtn.mouseClick(msg)) {
+				importStu(allStuList, ".\\import\\Stu.csv");
+
+
+				// 刷新表格
+				showAllStu(allStuList, allQuality_Data, L"");
+				allQuality_Table.setData(allQuality_Data);
+
+				// 保存
+				saveStu(allStuList, STU_FILE);
+
+			}
+
 			if (backButton.mouseClick(msg)) {
 				if (judge == 1)
 					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
@@ -549,16 +564,16 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
 			}
 
-			
+
 			//表格鼠标滑动与点击
 			allQuality_Table.onMouse(msg);
 
 			// 文本框输入
 			searchInputBox.onMessage(msg);
-		
+
 		}
-		
-		
+
+
 		//showxy(msg);
 
 
@@ -585,8 +600,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	ShowStu_Research(Stu, ResearchData);
 	ShowStu_Competition(Stu, CompetitionData);
 
-	Table Stu_Rtable(310, 90, 940, 350, ResearchData);
-	Table Stu_Ctable(310, 450, 940, 350, CompetitionData);
+	Table Stu_Rtable(310, 90, 1160, 350, ResearchData);
+	Table Stu_Ctable(310, 450, 1160, 350, CompetitionData);
 
 
 	//TextBox searchInputBox(310, 20, 820, L"搜索", L"");
@@ -594,7 +609,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	Text IDText(500, 45, L"", 32);
 	wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
 	IDText.setText(show_ID.c_str());
-	
+
 	Text nameText(850, 45, L"", 32);
 	wstring tmp_name = Stu->item.data.name;
 	wstring show_name = L"姓名：" + tmp_name;
@@ -616,7 +631,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	TextBox C_GPA_bonusBox(-500, 690, 290, L"绩点加分", L"");
 
 
-	
+
 	//进入单个学生的素质类界面后 一开始显示的
 
 	Button sort_Btn(30, 120, 200, 60, L"<按绩点加分排序>", 1);
@@ -631,12 +646,12 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 	Button backButton(-50, 700, 330, 60, L"返回", 0);
 
-	
+
 	Button modify_ResearchOK_Btn(-500, 580, 290, 60, L"确定修改", 1);
 	Button add_ResearchOK_Btn(-500, 640, 290, 60, L"确定添加", 1);
 	Button modify_CompetitionOK_Btn(-500, 580, 290, 60, L"确定修改", 1);
 	Button add_CompetitionOK_Btn(-500, 640, 290, 60, L"确定添加", 1);
-	
+
 	Button cancel_modifyResearch_Btn(-500, 720, 290, 60, L"取消修改", 0);
 	Button cancel_addResearch_Btn(-500, 720, 290, 60, L"取消添加", 0);
 	Button cancel_modifyCompetition_Btn(-500, 720, 290, 60, L"取消修改", 0);
@@ -668,11 +683,11 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 		if (peekmessage(&msg, -1, true)) {
 
 			if (sort_Btn.mouseClick(msg)) {
-				
+
 
 				int R_number = ResearchData.size();
 				int C_number = CompetitionData.size();
-				
+
 				int R1 = R_number - 1;
 				int L1 = 1;
 
@@ -886,7 +901,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 			if (add_Competition_Btn.mouseClick(msg)) {
 
 				titleText.setText(L" 竞赛获奖添加");
-				
+
 				//隐藏
 				sort_Btn.move(-500, 120);
 				add_Research_Btn.move(-500, 200);
@@ -910,7 +925,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 
 			}
-			
+
 			if (add_CompetitionOK_Btn.mouseClick(msg)) {
 
 				wchar_t competition_name[200];//竞赛名称
@@ -928,7 +943,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 					getDoubleInBox(10, &C_GPA_bonus, C_GPA_bonusBox.text)
 					) {
 
-					if (!addQuality_clist(Stu, competition_name, organizer, category, C_date, C_GPA_bonus) ){
+					if (!addQuality_clist(Stu, competition_name, organizer, category, C_date, C_GPA_bonus)) {
 						MessageBox(GetHWnd(), L"该竞赛获奖已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 
 						// 清除输入框内容
@@ -937,8 +952,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 						categoryBox.clear();
 						C_dateBox.clear();
 						C_GPA_bonusBox.clear();
-						
-					
+
+
 					}
 					else {
 						// 保存
@@ -988,7 +1003,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 					MessageBox(GetHWnd(), L"输入内容有误，请检查输入内容及格式", L"错误!", MB_ICONWARNING);
 				}
 			}
-			
+
 			if (cancel_addCompetition_Btn.mouseClick(msg)) {
 				// 更改标题
 				titleText.setText(L"该学生素质类项目");
@@ -1023,7 +1038,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 
 			}
-			
+
 			if (modify_Research_Btn.mouseClick(msg)) {
 				//选择一个要更改的科研成果
 				if (Stu_Rtable.getSelectedRow() == 0) {
@@ -1226,7 +1241,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 					modify_Competition_Btn.move(-500, 540);
 					delete_Competition_Btn.move(-500, 620);
 					backButton.move(-500, 700);
-					
+
 					//显示
 					modify_CompetitionOK_Btn.move(10, 570);
 					cancel_modifyCompetition_Btn.move(10, 650);
@@ -1419,7 +1434,7 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 
 						// 刷新表格
-						ShowStu_Competition(Stu,CompetitionData);
+						ShowStu_Competition(Stu, CompetitionData);
 						Stu_Ctable.setData(CompetitionData);
 					}
 				}
@@ -1451,17 +1466,17 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 			C_GPA_bonusBox.onMessage(msg);
 
 
-		
+
 		}
-			//showxy(msg);
+		//showxy(msg);
 
-			
-			FlushBatchDraw(); //批量绘图
 
-			ULONGLONG end_time = GetTickCount();
-			if (end_time - start_time < 1) {
-				Sleep(1);
-			}
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
 	}
 }
 
@@ -1481,14 +1496,23 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(pstu, allCrsINStuData, L"");
 
-	Table allCrsINStuTable(430, 90, 940, 700, allCrsINStuData);
+
+	vector<vector<std::wstring>>ResearchData;
+	vector<vector<std::wstring>>CompetitionData;
+
+	ShowStu_Research(pstu, ResearchData);
+	ShowStu_Competition(pstu, CompetitionData);
+
+	Table allCrsINStuTable(400, 90, 1070, 360, allCrsINStuData);
+	Table Stu_Rtable(400, 470, 1070, 160, ResearchData);
+	Table Stu_Ctable(400, 630, 1070, 160, CompetitionData);
 
 	//输入框
-	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(400, 20, 960, L"搜索", L"");
 
 
 	//按钮
-	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 
 
 	Text idBtn(40, 100, (wstring(L"学号：") + to_wstring(stuID)).c_str(), 32);
@@ -1503,12 +1527,13 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 	must = MustGrid(pstu);
 	alls = AllScore(pstu);
 	musts = MustScore(pstu);
-	Text allCrsGridText(40, 250, (wstring(L"所有课程平均绩点: ") + to_wstring(all)).c_str(), 32);
-	Text allCrsScoreText(40, 300, (wstring(L"所有课程平均分: ") + to_wstring(alls)).c_str(), 32);
-	Text reqCrsGridText(40, 350, (wstring(L"必修课程平均绩点: ") + to_wstring(must)).c_str(), 32);
-	Text reqCrsScoreText(40, 400, (wstring(L"必修课程平均分: ") + to_wstring(musts)).c_str(), 32);
+	Text allCrsGridText(40, 250, (wstring(L"平均绩点: ") + to_wstring(all)).c_str(), 32);
+	Text allCrsScoreText(40, 300, (wstring(L"平均分: ") + to_wstring(alls)).c_str(), 32);
+	Text reqCrsGridText(40, 350, (wstring(L"平均绩点(必修): ") + to_wstring(must)).c_str(), 32);
+	Text reqCrsScoreText(40, 400, (wstring(L"平均分(必修): ") + to_wstring(musts)).c_str(), 32);
 
 
+	Button drawBtn(-50, 470, 330, 60, L"   查看课程图表", 1);
 	Button modify_password_Btn(-50, 550, 330, 60, L"   修改密码", 1);
 	Button backButton(-50, 640, 330, 60, L"   退出登录", 0);
 
@@ -1544,10 +1569,17 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 				loginUI();
 			}
 
+			if (drawBtn.mouseClick(msg)) {
+				chartUI(allCrsINStuData, 1, 2, stuID, NULL, NULL, 0, admin, Admin_List);
+			}
+
 
 
 			//表格鼠标滑动与点击
 			allCrsINStuTable.onMouse(msg);
+			Stu_Rtable.onMouse(msg);
+			Stu_Ctable.onMouse(msg);
+
 
 
 			// 文本框输入
@@ -1569,22 +1601,22 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 
 }
 
-void allTchUI(Node* admin,List adminList) {
+void allTchUI(Node* admin, List adminList) {
 	cleardevice();
 
 	List TchList = readTch(TCH_FILE);
 
 	vector<vector<std::wstring>> allTchData;
-	
+
 	showAllTch(TchList, allTchData, L"");
 
-	Table allTchTable(430, 90, 940, 700, allTchData);
+	Table allTchTable(310, 90, 1160, 700, allTchData);
 
 	Text titleText(40, 50, L"所有教师", 64);
 
-	TextBox searchInputBox(430, 20, 820, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 
-	Button searchBtn(1290, 20, 100, 50, L"搜索", 1);
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
 	Button sortBtn(30, 210, 200, 60, L"<按工号排序>", 1);
 	Button inportBtn(-50, 300, 330, 60, L"   导入", 1);
 	Button exportBtn(-50, 380, 330, 60, L"   导出", 1);
@@ -1598,7 +1630,7 @@ void allTchUI(Node* admin,List adminList) {
 		// 输入框绘制(必须)
 		searchInputBox.draw();
 		if (peekmessage(&msg, -1, true)) {
-			
+
 			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
 				showAllTch(TchList, allTchData, searchInputBox.text);
@@ -1616,24 +1648,37 @@ void allTchUI(Node* admin,List adminList) {
 			}
 
 			if (exportBtn.mouseClick(msg)) {
-				//TODO
+				if (exportTch(TchList, ".\\export\\Tch.csv")) {
+					MessageBox(GetHWnd(), L"导出成功", L"导出教师", 0);
+				}
+				else {
+					MessageBox(GetHWnd(), L"导出失败", L"导出教师", MB_ICONERROR);
+				}
 			}
 
 			if (inportBtn.mouseClick(msg)) {
-				//TODO
+				importTch(TchList, ".\\import\\Tch.csv");
+
+
+				// 刷新表格
+				showAllTch(TchList, allTchData, L"");
+				allTchTable.setData(allTchData);
+
+				// 保存
+				saveTch(TchList, TCH_FILE);
 			}
 
 			if (backButton.mouseClick(msg)) {
 				menuUI_Administrator(admin, adminList);
 			}
-		
+
 			//表格鼠标滑动与点击
 			allTchTable.onMouse(msg);
 
 			// 文本框输入
 			searchInputBox.onMessage(msg);
 		}
-		
+
 		showxy(msg); // 显示坐标
 
 
@@ -1647,5 +1692,5 @@ void allTchUI(Node* admin,List adminList) {
 		}
 
 	}
-	
+
 }

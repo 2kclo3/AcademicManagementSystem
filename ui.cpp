@@ -188,7 +188,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 				chartUI({
 			{L"学科1", L"学科2", L"学科3喵", L"学科4", L"学科5", L"666", L"喵喵喵"},
 			{L"10", L"60", L"55", L"70", L"60", L"89", L"35"}
-		}, 0, 1, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+		}, 0, 1, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
 
 			}
 			if (exitButton.mouseClick(msg)) {
@@ -217,7 +217,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 }
 
 
-void chartUI(vector<vector<wstring>> _data, int row1, int row2,Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
 	Button backButton(1270, 30, 200, 60, L"返回主菜单", 1);
 
@@ -241,6 +241,9 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2,Node* tch_or_admi
 			if (backButton.mouseClick(msg)) {
 				if (judge == 1)
 					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin,  Admin_List);
+				else if (judge == 0) {
+					stuAccountUI(stuID, admin, Admin_List);
+				}
 				else
 					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
 				return;

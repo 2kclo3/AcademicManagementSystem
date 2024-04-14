@@ -67,6 +67,14 @@ void showAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_
 				data[row][7] = std::to_wstring(cplist->averGPA);
 				data[row][8] = std::to_wstring(cplist->PassRate);
 				data[row][9] = std::to_wstring(cplist->ExcelRate);
+
+				//保留小数
+				data[row][3] = data[row][3].substr(0, data[row][3].find('.') + 2);
+				data[row][6] = data[row][6].substr(0, data[row][6].find('.') + 3);
+				data[row][7] = data[row][7].substr(0, data[row][7].find('.') + 5);
+				data[row][8] = data[row][8].substr(0, data[row][8].find('.') + 3);
+				data[row][9] = data[row][9].substr(0, data[row][9].find('.') + 3);
+
 				row++; // 行数+1
 			}
 		}
@@ -110,6 +118,11 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 				data[row][1] = std::to_wstring(splist->snum);
 				data[row][2] = std::to_wstring(splist->score);
 				data[row][3] = std::to_wstring(splist->GPA);
+
+				// 保留小数
+				data[row][2] = data[row][2].substr(0, data[row][2].find('.') + 2);
+				data[row][3] = data[row][3].substr(0, data[row][3].find('.') + 2);
+
 
 				row++; // 行数+1
 			}
@@ -600,7 +613,7 @@ int deleteCrs(Cpnode cphead, wchar_t* cname, int cnum) // 删除课程
 	return 1;
 }
 
-int deleteStuInCrs(Cpnode cplist,const wchar_t* sname, int snum) // 删除某个课程的某学生成绩
+int deleteStuInCrs(Cpnode cplist, const wchar_t* sname, int snum) // 删除某个课程的某学生成绩
 {
 	Spnode pre_splist = cplist->sphead;
 	Spnode splist = pre_splist->next;
@@ -727,12 +740,12 @@ Spnode split_sortStuInCrs(Spnode splist, int size)
 	return splist;
 }
 // 合并两个链表并返回合并后的链表的尾部
-Spnode merge_sortStuInCrs(Spnode splist1, Spnode splist2, Spnode ptail,int op)
+Spnode merge_sortStuInCrs(Spnode splist1, Spnode splist2, Spnode ptail, int op)
 {
 	Spnode cur = ptail;
 	while (splist1 && splist2)
 	{
-		if (cmp_sortStuInCrs(splist1,splist2,op))
+		if (cmp_sortStuInCrs(splist1, splist2, op))
 		{
 			cur->next = splist1;
 			splist1 = splist1->next;
@@ -749,7 +762,7 @@ Spnode merge_sortStuInCrs(Spnode splist1, Spnode splist2, Spnode ptail,int op)
 	return cur;
 }
 // 使用迭代的方式实现归并排序
-void sortStuInCrs(Cpnode cplist,int op)
+void sortStuInCrs(Cpnode cplist, int op)
 {
 	if (!cplist->sphead || !cplist->sphead->next)
 		return;
@@ -766,7 +779,7 @@ void sortStuInCrs(Cpnode cplist,int op)
 			left = splist;
 			right = split_sortStuInCrs(left, size);  // 分割 left
 			splist = split_sortStuInCrs(right, size);  // 分割 right
-			sptail = merge_sortStuInCrs(left, right, sptail,op); // 合并 left 和 right
+			sptail = merge_sortStuInCrs(left, right, sptail, op); // 合并 left 和 right
 		}
 	}
 }

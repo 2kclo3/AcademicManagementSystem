@@ -599,7 +599,8 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 	Text titleText(40, 20, L"ËùÓÐ¿Î³Ì", 64);
 	//ÊäÈë¿ò
 	//TextBox searchInputBox(310, 20, 820, L"ËÑË÷", L"");
-	TextBox searchInputBox(310, 20, 1040, L"ËÑË÷", L"");
+
+	TextBox searchInputBox(310, 20, 920, L"ËÑË÷", L"");
 
 	int tmp_course_id = 0;
 	int tmp_semester = 0;
@@ -620,7 +621,8 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 	//°´Å¥
 	//Button searchBtn(1150, 20, 100, 50, L"ËÑË÷", 1);
-	Button searchBtn(1370, 20, 100, 50, L"ËÑË÷", 1);
+	Button searchBtn(1250, 20, 100, 50, L"ËÑË÷", 1);
+	Button chartBtn(1370, 20, 100, 50, L"Í¼±í", 1);
 
 	wchar_t aa[100];
 	wchar_t bb[100];
@@ -676,6 +678,9 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 			if (searchBtn.mouseClick(msg)) {
 				showStu(Crs, allCrsINStuData, searchInputBox.text);
 				allCrsINStuTable.setData(allCrsINStuData);
+			}
+			if (chartBtn.mouseClick(msg)) {
+				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
 			}
 
 			if (addCrsBtn.mouseClick(msg)) {
