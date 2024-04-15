@@ -135,12 +135,18 @@ void loginUI() {
 					passwordBox.clear();
 				}
 				else if (wcscmp(tmp_password.c_str(), (const wchar_t*)passwordBox.text) == 0) {//把这个对应的正确密码和输入的密码进行比较
-					if (Stu != NULL)//说明登录的是学生的账号
-						stuAccountUI(Stu->item.data.ID, Admin, AdminList);
-					else if (Tch != NULL)
-						menuUI_Tch(Tch, TchList, Admin, AdminList);
-					else
+					if (Stu != NULL) {//说明登录的是学生的账号
+						writeLog(0, Stu, wstring(L"登入系统"));
+						stuAccountUI(Stu->item.data.ID, Stu, AdminList);
+					}
+					else if (Tch != NULL) {
+						writeLog(1, Tch, wstring(L"登入系统"));
+						menuUI_Tch(Tch, TchList, Tch, AdminList);
+					}
+					else {
+						writeLog(2, Admin, wstring(L"登入系统"));
 						menuUI_Administrator(Admin, AdminList);
+					}
 				}
 				else {
 					MessageBox(GetHWnd(), L"密码错误！请重新输入！", L"错误!", MB_ICONWARNING);
@@ -400,10 +406,15 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 					wcscpy(Stu->item.data.password, new_passwordBox.text);
 
-					if (judge == 0 || judge == 3)
+					if (judge == 0 || judge == 3) {
 						saveStu(StuList, STU_FILE);
-					if (judge == 1 || judge == 4)
+						writeLog(judge, Stu, wstring(L"修改学生") + to_wstring(Stu->item.data.ID) + L"的密码");
+					}
+
+					if (judge == 1 || judge == 4) {
 						saveTch(StuList, TCH_FILE);
+						writeLog(judge, Stu, wstring(L"修改教师") + to_wstring(Stu->item.data.ID) + L"的密码");
+					}
 
 					// 清除输入框内容
 					accountBox.clear();
@@ -538,6 +549,7 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 			if (exportBtn.mouseClick(msg)) {
 				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
 					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+					writeLog(judge, tch_or_admin, wstring(L"导出学生信息"));
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
@@ -554,6 +566,8 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 
 				// 保存
 				saveStu(allStuList, STU_FILE);
+				writeLog(judge, tch_or_admin, wstring(L"导入学生信息"));
+
 
 			}
 
@@ -806,6 +820,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 						// 保存
 						saveStu(allStuList, STU_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"添加素质类项目");
+
 						// 使表格可变化
 						Stu_Rtable.canChange = true;
 
@@ -958,6 +974,9 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 					else {
 						// 保存
 						saveStu(allStuList, STU_FILE);
+
+						writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"添加素质类项目");
+
 
 						// 使表格可变化
 						Stu_Ctable.canChange = true;
@@ -1127,6 +1146,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
+
+					writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"修改素质类项目");
 
 					// 使表格可变化
 					Stu_Rtable.canChange = true;
@@ -1299,6 +1320,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 					// 保存
 					saveStu(allStuList, STU_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"修改素质类项目");
+
 					// 使表格可变化
 					Stu_Ctable.canChange = true;
 
@@ -1403,6 +1426,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 						// 保存
 						saveStu(allStuList, STU_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"删除素质类项目");
+
 
 						// 刷新表格
 						ShowStu_Research(Stu, ResearchData);
@@ -1431,6 +1456,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 
 						// 保存
 						saveStu(allStuList, STU_FILE);
+
+						writeLog(judge, tch_or_admin, wstring(L"为学生") + to_wstring(Stu->item.data.ID) + L"删除素质类项目");
 
 
 						// 刷新表格
@@ -1569,6 +1596,7 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 
 			if (backButton.mouseClick(msg))
 			{
+				writeLog(0, admin, wstring(L"退出系统"));
 				loginUI();
 			}
 
@@ -1653,6 +1681,8 @@ void allTchUI(Node* admin, List adminList) {
 			if (exportBtn.mouseClick(msg)) {
 				if (exportTch(TchList, ".\\export\\Tch.csv")) {
 					MessageBox(GetHWnd(), L"导出成功", L"导出教师", 0);
+					writeLog(2, admin, wstring(L"导出教师信息"));
+
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出教师", MB_ICONERROR);
@@ -1669,6 +1699,8 @@ void allTchUI(Node* admin, List adminList) {
 
 				// 保存
 				saveTch(TchList, TCH_FILE);
+
+				writeLog(2, admin, wstring(L"导入教师信息"));
 			}
 
 			if (backButton.mouseClick(msg)) {

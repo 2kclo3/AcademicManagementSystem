@@ -258,6 +258,8 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						// 保存
 						saveStu(allStuList, STU_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"添加学生:") + to_wstring(id));
+
 						// 刷新表格
 						showAllStu(allStuList, allStuData, L"");
 						allStuTable.setData(allStuData);
@@ -401,6 +403,8 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					saveStu(allStuList, STU_FILE);
 					saveCrs(allCrsList, CRS_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"修改学生:") + to_wstring(tempID));
+
 					// 使表格可变化
 					allStuTable.canChange = true;
 
@@ -492,6 +496,9 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						saveCrs(allCrsList, CRS_FILE);
 
 
+						writeLog(judge, tch_or_admin, wstring(L"删除学生:") + to_wstring(tempID));
+
+
 						// 刷新表格
 						showAllStu(allStuList, allStuData, searchInputBox.text);
 						allStuTable.setData(allStuData);
@@ -527,6 +534,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			if (exportBtn.mouseClick(msg)) {
 				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
 					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+					writeLog(judge, tch_or_admin, wstring(L"导出学生信息"));
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
@@ -543,6 +551,10 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 				// 保存
 				saveStu(allStuList, STU_FILE);
+
+				writeLog(judge, tch_or_admin, wstring(L"导入学生信息"));
+
+
 
 			}
 
@@ -594,7 +606,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 	sortStuCrsYear(Crs->item.crslist);
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
-			
+
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
 
@@ -787,6 +799,9 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					saveStu(allStuList, STU_FILE);
 					saveCrs(allCrsList, CRS_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"为学生:") + to_wstring(*pid) + L"  添加课程:" + course_id);
+
+
 
 					allCrsINStuTable.canChange = true;
 
@@ -833,7 +848,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 
 				}
-				else{
+				else {
 					MessageBox(GetHWnd(), L"输入内容有误，请检查!", L"错误!", MB_ICONERROR);
 				}
 			}
@@ -1016,6 +1031,8 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					saveCrs(allCrsList, CRS_FILE);
 					saveStu(allStuList, STU_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"为学生:") + to_wstring(*pid) + L"  修改课程:" + course_id);
+
 
 					//课程变化
 					allCrsINStuTable.canChange = true;
@@ -1102,6 +1119,8 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 						// 保存
 						saveStu(allStuList, STU_FILE);
 						saveCrs(allCrsList, CRS_FILE);
+
+						writeLog(judge, tch_or_admin, wstring(L"为学生:") + to_wstring(*pid) + L"  删除课程:" + pcourse_id);
 
 						// 刷新表格
 						showStu(Crs, allCrsINStuData, L"");

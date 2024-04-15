@@ -287,6 +287,12 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 						// 保存
 						saveStu(allStuList, STU_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"修改学生:") + to_wstring(tempID) + L"的专业信息");
+
+
+						//日志
+						//writeLog();
+
 						// 使表格可变化
 						allStuTable.canChange = true;
 
@@ -350,6 +356,8 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 			if (exportBtn.mouseClick(msg)) {
 				if (exportStu(allStuList, ".\\export\\Stu.csv")) {
 					MessageBox(GetHWnd(), L"导出成功", L"导出学生", 0);
+					writeLog(judge, tch_or_admin, wstring(L"导出所有学生信息"));
+
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出学生", MB_ICONERROR);
@@ -366,6 +374,8 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 
 				// 保存
 				saveStu(allStuList, STU_FILE);
+
+				writeLog(judge, tch_or_admin, wstring(L"导入学生信息"));
 
 			}
 

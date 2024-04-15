@@ -310,6 +310,7 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 				manageUI(admin, adminList);
 			}
 			if (exitButton.mouseClick(msg)) {
+				writeLog(2, admin, wstring(L"ÍË³öÏµÍ³"));
 				loginUI();
 			}
 		}
@@ -364,6 +365,7 @@ void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½
 				Modify_Stu_or_Tch_Password_UI(to_wstring(Tch->item.data.ID).c_str(), Tch, 1, TchList, admin, Admin_List);
 			}
 			if (exitButton.mouseClick(msg)) {
+				writeLog(1, Tch, wstring(L"ÍË³öÏµÍ³"));
 				loginUI();
 			}
 		}
@@ -412,7 +414,6 @@ double preditcGrid(vector<vector<wstring>> _data, int col1, int col2) {
 	double new_x = _chart[1].size();
 
 	double prediction = (a * new_x + b <= 4) ? (a * new_x + b >= 0) ? a * new_x + b : 0 : 3.9999;
-	printf("Ô¤²âÖµ: %.2f\n", prediction);
 	return prediction;
 }
 

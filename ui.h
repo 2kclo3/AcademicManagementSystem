@@ -43,6 +43,7 @@
 //#define BoxhoveredColor RGB(69, 73, 67);
 //#define BoxborderColor RGB(191, 202, 185);
 
+//主题颜色
 #define backgroundColor RGB(255, 255, 255)
 #define defaulteColoe RGB(31, 31, 31)
 #define tableSelectedColor RGB(216, 216, 217)
@@ -229,9 +230,10 @@ private:
 	COLORREF hoveredColor;
 	COLORREF borderColor;
 	COLORREF textColor;
+	wchar_t pwdText[1024];
 
 public:
-	wchar_t text[512];
+	wchar_t text[1024];
 	bool isInput;
 	bool hovered;
 	TextBox(int _x, int _y, int _width, const wchar_t* _hintText, const wchar_t* _text) {
@@ -276,11 +278,11 @@ public:
 		fillroundrect(x, y, x + width, y + height, height - 3, height - 3); //绘制
 
 		// 文本
-		wchar_t pwdText[100] = { 0 };
-		for (int i = 0; i < wcslen(text); i++) {
-			pwdText[i] = L'●';
-		}
 		if (wcscmp(hintText, L"密码") == 0 || wcscmp(hintText, L"请输入新密码") == 0 || wcscmp(hintText, L"请确认新密码") == 0) {
+			for (int i = 0; i < wcslen(text); i++) {
+				pwdText[i] = L'●';
+			}
+			pwdText[wcslen(text)] = L'\0';
 			settextcolor(textColor);
 			settextstyle(30, 0, L"微软雅黑");
 			setbkmode(TRANSPARENT);
@@ -334,6 +336,7 @@ public:
 	}
 	void onMessage(ExMessage& msg) {
 		size_t len = _tcslen(text);
+		size_t pwdLen = _tcslen(pwdText);
 		switch (msg.message)
 		{
 		case WM_MOUSEMOVE:
@@ -369,7 +372,7 @@ public:
 				default:
 					//printf(L"press:%c\n", msg.ch);
 					settextstyle((int)(height / 2.2), 0, L"微软雅黑");
-					if (len < 512 - 1 && textwidth(text) < width - 35) {
+					if ((len < 512 - 1 && textwidth(text) < width - 35) || (pwdLen < 512 - 1 && textwidth(pwdText) < width - 35)) {
 						text[len++] = msg.ch;
 						text[len] = '\0';
 						//printf(L"%d\n", textwidth(text));
@@ -876,28 +879,6 @@ bool showAllStuTest(const List StuList, vector<vector<std::wstring>>& data, cons
 double preditcGrid(vector<vector<wstring>> _data, int col1, int col2);
 
 void linear_regression(vector<wstring> y, int n, double* slope, double* intercept);
-
-
-
-
-
-
-///*
-//显示页面
-//作用：显示页面
-//参数：页面名称
-//返回：页面名
-//*/
-//wchar_t* show_page(wchar_t* page_name);
-
-
-/*
-显示表格信息
-作用：显示表格信息
-参数：链表头节点,表格类型
-返回：空
-*/
-//void show_sheet(List* plist, int sheet_type);
 
 
 

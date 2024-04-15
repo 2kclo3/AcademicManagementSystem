@@ -298,6 +298,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						// 保存
 						saveCrs(allCrsList, CRS_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"添加课程:") + to_wstring(cnum));
+
+
 						// 刷新表格
 						showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
 						allCrsTable.setData(allCrsData);
@@ -447,6 +450,8 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					saveCrs(allCrsList, CRS_FILE);
 					saveStu(allStuList, STU_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"修改课程:") + to_wstring(cnum));
+
 					// 使表格可变化
 					allCrsTable.canChange = true;
 
@@ -535,6 +540,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						// 保存
 						saveCrs(allCrsList, CRS_FILE);
 						saveStu(allStuList, STU_FILE);
+
+						writeLog(judge, tch_or_admin, wstring(L"删除课程:") + to_wstring(cnum));
+
 
 
 						// 刷新表格
@@ -867,6 +875,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				if (exportCrs(allCrsList, ".\\export\\Crs.csv"))
 				{
 					MessageBox(GetHWnd(), L"导出成功", L"导出课程", 0);
+					writeLog(judge, tch_or_admin, wstring(L"导出所有课程信息"));
 				}
 				else {
 					MessageBox(GetHWnd(), L"导出失败", L"导出课程", MB_ICONERROR);
@@ -891,6 +900,8 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 				// 保存
 				saveCrs(allCrsList, CRS_FILE);
+
+				writeLog(judge, tch_or_admin, wstring(L"导入课程信息"));
 			}
 			if (backButton.mouseClick(msg))
 			{
@@ -1130,6 +1141,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 						saveCrs(cphead, CRS_FILE);
 						saveStu(allStuList, STU_FILE);
 
+						writeLog(judge, tch_or_admin, wstring(L"为课程:") + to_wstring(cplist->cnum) + L"添加学生:" + to_wstring(snum));
+
 						// 刷新表格
 						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
 						allStuInCrsTable.setData(allStuInCrsData);
@@ -1259,6 +1272,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					saveCrs(cphead, CRS_FILE);
 					saveStu(allStuList, STU_FILE);
 
+					writeLog(judge, tch_or_admin, wstring(L"为课程:") + to_wstring(cplist->cnum) + L"修改学生:" + to_wstring(original_snum));
+
 					// 使表格可变化
 					allStuInCrsTable.canChange = true;
 
@@ -1335,6 +1350,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 						// 保存
 						saveCrs(cphead, CRS_FILE);
 						saveStu(allStuList, STU_FILE);
+
+						writeLog(judge, tch_or_admin, wstring(L"为课程:") + to_wstring(cplist->cnum) + L"删除学生:" + to_wstring(snum));
 
 						// 刷新表格
 						showAllStuInCrs(cplist, allStuInCrsData, searchTerm, screenOption, screenMin, screenMax);

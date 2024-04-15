@@ -925,13 +925,41 @@ void importTch(List TchList, const char* file_name) { //导入教师信息
 		).c_str(), L"导入文件", MB_SYSTEMMODAL);
 }
 
-//importCrs(allCrsList, ".\\import\\Crs.csv");
 
-////// 保存
-////saveCrs(allCrsList, CRS_FILE);
-////先不保存，不然导入过一遍之后就有相同数据, 第二次就导入不了了
 
-//// 刷新表格
-//showAllCrs(allCrsList, allCrsData, searchTerm, screenOption, screenMin, screenMax);
-//allCrsTable.setData(allCrsData);
+void writeLog(int operatorPeople, Node* person, wstring log) { //写入日志
+	FILE* fp;
+	char file_name[50] = ".\\log\\Log.log";
+	fp = fopen(file_name, "a"); // 打开文件
+	if (fp == NULL) {
+		printf("Write \"%s\" error, please check and reboot the system!", file_name);
+		exit(EXIT_FAILURE);
+	}//打开失败
+
+	// 获取当前时间
+	time_t now;
+	time(&now);
+
+	// 将时间转换为本地时间
+	struct tm* local_time = localtime(&now);
+
+	// 将时间转换为字符串
+	wchar_t time_str[256]; // 假设时间字符串最大长度为100
+	wcsftime(time_str, sizeof(time_str), L"[%Y-%m-%d %H:%M:%S] ", local_time);
+	//wprintf(L"当前时间：%s\n", time_str);
+
+	if (operatorPeople == 1) {
+		fwprintf(fp, (wstring(time_str) + L"教师 " + to_wstring(person->item.data.ID) + L" (" + person->item.data.name + L") " + log + L"\n").c_str());
+	}
+	if (operatorPeople == 2 || operatorPeople == 3 || operatorPeople == 4) {
+		fwprintf(fp, (wstring(time_str) + L"管理员 " + to_wstring(person->item.data.ID) + L" (" + person->item.data.name + L") " + log + L"\n").c_str());
+	}
+	if (operatorPeople == 0) {
+		fwprintf(fp, (wstring(time_str) + L"学生 " + to_wstring(person->item.data.ID) + L" (" + person->item.data.name + L") " + log + L"\n").c_str());
+	}
+	fclose(fp);
+
+}
+
+
 

@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <tchar.h>
+#include <time.h>
 #include "student.h"
 #include "course.h"
 
@@ -41,6 +42,7 @@ void importStu(List StuList, const char* file_name); //导入学生信息
 void importCrs(Cpnode CrsList, const char* file_name); //导入课程信息
 
 
+void writeLog(int operatorPeople, Node* person, wstring log); //写入日志
 
 
 
