@@ -1131,51 +1131,56 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 					else
 					{
 						Node* StuNode = searchStu(&allStuList, sname, snum);
-						wchar_t wch_cnum[10];
-						swprintf(wch_cnum, 10, L"%d", cplist->cnum);
-						double GPA = CalculGPA(score);
-						int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
-						addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
+						if (StuNode) {
+							wchar_t wch_cnum[10];
+							swprintf(wch_cnum, 10, L"%d", cplist->cnum);
+							double GPA = CalculGPA(score);
+							int character = wcscmp(cplist->character, L"必修") ? 0 : 1;//必修是1
+							addCrsToStu(StuNode, wch_cnum, cplist->cname, score, cplist->SchYear, character, cplist->credit, GPA);
 
-						// 保存
-						saveCrs(cphead, CRS_FILE);
-						saveStu(allStuList, STU_FILE);
+							// 保存
+							saveCrs(cphead, CRS_FILE);
+							saveStu(allStuList, STU_FILE);
 
-						writeLog(judge, tch_or_admin, wstring(L"为课程:") + to_wstring(cplist->cnum) + L"添加学生:" + to_wstring(snum));
+							writeLog(judge, tch_or_admin, wstring(L"为课程:") + to_wstring(cplist->cnum) + L"添加学生:" + to_wstring(snum));
 
-						// 刷新表格
-						showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
-						allStuInCrsTable.setData(allStuInCrsData);
+							// 刷新表格
+							showAllStuInCrs(cplist, allStuInCrsData, L"", screenOption, screenMin, screenMax);
+							allStuInCrsTable.setData(allStuInCrsData);
 
-						// 清除输入框内容
-						snameBox.clear();
-						snumBox.clear();
-						scoreBox.clear();
-
-
+							// 清除输入框内容
+							snameBox.clear();
+							snumBox.clear();
+							scoreBox.clear();
 
 
-						// 隐藏
-						snameBox.move(-500, 0);
-						snumBox.move(-500, 0);
-						scoreBox.move(-500, 0);
-						addOKButton.move(-500, 0);
-						cancelButton.move(-500, 0);
 
-						// 更改标题
-						modifyTitleText(&titleText, cplist->cname, 50);
 
-						// 显示
-						addStuInCrsBtn.move(-50, 220);
-						modifyStuInCrsBtn.move(-50, 300);
-						deleteStuInCrsBtn.move(-50, 380);
-						sortStuInCrsBtn.move(-50, 460);
-						if (!screenOption)
-							screenStuInCrsBtn.move(-50, 540);
-						else
-							screenCancelBtn.move(-50, 540);
-						backButton.move(-50, 620);
+							// 隐藏
+							snameBox.move(-500, 0);
+							snumBox.move(-500, 0);
+							scoreBox.move(-500, 0);
+							addOKButton.move(-500, 0);
+							cancelButton.move(-500, 0);
 
+							// 更改标题
+							modifyTitleText(&titleText, cplist->cname, 50);
+
+							// 显示
+							addStuInCrsBtn.move(-50, 220);
+							modifyStuInCrsBtn.move(-50, 300);
+							deleteStuInCrsBtn.move(-50, 380);
+							sortStuInCrsBtn.move(-50, 460);
+							if (!screenOption)
+								screenStuInCrsBtn.move(-50, 540);
+							else
+								screenCancelBtn.move(-50, 540);
+							backButton.move(-50, 620);
+
+						}
+						else {
+							MessageBox(GetHWnd(), L"找不到这个学生！", L"错误!", MB_ICONERROR);
+						}
 					}
 
 

@@ -575,7 +575,7 @@ bool deleteCrsInStu(Node* delstu, Crsnode* delcrs) {
 Node* searchStu(List* plist, wchar_t* pname, int pID)
 {
 	Node* ptmp = *plist;
-	while (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0)//通过姓名或学号来检索
+	while (ptmp && (ptmp->item.data.ID != pID || _tcscmp(ptmp->item.data.name, pname) != 0))//通过姓名或学号来检索
 		ptmp = ptmp->next;
 	return (ptmp);//返回这个学生信息的节点地址
 }
