@@ -273,17 +273,22 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 	cleardevice();
 
+	IMAGE Image;
+	loadimage(&Image, L".\\data\\background.jpeg", 1500, 810, true);
+	putimage(0, 0, &Image, SRCCOPY);
+
 	//drawLine();
 
 	Text titleText(90, 50, L"»¶Ó­", 64);
 
-	Button allStuButton(-50, 170, 350, 60, L"  Ñ§Éú¹ÜÀí", 1);
-	Button allCrsButton(-50, 250, 350, 60, L"  ¿Î³Ì¹ÜÀí", 1);
-	Button allQualityButton(-50, 330, 350, 60, L"  ËØÖÊÀàÏîÄ¿¹ÜÀí", 1);
-	Button changeMajorButton(-50, 410, 350, 60, L"  ×ª×¨Òµ¹ÜÀí", 1);
-	Button allTchButton(-50, 490, 350, 60, L"  ½ÌÊ¦¹ÜÀí", 1);
-	Button settingsButton(-50, 570, 350, 60, L"  ÃÜÂë¹ÜÀí", 1);
-	Button exitButton(-50, 670, 350, 60, L"  ÍË³öµÇÂ¼", 0);
+	int dy = 0;
+	Button allStuButton(-50, 170 + dy, 350, 60, L"  Ñ§Éú¹ÜÀí", 1);
+	Button allCrsButton(-50, 250 + dy, 350, 60, L"  ¿Î³Ì¹ÜÀí", 1);
+	Button allQualityButton(-50, 330 + dy, 350, 60, L"  ËØÖÊÀàÏîÄ¿¹ÜÀí", 1);
+	Button changeMajorButton(-50, 410 + dy, 350, 60, L"  ×ª×¨Òµ¹ÜÀí", 1);
+	Button allTchButton(-50, 490 + dy, 350, 60, L"  ½ÌÊ¦¹ÜÀí", 1);
+	Button settingsButton(-50, 570 + dy, 350, 60, L"  ÃÜÂë¹ÜÀí", 1);
+	Button exitButton(-50, 670 + dy, 350, 60, L"  ÍË³öµÇÂ¼", 0);
 
 	// ´¦ÀíÊó±êÊÂ¼ş
 	ExMessage msg;
@@ -315,7 +320,7 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 			}
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 
 
@@ -331,6 +336,10 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 
 void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½çÃæ
 	cleardevice();
+
+	IMAGE Image;
+	loadimage(&Image, L".\\data\\background.jpeg", 1500, 810, true);
+	putimage(0, 0, &Image, SRCCOPY);
 
 	//drawLine();
 
@@ -370,7 +379,7 @@ void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½
 			}
 		}
 
-		showxy(msg);
+		//showxy(msg);
 
 
 

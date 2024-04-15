@@ -509,19 +509,68 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (sortBtn.mouseClick(msg)) {
 				if (i == 1) {
-					sortStuaccID(&allStuList);
+
+					int R = allStuData.size() - 1;
+					int L = 1;
+
+					while (L < R) {
+						for (int i = L; i < R; i++) {
+							if (stof(allStuData[i][0]) > stof(allStuData[i + 1][0])) {
+								swap(allStuData[i], allStuData[i + 1]);
+							}
+
+						}
+
+						R--;
+						for (int i = R; i > L; i--) {
+							if (stof(allStuData[i][0]) < stof(allStuData[i - 1][0])) {
+								swap(allStuData[i], allStuData[i - 1]);
+							}
+						}
+
+						L++;
+					}
+
+
+
+					//sortStuaccID(&allStuList);
 					i = 0;
 				}
 				else {
-					sortStuaccyear(&allStuList);
+
+					int R = allStuData.size() - 1;
+					int L = 1;
+
+					while (L < R) {
+						for (int i = L; i < R; i++) {
+							if (stof(allStuData[i][3]) < stof(allStuData[i + 1][3])) {
+								swap(allStuData[i], allStuData[i + 1]);
+							}
+
+						}
+
+						R--;
+						for (int i = R; i > L; i--) {
+							if (stof(allStuData[i][3]) > stof(allStuData[i - 1][3])) {
+								swap(allStuData[i], allStuData[i - 1]);
+							}
+						}
+
+						L++;
+					}
+
+
+
+
+					//sortStuaccyear(&allStuList);
 					i = 1;
 				}
 
-				// 保存
-				saveStu(allStuList, STU_FILE);
+				//// 保存
+				//saveStu(allStuList, STU_FILE);
 
 				// 刷新表格
-				showAllStu(allStuList, allStuData, L"");
+				//showAllStu(allStuList, allStuData, L"");
 				allStuTable.setData(allStuData);
 			}
 

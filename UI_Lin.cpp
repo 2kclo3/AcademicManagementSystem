@@ -70,6 +70,11 @@ int mainLin() {
 void loginUI() {
 	cleardevice();
 
+	IMAGE Image;
+	loadimage(&Image, L".\\data\\logo.jpg", 150, 150, true);
+	putimage(200, 75, &Image, SRCCOPY);
+
+
 	//drawLine();
 
 	List StuList = readStu(STU_FILE);
@@ -80,7 +85,7 @@ void loginUI() {
 	Node* Tch = TchList->next;
 	Node* Admin = AdminList->next;*/
 
-	Text titleText(200, 100, L"你好，请登录!", 64);
+	Text titleText(400, 120, L"你好，欢迎登陆JLU教务管理系统!", 64);
 	TextBox accountBox(200, 300, 1100, L"账号", L"");
 	TextBox passwordBox(200, 400, 1100, L"密码", L"");
 	Button loginButton(200, 500, 530, 60, L"登录", 1);
