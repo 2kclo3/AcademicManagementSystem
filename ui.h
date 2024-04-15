@@ -280,7 +280,7 @@ public:
 		for (int i = 0; i < wcslen(text); i++) {
 			pwdText[i] = L'¡ñ';
 		}
-		if (wcscmp(hintText, L"ÃÜÂë") == 0) {
+		if (wcscmp(hintText, L"ÃÜÂë") == 0 || wcscmp(hintText, L"ÇëÊäÈëÐÂÃÜÂë") == 0 || wcscmp(hintText, L"ÇëÈ·ÈÏÐÂÃÜÂë") == 0) {
 			settextcolor(textColor);
 			settextstyle(30, 0, L"Î¢ÈíÑÅºÚ");
 			setbkmode(TRANSPARENT);
@@ -311,7 +311,7 @@ public:
 			DWORD clock = GetTickCount();
 			if (clock % 1000 < 500) {
 				setlinecolor(defaulteColoe); //¹â±êÑÕÉ«
-				if (wcscmp(hintText, L"ÃÜÂë") == 0) {
+				if (wcscmp(hintText, L"ÃÜÂë") == 0 || wcscmp(hintText, L"ÇëÊäÈëÐÂÃÜÂë") == 0 || wcscmp(hintText, L"ÇëÈ·ÈÏÐÂÃÜÂë") == 0) {
 					line(x + 16 + textwidth(pwdText), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(pwdText), y + 2 + height - (height - textHeight) / 2);
 				}
 				else {
