@@ -85,7 +85,7 @@ void loginUI() {
 	Node* Tch = TchList->next;
 	Node* Admin = AdminList->next;*/
 
-	Text titleText(400, 120, L"你好，欢迎登陆JLU教务管理系统!", 64);
+	Text titleText(400, 120, L"你好，欢迎登陆 JLU 教务管理系统!", 64);
 	TextBox accountBox(200, 330, 1100, L"账号", L"");
 	TextBox passwordBox(200, 430, 1100, L"密码", L"");
 	Button loginButton(200, 530, 530, 60, L"登录", 1);
