@@ -219,7 +219,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 
 void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
 	cleardevice();
-	Button backButton(1270, 30, 200, 60, L"返回主菜单", 1);
+	Button backButton(1270, 20, 200, 60, L"返回主菜单", 1);
 
 	vector<vector<wstring>> _chart;
 	_data.erase(_data.begin()); //删除表头
@@ -229,7 +229,7 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 		_chart[0][i] = _data[i][row1];
 		_chart[1][i] = _data[i][row2];
 	}
-	Chart testChart(100, 100, 1300, 540, _chart);
+	Chart testChart(100, 110, 1300, 490, _chart);
 
 
 

@@ -282,14 +282,14 @@ public:
 		}
 		if (wcscmp(hintText, L"密码") == 0) {
 			settextcolor(textColor);
-			settextstyle(24, 0, L"微软雅黑");
+			settextstyle(30, 0, L"微软雅黑");
 			setbkmode(TRANSPARENT);
 			if (!_tcscmp(text, L"")) {
 				settextstyle((int)(height / 2.2), 0, L"微软雅黑");
 				outtextxy(x + 20, y + (height - textHeight) / 2, hintText);
 			}
 			else {
-				outtextxy(x + 15, y + (height - textHeight) / 2, pwdText);
+				outtextxy(x + 15, y + (height - textHeight) / 2 - 5, pwdText);
 			}
 
 		}
@@ -632,6 +632,12 @@ public:
 		height = _height;
 		data = _data;
 		bkColor = getbkcolor();
+		if (data[0].size() != 0 && data[0].size() != 1) {
+			data[0].push_back(L"预测下一个值");
+			data[1].push_back(to_wstring(preditc()));
+			data[1][data[1].size() - 1] = data[1][data[1].size() - 1].substr(0, data[1][data[1].size() - 1].find('.') + 3);
+		}
+
 		draw();
 	}
 	void draw() {
@@ -649,20 +655,27 @@ public:
 
 		if (data[0].size() != 0) {
 			if (data[0].size() == 1) {
+				// 小圆点
 				solidroundrect(x + colWidth / 2 + textwidth(L"测") / 2 - 5, y + height - stof(data[1][0]) / 10.0 * rowHeight - 5,
 					x + colWidth / 2 + textwidth(L"测") / 2 + 5, y + height - stof(data[1][0]) / 10.0 * rowHeight + 5,
 					10, 10);
+				outtextxy(x + colWidth / 2 + textwidth(L"测") / 2 - 5 - textwidth(data[1][0].c_str()) / 2, y + height - stof(data[1][0]) / 10.0 * rowHeight - 25, data[1][0].c_str());
+				
 			}
 			for (int i = 0; i < data[1].size() - 1; i++) {
 				line(x + i * colWidth + colWidth / 2 + textwidth(L"测") / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight,
 					x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"测") / 2, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight
 				);
+				// 小圆点
 				solidroundrect(x + i * colWidth + colWidth / 2 + textwidth(L"测") / 2 - 5, y + height - stof(data[1][i]) / 10.0 * rowHeight - 5,
 					x + i * colWidth + colWidth / 2 + textwidth(L"测") / 2 + 5, y + height - stof(data[1][i]) / 10.0 * rowHeight + 5,
 					10, 10);
+				outtextxy(x + i * colWidth + colWidth / 2 + textwidth(L"测") / 2 - 5 - textwidth(data[1][i].c_str()) / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight - 25, data[1][i].c_str())  ;
+				// 小圆点
 				solidroundrect(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"测") / 2 - 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 5,
 					x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"测") / 2 + 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight + 5,
 					10, 10);
+				outtextxy(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"测") / 2 - 5 - textwidth(data[1][i + 1].c_str()) / 2, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 25, data[1][i + 1].c_str());
 			}
 		}
 
@@ -675,7 +688,7 @@ public:
 	}
 	void drawCol() { //画每列
 		int cnt = (data[0].size()) ? (data[0].size()) : 1;
-		colWidth = width / cnt;
+		colWidth = width / (cnt);
 		//width = colWidth * cnt;
 		line(x, y + height, x + width, y + height);
 		for (int i = 0; i < data[0].size(); i++) {
@@ -694,13 +707,116 @@ public:
 		int num = 0;
 		for (int i = y + height; i >= y; i -= rowHeight) {
 			line(x - 5, i, x + 10, i);
-			outtextxy(x - 30, i - textheight(L"1") / 2, to_wstring(num).c_str());
+			outtextxy(x - 40, i - textheight(L"1") / 2, to_wstring(num).c_str());
 			num += 10;
 		}
 
 
 
 	}
+
+	double preditc() {
+		// 回归参数
+		double a, b, c, d;
+
+		// 计算回归
+		//cubic_regression(data[1], data[1].size(), &a, &b, &c, &d);
+		//quadratic_regression(data[1], data[1].size(), &a, &b, &c);
+		linear_regression(data[1], data[1].size(), &a, &b);
+
+		// 预测新数据点
+		double new_x = data[1].size();
+
+		double prediction = (a * new_x + b <= 100) ? (a * new_x + b >= 0) ? a * new_x + b : 0 : 100;
+		//double prediction = a * pow(new_x, 3) + b * pow(new_x, 2) + c * new_x + d;
+		//double prediction = a * pow(new_x, 2) + b * pow(new_x, 1) + c;
+		printf("预测值: %.2f\n", prediction);
+		return prediction;
+	}
+
+	// 实现二阶多项式回归函数
+	void quadratic_regression(vector<wstring> y, int n, double* a, double* b, double* c) {
+		double sum_x = 0, sum_x2 = 0, sum_x3 = 0, sum_x4 = 0, sum_y = 0, sum_xy = 0, sum_x2y = 0;
+
+		// 计算各种和
+		for (int i = 0; i < n; i++) {
+			double x2 = (i + 1) * (i + 1);
+			double x3 = x2 * (i + 1);
+			double x4 = x3 * (i + 1);
+			sum_x += (i + 1);
+			sum_x2 += x2;
+			sum_x3 += x3;
+			sum_x4 += x4;
+			sum_y += stod(y[i]);
+			sum_xy += (i + 1) * stod(y[i]);
+			sum_x2y += x2 * stod(y[i]);
+		}
+
+		// 构建方程组并解出参数
+		double denominator = n * sum_x2 * sum_x4 + 2 * sum_x * sum_x2 * sum_x3 - sum_x * sum_x * sum_x4 - n * sum_x3 * sum_x3 - sum_x2 * sum_x2 * n;
+		double a_numerator = sum_y * sum_x2 * sum_x4 + sum_x * sum_x2y * sum_x4 + sum_x2 * sum_xy * sum_x3 - sum_x * sum_x2 * sum_x2y - sum_x * sum_x3 * sum_xy - sum_x2 * sum_x2 * sum_y;
+		double b_numerator = sum_y * sum_x3 * sum_x4 + sum_x * sum_x2 * sum_x2y + sum_x2 * sum_x * sum_xy - sum_x * sum_x2 * sum_x2y - sum_x * sum_x3 * sum_y - sum_x2 * sum_x2 * sum_xy;
+		double c_numerator = sum_y * sum_x2 * sum_x3 + sum_x * sum_x3 * sum_xy + sum_x2 * sum_x * sum_x2y - sum_x * sum_x2 * sum_x3 - sum_x * sum_x2 * sum_xy - sum_x2 * sum_x2 * sum_y;
+
+		*a = a_numerator / denominator;
+		*b = b_numerator / denominator;
+		*c = c_numerator / denominator;
+	}
+
+
+	void linear_regression(vector<wstring> y, int n, double* slope, double* intercept) {
+		double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x_squared = 0;
+
+		// 计算各种和
+		for (int i = 0; i < n; i++) {
+			sum_x += (i + 1);
+			sum_y += stod(y[i]);
+			sum_xy += (i + 1) * stod(y[i]);
+			sum_x_squared += (i + 1) * (i + 1);
+		}
+
+		// 计算斜率和截距
+		*slope = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x * sum_x);
+		*intercept = (sum_y - *slope * sum_x) / n;
+	}
+
+	// 实现三阶多项式回归函数
+	void cubic_regression(vector<wstring> y, int n, double* a, double* b, double* c, double* d) {
+		double sum_x = 0, sum_x2 = 0, sum_x3 = 0, sum_x4 = 0, sum_x5 = 0, sum_x6 = 0, sum_y = 0, sum_xy = 0, sum_x2y = 0, sum_x3y = 0;
+
+
+		// 计算各种和
+		for (int i = 0; i < n; i++) {
+			double x2 = (i + 1) * (i + 1);
+			double x3 = x2 * (i + 1);
+			double x4 = x3 * (i + 1);
+			double x5 = x4 * (i + 1);
+			double x6 = x5 * (i + 1);
+			sum_x += (i + 1);
+			sum_x2 += x2;
+			sum_x3 += x3;
+			sum_x4 += x4;
+			sum_x5 += x5;
+			sum_x6 += x6;
+			sum_y += stod(y[i]);
+			sum_xy += (i + 1) * stod(y[i]);
+			sum_x2y += x2 * stod(y[i]);
+			sum_x3y += x3 * stod(y[i]);
+		}
+
+		// 构建方程组并解出参数
+		long long denominator = n * sum_x2 * sum_x4 * sum_x6 - sum_x * sum_x2 * sum_x4 * sum_x4 - sum_x2 * sum_x2 * sum_x4 * sum_x4 - sum_x2 * sum_x4 * sum_x4 * n - n * sum_x * sum_x6 * sum_x6 + sum_x * sum_x * sum_x4 * sum_x6 + sum_x2 * sum_x2 * sum_x6 * sum_x6 + sum_x * sum_x2 * sum_x2 * sum_x6 + sum_x * sum_x2 * sum_x4 * sum_x4 + n * sum_x * sum_x2 * sum_x2 * sum_x4 - n * sum_x2 * sum_x2 * sum_x2 * sum_x4 - n * sum_x * sum_x * sum_x6 * sum_x6 + n * sum_x * sum_x2 * sum_x4 * sum_x4 + n * sum_x2 * sum_x2 * sum_x2 * sum_x2 * sum_x4 - n * sum_x2 * sum_x2 * sum_x2 * sum_x4 * sum_x4 - n * sum_x * sum_x * sum_x2 * sum_x6 * sum_x6;
+		long long a_numerator = sum_y * sum_x2 * sum_x4 * sum_x6 + sum_x * sum_x2y * sum_x4 * sum_x6 + sum_x2 * sum_xy * sum_x4 * sum_x6 + sum_x3y * sum_x2 * sum_x4 * sum_x6 - sum_x * sum_x2 * sum_x2y * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x3y * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_xy * sum_x2 * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x3y * sum_x4 - sum_x * sum_x3 * sum_xy * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x2 * sum_x2y * sum_x4 + sum_x * sum_x3 * sum_x2 * sum_x3y * sum_x4 + sum_x * sum_x3 * sum_x3y * sum_x2 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x3y * sum_x2 * sum_x4 * sum_x4 - sum_x * sum_x3 * sum_x3y * sum_x3 * sum_x2 * sum_x4 - sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 * sum_x4 - sum_x2 * sum_x2 * sum_x2 * sum_x2y * sum_x4 * sum_x4 - sum_x2 * sum_x2 * sum_x3 * sum_x3y * sum_x4 * sum_x4 + sum_x2 * sum_x2 * sum_x3y * sum_x3y * sum_x4 * sum_x4 + n * sum_x * sum_x2 * sum_x4 * sum_x4 * sum_x6 - n * sum_x * sum_x2 * sum_x2 * sum_x4 * sum_x6 - n * sum_x * sum_x2 * sum_x4 * sum_x6 * sum_x6 + n * sum_x * sum_x2 * sum_x2 * sum_x4 * sum_x4 * sum_x6;
+		long long b_numerator = sum_y * sum_x3 * sum_x4 * sum_x6 + sum_x * sum_x2 * sum_x2y * sum_x4 * sum_x6 + sum_x2 * sum_x * sum_x3y * sum_x4 * sum_x6 + sum_x2 * sum_x * sum_x2 * sum_xy * sum_x4 * sum_x6 - sum_x * sum_x2 * sum_x3 * sum_x2y * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x3 * sum_x3y * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x3y * sum_x4 * sum_x4 - sum_x * sum_x3 * sum_x2 * sum_x2 * sum_x2y * sum_x4 + sum_x * sum_x3 * sum_x2 * sum_x3y * sum_x4 + sum_x * sum_x3 * sum_x3y * sum_x2 * sum_x2 * sum_x4 - sum_x * sum_x3 * sum_x3y * sum_x2 * sum_x4 * sum_x4 - sum_x * sum_x3 * sum_x3y * sum_x3 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x3y * sum_x3 * sum_x4 * sum_x4 - sum_x2 * sum_x2 * sum_x2 * sum_x3y * sum_x4 * sum_x6 - sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 * sum_x6 + sum_x2 * sum_x2 * sum_x3 * sum_x3y * sum_x4 * sum_x6 + n * sum_x * sum_x2 * sum_x2 * sum_x2 * sum_x4 - n * sum_x * sum_x2 * sum_x3 * sum_x3 * sum_x4 - n * sum_x * sum_x2 * sum_x2 * sum_x2 * sum_x2 * sum_x4 + n * sum_x * sum_x2 * sum_x2 * sum_x3 * sum_x3 * sum_x4;
+		long long c_numerator = sum_y * sum_x2 * sum_x4 * sum_x6 + sum_x * sum_x2 * sum_x3y * sum_x4 * sum_x6 + sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 * sum_x6 + sum_x3 * sum_x * sum_x2 * sum_x2y * sum_x4 * sum_x6 - sum_x * sum_x2 * sum_x3 * sum_x3y * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x3y * sum_x4 * sum_x4 - sum_x * sum_x3 * sum_x2 * sum_x2 * sum_x2 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x2 * sum_x2 * sum_x3 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x3 * sum_x2 * sum_x2 * sum_x2 * sum_x4 - sum_x * sum_x3 * sum_x3 * sum_x3y * sum_x2 * sum_x4 * sum_x4 + n * sum_x * sum_x2 * sum_x3 * sum_x4 * sum_x4 * sum_x6 - n * sum_x * sum_x2 * sum_x3 * sum_x3 * sum_x4 * sum_x6 - n * sum_x * sum_x3 * sum_x3 * sum_x3 * sum_x2 * sum_x2 * sum_x4 + n * sum_x * sum_x3 * sum_x3 * sum_x3y * sum_x2 * sum_x4 * sum_x4;
+		long long d_numerator = sum_y * sum_x2 * sum_x3 * sum_x4 + sum_x * sum_x3 * sum_x3y * sum_x4 + sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 + sum_x3 * sum_x * sum_x2 * sum_x2y * sum_x4 - sum_x * sum_x2 * sum_x3 * sum_x3y * sum_x4 - sum_x * sum_x2 * sum_x2 * sum_x2 * sum_xy * sum_x4 - sum_x * sum_x3 * sum_x2 * sum_x2 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x2 * sum_x2 * sum_x3 * sum_x4 - sum_x * sum_x3 * sum_x3 * sum_x2 * sum_x2 * sum_x4 + sum_x * sum_x3 * sum_x3 * sum_x3y * sum_x2 * sum_x4 - sum_x2 * sum_x2 * sum_x2 * sum_x3y * sum_x4 - sum_x2 * sum_x2 * sum_x3 * sum_x2 * sum_x2 * sum_x4 + sum_x2 * sum_x2 * sum_x3 * sum_x3y * sum_x2 * sum_x4 + n * sum_x * sum_x2 * sum_x3 * sum_x4 - n * sum_x * sum_x2 * sum_x2 * sum_x2 * sum_x4 - n * sum_x * sum_x2 * sum_x3 * sum_x3 * sum_x2 * sum_x4 + n * sum_x * sum_x2 * sum_x2 * sum_x3 * sum_x3 * sum_x4;
+
+		*a = 1.0 * a_numerator / denominator;
+		*b = 1.0 * b_numerator / denominator;
+		*c = 1.0 * c_numerator / denominator;
+		*d = 1.0 * d_numerator / denominator;
+	}
+
 };
 
 

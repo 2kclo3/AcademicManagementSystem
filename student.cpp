@@ -85,7 +85,7 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 			data[row][3] = std::to_wstring(crstmp->score.semester); //数字转为字符串
 			data[row][4] = std::to_wstring(crstmp->score.credit);//数字转为字符串
 			data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
-			data[row][6] = std::to_wstring(crstmp->score.course_nature); //数字转为字符串
+			data[row][6] = (crstmp->score.course_nature == 1) ? L"必修" : L"选修"; //数字转为字符串
 
 
 			data[row][2] = data[row][2].substr(0, data[row][2].find('.') + 2);

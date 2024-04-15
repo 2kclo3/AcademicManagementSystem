@@ -57,7 +57,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
 	TextBox IDBox(-500, 150, 290, L"学号 ( 添加后不可更改！)", L"");
 	TextBox nameBox(-500, 220, 290, L"姓名", L"");
-	TextBox genderBox(-500, 290, 290, L"性别 ( 女:0, 男:1 )", L"");
+	TextBox genderBox(-500, 290, 290, L"性别", L"");
 	TextBox gradeBox(-500, 360, 290, L"年级", L"");
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
@@ -73,7 +73,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	Button exportBtn(-50, 550, 330, 60, L"   导出", 1);
 
 	Button inportBtn(-50, 630, 330, 60, L"   导入", 1);
-	Button backButton(-50, 730, 330, 60, L"   返回", 0);
+	Button backButton(-50, 720, 330, 60, L"   返回", 0);
 	Button addOKButton(-500, 580, 290, 60, L"确定添加", 1);
 	Button modifyOKButton(-500, 580, 290, 60, L"确定修改", 1);
 	Button cancelButton(-500, 660, 290, 60, L"取消", 0);
@@ -93,13 +93,13 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 		collegeBox.draw();
 		majorBox.draw();
 
-		if (peekmessage(&msg, -1, true)) 
+		if (peekmessage(&msg, -1, true))
 		{
 
 			// 鼠标点击事件
-			if (searchBtn.mouseClick(msg)) 
+			if (searchBtn.mouseClick(msg))
 			{
-				if(allStuTable.canChange)
+				if (allStuTable.canChange)
 				{
 					showAllStu(allStuList, allStuData, searchInputBox.text);
 					allStuTable.setData(allStuData);
@@ -118,7 +118,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				sortyearBtn.move(-500, 470);
 				exportBtn.move(-500, 550);
 				inportBtn.move(-500, 630);
-				backButton.move(-500, 730);
+				backButton.move(-500, 720);
 
 				// 显示
 				IDBox.move(10, 150);
@@ -155,7 +155,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					//	sortBtn.move(-500, 470);
 					//	exportBtn.move(-500, 550);
 					//	inportBtn.move(-500, 630);
-					//	backButton.move(-500, 730);
+					//	backButton.move(-500, 720);
 
 					//	// 获取当前行
 					//	int selectedRow = allStuTable.getSelectedRow();
@@ -220,14 +220,14 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				sortyearBtn.move(145, 470);
 				exportBtn.move(-50, 550);
 				inportBtn.move(-50, 630);
-				backButton.move(-50, 730);
+				backButton.move(-50, 720);
 
 			}
 
 			if (addOKButton.mouseClick(msg)) {
 				int id;
 				wchar_t name[30];
-				int gender;
+				wchar_t gender[5];
 				int grade;
 				wchar_t college[50];
 				wchar_t major[50];
@@ -240,16 +240,17 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				if (
 					getNumberInBox(99999999, &id, IDBox.text) &&
 					getTextInBox(name, nameBox.text) &&
-					getNumberInBox(1, &gender, genderBox.text) &&
+					getTextInBox(gender, genderBox.text) &&
 					getNumberInBox(9999, &grade, gradeBox.text) &&
 					getTextInBox(college, collegeBox.text) &&
 					getTextInBox(major, majorBox.text) &&
 					(id > 9999999 && id < 100000000) &&
-					(grade > 1970 && grade <= Current_year)
+					(grade > 1970 && grade <= Current_year) &&
+					(!wcscmp(gender, L"男") || !wcscmp(gender, L"女"))
 					) {
 
 					// 学号相同的情况,报错提醒
-					if (!addStu(&allStuList, name, id, gender, grade, college, major)) {
+					if (!addStu(&allStuList, name, id, wcscmp(gender, L"男") == 0 ? 1 : 0, grade, college, major)) {
 						MessageBox(GetHWnd(), L"该学生已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 					}
 					// 否则保存
@@ -292,7 +293,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 						sortyearBtn.move(145, 470);
 						exportBtn.move(-50, 550);
 						inportBtn.move(-50, 630);
-						backButton.move(-50, 730);
+						backButton.move(-50, 720);
 
 					}
 
@@ -322,7 +323,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					sortyearBtn.move(-500, 470);
 					exportBtn.move(-500, 550);
 					inportBtn.move(-500, 630);
-					backButton.move(-500, 730);
+					backButton.move(-500, 720);
 
 
 					// 使表格不可变化
@@ -337,7 +338,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					// 文本框默认内容
 					IDText.setText((L"学号:" + selectedData[0]).c_str()); // C++语法
 					nameBox.setText(selectedData[1].c_str());
-					genderBox.setText(wcscmp(selectedData[2].c_str(), L"男") ? L"0" : L"1");
+					genderBox.setText(selectedData[2].c_str());
 					gradeBox.setText(selectedData[3].c_str());
 					collegeBox.setText(selectedData[4].c_str());
 					majorBox.setText(selectedData[5].c_str());
@@ -358,7 +359,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			if (modifyOKButton.mouseClick(msg)) {
 				int id;
 				wchar_t name[30];
-				int gender;
+				wchar_t gender[10];
 				int grade;
 				wchar_t college[50];
 				wchar_t major[50];
@@ -376,11 +377,12 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				// 判断输入格式
 				if (
 					getTextInBox(name, nameBox.text) &&
-					getNumberInBox(1, &gender, genderBox.text) &&
+					getTextInBox(gender, genderBox.text) &&
 					getNumberInBox(9999, &grade, gradeBox.text) &&
 					getTextInBox(college, collegeBox.text) &&
 					getTextInBox(major, majorBox.text) &&
-					(grade > 1970 && grade <= Current_year)
+					(grade > 1970 && grade <= Current_year) &&
+					(!wcscmp(gender, L"男") || !wcscmp(gender, L"女"))
 					) {
 
 					Cpnode CrsNode = allCrsList->next;
@@ -393,7 +395,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					}
 
 					// 修改
-					modifyStu(&allStuList, modifyingStu, name, tempID, gender, grade, college, major);
+					modifyStu(&allStuList, modifyingStu, name, tempID, wcscmp(gender, L"男") == 0 ? 1 : 0, grade, college, major);
 
 					// 保存
 					saveStu(allStuList, STU_FILE);
@@ -437,7 +439,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					sortyearBtn.move(145, 470);
 					exportBtn.move(-50, 550);
 					inportBtn.move(-50, 630);
-					backButton.move(-50, 730);
+					backButton.move(-50, 720);
 
 
 
@@ -680,7 +682,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 				allCrsINStuTable.setData(allCrsINStuData);
 			}
 			if (chartBtn.mouseClick(msg)) {
-				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
 			}
 
 			if (addCrsBtn.mouseClick(msg)) {
@@ -828,6 +830,9 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 
 				}
+				else{
+					MessageBox(GetHWnd(), L"输入内容有误，请检查!", L"错误!", MB_ICONERROR);
+				}
 			}
 
 			if (cancelButton.mouseClick(msg)) {
@@ -943,7 +948,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 				wchar_t course_name[100];//课程名
 				double score;//课程成绩
 				int semester;//学年学期
-				int course_nature;//课程性质
+				wchar_t course_nature[5];//课程性质
 				double credit;//学分
 				double grid;//绩点
 
@@ -960,18 +965,20 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					getTextInBox(course_name, course_nameBox.text) &&
 					getDoubleInBox(100, &score, scoreBox.text) &&
 					getNumberInBox(2024, &semester, semesterBox.text) &&
-					getNumberInBox(1, &course_nature, course_natureBox.text) &&
+					getTextInBox(course_nature, course_natureBox.text) &&
 					getDoubleInBox(4, &credit, creditBox.text) &&
-					credit >= 0 && score >= 0 && semester >= 0 && course_nature >= 0
+					credit >= 0 && score >= 0 && semester >= 0
 					) {
 
 					grid = CalculGPA(score);
 
 
-					//改动课程
+					//改动课程及分数
 					Cpnode StuInCrsNode = searchCrs(allCrsList, stoi(allCrsINStuData[selectedRow][0].c_str()), semester);///////
+					Spnode StuInCrsNodeTrue = searchStuInCrs(StuInCrsNode, *pid);
 					if (StuInCrsNode) {
-						modifyCrs(StuInCrsNode, course_name, stoi(course_id), (course_nature == 1) ? (L"必修") : (L"选修"), credit, semester);
+						modifyCrs(StuInCrsNode, course_name, stoi(course_id), course_nature, credit, semester);
+						modifyStuInCrs(StuInCrsNode, StuInCrsNodeTrue, pname, *pid, score);
 					}
 					else {
 						MessageBox(GetHWnd(), L"课程错误", L"错误!", MB_ICONERROR);
@@ -985,12 +992,14 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 						while (everyStuCrs) {
 							if (wcscmp(everyStuCrs->score.course_id, allCrsINStuData[selectedRow][0].c_str()) == 0)
 							{
-								modifyCrsInStu(everyStuCrs, course_id, course_name, everyStuCrs->score.score, semester, course_nature, credit, CalculGPA(everyStuCrs->score.score));
+								modifyCrsInStu(everyStuCrs, course_id, course_name, everyStuCrs->score.score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, CalculGPA(everyStuCrs->score.score));
 							}
 							everyStuCrs = everyStuCrs->crs_next;
 						}
 						everystu = everystu->next;
 					}
+					//改动自己的课程
+					modifyCrsInStu(tmp, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, CalculGPA(score));
 
 
 
@@ -1047,6 +1056,9 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					backButton.move(-50, 700);
 
 
+				}
+				else {
+					MessageBox(GetHWnd(), L"修改内容有误，请检查!", L"错误!", MB_ICONERROR);
 				}
 			}
 
