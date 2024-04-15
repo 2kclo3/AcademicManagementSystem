@@ -229,7 +229,7 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 		_chart[0][i] = _data[i][row1];
 		_chart[1][i] = _data[i][row2];
 	}
-	Chart testChart(100, 110, 1300, 490, _chart);
+	Chart testChart(100, 110, 1300, 480, _chart);
 
 
 
@@ -278,10 +278,10 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 	Text titleText(90, 50, L"»¶Ó­", 64);
 
 	Button allStuButton(-50, 170, 350, 60, L"  Ñ§Éú¹ÜÀí", 1);
-	Button allTchButton(-50, 250, 350, 60, L"  ½ÌÊ¦¹ÜÀí", 1);
-	Button allCrsButton(-50, 330, 350, 60, L"  ¿Î³Ì¹ÜÀí", 1);
-	Button allQualityButton(-50, 410, 350, 60, L"  ËØÖÊÀàÏîÄ¿¹ÜÀí", 1);
-	Button changeMajorButton(-50, 490, 350, 60, L"  ×ª×¨Òµ¹ÜÀí", 1);
+	Button allCrsButton(-50, 250, 350, 60, L"  ¿Î³Ì¹ÜÀí", 1);
+	Button allQualityButton(-50, 330, 350, 60, L"  ËØÖÊÀàÏîÄ¿¹ÜÀí", 1);
+	Button changeMajorButton(-50, 410, 350, 60, L"  ×ª×¨Òµ¹ÜÀí", 1);
+	Button allTchButton(-50, 490, 350, 60, L"  ½ÌÊ¦¹ÜÀí", 1);
 	Button settingsButton(-50, 570, 350, 60, L"  ÃÜÂë¹ÜÀí", 1);
 	Button exitButton(-50, 670, 350, 60, L"  ÍË³öµÇÂ¼", 0);
 
@@ -387,6 +387,49 @@ void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½
 
 
 
+}
+
+
+
+double preditcGrid(vector<vector<wstring>> _data, int col1, int col2) {
+	// »Ø¹é²ÎÊı
+	double a, b, c, d;
+
+	vector<vector<wstring>> _chart;
+	_data.erase(_data.begin()); //É¾³ı±íÍ·
+	_chart.push_back(vector<wstring>(_data.size(), L""));
+	_chart.push_back(vector<wstring>(_data.size(), L""));
+	for (int i = 0; i < _data.size(); i++) {
+		_chart[0][i] = _data[i][col1];
+		_chart[1][i] = _data[i][col2];
+	}
+
+
+	// ¼ÆËã»Ø¹é
+	linear_regression(_chart[1], _chart[1].size(), &a, &b);
+
+	// Ô¤²âĞÂÊı¾İµã
+	double new_x = _chart[1].size();
+
+	double prediction = (a * new_x + b <= 4) ? (a * new_x + b >= 0) ? a * new_x + b : 0 : 3.9999;
+	printf("Ô¤²âÖµ: %.2f\n", prediction);
+	return prediction;
+}
+
+void linear_regression(vector<wstring> y, int n, double* slope, double* intercept) {
+	double sum_x = 0, sum_y = 0, sum_xy = 0, sum_x_squared = 0;
+
+	// ¼ÆËã¸÷ÖÖºÍ
+	for (int i = 0; i < n; i++) {
+		sum_x += (i + 1);
+		sum_y += stod(y[i]);
+		sum_xy += (i + 1) * stod(y[i]);
+		sum_x_squared += (i + 1) * (i + 1);
+	}
+
+	// ¼ÆËãĞ±ÂÊºÍ½Ø¾à
+	*slope = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x * sum_x);
+	*intercept = (sum_y - *slope * sum_x) / n;
 }
 
 

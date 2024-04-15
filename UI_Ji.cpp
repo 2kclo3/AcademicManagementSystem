@@ -40,7 +40,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	Cpnode allCrsList = readCrs(CRS_FILE);
 
 	vector<vector<std::wstring>> allStuData;
-	showAllStu(allStuList, allStuData, L"");
+	showAllStu(allStuList, allStuData, (judge == 1) ? tch_or_admin->item.data.college : L"");
 	int i = 0;
 
 
@@ -54,7 +54,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 	Text collegeText(-500, 430, L"", 32);
 	Text majorText(-500, 500, L"", 32);
 
-	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", (judge == 1) ? tch_or_admin->item.data.college : L"");
 	TextBox IDBox(-500, 150, 290, L"学号 ( 添加后不可更改！)", L"");
 	TextBox nameBox(-500, 220, 290, L"姓名", L"");
 	TextBox genderBox(-500, 290, 290, L"性别", L"");
@@ -592,7 +592,9 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 	Cpnode allCrsList = readCrs(CRS_FILE);
 
+	sortStuCrsYear(Crs->item.crslist);
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
+			
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(Crs, allCrsINStuData, L"");
 
@@ -615,10 +617,11 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 	TextBox gridBox(-500, 350, 290, L"绩点(自动转化)", L"");
 	TextBox semesterBox(-500, 400, 290, L"学年", L"");
 
-	TextBox allButton(-500, 330, 290, L"   所有", L"");
-	TextBox mustButton(-500, 380, 290, L"   必修", L"");
-	TextBox allsButton(-500, 430, 290, L"   所有", L"");
-	TextBox mustsButton(-500, 480, 290, L"   必修", L"");
+	TextBox allButton(-500, 280, 290, L"   所有", L"");
+	TextBox mustButton(-500, 330, 290, L"   必修", L"");
+	TextBox allsButton(-500, 380, 290, L"   所有", L"");
+	TextBox mustsButton(-500, 430, 290, L"   必修", L"");
+	TextBox predictTxt(-500, 480, 290, L"   预测", L"");
 
 
 	//按钮
@@ -863,6 +866,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 				mustButton.move(-500, 380);
 				allsButton.move(-500, 300);
 				mustsButton.move(-500, 380);
+				predictTxt.move(-500, 380);
 
 				addOKButton.move(-500, 600);
 				modifyOKButton.move(-500, 650);
@@ -1151,10 +1155,11 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 				//显示
 
-				allButton.move(0, 300);
-				mustButton.move(0, 380);
-				allsButton.move(0, 460);
-				mustsButton.move(0, 540);
+				allButton.move(0, 270);
+				mustButton.move(0, 350);
+				allsButton.move(0, 430);
+				mustsButton.move(0, 510);
+				predictTxt.move(0, 590);
 
 				cancelButton.move(10, 730);
 
@@ -1169,10 +1174,12 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 
 
-				allButton.setText((wstring(L"所有课程绩点：") + std::to_wstring(all)).c_str());
-				mustButton.setText((wstring(L"必修课程绩点：") + std::to_wstring(must)).c_str());
-				allsButton.setText((wstring(L"所有课程成绩：") + std::to_wstring(alls)).c_str());
-				mustsButton.setText((wstring(L"必修课程成绩：") + std::to_wstring(musts)).c_str());
+				allButton.setText((wstring(L"平均绩点：") + std::to_wstring(all).substr(0, to_wstring(all).find(L'.') + 5)).c_str());
+				mustButton.setText((wstring(L"平均绩点(必修)：") + std::to_wstring(must).substr(0, to_wstring(must).find(L'.') + 5)).c_str());
+				allsButton.setText((wstring(L"平均成绩：") + std::to_wstring(alls).substr(0, to_wstring(alls).find(L'.') + 3)).c_str());
+				mustsButton.setText((wstring(L"平均成绩(必修)：") + std::to_wstring(musts).substr(0, to_wstring(musts).find(L'.') + 3)).c_str());
+
+				predictTxt.setText((wstring(L"预测下一学年绩点：") + std::to_wstring(preditcGrid(allCrsINStuData, 1, 5)).substr(0, to_wstring(preditcGrid(allCrsINStuData, 1, 5)).find(L'.') + 5)).c_str());
 
 
 			}

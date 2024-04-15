@@ -320,7 +320,12 @@ public:
 			}
 			else {
 				setlinecolor(inputColor);
-				line(x + 16 + textwidth(text), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(text), y + 2 + height - (height - textHeight) / 2);
+				if (wcscmp(hintText, L"√‹¬Î") == 0 || wcscmp(hintText, L"«Î ‰»Î–¬√‹¬Î") == 0 || wcscmp(hintText, L"«Î»∑»œ–¬√‹¬Î") == 0) {
+					line(x + 16 + textwidth(pwdText), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(pwdText), y + 2 + height - (height - textHeight) / 2);
+				}
+				else {
+					line(x + 16 + textwidth(text), y - 2 + (height - textHeight) / 2, x + 16 + textwidth(text), y + 2 + height - (height - textHeight) / 2);
+				}
 
 			}
 		}
@@ -660,7 +665,7 @@ public:
 					x + colWidth / 2 + textwidth(L"≤‚") / 2 + 5, y + height - stof(data[1][0]) / 10.0 * rowHeight + 5,
 					10, 10);
 				outtextxy(x + colWidth / 2 + textwidth(L"≤‚") / 2 - 5 - textwidth(data[1][0].c_str()) / 2, y + height - stof(data[1][0]) / 10.0 * rowHeight - 25, data[1][0].c_str());
-				
+
 			}
 			for (int i = 0; i < data[1].size() - 1; i++) {
 				line(x + i * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight,
@@ -670,7 +675,7 @@ public:
 				solidroundrect(x + i * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 - 5, y + height - stof(data[1][i]) / 10.0 * rowHeight - 5,
 					x + i * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 + 5, y + height - stof(data[1][i]) / 10.0 * rowHeight + 5,
 					10, 10);
-				outtextxy(x + i * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 - 5 - textwidth(data[1][i].c_str()) / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight - 25, data[1][i].c_str())  ;
+				outtextxy(x + i * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 - 5 - textwidth(data[1][i].c_str()) / 2, y + height - stof(data[1][i]) / 10.0 * rowHeight - 25, data[1][i].c_str());
 				// –°‘≤µ„
 				solidroundrect(x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 - 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight - 5,
 					x + (i + 1) * colWidth + colWidth / 2 + textwidth(L"≤‚") / 2 + 5, y + height - stof(data[1][i + 1]) / 10.0 * rowHeight + 5,
@@ -863,6 +868,17 @@ void printCrs(const Cpnode CrsList);
 
 
 bool showAllStuTest(const List StuList, vector<vector<std::wstring>>& data, const wchar_t* searchTerm);
+
+
+
+
+
+double preditcGrid(vector<vector<wstring>> _data, int col1, int col2);
+
+void linear_regression(vector<wstring> y, int n, double* slope, double* intercept);
+
+
+
 
 
 

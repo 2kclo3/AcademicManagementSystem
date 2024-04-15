@@ -136,6 +136,8 @@ bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, doubl
 
 void sortStuaccID(List* plist);// 排序总学生链表
 
+void sortStuCrsYear(Crsnode* plist);
+
 void sortStuaccyear(List* plist);
 
 bool modifyStu(List* plist, Node* chastu, wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor);// 修改学生信息（不修改课程）

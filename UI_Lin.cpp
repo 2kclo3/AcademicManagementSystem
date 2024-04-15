@@ -1493,6 +1493,7 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 	}
 
 	Crsnode* allCrsInStuList = pstu->item.crslist->crs_next;
+	sortStuCrsYear(pstu->item.crslist);
 	vector<vector<std::wstring>>allCrsINStuData;
 	showStu(pstu, allCrsINStuData, L"");
 
@@ -1527,15 +1528,17 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 	must = MustGrid(pstu);
 	alls = AllScore(pstu);
 	musts = MustScore(pstu);
-	Text allCrsGridText(40, 250, (wstring(L"平均绩点: ") + to_wstring(all)).c_str(), 32);
-	Text allCrsScoreText(40, 300, (wstring(L"平均分: ") + to_wstring(alls)).c_str(), 32);
-	Text reqCrsGridText(40, 350, (wstring(L"平均绩点(必修): ") + to_wstring(must)).c_str(), 32);
-	Text reqCrsScoreText(40, 400, (wstring(L"平均分(必修): ") + to_wstring(musts)).c_str(), 32);
+	Text allCrsGridText(40, 250, (wstring(L"平均绩点: ") + to_wstring(all).substr(0, to_wstring(all).find(L'.') + 5)).c_str(), 32);
+	Text allCrsScoreText(40, 300, (wstring(L"平均分: ") + to_wstring(alls).substr(0, to_wstring(alls).find(L'.') + 3)).c_str(), 32);
+	Text reqCrsGridText(40, 350, (wstring(L"平均绩点(必修): ") + to_wstring(must).substr(0, to_wstring(must).find(L'.') + 5)).c_str(), 32);
+	Text reqCrsScoreText(40, 400, (wstring(L"平均分(必修): ") + to_wstring(musts).substr(0, to_wstring(musts).find(L'.') + 3)).c_str(), 32);
+
+	Text predictGridText(40, 450, (wstring(L"预测下一学年绩点：") + to_wstring(preditcGrid(allCrsINStuData, 1, 5)).substr(0, to_wstring(preditcGrid(allCrsINStuData, 1, 5)).find(L'.') + 5)).c_str(), 32);
 
 
-	Button drawBtn(-50, 470, 330, 60, L"   查看课程图表", 1);
-	Button modify_password_Btn(-50, 550, 330, 60, L"   修改密码", 1);
-	Button backButton(-50, 640, 330, 60, L"   退出登录", 0);
+	Button drawBtn(-50, 520, 330, 60, L"   查看课程图表", 1);
+	Button modify_password_Btn(-50, 600, 330, 60, L"   修改密码", 1);
+	Button backButton(-50, 690, 330, 60, L"   退出登录", 0);
 
 
 

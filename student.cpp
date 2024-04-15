@@ -60,7 +60,7 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 	data[0][0] = L"课程号";
 	data[0][1] = L"课程名";
 	data[0][2] = L"成绩";
-	data[0][3] = L"学期";
+	data[0][3] = L"学年";
 	data[0][4] = L"学分";
 	data[0][5] = L"绩点";
 	data[0][6] = L"课程性质";
@@ -395,6 +395,38 @@ void sortStuaccID(List* plist) {
 		p = p->next;
 	}
 }
+
+
+// 排序学生课程链表(按照学年来排序）
+void sortStuCrsYear(Crsnode* plist) {
+	Crsnode* p, * p0, * r, * r0, * q;
+	p = p0 = r = r0 = q = NULL;
+	p = plist;
+	while (p) {
+		r = plist;
+		while (r->score.semester < p->score.semester && r != p) {
+			r0 = r;
+			r = r->crs_next;
+		}//找位置
+
+		if (r != p) {
+			q = p;
+			p0->crs_next = p->crs_next;
+			p = p0;
+			if (r != plist) {
+				r0->crs_next = q;
+				q->crs_next = r;
+			}
+			else {
+				q->crs_next = plist;
+				plist = q;
+			}
+		}
+		p0 = p;
+		p = p->crs_next;
+	}
+}
+
 
 
 // 排序总学生链表(按照入学年份来排序）

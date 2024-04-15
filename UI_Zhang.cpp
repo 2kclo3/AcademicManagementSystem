@@ -944,6 +944,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 	int TextWidth = textwidth(cplist->cname);
 	int x = 0 + (276 - TextWidth) / 2;
 	Text titleText(x, 50, cplist->cname, 64);
+	modifyTitleText(&titleText, cplist->cname, 50);
 
 	Text GPAText(-500, 370, L"", 32);
 
