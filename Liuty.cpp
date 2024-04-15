@@ -124,7 +124,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allStuData;
-	showAllMajor(allStuList, allStuData, L"");
+	showAllMajor(allStuList, allStuData, (judge == 1) ? tch_or_admin->item.data.college : L"");
 
 	Table allStuTable(310, 90, 1160, 700, allStuData);
 
@@ -136,7 +136,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	Text collegeText(-500, 430, L"", 32);
 	Text majorText(-500, 500, L"", 32);
 
-	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
+	TextBox searchInputBox(310, 20, 1040, L"搜索", (judge == 1) ? tch_or_admin->item.data.college : L"");
 	TextBox gradeBox(-500, 360, 290, L"年级", L"");
 	TextBox collegeBox(-500, 430, 290, L"学院", L"");
 	TextBox majorBox(-500, 500, 290, L"专业", L"");
