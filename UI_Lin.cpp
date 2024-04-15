@@ -413,12 +413,22 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 					if (judge == 0 || judge == 3) {
 						saveStu(StuList, STU_FILE);
-						writeLog(judge, Stu, wstring(L"修改学生") + to_wstring(Stu->item.data.ID) + L"的密码");
+						if (judge == 0) {
+							writeLog(judge, Stu, wstring(L"修改学生") + to_wstring(Stu->item.data.ID) + L"的密码");
+						}
+						else {
+							writeLog(judge, admin, wstring(L"修改学生") + to_wstring(Stu->item.data.ID) + L"的密码");
+						}
 					}
 
 					if (judge == 1 || judge == 4) {
 						saveTch(StuList, TCH_FILE);
-						writeLog(judge, Stu, wstring(L"修改教师") + to_wstring(Stu->item.data.ID) + L"的密码");
+						if (judge == 1) {
+							writeLog(judge, Stu, wstring(L"修改教师") + to_wstring(Stu->item.data.ID) + L"的密码");
+						}
+						else {
+							writeLog(judge, admin, wstring(L"修改教师") + to_wstring(Stu->item.data.ID) + L"的密码");
+						}
 					}
 
 					// 清除输入框内容
@@ -1734,3 +1744,4 @@ void allTchUI(Node* admin, List adminList) {
 	}
 
 }
+

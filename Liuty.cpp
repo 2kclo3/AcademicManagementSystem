@@ -415,3 +415,150 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 
 
 
+
+void logUI(Node* admin, List adminList) {
+	cleardevice();
+
+
+	FILE* fp;
+	char file_name[50] = ".\\log\\Log.log";
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	vector<vector<std::wstring>> data;
+	data.push_back(vector<wstring>(1, L""));
+	data[0][0] = L"[时间] : 操作";
+
+	int logRow = 1;
+	wchar_t line[1024];
+	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+		if (line[0] == '\n') {//跳过空行
+			continue;
+		}
+		line[wcslen(line) - 1] = L'\0';
+		if (wcsstr(line, L"")) {
+			data.push_back(vector<wstring>(1, L""));
+			data[logRow][0] = wstring(line);
+			logRow++;
+		}
+	}
+	fclose(fp);
+
+
+	//showLog(data, L"");
+
+
+
+	Table allTchTable(310, 90, 1160, 700, data);
+
+	Text titleText(40, 50, L"所有日志", 64);
+
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
+
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
+	Button backButton(-50, 700, 330, 60, L"   返回", 0);
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+
+		// 输入框绘制(必须)
+		searchInputBox.draw();
+		if (peekmessage(&msg, -1, true)) {
+
+			// 鼠标点击事件
+			if (searchBtn.mouseClick(msg)) {
+
+				fp = fopen(file_name, "r");//读取文件
+				if (fp == NULL) {
+					printf("Read \"%s\" error, please check and reboot the system!", file_name);
+					MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+					exit(EXIT_FAILURE);
+				}//读取失败退出
+
+				data.clear(); // 清空数组
+				data.push_back(vector<wstring>(1, L""));
+				data[0][0] = L"[时间] : 操作";
+
+				int logRow = 1;
+				wchar_t line[1024];
+				while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
+					if (line[0] == '\n') {//跳过空行
+						continue;
+					}
+					line[wcslen(line) - 1] = L'\0';
+					if (wcsstr(line, searchInputBox.text)) {
+						data.push_back(vector<wstring>(1, L""));
+						data[logRow++][0] = wstring(line);
+					}
+				}
+				fclose(fp);
+				allTchTable.setData(data);
+			}
+
+			if (backButton.mouseClick(msg)) {
+				menuUI_Administrator(admin, adminList);
+			}
+
+			//表格鼠标滑动与点击
+			allTchTable.onMouse(msg);
+
+			// 文本框输入
+			searchInputBox.onMessage(msg);
+		}
+
+		//showxy(msg); // 显示坐标
+
+
+
+		//-------------------------------------------------
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+
+	}
+
+}
+
+
+
+
+void showLog(vector<vector<wstring>> data, wchar_t* searchTerm) {
+	//data.clear(); // 清空数组
+	//data.push_back(vector<wstring>(1, L"")); //增加一行(每行1列)
+
+	////初始化表头
+	//data[0][0] = L"[时间] : 操作";
+
+	//int logRow = data.size();
+	//while (logRow--) {
+
+	//	// 检测是否有搜索词
+	//	if (data[logRow][0] == (wstring)searchTerm) // 数字转为字符串再转为wchar_t来进行比较
+	//		|| wcsstr(pCurrent->item.data.name, searchTerm) != NULL
+	//		|| wcsstr(pCurrent->item.data.college, searchTerm) != NULL
+	//		) {
+
+	//		data.push_back(vector<std::wstring>(1, L"")); //增加一行(每行1列)
+
+	//		//每行的内容
+	//		data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
+	//		data[row][1] = pCurrent->item.data.name;
+	//		data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
+	//		data[row][3] = pCurrent->item.data.college;
+
+
+	//		row++; // 行数+1
+	//	}
+
+
+	//}
+}

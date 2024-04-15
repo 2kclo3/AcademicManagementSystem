@@ -558,8 +558,8 @@ public:
 		//		printf("%d\n", times);
 		//	}
 		//}
-		maxRow = height / textheight(data[0][0].c_str());
-		height = maxRow * textheight(data[0][0].c_str());
+		maxRow = height / ((textheight(L"²â")));
+		height = maxRow * ((textheight(L"²â")));
 	}
 	void onMouse(ExMessage& msg) {
 		if (isHovered(msg.x, msg.y)) {
@@ -859,6 +859,10 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 void stuAccountUI(int stuID, Node* admin, List Admin_List);
 
 
+void logUI(Node* admin, List adminList);
+
+
+void showLog(vector<vector<wstring>> data, wchar_t* searchTerm);
 
 
 

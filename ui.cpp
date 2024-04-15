@@ -281,14 +281,15 @@ void menuUI_Administrator(Node* admin, List adminList) {//管理员端界面
 
 	Text titleText(90, 50, L"欢迎", 64);
 
-	int dy = 0;
+	int dy = -30;
 	Button allStuButton(-50, 170 + dy, 350, 60, L"  学生管理", 1);
 	Button allCrsButton(-50, 250 + dy, 350, 60, L"  课程管理", 1);
 	Button allQualityButton(-50, 330 + dy, 350, 60, L"  素质类项目管理", 1);
 	Button changeMajorButton(-50, 410 + dy, 350, 60, L"  转专业管理", 1);
 	Button allTchButton(-50, 490 + dy, 350, 60, L"  教师管理", 1);
 	Button settingsButton(-50, 570 + dy, 350, 60, L"  密码管理", 1);
-	Button exitButton(-50, 670 + dy, 350, 60, L"  退出登录", 0);
+	Button logButton(-50, 650 + dy, 350, 60, L"  查看日志", 1);
+	Button exitButton(-50, 740 + dy, 350, 60, L"  退出登录", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -313,6 +314,9 @@ void menuUI_Administrator(Node* admin, List adminList) {//管理员端界面
 			}
 			if (settingsButton.mouseClick(msg)) {
 				manageUI(admin, adminList);
+			}
+			if (logButton.mouseClick(msg)) {
+				logUI(admin, adminList);
 			}
 			if (exitButton.mouseClick(msg)) {
 				writeLog(2, admin, wstring(L"退出系统"));
