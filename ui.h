@@ -558,8 +558,8 @@ public:
 		//		printf("%d\n", times);
 		//	}
 		//}
-		maxRow = height / textheight(data[0][0].c_str());
-		height = maxRow * textheight(data[0][0].c_str());
+		maxRow = height / ((textheight(L"测")));
+		height = maxRow * ((textheight(L"测")));
 	}
 	void onMouse(ExMessage& msg) {
 		if (isHovered(msg.x, msg.y)) {
@@ -837,28 +837,34 @@ void testUI(Node*, List, int, Node* admin, List Admin_List);
 
 void loginUI();
 
-void menuUI_Tch(Node*, List, Node* admin, List Admin_List);
-void menuUI_Administrator(Node*, List);
+void menuUI_Tch(Node*, List, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+void menuUI_Administrator(Node*, List, List allStuList, Cpnode allCrsList);
 
-void allStuUI(Node*, List, int, Node* admin, List Admin_List);
-void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node*, List, int, Node* admin, List Admin_List);
-void RankUI(List StuList, Node*, List, int, Node* admin, List Admin_List);
+void allStuUI(Node*, List, int, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node*, List, int, Node* admin, List Admin_List, Cpnode allCrsList);
+void RankUI(List StuList, Node*, List, int, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 
-void allCrsUI(Node*, List, int, Node* admin, List Admin_List);
-void CrsUI(Cpnode cphead, Cpnode cplist, Node*, List, int, Node* admin, List Admin_List);
+void allCrsUI(Node*, List, int, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+void CrsUI(Cpnode cphead, Cpnode cplist, Node*, List, int, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 
-void allQualityUI(Node*, List, int, Node* admin, List Admin_List);
-void QualityUI(Node* Stu, List allStuList, Node*, List, int, Node* admin, List Admin_List);
-void allTchUI(Node*, List);
-void manageUI(Node* admin, List Admin_List);//管理员端改密码
-void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List);//学生教师改密码
+void allQualityUI(Node*, List, int, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+void QualityUI(Node* Stu, List allStuList, Node*, List, int, Node* admin, List Admin_List, Cpnode allCrsList);
+void allTchUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList);
+void manageUI(Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);//管理员端改密码
+void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);//学生教师改密码
 
-void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
+void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 
-void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List);
-void stuAccountUI(int stuID, Node* admin, List Admin_List);
+void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+
+void chooseCrsUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 
 
+void logUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList);
+
+
+void showLog(vector<vector<wstring>> data, wchar_t* searchTerm);
 
 
 

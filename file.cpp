@@ -203,7 +203,6 @@ List readStu(const char* file_name) {
 
 }
 
-
 List readTch(const char* file_name) {
 	FILE* fp;
 	List TchList = (List)malloc(sizeof(Node));//构建教师链表
@@ -926,7 +925,6 @@ void importTch(List TchList, const char* file_name) { //导入教师信息
 }
 
 
-
 void writeLog(int operatorPeople, Node* person, wstring log) { //写入日志
 	FILE* fp;
 	char file_name[50] = ".\\log\\Log.log";
@@ -959,6 +957,63 @@ void writeLog(int operatorPeople, Node* person, wstring log) { //写入日志
 	}
 	fclose(fp);
 
+}
+
+
+
+void freeStu(List StuList) {
+	Node* plist = StuList->next;
+	Node* freeList = plist;
+	while (plist) {
+
+		Crsnode* pcrs = plist->item.crslist;
+		Crsnode* freeCrsN = pcrs;
+		while (pcrs) {
+			pcrs = pcrs->crs_next;
+			free(freeCrsN);
+			freeCrsN = pcrs;
+		}
+
+		Cnode* pc = plist->item.clist;
+		Cnode* freeC = pc;
+		while (pc) {
+			pc = pc->cnext;
+			free(freeC);
+			freeC = pc;
+		}
+
+		Rnode* pr = plist->item.rlist;
+		Rnode* freeR = pr;
+		while (pr) {
+			pr = pr->rnext;
+			free(freeR);
+			freeR = pr;
+		}
+
+
+		plist = plist->next;
+		free(freeList);
+		freeList = plist;
+	}
+}
+
+void freeCrs(Cpnode CrsList) {
+	Cpnode plist = CrsList->next;
+	Cpnode freeList = plist;
+	while (plist) {
+
+		Spnode pstu = plist->sphead;
+		Spnode freeStuN = pstu;
+		while (pstu) {
+			pstu = pstu->next;
+			free(freeStuN);
+			freeStuN = pstu;
+		}
+
+		plist = plist->next;
+		free(freeList);
+		freeList = plist;
+	}
 }
 
 

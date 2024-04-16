@@ -115,13 +115,13 @@ bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar
 //	chartUI(_chart, 1, 2);
 //}
 
-void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
 	//drawLine();
 
 
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allStuData;
 	showAllMajor(allStuList, allStuData, (judge == 1) ? tch_or_admin->item.data.college : L"");
@@ -380,11 +380,11 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 			}
 
 			if (backButton.mouseClick(msg)) {
-				//freeAllStu(allStuList); //TODO
+				return;
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -413,5 +413,453 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 	}
 }
 
+
+
+
+void logUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList) {
+	cleardevice();
+
+
+	FILE* fp;
+	char file_name[50] = ".\\log\\Log.log";
+	fp = fopen(file_name, "r");//读取文件
+	if (fp == NULL) {
+		printf("Read \"%s\" error, please check and reboot the system!", file_name);
+		MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+		exit(EXIT_FAILURE);
+	}//读取失败退出
+
+	vector<vector<std::wstring>> data;
+	data.push_back(vector<wstring>(1, L""));
+	data[0][0] = L"[时间] : 操作";
+
+	int logRow = 0;
+	static wchar_t line[1024][128];
+	while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+		if (line[logRow][0] == '\n') {//跳过空行
+			continue;
+		}
+		if (wcsstr(line[logRow], L"")) {
+			line[logRow][wcslen(line[logRow]) - 1] = L'\0';
+			logRow++;
+		}
+	}
+	fclose(fp);
+	int tmpRow = logRow--;
+	while (tmpRow--) {
+		data.push_back(vector<wstring>(1, L""));
+	}
+	int row = 1;
+	while (logRow >= 0) {
+		//if (wcsstr(line[logRow], L"")) {
+		data[row++][0] = wstring(line[logRow]);
+		//}
+		logRow--;
+	}
+
+
+	//showLog(data, L"");
+
+
+
+	Table allTchTable(310, 90, 1160, 700, data);
+
+	Text titleText(40, 50, L"所有日志", 64);
+
+	TextBox searchInputBox(310, 20, 1040, L"搜索", L"");
+
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
+	Button backButton(-50, 700, 330, 60, L"   返回", 0);
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+
+		// 输入框绘制(必须)
+		searchInputBox.draw();
+		if (peekmessage(&msg, -1, true)) {
+
+			// 鼠标点击事件
+			if (searchBtn.mouseClick(msg)) {
+
+				//fp = fopen(file_name, "r");//读取文件
+				//if (fp == NULL) {
+				//	printf("Read \"%s\" error, please check and reboot the system!", file_name);
+				//	MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+				//	exit(EXIT_FAILURE);
+				//}//读取失败退出
+
+				//data.clear();
+				////data.resize(0);
+				//data.push_back(vector<wstring>(1, L""));
+				//data[0][0] = L"[时间] : 操作";
+
+				//logRow = 0;
+				//int trueRow = 0;
+				//for (int i = 0; i < 1024; i++) {
+				//	line[i][0] == L'\0';
+				//}
+				//while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+				//	if (line[logRow][0] == '\n') {//跳过空行
+				//		continue;
+				//	}
+				//	line[logRow][wcslen(line[logRow]) - 1] = L'\0';
+				//	if (wcsstr(line[logRow], searchInputBox.text)) {
+				//		trueRow++;
+				//	}
+				//	logRow++;
+				//}
+				//fclose(fp);
+				////tmpRow = trueRow--;
+				//while (trueRow--) {
+				//	data.push_back(vector<wstring>(1, L""));
+				//}
+				//row = 1;
+				//while (logRow >= 0) {
+				//	if (wcsstr(line[logRow], searchInputBox.text)) {
+				//		data[row++][0] = wstring(line[logRow]);
+				//	}
+				//	logRow--;
+				//}
+
+				fp = fopen(file_name, "r");//读取文件
+				if (fp == NULL) {
+					printf("Read \"%s\" error, please check and reboot the system!", file_name);
+					MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+					exit(EXIT_FAILURE);
+				}//读取失败退出
+
+				vector<vector<std::wstring>> data;
+				data.push_back(vector<wstring>(1, L""));
+				data[0][0] = L"[时间] : 操作";
+
+				logRow = 0;
+				while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+					if (line[logRow][0] == '\n') {//跳过空行
+						continue;
+					}
+					if (wcsstr(line[logRow], searchInputBox.text)) {
+						line[logRow][wcslen(line[logRow]) - 1] = L'\0';
+						logRow++;
+					}
+				}
+				fclose(fp);
+				tmpRow = logRow--;
+				while (tmpRow--) {
+					data.push_back(vector<wstring>(1, L""));
+				}
+				row = 1;
+				while (logRow >= 0) {
+					//if (wcsstr(line[logRow], L"")) {
+					data[row++][0] = wstring(line[logRow]);
+					//}
+					logRow--;
+				}
+
+				allTchTable.setData(data);
+			}
+
+			if (backButton.mouseClick(msg)) {
+				return;
+				menuUI_Administrator(admin, adminList, allStuList, allCrsList);
+			}
+
+			//表格鼠标滑动与点击
+			allTchTable.onMouse(msg);
+
+			// 文本框输入
+			searchInputBox.onMessage(msg);
+		}
+
+		//showxy(msg); // 显示坐标
+
+
+
+		//-------------------------------------------------
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+
+	}
+
+}
+
+
+
+
+void showLog(vector<vector<wstring>> data, wchar_t* searchTerm) {
+	//data.clear(); // 清空数组
+	//data.push_back(vector<wstring>(1, L"")); //增加一行(每行1列)
+
+	////初始化表头
+	//data[0][0] = L"[时间] : 操作";
+
+	//int logRow = data.size();
+	//while (logRow--) {
+
+	//	// 检测是否有搜索词
+	//	if (data[logRow][0] == (wstring)searchTerm) // 数字转为字符串再转为wchar_t来进行比较
+	//		|| wcsstr(pCurrent->item.data.name, searchTerm) != NULL
+	//		|| wcsstr(pCurrent->item.data.college, searchTerm) != NULL
+	//		) {
+
+	//		data.push_back(vector<std::wstring>(1, L"")); //增加一行(每行1列)
+
+	//		//每行的内容
+	//		data[row][0] = std::to_wstring(pCurrent->item.data.ID); //数字转为字符串
+	//		data[row][1] = pCurrent->item.data.name;
+	//		data[row][2] = (pCurrent->item.data.gender) ? L"男" : L"女";
+	//		data[row][3] = pCurrent->item.data.college;
+
+
+	//		row++; // 行数+1
+	//	}
+
+
+	//}
+}
+
+void showStuAllCrs(const Cpnode cphead, vector<vector<wstring>>& data, const wchar_t* searchTerm)
+{
+	Cpnode cplist = cphead->next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(5, L""));
+
+	//初始化表头
+	data[0][0] = L"课程名称";
+	data[0][1] = L"课程号";
+	data[0][2] = L"课程性质";
+	data[0][3] = L"学分";
+	data[0][4] = L"学年";
+
+
+	int row = 1;
+	while (cplist != NULL)//遍历链表
+	{
+		// 检测是否有搜索词
+		if (
+			wcsstr(cplist->cname, searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->cnum).c_str(), searchTerm) != NULL ||
+			wcsstr(cplist->character, searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->credit).c_str(), searchTerm) != NULL ||
+			wcsstr(std::to_wstring(cplist->SchYear).c_str(), searchTerm) != NULL
+			)
+		{
+			data.push_back(vector<std::wstring>(5, L""));
+
+			//每行的内容
+			data[row][0] = cplist->cname;
+			data[row][1] = std::to_wstring(cplist->cnum);
+			data[row][2] = cplist->character;
+			data[row][3] = std::to_wstring(cplist->credit);
+			data[row][4] = std::to_wstring(cplist->SchYear);
+
+			//保留小数
+			data[row][3] = data[row][3].substr(0, data[row][3].find('.') + 2);
+			row++; // 行数+1
+		}
+		cplist = cplist->next; // 移向下一个节点
+	}
+	return;
+}
+
+
+void showStuChooseCrs(const Node* Stu, vector<vector<wstring>>& data)
+{
+	Crsnode* cplist = Stu->item.crslist->crs_next; //从第一个有数据节点开始
+	data.clear(); // 清空数组
+	data.push_back(vector<wstring>(5, L""));
+
+	//初始化表头
+	data[0][0] = L"课程名称";
+	data[0][1] = L"课程号";
+	data[0][2] = L"课程性质";
+	data[0][3] = L"学分";
+	data[0][4] = L"学年";
+
+
+	int row = 1;
+	while (cplist != NULL)//遍历链表
+	{
+		// 检测是否有搜索词
+		data.push_back(vector<std::wstring>(5, L""));
+
+		//每行的内容
+		data[row][0] = cplist->score.course_name;
+		data[row][1] = cplist->score.course_id;
+		data[row][2] = (cplist->score.course_nature == 1) ? L"必修" : L"选修";
+		data[row][3] = std::to_wstring(cplist->score.credit);
+		data[row][4] = std::to_wstring(cplist->score.semester);
+
+		//保留小数
+		data[row][3] = data[row][3].substr(0, data[row][3].find('.') + 2);
+		row++; // 行数+1
+		cplist = cplist->crs_next; // 移向下一个节点
+	}
+	return;
+}
+
+
+void chooseCrsUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
+	cleardevice();
+
+	//List StuList = readStu(STU_FILE);
+	Node* pstu = allStuList->next;
+	while (pstu != NULL) {
+		if (stuID == pstu->item.data.ID) {
+			break;
+		}
+		pstu = pstu->next;
+	}
+
+	Crsnode* allCrsInStuList = pstu->item.crslist->crs_next;
+	sortStuCrsYear(pstu->item.crslist);
+	vector<vector<std::wstring>> stuAllCrs;
+	vector<vector<std::wstring>> stuChooseCrs;
+	showStuAllCrs(allCrsList, stuAllCrs, L"");
+	showStuChooseCrs(pstu, stuChooseCrs);
+
+	Table allCrsTable(400, 90, 525, 700, stuAllCrs);
+	Table chooseCrsTable(945, 90, 525, 700, stuChooseCrs);
+
+	//输入
+	TextBox searchInputBox(400, 20, 960, L"搜索", L"");
+
+
+	//按钮
+	Button searchBtn(1370, 20, 100, 50, L"搜索", 1);
+
+
+	Text idBtn(40, 100, (wstring(L"学号：") + to_wstring(stuID)).c_str(), 32);
+	Text nameBtn(40, 150, (wstring(L"姓名：") + pstu->item.data.name).c_str(), 32);
+	Text titleText(50, 20, (wstring(L"选退课")).c_str(), 56);
+
+
+	//计算绩点
+	Button chooseBtn(-50, 520, 330, 60, L"   选课", 1);
+	Button cancelBtn(-50, 600, 330, 60, L"   退课", 1);
+	Button backButton(-50, 690, 330, 60, L"   完成", 0);
+
+
+
+
+
+	// 处理鼠标事件
+	ExMessage msg;
+	while (!_kbhit()) {
+		ULONGLONG start_time = GetTickCount();
+		//-------------------------------------------------
+
+		searchInputBox.draw();
+
+
+
+		if (peekmessage(&msg, -1, true)) {
+			//鼠标点击事件
+
+			//搜索
+			if (searchBtn.mouseClick(msg)) {
+				showStu(pstu, stuAllCrs, searchInputBox.text);
+				allCrsTable.setData(stuAllCrs);
+			}
+
+			if (chooseBtn.mouseClick(msg)) {
+				// 获取当前行
+				int selectedRowAll = allCrsTable.getSelectedRow();
+				if (selectedRowAll == 0) {
+					MessageBox(GetHWnd(), L"请选择一门未选课程", L"错误!", MB_ICONERROR);
+				}
+				else {
+					vector<std::wstring> selectedData = stuAllCrs[selectedRowAll];
+					Cpnode addingCrs = searchCrs(allCrsList, stoi(selectedData[1]), stoi(selectedData[4]));
+
+
+					if (addStuInCrs(addingCrs, pstu->item.data.name, pstu->item.data.ID, 0) == 0) {
+						MessageBox(GetHWnd(), L"你已经选择了这门课程", L"错误!", MB_ICONERROR);
+					}
+					else {
+						addCrsToStu(pstu, selectedData[1].c_str(), selectedData[0].c_str(), 0, stoi(selectedData[4]), stoi(selectedData[3]), stod(selectedData[3]), 0);
+
+						//刷新表格
+						showStuChooseCrs(pstu, stuChooseCrs);
+						chooseCrsTable.setData(stuChooseCrs);
+
+						// 保存
+						saveStu(allStuList, STU_FILE);
+						saveCrs(allCrsList, CRS_FILE);
+
+						writeLog(0, pstu, wstring(L"选课:") + selectedData[1]);
+					}
+				}
+			}
+
+			if (cancelBtn.mouseClick(msg)) {
+				// 获取当前行
+				int selectedRowChoose = chooseCrsTable.getSelectedRow();
+				if (selectedRowChoose == 0) {
+					MessageBox(GetHWnd(), L"请选择一门已选课程", L"错误!", MB_ICONERROR);
+				}
+				else {
+					vector<std::wstring> selectedData = stuChooseCrs[selectedRowChoose];
+					Cpnode deletingCrs = searchCrs(allCrsList, stoi(selectedData[1]), stoi(selectedData[4]));
+					Crsnode* tmpcrs = searchCrsInStu(pstu, selectedData[1].c_str(), selectedData[0].c_str());
+
+					if (tmpcrs->score.score != 0) {
+						MessageBox(GetHWnd(), L"这门课程你已完成考试，不能退课！", L"错误!", MB_ICONERROR);
+					}
+					else {
+						deleteStuInCrs(deletingCrs, pstu->item.data.name, pstu->item.data.ID);
+						deleteCrsInStu(pstu, tmpcrs);
+						MessageBox(GetHWnd(), L"退课成功", L"退课!", MB_ICONINFORMATION);
+
+						//刷新表格
+						showStuChooseCrs(pstu, stuChooseCrs);
+						chooseCrsTable.setData(stuChooseCrs);
+
+						// 保存
+						saveStu(allStuList, STU_FILE);
+						saveCrs(allCrsList, CRS_FILE);
+
+						writeLog(0, pstu, wstring(L"退课:") + selectedData[1]);
+					}
+				}
+			}
+
+			if (backButton.mouseClick(msg))
+			{
+				writeLog(0, pstu, wstring(L"选课完成"));
+				return;
+				loginUI();
+			}
+
+			//表格鼠标滑动与点击
+			allCrsTable.onMouse(msg);
+			chooseCrsTable.onMouse(msg);
+
+
+
+			// 文本框输入
+			searchInputBox.onMessage(msg);
+		}
+
+
+		//-------------------------------------------------
+		FlushBatchDraw(); //批量绘图
+
+		ULONGLONG end_time = GetTickCount();
+		if (end_time - start_time < 1) {
+			Sleep(1);
+		}
+
+	}
+
+
+
+
+}
 
 

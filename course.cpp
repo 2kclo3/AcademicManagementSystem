@@ -116,8 +116,8 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 				//每行的内容
 				data[row][0] = splist->sname;
 				data[row][1] = std::to_wstring(splist->snum);
-				data[row][2] = std::to_wstring(splist->score);
-				data[row][3] = std::to_wstring(splist->GPA);
+				data[row][2] = (splist->score == 0) ? L"" : to_wstring(splist->score);
+				data[row][3] = (splist->GPA == 0) ? L"" : to_wstring(splist->GPA);
 
 				// 保留小数
 				data[row][2] = data[row][2].substr(0, data[row][2].find('.') + 2);

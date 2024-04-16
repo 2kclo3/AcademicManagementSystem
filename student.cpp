@@ -81,10 +81,10 @@ void showStu(const Node* stu, vector<vector<wstring>>& data, const wchar_t* sear
 			//每行的内容
 			data[row][0] = crstmp->score.course_id;
 			data[row][1] = crstmp->score.course_name;
-			data[row][2] = std::to_wstring(crstmp->score.score); //数字转为字符串
+			data[row][2] = (crstmp->score.score == 0) ? L"" : to_wstring(crstmp->score.score); //数字转为字符串
 			data[row][3] = std::to_wstring(crstmp->score.semester); //数字转为字符串
 			data[row][4] = std::to_wstring(crstmp->score.credit);//数字转为字符串
-			data[row][5] = std::to_wstring(crstmp->score.grid);//数字转为字符串
+			data[row][5] = (crstmp->score.grid == 0) ? L"" : to_wstring(crstmp->score.grid);//数字转为字符串
 			data[row][6] = (crstmp->score.course_nature == 1) ? L"必修" : L"选修"; //数字转为字符串
 
 
@@ -498,7 +498,7 @@ bool addStu(List* plist, wchar_t* pname, int pID, int pgender, int pgrade, wchar
 }
 
 //为某个学生添加某课程及成绩
-bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
+bool addCrsToStu(Node* chastu, const wchar_t* pcourse_id, const wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
 	Crsnode* crs_tmp = chastu->item.crslist;//课程链表头节点
 	while (crs_tmp->crs_next != NULL)
 		crs_tmp = crs_tmp->crs_next;
