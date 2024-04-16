@@ -176,7 +176,7 @@ double AllGrid(Node* Crs) {
 
 
 	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
-		if (judge[stoi(tmp1->score.course_id)] == 0) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.score != 0) {
 
 			judge[stoi(tmp1->score.course_id)] = 1;
 			maxhhh = tmp1->score.grid;
@@ -226,7 +226,7 @@ double MustGrid(Node* Crs) {
 
 
 	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
-		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1 && tmp1->score.score != 0) {
 
 			judge[stoi(tmp1->score.course_id)] = 1;
 			maxhhh = tmp1->score.grid;
@@ -276,7 +276,7 @@ double AllScore(Node* Crs) {
 
 
 	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
-		if (judge[stoi(tmp1->score.course_id)] == 0) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.score != 0) {
 
 			judge[stoi(tmp1->score.course_id)] = 1;
 			maxhhh = tmp1->score.score;
@@ -327,7 +327,7 @@ double MustScore(Node* Crs) {
 
 
 	for (; tmp1 != NULL; tmp1 = tmp1->crs_next) {
-		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1) {
+		if (judge[stoi(tmp1->score.course_id)] == 0 && tmp1->score.course_nature == 1 && tmp1->score.score != 0) {
 
 			judge[stoi(tmp1->score.course_id)] = 1;
 			maxhhh = tmp1->score.score;

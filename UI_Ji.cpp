@@ -882,7 +882,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					}
 					else {
 						addStuInCrs(searchCrs(allCrsList, stoi(course_id), semester), pname, *pid, score);
-						addCrsToStu(Crs, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, grid);
+						addCrsToStu(Crs, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") == 0 ? 1 : 0, credit, grid);
 					}
 
 
@@ -1102,14 +1102,14 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 						while (everyStuCrs) {
 							if (wcscmp(everyStuCrs->score.course_id, allCrsINStuData[selectedRow][0].c_str()) == 0)
 							{
-								modifyCrsInStu(everyStuCrs, course_id, course_name, everyStuCrs->score.score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, CalculGPA(everyStuCrs->score.score));
+								modifyCrsInStu(everyStuCrs, course_id, course_name, everyStuCrs->score.score, semester, wcscmp(course_nature, L"必修") == 0 ? 1 : 0, credit, CalculGPA(everyStuCrs->score.score));
 							}
 							everyStuCrs = everyStuCrs->crs_next;
 						}
 						everystu = everystu->next;
 					}
 					//改动自己的课程
-					modifyCrsInStu(tmp, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") ? 1 : 0, credit, CalculGPA(score));
+					modifyCrsInStu(tmp, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") == 0 ? 1 : 0, credit, CalculGPA(score));
 
 
 
@@ -1164,7 +1164,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 					addCrsBtn.move(-50, 300);
 					modifyCrsBtn.move(-50, 380);
 					deleteCrsBtn.move(-50, 460);
-					GridCrsBtn.move(-500, 540);
+					GridCrsBtn.move(-50, 540);
 					backButton.move(-50, 700);
 
 

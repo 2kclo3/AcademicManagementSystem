@@ -782,7 +782,7 @@ void chooseCrsUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnod
 						MessageBox(GetHWnd(), L"你已经选择了这门课程", L"错误!", MB_ICONERROR);
 					}
 					else {
-						addCrsToStu(pstu, selectedData[1].c_str(), selectedData[0].c_str(), 0, stoi(selectedData[4]), stoi(selectedData[3]), stod(selectedData[3]), 0);
+						addCrsToStu(pstu, selectedData[1].c_str(), selectedData[0].c_str(), 0, stoi(selectedData[4]), wcscmp(selectedData[2].c_str(), L"必修") == 0 ? 1 : 0, stod(selectedData[3]), 0);
 
 						//刷新表格
 						showStuChooseCrs(pstu, stuChooseCrs);
