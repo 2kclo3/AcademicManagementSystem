@@ -858,6 +858,8 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
 
+void chooseCrsUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList);
+
 
 void logUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList);
 

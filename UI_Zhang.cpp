@@ -141,6 +141,25 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			if (drawBtn.mouseClick(msg))
 			{
 				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				allCrsTable.draw();
+				titleText.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				drawBtn.draw();
+				y = 90 - 80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
+				viewCrsBtn.draw();
+				addCrsBtn.draw();
+				modifyCrsBtn.draw();
+				deleteCrsBtn.draw();
+				sortCrsBtn.draw();
+				screenCrsBtn.draw();
+				screenCancelBtn.draw();
+				exportBtn.draw();
+				inportBtn.draw();
+				backButton.draw();
+
 			}
 			if (cancelButton.mouseClick(msg)) {
 
@@ -991,7 +1010,7 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 	Button searchBtn(1150 + 220, 20, 100, 50, L"搜索", 1);
 
 	Button addStuInCrsBtn(-50, 220, 330, 60, L"   添加", 1);
-	Button modifyStuInCrsBtn(-50, 300, 330, 60, L"   修改", 1);
+	Button modifyStuInCrsBtn(-50, 300, 330, 60, L"   录入/修改成绩", 1);
 	Button deleteStuInCrsBtn(-50, 380, 330, 60, L"   删除", 1);
 	Button sortStuInCrsBtn(-50, 460, 330, 60, L"   排序", 1);
 	Button screenStuInCrsBtn(-50, 540, 330, 60, L"   筛选", 1);

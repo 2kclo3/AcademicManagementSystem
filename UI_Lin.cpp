@@ -86,7 +86,7 @@ void loginUI() {
 	Node* Tch = TchList->next;
 	Node* Admin = AdminList->next;*/
 
-	Text titleText(400, 120, L"你好，欢迎登陆 JLU 教务管理系统!", 64);
+	Text titleText(400, 120, L"你好，欢迎登陆 JLU 成绩管理系统!", 64);
 	TextBox accountBox(200, 330, 1100, L"账号", L"");
 	TextBox passwordBox(200, 430, 1100, L"密码", L"");
 	Button loginButton(200, 530, 530, 60, L"登录", 1);
@@ -314,6 +314,12 @@ void manageUI(Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) 
 					modify_Stu_Btn.draw();
 					modify_Tch_Btn.draw();
 					backButton.draw();
+
+					ShowStu_Password(allStuList, Stu_Password_Data, L"");
+					ShowTch_Password(allTchList, Tch_Password_Data, L"");
+
+					Stu_ptable.setData(Stu_Password_Data);
+					Tch_ptable.setData(Tch_Password_Data);
 
 				}
 			}
@@ -1627,17 +1633,17 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpno
 	must = MustGrid(pstu);
 	alls = AllScore(pstu);
 	musts = MustScore(pstu);
-	Text allCrsGridText(40, 250, (wstring(L"平均绩点: ") + to_wstring(all).substr(0, to_wstring(all).find(L'.') + 5)).c_str(), 32);
-	Text allCrsScoreText(40, 300, (wstring(L"平均分: ") + to_wstring(alls).substr(0, to_wstring(alls).find(L'.') + 3)).c_str(), 32);
-	Text reqCrsGridText(40, 350, (wstring(L"平均绩点(必修): ") + to_wstring(must).substr(0, to_wstring(must).find(L'.') + 5)).c_str(), 32);
-	Text reqCrsScoreText(40, 400, (wstring(L"平均分(必修): ") + to_wstring(musts).substr(0, to_wstring(musts).find(L'.') + 3)).c_str(), 32);
+	Text allCrsGridText(40, 220, (wstring(L"平均绩点: ") + to_wstring(all).substr(0, to_wstring(all).find(L'.') + 5)).c_str(), 32);
+	Text allCrsScoreText(40, 260, (wstring(L"平均分: ") + to_wstring(alls).substr(0, to_wstring(alls).find(L'.') + 3)).c_str(), 32);
+	Text reqCrsGridText(40, 300, (wstring(L"平均绩点(必修): ") + to_wstring(must).substr(0, to_wstring(must).find(L'.') + 5)).c_str(), 32);
+	Text reqCrsScoreText(40, 340, (wstring(L"平均分(必修): ") + to_wstring(musts).substr(0, to_wstring(musts).find(L'.') + 3)).c_str(), 32);
+	Text predictGridText(40, 380, (wstring(L"预测下一学年绩点：") + to_wstring(preditcGrid(allCrsINStuData, 1, 5)).substr(0, to_wstring(preditcGrid(allCrsINStuData, 1, 5)).find(L'.') + 5)).c_str(), 32);
 
-	Text predictGridText(40, 450, (wstring(L"预测下一学年绩点：") + to_wstring(preditcGrid(allCrsINStuData, 1, 5)).substr(0, to_wstring(preditcGrid(allCrsINStuData, 1, 5)).find(L'.') + 5)).c_str(), 32);
 
-
-	Button drawBtn(-50, 520, 330, 60, L"   查看课程图表", 1);
-	Button modify_password_Btn(-50, 600, 330, 60, L"   修改密码", 1);
-	Button backButton(-50, 690, 330, 60, L"   退出登录", 0);
+	Button chooseCrsBtn(-50, 450, 330, 60, L"   选退课", 1);
+	Button drawBtn(-50, 530, 330, 60, L"   查看课程图表", 1);
+	Button modify_password_Btn(-50, 610, 330, 60, L"   修改密码", 1);
+	Button backButton(-50, 700, 330, 60, L"   退出登录", 0);
 
 
 
@@ -1662,8 +1668,57 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpno
 				allCrsINStuTable.setData(allCrsINStuData);
 			}
 
+			if (chooseCrsBtn.mouseClick(msg)) {
+				chooseCrsUI(stuID, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+
+				allCrsINStuTable.draw();
+				Stu_Rtable.draw();
+				Stu_Ctable.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				idBtn.draw();
+				nameBtn.draw();
+				titleText.draw();
+				allCrsGridText.draw();
+				allCrsScoreText.draw();
+				reqCrsGridText.draw();
+				reqCrsScoreText.draw();
+				predictGridText.draw();
+				chooseCrsBtn.draw();
+				drawBtn.draw();
+				modify_password_Btn.draw();
+				backButton.draw();
+
+				showStu(pstu, allCrsINStuData, L"");
+				allCrsINStuTable.setData(allCrsINStuData);
+
+			}
+
 			if (modify_password_Btn.mouseClick(msg)) {
 				Modify_Stu_or_Tch_Password_UI(to_wstring(pstu->item.data.ID).c_str(), pstu, 0, allStuList, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+
+				allCrsINStuTable.draw();
+				Stu_Rtable.draw();
+				Stu_Ctable.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				idBtn.draw();
+				nameBtn.draw();
+				titleText.draw();
+				allCrsGridText.draw();
+				allCrsScoreText.draw();
+				reqCrsGridText.draw();
+				reqCrsScoreText.draw();
+				predictGridText.draw();
+				chooseCrsBtn.draw();
+				drawBtn.draw();
+				modify_password_Btn.draw();
+				backButton.draw();
+
 			}
 
 			if (backButton.mouseClick(msg))
@@ -1674,6 +1729,28 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpno
 
 			if (drawBtn.mouseClick(msg)) {
 				chartUI(allCrsINStuData, 1, 2, stuID, NULL, NULL, 0, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+
+				allCrsINStuTable.draw();
+				Stu_Rtable.draw();
+				Stu_Ctable.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				idBtn.draw();
+				nameBtn.draw();
+				titleText.draw();
+				allCrsGridText.draw();
+				allCrsScoreText.draw();
+				reqCrsGridText.draw();
+				reqCrsScoreText.draw();
+				predictGridText.draw();
+				chooseCrsBtn.draw();
+				drawBtn.draw();
+				modify_password_Btn.draw();
+				backButton.draw();
+
+
 			}
 
 

@@ -216,16 +216,23 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 
 void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
-	Button backButton(1270, 20, 200, 60, L"返回主菜单", 1);
+	Button backButton(1270, 20, 200, 60, L"返回", 1);
 
 	vector<vector<wstring>> _chart;
 	_data.erase(_data.begin()); //删除表头
 	_chart.push_back(vector<wstring>(_data.size(), L""));
 	_chart.push_back(vector<wstring>(_data.size(), L""));
+	int trueCol = 0;
 	for (int i = 0; i < _data.size(); i++) {
-		_chart[0][i] = _data[i][row1];
-		_chart[1][i] = _data[i][row2];
+		if (wcscmp(_data[i][row2].c_str(), L"") != 0) {
+			_chart[0][trueCol] = _data[i][row1];
+			_chart[1][trueCol] = _data[i][row2];
+			trueCol++;
+		}
 	}
+	_chart[0].resize(trueCol);
+	_chart[1].resize(trueCol);
+
 	Chart testChart(100, 110, 1300, 480, _chart);
 
 
@@ -236,6 +243,7 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 		ULONGLONG start_time = GetTickCount();
 		if (peekmessage(&msg, -1, true)) {
 			if (backButton.mouseClick(msg)) {
+				return;
 				if (judge == 1)
 					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else if (judge == 0) {
@@ -243,7 +251,6 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 				}
 				else
 					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
-				return;
 			}
 		}
 
@@ -561,10 +568,16 @@ double preditcGrid(vector<vector<wstring>> _data, int col1, int col2) {
 	_data.erase(_data.begin()); //删除表头
 	_chart.push_back(vector<wstring>(_data.size(), L""));
 	_chart.push_back(vector<wstring>(_data.size(), L""));
+	int trueCol = 0;
 	for (int i = 0; i < _data.size(); i++) {
-		_chart[0][i] = _data[i][col1];
-		_chart[1][i] = _data[i][col2];
+		if (wcscmp(_data[i][col2].c_str(), L"") != 0) {
+			_chart[0][trueCol] = _data[i][col1];
+			_chart[1][trueCol] = _data[i][col2];
+			trueCol++;
+		}
 	}
+	_chart[0].resize(trueCol);
+	_chart[1].resize(trueCol);
 
 
 	// 计算回归

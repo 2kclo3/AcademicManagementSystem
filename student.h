@@ -132,7 +132,7 @@ double MustScore(Node* Crs);
 
 bool addStu(List* plist,wchar_t* pname, int pID, int pgender, int pgrade, wchar_t* pcollege, wchar_t* pmajor); // 添加学生（不包含课程）
 
-bool addCrsToStu(Node* chastu, wchar_t* pcourse_id, wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid);// 为某个学生添加某课程及成绩
+bool addCrsToStu(Node* chastu, const wchar_t* pcourse_id, const wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid);// 为某个学生添加某课程及成绩
 
 void sortStuaccID(List* plist);// 排序总学生链表
 

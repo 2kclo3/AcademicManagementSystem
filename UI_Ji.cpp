@@ -731,7 +731,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 
 	Button addCrsBtn(-50, 300, 330, 60, L"   添加课程", 1);
-	Button modifyCrsBtn(-50, 380, 330, 60, L"   修改课程", 1);
+	Button modifyCrsBtn(-50, 380, 330, 60, L"   录入/修改成绩", 1);
 	Button deleteCrsBtn(-50, 460, 330, 60, L"   删除课程", 1);
 	Button GridCrsBtn(-50, 540, 330, 60, L"   查看绩点", 1);
 
@@ -772,6 +772,23 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 			}
 			if (chartBtn.mouseClick(msg)) {
 				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
+
+
+				cleardevice();
+				allCrsINStuTable.draw();
+				titleText.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				chartBtn.draw();
+				idBtn.draw();
+				nameBtn.draw();
+				addCrsBtn.draw();
+				modifyCrsBtn.draw();
+				deleteCrsBtn.draw();
+				GridCrsBtn.draw();
+				backButton.draw();
+
+
 			}
 
 			if (addCrsBtn.mouseClick(msg)) {
