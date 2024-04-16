@@ -47,6 +47,7 @@
     <ClCompile Include="张.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Log\Log.log" />
     <Text Include="Page.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

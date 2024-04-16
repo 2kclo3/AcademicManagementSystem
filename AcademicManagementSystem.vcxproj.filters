@@ -100,5 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Page.txt" />
+    <Text Include="Log\Log.log" />
   </ItemGroup>
 </Project>
