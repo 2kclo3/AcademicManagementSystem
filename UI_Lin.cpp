@@ -71,15 +71,16 @@ void loginUI() {
 	cleardevice();
 
 	IMAGE Image;
-	loadimage(&Image, L".\\data\\logo.jpg", 150, 150, true);
+	loadimage(&Image, L".\\res\\logo.jpg", 150, 150, true);
 	putimage(200, 75, &Image, SRCCOPY);
 
 
 	//drawLine();
 
-	List StuList = readStu(STU_FILE);
-	List TchList = readTch(TCH_FILE);
-	List AdminList = readAdmin(ADMIN_FILE);
+	List allStuList = readStu(STU_FILE);
+	List allTchList = readTch(TCH_FILE);
+	Cpnode allCrsList = readCrs(CRS_FILE);
+	List allAdminList = readAdmin(ADMIN_FILE);
 
 	/*Node* Stu = StuList->next;
 	Node* Tch = TchList->next;
@@ -106,9 +107,9 @@ void loginUI() {
 
 				wstring tmp_password;
 
-				Node* Stu = StuList->next;
-				Node* Tch = TchList->next;
-				Node* Admin = AdminList->next;
+				Node* Stu = allStuList->next;
+				Node* Tch = allTchList->next;
+				Node* Admin = allAdminList->next;
 
 				while (Stu != NULL) {
 					if (wcscmp((to_wstring(Stu->item.data.ID)).c_str(), (const wchar_t*)accountBox.text) == 0) {
@@ -142,15 +143,15 @@ void loginUI() {
 				else if (wcscmp(tmp_password.c_str(), (const wchar_t*)passwordBox.text) == 0) {//把这个对应的正确密码和输入的密码进行比较
 					if (Stu != NULL) {//说明登录的是学生的账号
 						writeLog(0, Stu, wstring(L"登入系统"));
-						stuAccountUI(Stu->item.data.ID, Stu, AdminList);
+						stuAccountUI(Stu->item.data.ID, Stu, allAdminList, allStuList, allCrsList);
 					}
 					else if (Tch != NULL) {
 						writeLog(1, Tch, wstring(L"登入系统"));
-						menuUI_Tch(Tch, TchList, Tch, AdminList);
+						menuUI_Tch(Tch, allTchList, Tch, allAdminList, allStuList, allCrsList);
 					}
 					else {
 						writeLog(2, Admin, wstring(L"登入系统"));
-						menuUI_Administrator(Admin, AdminList);
+						menuUI_Administrator(Admin, allAdminList, allStuList, allCrsList);
 					}
 				}
 				else {
@@ -160,6 +161,8 @@ void loginUI() {
 			}
 
 			if (exitButton.mouseClick(msg)) {
+				freeStu(allStuList);
+				freeCrs(allCrsList);
 				exit(0);
 			}
 
@@ -220,11 +223,11 @@ void loginUI() {
 
 }
 
-void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
+void manageUI(Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {	//管理员管理密码界面
 
 	cleardevice();
 
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 	List allTchList = readTch(TCH_FILE);
 
 	vector<vector<std::wstring>>Stu_Password_Data;
@@ -296,8 +299,22 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 					int selectedRow = Stu_ptable.getSelectedRow(); // 获取当前列
 					getNumberInBox(99999999, &tempID, Stu_Password_Data[selectedRow][0].c_str());
 					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)Stu_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 3, allStuList, admin, Admin_List);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingStu->item.data.ID).c_str(), modifyingStu, 3, allStuList, admin, Admin_List, allStuList, allCrsList);
 					//返回 manageUI时 自动保存自动刷新				
+
+					cleardevice();
+					Stu_ptable.draw();
+					Tch_ptable.draw();
+					titleText.draw();
+					searchStuInputBox.draw();
+					searchTchInputBox.draw();
+					searchStuBtn.draw();
+					searchTchBtn.draw();
+					sortBtn.draw();
+					modify_Stu_Btn.draw();
+					modify_Tch_Btn.draw();
+					backButton.draw();
+
 				}
 			}
 
@@ -312,15 +329,31 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 					int selectedRow = Tch_ptable.getSelectedRow(); // 获取当前列
 					getNumberInBox(99999999, &tempID, Tch_Password_Data[selectedRow][0].c_str());
 					Node* modifyingTch = searchStu(&allTchList, (wchar_t*)Tch_Password_Data[selectedRow][1].c_str(), tempID);
-					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 4, allTchList, admin, Admin_List);
+					Modify_Stu_or_Tch_Password_UI(to_wstring(modifyingTch->item.data.ID).c_str(), modifyingTch, 4, allTchList, admin, Admin_List, allStuList, allCrsList);
 					//返回 manageUI时 自动保存自动刷新				
+
+
+					cleardevice();
+					Stu_ptable.draw();
+					Tch_ptable.draw();
+					titleText.draw();
+					searchStuInputBox.draw();
+					searchTchInputBox.draw();
+					searchStuBtn.draw();
+					searchTchBtn.draw();
+					sortBtn.draw();
+					modify_Stu_Btn.draw();
+					modify_Tch_Btn.draw();
+					backButton.draw();
+
 				}
 
 			}
 
 
 			if (backButton.mouseClick(msg)) {
-				menuUI_Administrator(admin, Admin_List);
+				return;
+				menuUI_Administrator(admin, Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -354,7 +387,7 @@ void manageUI(Node* admin, List Admin_List) {	//管理员管理密码界面
 
 }
 
-void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List) {//judge： 0为从学生端进入改密码 1为从教师端进入改密码 3为从管理员端进入修改学生 4为从管理员端进入修改老师
+void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge, List StuList, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {//judge： 0为从学生端进入改密码 1为从教师端进入改密码 3为从管理员端进入修改学生 4为从管理员端进入修改老师
 
 	cleardevice();
 
@@ -438,12 +471,13 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 					confirm_passwordBox.clear();
 
 					//自动返回
+					return;
 					if (judge == 0)
-						stuAccountUI(Stu->item.data.ID, admin, Admin_List);
+						stuAccountUI(Stu->item.data.ID, admin, Admin_List, allStuList, allCrsList);
 					else if (judge == 1)
-						menuUI_Tch(Stu, StuList, admin, Admin_List);
+						menuUI_Tch(Stu, StuList, admin, Admin_List, allStuList, allCrsList);
 					else
-						manageUI(admin, Admin_List);
+						manageUI(admin, Admin_List, allStuList, allCrsList);
 
 				}
 				else {
@@ -455,12 +489,13 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 			}
 
 			if (backButton.mouseClick(msg)) {
+				return;
 				if (judge == 0)
-					stuAccountUI(Stu->item.data.ID, admin, Admin_List);
+					stuAccountUI(Stu->item.data.ID, admin, Admin_List, allStuList, allCrsList);
 				else if (judge == 1)
-					menuUI_Tch(Stu, StuList, admin, Admin_List);
+					menuUI_Tch(Stu, StuList, admin, Admin_List, allStuList, allCrsList);
 				else
-					manageUI(admin, Admin_List);
+					manageUI(admin, Admin_List, allStuList, allCrsList);
 
 			}
 
@@ -485,11 +520,11 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 
 }
 
-void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 
 	cleardevice();
 
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allQuality_Data;
 	//vector<vector<std::wstring>> Stu_Research_Data;
@@ -556,7 +591,27 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 					int selectedRow = allQuality_Table.getSelectedRow();
 					getNumberInBox(99999999, &tempID, allQuality_Data[selectedRow][0].c_str());
 					Node* modifyingStu = searchStu(&allStuList, (wchar_t*)allQuality_Data[selectedRow][1].c_str(), tempID);
-					QualityUI(modifyingStu, allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+					QualityUI(modifyingStu, allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allCrsList);
+
+
+
+					cleardevice();
+					allQuality_Table.draw();
+					titleText.draw();
+					searchInputBox.draw();
+					searchBtn.draw();
+					sortBtn.draw();
+					search_for_quality_Btn.draw();
+					exportBtn.draw();
+					inportBtn.draw();
+					backButton.draw();
+
+
+
+
+
+
+
 				}
 
 			}
@@ -587,10 +642,11 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 			}
 
 			if (backButton.mouseClick(msg)) {
+				return;
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -619,7 +675,7 @@ void allQualityUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* a
 
 }
 
-void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, Cpnode allCrsList) {
 
 	cleardevice();
 
@@ -1483,7 +1539,8 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 			}
 
 			if (backButton.mouseClick(msg)) {
-				allQualityUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				return;
+				allQualityUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击
@@ -1522,11 +1579,11 @@ void QualityUI(Node* Stu, List allStuList, Node* tch_or_admin, List Tch_or_Admin
 	}
 }
 
-void stuAccountUI(int stuID, Node* admin, List Admin_List) {
+void stuAccountUI(int stuID, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
-	List StuList = readStu(STU_FILE);
-	Node* pstu = StuList->next;
+	//List StuList = readStu(STU_FILE);
+	Node* pstu = allStuList->next;
 	while (pstu != NULL) {
 		if (stuID == pstu->item.data.ID) {
 			break;
@@ -1606,7 +1663,7 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 			}
 
 			if (modify_password_Btn.mouseClick(msg)) {
-				Modify_Stu_or_Tch_Password_UI(to_wstring(pstu->item.data.ID).c_str(), pstu, 0, StuList, admin, Admin_List);
+				Modify_Stu_or_Tch_Password_UI(to_wstring(pstu->item.data.ID).c_str(), pstu, 0, allStuList, admin, Admin_List, allStuList, allCrsList);
 			}
 
 			if (backButton.mouseClick(msg))
@@ -1616,7 +1673,7 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 			}
 
 			if (drawBtn.mouseClick(msg)) {
-				chartUI(allCrsINStuData, 1, 2, stuID, NULL, NULL, 0, admin, Admin_List);
+				chartUI(allCrsINStuData, 1, 2, stuID, NULL, NULL, 0, admin, Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -1647,7 +1704,7 @@ void stuAccountUI(int stuID, Node* admin, List Admin_List) {
 
 }
 
-void allTchUI(Node* admin, List adminList) {
+void allTchUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
 	List TchList = readTch(TCH_FILE);
@@ -1719,7 +1776,8 @@ void allTchUI(Node* admin, List adminList) {
 			}
 
 			if (backButton.mouseClick(msg)) {
-				menuUI_Administrator(admin, adminList);
+				return;
+				menuUI_Administrator(admin, adminList, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击

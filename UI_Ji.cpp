@@ -30,14 +30,14 @@ int mainJi(void) {
 	return 0;
 }
 
-void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {//judge:1是老师 2是管理员
+void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {//judge:1是老师 2是管理员
 	cleardevice();
 
 	//drawLine();
 
 
-	List allStuList = readStu(STU_FILE);
-	Cpnode allCrsList = readCrs(CRS_FILE);
+	//List allStuList = readStu(STU_FILE);
+	//Cpnode allCrsList = readCrs(CRS_FILE);
 
 	vector<vector<std::wstring>> allStuData;
 	showAllStu(allStuList, allStuData, (judge == 1) ? tch_or_admin->item.data.college : L"");
@@ -145,7 +145,29 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					Node* Crs = searchStu(&allStuList, cname, cid);
 
 
-					StuUI(Crs, allStuList, cname, &cid, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+					StuUI(Crs, allStuList, cname, &cid, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allCrsList);
+
+
+
+					cleardevice();
+					Table allStuTable(310, 90, 1160, 700, allStuData);
+
+					titleText.draw();
+					searchInputBox.draw();
+					searchBtn.draw();
+					lookBtn.draw();
+					addBtn.draw();
+					modifyBtn.draw();
+					deleteBtn.draw();
+					sortBtn.draw();
+					sortyearBtn.draw();
+					exportBtn.draw();
+					inportBtn.draw();
+					backButton.draw();
+
+
+
+
 
 					//	// 隐藏
 					//	lookBtn.move(-500, 150);
@@ -576,7 +598,7 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (sortyearBtn.mouseClick(msg)) {
 
-				RankUI(allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				RankUI(allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 
 			}
 
@@ -608,11 +630,14 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			}
 
 			if (backButton.mouseClick(msg)) {
-				//freeAllStu(allStuList); //TODO
+				//freeStu(allStuList);
+				//freeCrs(allCrsList);
+
+				return;
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -646,12 +671,12 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 
 
-void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, Cpnode allCrsList) {
 
 
 	cleardevice();
 
-	Cpnode allCrsList = readCrs(CRS_FILE);
+	//Cpnode allCrsList = readCrs(CRS_FILE);
 
 	sortStuCrsYear(Crs->item.crslist);
 	Crsnode* allCrsInStuList = Crs->item.crslist->crs_next;
@@ -746,7 +771,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 				allCrsINStuTable.setData(allCrsINStuData);
 			}
 			if (chartBtn.mouseClick(msg)) {
-				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				chartUI(allCrsINStuData, 1, 2, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
 			if (addCrsBtn.mouseClick(msg)) {
@@ -1257,7 +1282,8 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 			if (backButton.mouseClick(msg))
 			{
-				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				return;
+				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -1294,7 +1320,7 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 
 
 
-void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
 	vector<vector<std::wstring>> RankData;
@@ -1453,7 +1479,7 @@ void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge,
 			}
 
 			if (backButton.mouseClick(msg)) {
-				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击

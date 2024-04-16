@@ -3,6 +3,7 @@
 #ifndef _FILE_H_
 #define _FILE_H_
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -52,7 +53,9 @@ bool exportTch(List TchList, const char* file_name); //导出教师信息
 void importTch(List TchList, const char* file_name); //导入教师信息
 
 
+void freeStu(List StuList);
 
+void freeCrs(Cpnode CrsList);
 
 
 

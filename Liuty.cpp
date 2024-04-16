@@ -115,13 +115,13 @@ bool showAllMajor(const List StuList, vector<vector<wstring>>& data, const wchar
 //	chartUI(_chart, 1, 2);
 //}
 
-void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
 	//drawLine();
 
 
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 
 	vector<vector<std::wstring>> allStuData;
 	showAllMajor(allStuList, allStuData, (judge == 1) ? tch_or_admin->item.data.college : L"");
@@ -380,11 +380,11 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 			}
 
 			if (backButton.mouseClick(msg)) {
-				//freeAllStu(allStuList); //TODO
+				return;
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 
@@ -416,7 +416,7 @@ void changeMajorUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* 
 
 
 
-void logUI(Node* admin, List adminList) {
+void logUI(Node* admin, List adminList, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 
 
@@ -433,20 +433,29 @@ void logUI(Node* admin, List adminList) {
 	data.push_back(vector<wstring>(1, L""));
 	data[0][0] = L"[时间] : 操作";
 
-	int logRow = 1;
-	wchar_t line[1024];
-	while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
-		if (line[0] == '\n') {//跳过空行
+	int logRow = 0;
+	static wchar_t line[1024][128];
+	while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+		if (line[logRow][0] == '\n') {//跳过空行
 			continue;
 		}
-		line[wcslen(line) - 1] = L'\0';
-		if (wcsstr(line, L"")) {
-			data.push_back(vector<wstring>(1, L""));
-			data[logRow][0] = wstring(line);
+		if (wcsstr(line[logRow], L"")) {
+			line[logRow][wcslen(line[logRow]) - 1] = L'\0';
 			logRow++;
 		}
 	}
 	fclose(fp);
+	int tmpRow = logRow--;
+	while (tmpRow--) {
+		data.push_back(vector<wstring>(1, L""));
+	}
+	int row = 1;
+	while (logRow >= 0) {
+		//if (wcsstr(line[logRow], L"")) {
+		data[row++][0] = wstring(line[logRow]);
+		//}
+		logRow--;
+	}
 
 
 	//showLog(data, L"");
@@ -474,6 +483,46 @@ void logUI(Node* admin, List adminList) {
 			// 鼠标点击事件
 			if (searchBtn.mouseClick(msg)) {
 
+				//fp = fopen(file_name, "r");//读取文件
+				//if (fp == NULL) {
+				//	printf("Read \"%s\" error, please check and reboot the system!", file_name);
+				//	MessageBox(GetHWnd(), L"日志读取失败，即将退出!", L"错误!", MB_ICONERROR);
+				//	exit(EXIT_FAILURE);
+				//}//读取失败退出
+
+				//data.clear();
+				////data.resize(0);
+				//data.push_back(vector<wstring>(1, L""));
+				//data[0][0] = L"[时间] : 操作";
+
+				//logRow = 0;
+				//int trueRow = 0;
+				//for (int i = 0; i < 1024; i++) {
+				//	line[i][0] == L'\0';
+				//}
+				//while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+				//	if (line[logRow][0] == '\n') {//跳过空行
+				//		continue;
+				//	}
+				//	line[logRow][wcslen(line[logRow]) - 1] = L'\0';
+				//	if (wcsstr(line[logRow], searchInputBox.text)) {
+				//		trueRow++;
+				//	}
+				//	logRow++;
+				//}
+				//fclose(fp);
+				////tmpRow = trueRow--;
+				//while (trueRow--) {
+				//	data.push_back(vector<wstring>(1, L""));
+				//}
+				//row = 1;
+				//while (logRow >= 0) {
+				//	if (wcsstr(line[logRow], searchInputBox.text)) {
+				//		data[row++][0] = wstring(line[logRow]);
+				//	}
+				//	logRow--;
+				//}
+
 				fp = fopen(file_name, "r");//读取文件
 				if (fp == NULL) {
 					printf("Read \"%s\" error, please check and reboot the system!", file_name);
@@ -481,28 +530,39 @@ void logUI(Node* admin, List adminList) {
 					exit(EXIT_FAILURE);
 				}//读取失败退出
 
-				data.clear(); // 清空数组
+				vector<vector<std::wstring>> data;
 				data.push_back(vector<wstring>(1, L""));
 				data[0][0] = L"[时间] : 操作";
 
-				int logRow = 1;
-				wchar_t line[1024];
-				while (fgetws(line, sizeof(line) / sizeof(line[0]), fp) != NULL) {
-					if (line[0] == '\n') {//跳过空行
+				logRow = 0;
+				while (fgetws(line[logRow], sizeof(line[logRow]) / sizeof(line[logRow][0]), fp) != NULL) {
+					if (line[logRow][0] == '\n') {//跳过空行
 						continue;
 					}
-					line[wcslen(line) - 1] = L'\0';
-					if (wcsstr(line, searchInputBox.text)) {
-						data.push_back(vector<wstring>(1, L""));
-						data[logRow++][0] = wstring(line);
+					if (wcsstr(line[logRow], searchInputBox.text)) {
+						line[logRow][wcslen(line[logRow]) - 1] = L'\0';
+						logRow++;
 					}
 				}
 				fclose(fp);
+				tmpRow = logRow--;
+				while (tmpRow--) {
+					data.push_back(vector<wstring>(1, L""));
+				}
+				row = 1;
+				while (logRow >= 0) {
+					//if (wcsstr(line[logRow], L"")) {
+					data[row++][0] = wstring(line[logRow]);
+					//}
+					logRow--;
+				}
+
 				allTchTable.setData(data);
 			}
 
 			if (backButton.mouseClick(msg)) {
-				menuUI_Administrator(admin, adminList);
+				return;
+				menuUI_Administrator(admin, adminList, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击

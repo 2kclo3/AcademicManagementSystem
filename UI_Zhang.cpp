@@ -53,14 +53,14 @@ int mainZ(void)
 	return 0;
 }
 
-void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List)
+void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList)
 {
 	cleardevice();
-	Cpnode allCrsList = readCrs(CRS_FILE);
+	//Cpnode allCrsList = readCrs(CRS_FILE);
 	vector<vector<std::wstring>> allCrsData;
 	showAllCrs(allCrsList, allCrsData, L"", 0, 0, 0);
 
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 
 	Table allCrsTable(310, 90, 940 + 220, 700, allCrsData);
 
@@ -140,7 +140,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 			if (drawBtn.mouseClick(msg))
 			{
-				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				chartUI(allCrsData, 0, 6, 0, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 			if (cancelButton.mouseClick(msg)) {
 
@@ -236,7 +236,26 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 					getNumberInBox(99999, &cnum, allCrsData[selectedRow][1].c_str());
 					getNumberInBox(99999, &SchYear, allCrsData[selectedRow][4].c_str());
 					Cpnode cplist = searchCrs(allCrsList, cnum, SchYear);
-					CrsUI(allCrsList, cplist, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+					CrsUI(allCrsList, cplist, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
+
+
+					cleardevice();
+					allCrsTable.draw();
+					titleText.draw();
+					searchInputBox.draw();
+					searchBtn.draw();
+					drawBtn.draw();
+					y = 90 - 80, dy = 80;//方便调位置,或者说，更契合面向“Ctrl+C”和“Ctrl+V”的编程思想
+					viewCrsBtn.draw();
+					addCrsBtn.draw();
+					modifyCrsBtn.draw();
+					deleteCrsBtn.draw();
+					sortCrsBtn.draw();
+					screenCrsBtn.draw();
+					screenCancelBtn.draw();
+					exportBtn.draw();
+					inportBtn.draw();
+					backButton.draw();
 
 				}
 			}
@@ -905,10 +924,11 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 			}
 			if (backButton.mouseClick(msg))
 			{
+				return;
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击
@@ -939,9 +959,9 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 }
 
-void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List)
+void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList)
 {
-	List allStuList = readStu(STU_FILE);
+	//List allStuList = readStu(STU_FILE);
 
 	cleardevice();
 	Spnode allStuInCrsList = cplist->sphead;
@@ -1564,7 +1584,8 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 			if (backButton.mouseClick(msg))
 			{
 				//return;不能直接return
-				allCrsUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List);
+				return;
+				allCrsUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
 			//表格鼠标滑动与点击

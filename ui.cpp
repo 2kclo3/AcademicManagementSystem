@@ -19,11 +19,11 @@ void printStu(const List StuList) {
 			pStu->item.data.major,
 			pStu->item.data.original_college,
 			pStu->item.data.original_major,
-			pStu->item.data.password, 
+			pStu->item.data.password,
 
-			pStu->item.data.all_avg_score, 
-			pStu->item.data.all_avg_grid, 
-			pStu->item.data.req_avg_score, 
+			pStu->item.data.all_avg_score,
+			pStu->item.data.all_avg_grid,
+			pStu->item.data.req_avg_score,
 			pStu->item.data.req_avg_grid
 		);
 
@@ -185,10 +185,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 			//	wprintf(L"box1 is:%s\n", box1.text);
 			//}
 			if (selectRowBtn1.mouseClick(msg)) {
-				chartUI({
-			{L"Ñ§¿Æ1", L"Ñ§¿Æ2", L"Ñ§¿Æ3ß÷", L"Ñ§¿Æ4", L"Ñ§¿Æ5", L"666", L"ß÷ß÷ß÷"},
-			{L"10", L"60", L"55", L"70", L"60", L"89", L"35"}
-		}, 0, 1, 0, tch_or_admin, Tch_or_Admin_List,judge,  admin, Admin_List);
+
 
 			}
 			if (exitButton.mouseClick(msg)) {
@@ -217,7 +214,7 @@ void testUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, 
 }
 
 
-void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List) {
+void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {
 	cleardevice();
 	Button backButton(1270, 20, 200, 60, L"·µ»ØÖ÷²Ëµ¥", 1);
 
@@ -240,12 +237,12 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 		if (peekmessage(&msg, -1, true)) {
 			if (backButton.mouseClick(msg)) {
 				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin,  Admin_List);
+					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
 				else if (judge == 0) {
-					stuAccountUI(stuID, admin, Admin_List);
+					stuAccountUI(stuID, admin, Admin_List, allStuList, allCrsList);
 				}
 				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List);
+					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 				return;
 			}
 		}
@@ -270,11 +267,11 @@ void chartUI(vector<vector<wstring>> _data, int row1, int row2, int stuID, Node*
 }
 
 
-void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
+void menuUI_Administrator(Node* admin, List adminList, List allStuList, Cpnode allCrsList) {//¹ÜÀíÔ±¶Ë½çÃæ
 	cleardevice();
 
 	IMAGE Image;
-	loadimage(&Image, L".\\data\\background.jpeg", 1500, 810, true);
+	loadimage(&Image, L".\\res\\background.jpeg", 1500, 810, true);
 	putimage(0, 0, &Image, SRCCOPY);
 
 	//drawLine();
@@ -298,28 +295,120 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 
 		if (peekmessage(&msg, -1, true)) {
 			if (allStuButton.mouseClick(msg)) {
-				allStuUI(admin, adminList, 2, admin, adminList);
+				allStuUI(admin, adminList, 2, admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
 			}
 			if (allTchButton.mouseClick(msg)) {
-				allTchUI(admin, adminList);
+				allTchUI(admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (allCrsButton.mouseClick(msg)) {
-				allCrsUI(admin, adminList, 2, admin, adminList);
+				allCrsUI(admin, adminList, 2, admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (allQualityButton.mouseClick(msg)) {
-				allQualityUI(admin, adminList, 2, admin, adminList);
+				allQualityUI(admin, adminList, 2, admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (changeMajorButton.mouseClick(msg)) {
-				changeMajorUI(admin, adminList, 2, admin, adminList);
+				changeMajorUI(admin, adminList, 2, admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (settingsButton.mouseClick(msg)) {
-				manageUI(admin, adminList);
+				manageUI(admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (logButton.mouseClick(msg)) {
-				logUI(admin, adminList);
+				logUI(admin, adminList, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				allTchButton.draw();
+				settingsButton.draw();
+				logButton.draw();
+				exitButton.draw();
+
 			}
 			if (exitButton.mouseClick(msg)) {
 				writeLog(2, admin, wstring(L"ÍË³öÏµÍ³"));
+				freeStu(allStuList);
+				freeCrs(allCrsList);
 				loginUI();
 			}
 		}
@@ -338,11 +427,11 @@ void menuUI_Administrator(Node* admin, List adminList) {//¹ÜÀíÔ±¶Ë½çÃæ
 	}
 }
 
-void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½çÃæ
+void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) {//½ÌÊ¦¶Ë½çÃæ
 	cleardevice();
 
 	IMAGE Image;
-	loadimage(&Image, L".\\data\\background.jpeg", 1500, 810, true);
+	loadimage(&Image, L".\\res\\background.jpeg", 1500, 810, true);
 	putimage(0, 0, &Image, SRCCOPY);
 
 	//drawLine();
@@ -363,22 +452,79 @@ void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½
 
 		if (peekmessage(&msg, -1, true)) {
 			if (allStuButton.mouseClick(msg)) {
-				allStuUI(Tch,TchList,1, admin, Admin_List);
+				allStuUI(Tch, TchList, 1, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				settingsButton.draw();
+				exitButton.draw();
+
 			}
 			if (allCrsButton.mouseClick(msg)) {
-				allCrsUI(Tch, TchList,1, admin, Admin_List);
+				allCrsUI(Tch, TchList, 1, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				settingsButton.draw();
+				exitButton.draw();
+
 			}
 			if (allQualityButton.mouseClick(msg)) {
-				allQualityUI(Tch, TchList,1, admin, Admin_List);
+				allQualityUI(Tch, TchList, 1, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				settingsButton.draw();
+				exitButton.draw();
+
 			}
 			if (changeMajorButton.mouseClick(msg)) {
-				changeMajorUI( Tch, TchList,1, admin, Admin_List);
+				changeMajorUI(Tch, TchList, 1, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				settingsButton.draw();
+				exitButton.draw();
+
 			}
 			if (settingsButton.mouseClick(msg)) {
-				Modify_Stu_or_Tch_Password_UI(to_wstring(Tch->item.data.ID).c_str(), Tch, 1, TchList, admin, Admin_List);
+				Modify_Stu_or_Tch_Password_UI(to_wstring(Tch->item.data.ID).c_str(), Tch, 1, TchList, admin, Admin_List, allStuList, allCrsList);
+
+				cleardevice();
+				putimage(0, 0, &Image, SRCCOPY);
+				titleText.draw();
+				allStuButton.draw();
+				allCrsButton.draw();
+				allQualityButton.draw();
+				changeMajorButton.draw();
+				settingsButton.draw();
+				exitButton.draw();
+
 			}
 			if (exitButton.mouseClick(msg)) {
 				writeLog(1, Tch, wstring(L"ÍË³öÏµÍ³"));
+				freeStu(allStuList);
+				freeCrs(allCrsList);
 				loginUI();
 			}
 		}
@@ -390,10 +536,11 @@ void menuUI_Tch(Node* Tch,List TchList, Node* admin, List Admin_List) {//½ÌÊ¦¶Ë½
 
 		FlushBatchDraw(); //ÅúÁ¿»æÍ¼
 
-		ULONGLONG end_time = GetTickCount();
-		if (end_time - start_time < 1) {
-			Sleep(1);
-		}
+		//ULONGLONG end_time = GetTickCount();
+		//if (end_time - start_time < 1) {
+		//	Sleep(1);
+		//}
+		Sleep(2);
 	}
 
 
