@@ -410,12 +410,12 @@ void Modify_Stu_or_Tch_Password_UI(const wchar_t* account, Node* Stu, int judge,
 	Button modify_OK_Button(585, 620, 330, 60, L"确认修改", 1);
 	Button backButton(585, 700, 330, 60, L"取消修改", 0);
 
-	if (judge == 0) {
+	if (judge == 0 || judge == 3) {
 		Text IDText(300, 200, L"", 32);
 		wstring show_ID = L"学号：" + to_wstring(Stu->item.data.ID);
 		IDText.setText(show_ID.c_str());
 	}
-	if (judge == 1) {
+	if (judge == 1 || judge == 4) {
 		Text IDText(300, 200, L"", 32);
 		wstring show_ID = L"工号：" + to_wstring(Stu->item.data.ID);
 		IDText.setText(show_ID.c_str());
