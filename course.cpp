@@ -425,21 +425,21 @@ double CalculGPA(double score)
 {
 	if (score >= 90 && score <= 100)
 		return 4.0;
-	else if (score >= 85 && score <= 89)
+	else if (score >= 85 && score <90)
 		return 3.7;
-	else if (score >= 82 && score <= 84)
+	else if (score >= 82 && score <85)
 		return 3.3;
-	else if (score >= 78 && score <= 81)
+	else if (score >= 78 && score <80)
 		return 3.0;
-	else if (score >= 75 && score <= 77)
+	else if (score >= 75 && score <78)
 		return 2.7;
-	else if (score >= 72 && score <= 74)
+	else if (score >= 72 && score <75)
 		return 2.3;
-	else if (score >= 68 && score <= 71)
+	else if (score >= 68 && score <72)
 		return 2.0;
-	else if (score >= 64 && score <= 67)
+	else if (score >= 64 && score <68)
 		return 1.5;
-	else if (score >= 60 && score <= 63)
+	else if (score >= 60 && score <64)
 		return 1.0;
 	else
 		return 0;
