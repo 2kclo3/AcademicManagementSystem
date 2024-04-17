@@ -316,10 +316,8 @@ void manageUI(Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) 
 					backButton.draw();
 
 					ShowStu_Password(allStuList, Stu_Password_Data, L"");
-					ShowTch_Password(allTchList, Tch_Password_Data, L"");
 
 					Stu_ptable.setData(Stu_Password_Data);
-					Tch_ptable.setData(Tch_Password_Data);
 
 				}
 			}
@@ -352,6 +350,9 @@ void manageUI(Node* admin, List Admin_List, List allStuList, Cpnode allCrsList) 
 					modify_Tch_Btn.draw();
 					backButton.draw();
 
+					ShowTch_Password(allTchList, Tch_Password_Data, L"");
+
+					Tch_ptable.setData(Tch_Password_Data);
 				}
 
 			}
