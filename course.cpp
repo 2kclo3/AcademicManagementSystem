@@ -429,7 +429,7 @@ double CalculGPA(double score)
 		return 3.7;
 	else if (score >= 82 && score <85)
 		return 3.3;
-	else if (score >= 78 && score <80)
+	else if (score >= 78 && score <82)
 		return 3.0;
 	else if (score >= 75 && score <78)
 		return 2.7;
