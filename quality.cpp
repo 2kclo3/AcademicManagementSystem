@@ -177,13 +177,13 @@ bool ShowStu_Research(const Node* Stu, vector<vector<wstring>>& data) {
 
 	//初始化表头
 	data[0][0] = L"论文名称";
-	data[0][1] = L"发表的期刊/会议名称";
+	data[0][1] = L"期刊名";
 	data[0][2] = L"作者情况";
-	data[0][3] = L"发表时间";
+	data[0][3] = L"时间";
 	data[0][4] = L"卷数";
 	data[0][5] = L"刊号";
-	data[0][6] = L"页码范围";
-	data[0][7] = L"绩点加分";
+	data[0][6] = L"页码";
+	data[0][7] = L"加绩";
 
 	int row = 1;
 
@@ -287,7 +287,7 @@ bool addQuality_rlist(Node* Stu,wchar_t* paper_name,
 	Rnode* rtmp = Stu->item.rlist;//素质类rlist链表亦有哨兵节点
 	
 	while (rtmp->rnext != NULL) {
-		if (wcscmp(rtmp->research.paper_name, paper_name) == 0)
+		if (wcscmp(rtmp->rnext->research.paper_name, paper_name) == 0)
 			return false;
 		rtmp = rtmp->rnext;//尾插法
 	}
@@ -320,7 +320,7 @@ bool addQuality_clist(Node* Stu,
 	Cnode* ctmp = Stu->item.clist;//素质类clist链表亦有哨兵节点
 	
 	while (ctmp->cnext != NULL) {
-		if (wcscmp(ctmp->competition.competition_name, competition_name) == 0)
+		if (wcscmp(ctmp->cnext->competition.competition_name, competition_name) == 0)
 			return false;
 		ctmp = ctmp->cnext;//尾插法
 	}
