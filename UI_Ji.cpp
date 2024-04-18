@@ -600,6 +600,30 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 
 				RankUI(allStuList, tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 
+
+				cleardevice();
+				Table allStuTable(310, 90, 1160, 700, allStuData);
+
+				titleText.draw();
+				searchInputBox.draw();
+				searchBtn.draw();
+				lookBtn.draw();
+				addBtn.draw();
+				modifyBtn.draw();
+				deleteBtn.draw();
+				sortBtn.draw();
+				sortyearBtn.draw();
+				exportBtn.draw();
+				inportBtn.draw();
+				backButton.draw();
+
+
+
+
+
+
+
+
 			}
 
 			if (exportBtn.mouseClick(msg)) {
@@ -1501,6 +1525,7 @@ void RankUI(List StuList, Node* tch_or_admin, List Tch_or_Admin_List, int judge,
 			}
 
 			if (backButton.mouseClick(msg)) {
+				return;
 				allStuUI(tch_or_admin, Tch_or_Admin_List, judge, admin, Admin_List, allStuList, allCrsList);
 			}
 
