@@ -634,10 +634,10 @@ void allStuUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				//freeCrs(allCrsList);
 
 				return;
-				if (judge == 1)
-					menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
-				else
-					menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
+				//if (judge == 1)
+				//	menuUI_Tch(tch_or_admin, Tch_or_Admin_List, admin, Admin_List, allStuList, allCrsList);
+				//else
+				//	menuUI_Administrator(tch_or_admin, Tch_or_Admin_List, allStuList, allCrsList);
 			}
 
 
