@@ -14,9 +14,6 @@
     <Filter Include="Quality">
       <UniqueIdentifier>{ca35a1fe-d9be-4519-857b-a7946664b505}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Account">
-      <UniqueIdentifier>{5f9f62ad-388f-45d9-935e-fb5835efedd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="File">
       <UniqueIdentifier>{a89f58df-b278-4513-bb2d-294c9c1cf20a}</UniqueIdentifier>
     </Filter>
@@ -42,9 +39,6 @@
     </ClInclude>
     <ClInclude Include="course.h">
       <Filter>Course</Filter>
-    </ClInclude>
-    <ClInclude Include="account.h">
-      <Filter>Account</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Main</Filter>
@@ -72,9 +66,6 @@
     <ClCompile Include="course.cpp">
       <Filter>Course</Filter>
     </ClCompile>
-    <ClCompile Include="account.cpp">
-      <Filter>Account</Filter>
-    </ClCompile>
     <ClCompile Include="quality.cpp">
       <Filter>Quality</Filter>
     </ClCompile>
@@ -94,9 +85,6 @@
       <Filter>UI</Filter>
     </ClCompile>
     <ClCompile Include="UI_Liu.cpp">
-      <Filter>UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Liuty.cpp">
       <Filter>UI</Filter>
     </ClCompile>
   </ItemGroup>
