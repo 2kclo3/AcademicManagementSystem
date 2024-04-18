@@ -881,8 +881,13 @@ void StuUI(Node* Crs, List allStuList, wchar_t* pname, int* pid, Node* tch_or_ad
 						MessageBox(GetHWnd(), L"没有该课程", L"错误!", MB_ICONERROR);
 					}
 					else {
-						addStuInCrs(searchCrs(allCrsList, stoi(course_id), semester), pname, *pid, score);
-						addCrsToStu(Crs, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") == 0 ? 1 : 0, credit, grid);
+						if (addCrsToStu(Crs, course_id, course_name, score, semester, wcscmp(course_nature, L"必修") == 0 ? 1 : 0, credit, grid) == false) {
+							MessageBox(GetHWnd(), L"已存在该课程", L"错误!", MB_ICONERROR);
+							continue;
+						}
+						else {
+							addStuInCrs(searchCrs(allCrsList, stoi(course_id), semester), pname, *pid, score);
+						}
 					}
 
 

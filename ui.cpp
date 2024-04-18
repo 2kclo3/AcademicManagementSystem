@@ -445,12 +445,12 @@ void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allS
 
 	Text titleText(90, 50, L"欢迎", 64);
 
-	Button allStuButton(-50, 170, 350, 60, L"  查看学生", 1);
-	Button allCrsButton(-50, 250, 350, 60, L"  查看课程", 1);
-	Button allQualityButton(-50, 330, 350, 60, L"  素质类项目管理", 1);
-	Button changeMajorButton(-50, 410, 350, 60, L"  转专业管理", 1);
-	Button settingsButton(-50, 490, 350, 60, L"  修改密码", 1);
-	Button exitButton(-50, 580, 350, 60, L"  退出登录", 0);
+	int dy = 50;
+	Button allStuButton(-50, 170 + dy, 350, 60, L"  查看学生", 1);
+	Button allCrsButton(-50, 250 + dy , 350, 60, L"  查看课程", 1);
+	Button allQualityButton(-50, 330 + dy, 350, 60, L"  素质类项目管理", 1);
+	Button settingsButton(-50, 410 + dy, 350, 60, L"  修改密码", 1);
+	Button exitButton(-50, 510 + dy, 350, 60, L"  退出登录", 0);
 
 	// 处理鼠标事件
 	ExMessage msg;
@@ -467,7 +467,6 @@ void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allS
 				allStuButton.draw();
 				allCrsButton.draw();
 				allQualityButton.draw();
-				changeMajorButton.draw();
 				settingsButton.draw();
 				exitButton.draw();
 
@@ -481,7 +480,6 @@ void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allS
 				allStuButton.draw();
 				allCrsButton.draw();
 				allQualityButton.draw();
-				changeMajorButton.draw();
 				settingsButton.draw();
 				exitButton.draw();
 
@@ -495,21 +493,6 @@ void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allS
 				allStuButton.draw();
 				allCrsButton.draw();
 				allQualityButton.draw();
-				changeMajorButton.draw();
-				settingsButton.draw();
-				exitButton.draw();
-
-			}
-			if (changeMajorButton.mouseClick(msg)) {
-				changeMajorUI(Tch, TchList, 1, admin, Admin_List, allStuList, allCrsList);
-
-				cleardevice();
-				putimage(0, 0, &Image, SRCCOPY);
-				titleText.draw();
-				allStuButton.draw();
-				allCrsButton.draw();
-				allQualityButton.draw();
-				changeMajorButton.draw();
 				settingsButton.draw();
 				exitButton.draw();
 
@@ -523,7 +506,6 @@ void menuUI_Tch(Node* Tch, List TchList, Node* admin, List Admin_List, List allS
 				allStuButton.draw();
 				allCrsButton.draw();
 				allQualityButton.draw();
-				changeMajorButton.draw();
 				settingsButton.draw();
 				exitButton.draw();
 

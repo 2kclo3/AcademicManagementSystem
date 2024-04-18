@@ -499,6 +499,9 @@ bool addStu(List* plist, wchar_t* pname, int pID, int pgender, int pgrade, wchar
 
 //为某个学生添加某课程及成绩
 bool addCrsToStu(Node* chastu, const wchar_t* pcourse_id, const wchar_t* pcourse_name, double pscore, int psemester, int pcourse_nature, double pcredit, double pgrid) {
+	if (searchCrsInStu(chastu, pcourse_id, pcourse_name)) {
+		return false;
+	}
 	Crsnode* crs_tmp = chastu->item.crslist;//课程链表头节点
 	while (crs_tmp->crs_next != NULL)
 		crs_tmp = crs_tmp->crs_next;

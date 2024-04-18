@@ -117,7 +117,7 @@ void showAllStuInCrs(const Cpnode cplist, vector<vector<wstring>>& data, const w
 				data[row][0] = splist->sname;
 				data[row][1] = std::to_wstring(splist->snum);
 				data[row][2] = (splist->score == 0) ? L"" : to_wstring(splist->score);
-				data[row][3] = (splist->GPA == 0) ? L"" : to_wstring(splist->GPA);
+				data[row][3] = (splist->score == 0) ? L"" : to_wstring(splist->GPA);
 
 				// ±£ÁôÐ¡Êý
 				data[row][2] = data[row][2].substr(0, data[row][2].find('.') + 2);
@@ -427,9 +427,9 @@ double CalculGPA(double score)
 		return 4.0;
 	else if (score >= 85 && score <90)
 		return 3.7;
-	else if (score >= 82 && score <85)
+	else if (score >= 81 && score <85)
 		return 3.3;
-	else if (score >= 78 && score <80)
+	else if (score >= 78 && score <81)
 		return 3.0;
 	else if (score >= 75 && score <78)
 		return 2.7;

@@ -175,6 +175,7 @@ void allCrsUI(Node* tch_or_admin, List Tch_or_Admin_List, int judge, Node* admin
 				cnumBox.clear();
 				characterBox.clear();
 				SchYearBox.clear();
+				creditBox.clear();
 				minBox.clear();
 				maxBox.clear();
 
@@ -1163,14 +1164,16 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 				{
 
 
-					if (!addStuInCrs(cplist, sname, snum, score))
+					Node* StuNode = searchStu(&allStuList, sname, snum);
+					if (StuNode == NULL) {
+						MessageBox(GetHWnd(), L"找不到这个学生！", L"错误!", MB_ICONERROR);
+					}
+					else if (!addStuInCrs(cplist, sname, snum, score))
 					{
-						MessageBox(GetHWnd(), L"该学号已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
+						MessageBox(GetHWnd(), L"该学生已经存在,请勿重复添加!", L"错误!", MB_ICONERROR);
 					}
 					else
 					{
-						Node* StuNode = searchStu(&allStuList, sname, snum);
-						if (StuNode) {
 							wchar_t wch_cnum[10];
 							swprintf(wch_cnum, 10, L"%d", cplist->cnum);
 							double GPA = CalculGPA(score);
@@ -1215,11 +1218,6 @@ void CrsUI(Cpnode cphead, Cpnode cplist, Node* tch_or_admin, List Tch_or_Admin_L
 							else
 								screenCancelBtn.move(-50, 540);
 							backButton.move(-50, 620);
-
-						}
-						else {
-							MessageBox(GetHWnd(), L"找不到这个学生！", L"错误!", MB_ICONERROR);
-						}
 					}
 
 
